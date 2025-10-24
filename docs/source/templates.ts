@@ -43,7 +43,7 @@ function createBaseTemplate(
     }));
 
   return `<!DOCTYPE html>
-    <html lang="en" class="quiet-theme">
+    <html lang="en" class="quiet-teal">
       <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -51,6 +51,24 @@ function createBaseTemplate(
         <meta name="description" content="${
           props.frontmatter.description || ""
         }" />
+        <script>
+          // Apply dark theme class immediately to prevent flash
+          (function() {
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            if (prefersDark) {
+              document.documentElement.classList.add('quiet-dark');
+            }
+            
+            // Listen for theme changes
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+              if (e.matches) {
+                document.documentElement.classList.add('quiet-dark');
+              } else {
+                document.documentElement.classList.remove('quiet-dark');
+              }
+            });
+          })();
+        </script>
         <link rel="stylesheet" href="/source/style.css" />
         <script type="module" src="/source/main.ts"></script>
       </head>

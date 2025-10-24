@@ -144,18 +144,27 @@ export class MeowzerDemo extends LitElement {
               Add Random Cat
             </quiet-button>
 
-            <quiet-button @click=${this.handleAddCustomCat}>
+            <quiet-button
+              variant="neutral"
+              @click=${this.handleAddCustomCat}
+            >
               Add Orange Tabby
             </quiet-button>
 
             ${this.isPaused
               ? html`
-                  <quiet-button @click=${this.handleResumeAll}>
+                  <quiet-button
+                    variant="neutral"
+                    @click=${this.handleResumeAll}
+                  >
                     Resume All
                   </quiet-button>
                 `
               : html`
-                  <quiet-button @click=${this.handlePauseAll}>
+                  <quiet-button
+                    variant="neutral"
+                    @click=${this.handlePauseAll}
+                  >
                     Pause All
                   </quiet-button>
                 `}

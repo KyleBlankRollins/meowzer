@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="quiet-teal">
   <head>
     <meta charset="UTF-8" />
     <meta
@@ -7,6 +7,24 @@
       content="width=device-width, initial-scale=1.0"
     />
     <title>Meowbase Documentation</title>
+    <script>
+      // Apply dark theme class immediately to prevent flash
+      (function() {
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (prefersDark) {
+          document.documentElement.classList.add('quiet-dark');
+        }
+        
+        // Listen for theme changes
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+          if (e.matches) {
+            document.documentElement.classList.add('quiet-dark');
+          } else {
+            document.documentElement.classList.remove('quiet-dark');
+          }
+        });
+      })();
+    </script>
   </head>
   <body>
     <!-- This file is only used as a Vite entry point for building assets -->
