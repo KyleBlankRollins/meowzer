@@ -1,4 +1,6 @@
 import type { Collection, MeowbaseResult } from "../types.js";
+import type { IStorageAdapter } from "../storage/adapter-interface.js";
+import type { CollectionInfo } from "../storage/schema.js";
 
 const NAMESPACE_PREFIX = "meowbase-";
 
@@ -6,11 +8,26 @@ const NAMESPACE_PREFIX = "meowbase-";
  * Storage adapter for localStorage operations
  * Pure functions with no side effects on memory state
  */
-export class StorageAdapter {
+export class StorageAdapter implements IStorageAdapter {
+  /**
+   * Initialize the storage adapter (no-op for localStorage)
+   */
+  async initialize(): Promise<void> {
+    // localStorage is always ready
+  }
+
+  /**
+   * Close the storage connection (no-op for localStorage)
+   */
+  async close(): Promise<void> {
+    // localStorage doesn't need closing
+  }
   /**
    * Create a new collection in localStorage
    */
-  create(collection: Collection): MeowbaseResult<Collection> {
+  async create(
+    collection: Collection
+  ): Promise<MeowbaseResult<Collection>> {
     const key = `${NAMESPACE_PREFIX}${collection.id}`;
 
     if (localStorage.getItem(key)) {
@@ -42,8 +59,10 @@ export class StorageAdapter {
   /**
    * Read a collection from localStorage
    */
-  read(identifier: string): MeowbaseResult<Collection> {
-    const key = this.findKey(identifier);
+  async read(
+    identifier: string
+  ): Promise<MeowbaseResult<Collection>> {
+    const key = await this.findKey(identifier);
 
     if (!key) {
       return {
@@ -79,7 +98,7 @@ export class StorageAdapter {
   /**
    * Update an existing collection in localStorage
    */
-  update(collection: Collection): MeowbaseResult {
+  async update(collection: Collection): Promise<MeowbaseResult> {
     const key = `${NAMESPACE_PREFIX}${collection.id}`;
 
     if (!localStorage.getItem(key)) {
@@ -110,8 +129,8 @@ export class StorageAdapter {
   /**
    * Delete a collection from localStorage
    */
-  delete(identifier: string): MeowbaseResult {
-    const key = this.findKey(identifier);
+  async delete(identifier: string): Promise<MeowbaseResult> {
+    const key = await this.findKey(identifier);
 
     if (!key) {
       return {
@@ -140,14 +159,8 @@ export class StorageAdapter {
   /**
    * List all collections in localStorage
    */
-  list(): MeowbaseResult<
-    Array<{ id: string; name: string; catCount: number }>
-  > {
-    const collections: Array<{
-      id: string;
-      name: string;
-      catCount: number;
-    }> = [];
+  async list(): Promise<MeowbaseResult<CollectionInfo[]>> {
+    const collections: CollectionInfo[] = [];
 
     try {
       for (let i = 0; i < localStorage.length; i++) {
@@ -182,7 +195,7 @@ export class StorageAdapter {
   /**
    * Find the localStorage key for a collection by ID or name
    */
-  findKey(identifier: string): string | null {
+  async findKey(identifier: string): Promise<string | null> {
     // Try as ID first
     const keyById = `${NAMESPACE_PREFIX}${identifier}`;
     if (localStorage.getItem(keyById)) {

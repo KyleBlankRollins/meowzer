@@ -4,31 +4,35 @@ import type {
   MeowbaseConfig,
   MeowbaseResult,
 } from "./types.js";
-import { StorageAdapter } from "./collections/storage.js";
+import type { IStorageAdapter } from "./storage/adapter-interface.js";
+import { IndexedDBAdapter } from "./storage/indexeddb-adapter.js";
 import { CollectionCache } from "./collections/cache.js";
 import { CollectionOperations } from "./collections/operations.js";
 import { CatOperations } from "./cats/operations.js";
 import { getSampleDataset } from "./core/sample-data.js";
 
 /**
- * Meowbase - A localStorage wrapper that mimics database operations
+ * Meowbase - An IndexedDB wrapper that provides database operations
  * Main facade that orchestrates all operations
  */
 export class Meowbase {
   private config: MeowbaseConfig;
-  private storage: StorageAdapter;
+  private storage: IStorageAdapter;
   private cache: CollectionCache;
   private collections: CollectionOperations;
   private cats: CatOperations;
 
-  constructor(config?: Partial<MeowbaseConfig>) {
+  constructor(
+    config?: Partial<MeowbaseConfig>,
+    storage?: IStorageAdapter
+  ) {
     this.config = {
       maxLoadedCollections: config?.maxLoadedCollections ?? 5,
       maxCollectionSize: config?.maxCollectionSize ?? 100,
     };
 
     // Initialize modules
-    this.storage = new StorageAdapter();
+    this.storage = storage ?? new IndexedDBAdapter();
     this.cache = new CollectionCache(
       this.config.maxLoadedCollections
     );
@@ -40,46 +44,63 @@ export class Meowbase {
     this.cats = new CatOperations(this.cache, this.config);
   }
 
+  /**
+   * Initialize the database connection
+   * Must be called before any other operations
+   */
+  async initialize(): Promise<void> {
+    await this.storage.initialize();
+  }
+
+  /**
+   * Close the database connection
+   */
+  async close(): Promise<void> {
+    await this.storage.close();
+  }
+
   // ===== Collection Management Methods =====
 
   /**
-   * Create a new collection and persist it to localStorage
+   * Create a new collection and persist it to storage
    */
-  createCollection(
+  async createCollection(
     name: string,
     cats: Cat[] = []
-  ): MeowbaseResult<Collection> {
-    return this.collections.create(name, cats);
+  ): Promise<MeowbaseResult<Collection>> {
+    return await this.collections.create(name, cats);
   }
 
   /**
    * Load a collection into memory
    */
-  loadCollection(identifier: string): MeowbaseResult<Collection> {
-    return this.collections.load(identifier);
+  async loadCollection(
+    identifier: string
+  ): Promise<MeowbaseResult<Collection>> {
+    return await this.collections.load(identifier);
   }
 
   /**
    * Load multiple collections into memory
    */
-  loadCollections(
+  async loadCollections(
     identifiers: string[]
-  ): MeowbaseResult<Collection[]> {
-    return this.collections.loadMany(identifiers);
+  ): Promise<MeowbaseResult<Collection[]>> {
+    return await this.collections.loadMany(identifiers);
   }
 
   /**
-   * Save a loaded collection back to localStorage
+   * Save a loaded collection back to storage
    */
-  saveCollection(identifier: string): MeowbaseResult {
-    return this.collections.save(identifier);
+  async saveCollection(identifier: string): Promise<MeowbaseResult> {
+    return await this.collections.save(identifier);
   }
 
   /**
-   * Save all dirty collections to localStorage
+   * Save all dirty collections to storage
    */
-  flushChanges(): MeowbaseResult {
-    return this.collections.flush();
+  async flushChanges(): Promise<MeowbaseResult> {
+    return await this.collections.flush();
   }
 
   /**
@@ -97,26 +118,32 @@ export class Meowbase {
   }
 
   /**
-   * Delete a collection from localStorage
+   * Delete a collection from storage
    */
-  deleteCollection(identifier: string): MeowbaseResult {
-    return this.collections.delete(identifier);
+  async deleteCollection(
+    identifier: string
+  ): Promise<MeowbaseResult> {
+    return await this.collections.delete(identifier);
   }
 
   /**
-   * Get a collection from localStorage without loading it into memory
+   * Get a collection from storage without loading it into memory
    */
-  getCollection(identifier: string): MeowbaseResult<Collection> {
-    return this.collections.get(identifier);
+  async getCollection(
+    identifier: string
+  ): Promise<MeowbaseResult<Collection>> {
+    return await this.collections.get(identifier);
   }
 
   /**
-   * List all collection IDs and names in localStorage
+   * List all collection IDs and names in storage
    */
-  listCollections(): MeowbaseResult<
-    Array<{ id: string; name: string; catCount: number }>
+  async listCollections(): Promise<
+    MeowbaseResult<
+      Array<{ id: string; name: string; catCount: number }>
+    >
   > {
-    return this.collections.list();
+    return await this.collections.list();
   }
 
   /**
@@ -141,8 +168,10 @@ export class Meowbase {
   /**
    * Get the size of a collection without loading it
    */
-  getCollectionSize(identifier: string): MeowbaseResult<number> {
-    return this.collections.getSize(identifier);
+  async getCollectionSize(
+    identifier: string
+  ): Promise<MeowbaseResult<number>> {
+    return await this.collections.getSize(identifier);
   }
 
   // ===== Cat Operations on Loaded Collections =====
@@ -190,29 +219,29 @@ export class Meowbase {
   // ===== Data Management Methods =====
 
   /**
-   * Load sample dataset into localStorage
+   * Load sample dataset into storage
    * Clears all existing meowbase data and loads three collections:
    * - shelter: 5 cats waiting for adoption
    * - neighborhood: 4 community cats
    * - home: 6 owned indoor cats
    */
-  loadSampleData(): MeowbaseResult<{
-    collectionsCreated: number;
-    totalCats: number;
-  }> {
+  async loadSampleData(): Promise<
+    MeowbaseResult<{
+      collectionsCreated: number;
+      totalCats: number;
+    }>
+  > {
     try {
       // Unload all collections from memory
       this.cache.clear();
 
-      // Clear all existing meowbase data from localStorage
-      const keys: string[] = [];
-      for (let i = 0; i < localStorage.length; i++) {
-        const key = localStorage.key(i);
-        if (key?.startsWith("meowbase-")) {
-          keys.push(key);
+      // Clear all existing meowbase data from storage
+      const listResult = await this.storage.list();
+      if (listResult.success && listResult.data) {
+        for (const info of listResult.data) {
+          await this.storage.delete(info.id);
         }
       }
-      keys.forEach((key) => localStorage.removeItem(key));
 
       // Load sample dataset
       const sampleCollections = getSampleDataset();
@@ -220,7 +249,7 @@ export class Meowbase {
 
       // Create each collection in storage
       for (const collection of sampleCollections) {
-        const result = this.storage.create(collection);
+        const result = await this.storage.create(collection);
         if (!result.success) {
           return {
             success: false,
@@ -249,26 +278,28 @@ export class Meowbase {
   }
 
   /**
-   * Clear all meowbase data from localStorage and memory
+   * Clear all meowbase data from storage and memory
    */
-  clearAllData(): MeowbaseResult {
+  async clearAllData(): Promise<MeowbaseResult> {
     try {
       // Unload all collections from memory
       this.cache.clear();
 
-      // Clear all meowbase data from localStorage
-      const keys: string[] = [];
-      for (let i = 0; i < localStorage.length; i++) {
-        const key = localStorage.key(i);
-        if (key?.startsWith("meowbase-")) {
-          keys.push(key);
-        }
+      // Get list of all collections
+      const listResult = await this.storage.list();
+      if (!listResult.success) {
+        return listResult;
       }
-      keys.forEach((key) => localStorage.removeItem(key));
+
+      // Delete each collection
+      const collections = listResult.data || [];
+      for (const info of collections) {
+        await this.storage.delete(info.id);
+      }
 
       return {
         success: true,
-        message: `Cleared ${keys.length} collections from storage`,
+        message: `Cleared ${collections.length} collections from storage`,
       };
     } catch (error) {
       return {

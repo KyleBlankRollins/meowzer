@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach } from "vitest";
 import { Meowbase } from "../meowbase.js";
+import { StorageAdapter } from "../collections/storage.js";
 import {
   clearMeowbaseStorage,
   countMeowbaseItems,
@@ -8,18 +9,21 @@ import {
 describe("Meowbase - Sample Data", () => {
   let db: Meowbase;
 
-  beforeEach(() => {
-    db = new Meowbase();
+  beforeEach(async () => {
+    const storage = new StorageAdapter();
+    db = new Meowbase(undefined, storage);
+    await db.initialize();
     clearMeowbaseStorage();
   });
 
-  afterEach(() => {
+  afterEach(async () => {
     clearMeowbaseStorage();
+    await db.close();
   });
 
   describe("loadSampleData", () => {
-    it("should load sample dataset with three collections", () => {
-      const result = db.loadSampleData();
+    it("should load sample dataset with three collections", async () => {
+      const result = await db.loadSampleData();
 
       expect(result.success).toBe(true);
       if (result.success) {
@@ -28,10 +32,10 @@ describe("Meowbase - Sample Data", () => {
       }
     });
 
-    it("should create shelter, neighborhood, and home collections", () => {
-      db.loadSampleData();
+    it("should create shelter, neighborhood, and home collections", async () => {
+      await db.loadSampleData();
 
-      const listResult = db.listCollections();
+      const listResult = await db.listCollections();
       expect(listResult.success).toBe(true);
 
       if (listResult.success) {
@@ -42,12 +46,14 @@ describe("Meowbase - Sample Data", () => {
       }
     });
 
-    it("should have correct cat counts per collection", () => {
-      db.loadSampleData();
+    it("should have correct cat counts per collection", async () => {
+      await db.loadSampleData();
 
-      const shelterResult = db.getCollection("shelter");
-      const neighborhoodResult = db.getCollection("neighborhood");
-      const homeResult = db.getCollection("home");
+      const shelterResult = await db.getCollection("shelter");
+      const neighborhoodResult = await db.getCollection(
+        "neighborhood"
+      );
+      const homeResult = await db.getCollection("home");
 
       expect(shelterResult.success).toBe(true);
       expect(neighborhoodResult.success).toBe(true);
@@ -64,39 +70,39 @@ describe("Meowbase - Sample Data", () => {
       }
     });
 
-    it("should clear existing data before loading", () => {
+    it("should clear existing data before loading", async () => {
       // Create some initial data
-      db.createCollection("existing", []);
+      await db.createCollection("existing", []);
       expect(countMeowbaseItems()).toBe(1);
 
       // Load sample data
-      db.loadSampleData();
+      await db.loadSampleData();
 
       // Should only have 3 collections from sample data
       expect(countMeowbaseItems()).toBe(3);
 
       // Existing collection should be gone
-      const result = db.getCollection("existing");
+      const result = await db.getCollection("existing");
       expect(result.success).toBe(false);
     });
 
-    it("should clear memory cache when loading", () => {
+    it("should clear memory cache when loading", async () => {
       // Load and keep a collection in memory
-      db.createCollection("test-collection", []);
-      db.loadCollection("test-collection");
+      await db.createCollection("test-collection", []);
+      await db.loadCollection("test-collection");
       expect(db.isCollectionLoaded("test-collection")).toBe(true);
 
       // Load sample data
-      db.loadSampleData();
+      await db.loadSampleData();
 
       // Cache should be cleared
       expect(db.isCollectionLoaded("test-collection")).toBe(false);
     });
 
-    it("should create cats with all required fields", () => {
-      db.loadSampleData();
+    it("should create cats with all required fields", async () => {
+      await db.loadSampleData();
 
-      const result = db.getCollection("home");
+      const result = await db.getCollection("home");
       expect(result.success).toBe(true);
 
       if (result.success) {
@@ -120,28 +126,28 @@ describe("Meowbase - Sample Data", () => {
   });
 
   describe("clearAllData", () => {
-    it("should clear all meowbase data from localStorage", () => {
-      db.loadSampleData();
+    it("should clear all meowbase data from localStorage", async () => {
+      await db.loadSampleData();
       expect(countMeowbaseItems()).toBe(3);
 
-      const result = db.clearAllData();
+      const result = await db.clearAllData();
 
       expect(result.success).toBe(true);
       expect(countMeowbaseItems()).toBe(0);
     });
 
-    it("should clear memory cache", () => {
-      db.createCollection("test", []);
-      db.loadCollection("test");
+    it("should clear memory cache", async () => {
+      await db.createCollection("test", []);
+      await db.loadCollection("test");
       expect(db.isCollectionLoaded("test")).toBe(true);
 
-      db.clearAllData();
+      await db.clearAllData();
 
       expect(db.isCollectionLoaded("test")).toBe(false);
     });
 
-    it("should work when no data exists", () => {
-      const result = db.clearAllData();
+    it("should work when no data exists", async () => {
+      const result = await db.clearAllData();
 
       expect(result.success).toBe(true);
       if (result.success) {

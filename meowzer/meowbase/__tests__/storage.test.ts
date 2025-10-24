@@ -20,9 +20,9 @@ describe("StorageAdapter", () => {
   });
 
   describe("create", () => {
-    it("should create a collection in localStorage", () => {
+    it("should create a collection in localStorage", async () => {
       const collection = createMockCollection({ name: "My Cats" });
-      const result = storage.create(collection);
+      const result = await storage.create(collection);
 
       expect(result.success).toBe(true);
       if (result.success) {
@@ -31,10 +31,10 @@ describe("StorageAdapter", () => {
       expect(countMeowbaseItems()).toBe(1);
     });
 
-    it("should not create duplicate collection with same id", () => {
+    it("should not create duplicate collection with same id", async () => {
       const collection = createMockCollection({ name: "My Cats" });
-      storage.create(collection);
-      const result = storage.create(collection);
+      await storage.create(collection);
+      const result = await storage.create(collection);
 
       expect(result.success).toBe(false);
       if (!result.success) {
@@ -43,9 +43,9 @@ describe("StorageAdapter", () => {
       expect(countMeowbaseItems()).toBe(1);
     });
 
-    it("should store collection with proper namespace", () => {
+    it("should store collection with proper namespace", async () => {
       const collection = createMockCollection();
-      storage.create(collection);
+      await storage.create(collection);
 
       const key = `meowbase-${collection.id}`;
       const stored = localStorage.getItem(key);
@@ -55,13 +55,13 @@ describe("StorageAdapter", () => {
   });
 
   describe("read", () => {
-    it("should read a collection by id", () => {
+    it("should read a collection by id", async () => {
       const collection = createMockCollection({
         name: "Test Collection",
       });
-      storage.create(collection);
+      await storage.create(collection);
 
-      const result = storage.read(collection.id);
+      const result = await storage.read(collection.id);
 
       expect(result.success).toBe(true);
       if (result.success) {
@@ -69,13 +69,13 @@ describe("StorageAdapter", () => {
       }
     });
 
-    it("should read a collection by name", () => {
+    it("should read a collection by name", async () => {
       const collection = createMockCollection({
         name: "Unique Name",
       });
-      storage.create(collection);
+      await storage.create(collection);
 
-      const result = storage.read("Unique Name");
+      const result = await storage.read("Unique Name");
 
       expect(result.success).toBe(true);
       if (result.success) {
@@ -83,8 +83,8 @@ describe("StorageAdapter", () => {
       }
     });
 
-    it("should return error for non-existent collection", () => {
-      const result = storage.read("non-existent");
+    it("should return error for non-existent collection", async () => {
+      const result = await storage.read("non-existent");
 
       expect(result.success).toBe(false);
       if (!result.success) {
@@ -92,13 +92,13 @@ describe("StorageAdapter", () => {
       }
     });
 
-    it("should read first collection when multiple have same name", () => {
+    it("should read first collection when multiple have same name", async () => {
       const collection1 = createMockCollection({ name: "Duplicate" });
       const collection2 = createMockCollection({ name: "Duplicate" });
-      storage.create(collection1);
-      storage.create(collection2);
+      await storage.create(collection1);
+      await storage.create(collection2);
 
-      const result = storage.read("Duplicate");
+      const result = await storage.read("Duplicate");
 
       expect(result.success).toBe(true);
       if (result.success) {
@@ -108,21 +108,21 @@ describe("StorageAdapter", () => {
   });
 
   describe("update", () => {
-    it("should update an existing collection", () => {
+    it("should update an existing collection", async () => {
       const collection = createMockCollection({
         name: "Original Name",
       });
-      storage.create(collection);
+      await storage.create(collection);
 
       collection.name = "Updated Name";
       const cat = createMockCat();
       collection.children = [cat];
 
-      const result = storage.update(collection);
+      const result = await storage.update(collection);
 
       expect(result.success).toBe(true);
 
-      const readResult = storage.read(collection.id);
+      const readResult = await storage.read(collection.id);
       expect(readResult.success).toBe(true);
       if (readResult.success) {
         expect(readResult.data!.name).toBe("Updated Name");
@@ -130,9 +130,9 @@ describe("StorageAdapter", () => {
       }
     });
 
-    it("should return error when updating non-existent collection", () => {
+    it("should return error when updating non-existent collection", async () => {
       const collection = createMockCollection();
-      const result = storage.update(collection);
+      const result = await storage.update(collection);
 
       expect(result.success).toBe(false);
       if (!result.success) {
@@ -142,28 +142,28 @@ describe("StorageAdapter", () => {
   });
 
   describe("delete", () => {
-    it("should delete a collection by id", () => {
+    it("should delete a collection by id", async () => {
       const collection = createMockCollection();
-      storage.create(collection);
+      await storage.create(collection);
 
-      const result = storage.delete(collection.id);
+      const result = await storage.delete(collection.id);
 
       expect(result.success).toBe(true);
       expect(countMeowbaseItems()).toBe(0);
     });
 
-    it("should delete a collection by name", () => {
+    it("should delete a collection by name", async () => {
       const collection = createMockCollection({ name: "Delete Me" });
-      storage.create(collection);
+      await storage.create(collection);
 
-      const result = storage.delete("Delete Me");
+      const result = await storage.delete("Delete Me");
 
       expect(result.success).toBe(true);
       expect(countMeowbaseItems()).toBe(0);
     });
 
-    it("should return error when deleting non-existent collection", () => {
-      const result = storage.delete("non-existent");
+    it("should return error when deleting non-existent collection", async () => {
+      const result = await storage.delete("non-existent");
 
       expect(result.success).toBe(false);
       if (!result.success) {
@@ -173,17 +173,17 @@ describe("StorageAdapter", () => {
   });
 
   describe("list", () => {
-    it("should list all collections", () => {
+    it("should list all collections", async () => {
       const collection1 = createMockCollection({
         name: "Collection 1",
       });
       const collection2 = createMockCollection({
         name: "Collection 2",
       });
-      storage.create(collection1);
-      storage.create(collection2);
+      await storage.create(collection1);
+      await storage.create(collection2);
 
-      const result = storage.list();
+      const result = await storage.list();
 
       expect(result.success).toBe(true);
       if (result.success) {
@@ -194,8 +194,8 @@ describe("StorageAdapter", () => {
       }
     });
 
-    it("should return empty array when no collections exist", () => {
-      const result = storage.list();
+    it("should return empty array when no collections exist", async () => {
+      const result = await storage.list();
 
       expect(result.success).toBe(true);
       if (result.success) {
@@ -203,16 +203,16 @@ describe("StorageAdapter", () => {
       }
     });
 
-    it("should include cat count in listing", () => {
+    it("should include cat count in listing", async () => {
       const cat1 = createMockCat();
       const cat2 = createMockCat();
       const collection = createMockCollection({
         name: "Cat Collection",
         children: [cat1, cat2],
       });
-      storage.create(collection);
+      await storage.create(collection);
 
-      const result = storage.list();
+      const result = await storage.list();
 
       expect(result.success).toBe(true);
       if (result.success) {
@@ -222,26 +222,26 @@ describe("StorageAdapter", () => {
   });
 
   describe("findKey", () => {
-    it("should find key by id", () => {
+    it("should find key by id", async () => {
       const collection = createMockCollection();
-      storage.create(collection);
+      await storage.create(collection);
 
-      const key = storage.findKey(collection.id);
+      const key = await storage.findKey(collection.id);
 
       expect(key).toBe(`meowbase-${collection.id}`);
     });
 
-    it("should find key by name", () => {
+    it("should find key by name", async () => {
       const collection = createMockCollection({ name: "Find Me" });
-      storage.create(collection);
+      await storage.create(collection);
 
-      const key = storage.findKey("Find Me");
+      const key = await storage.findKey("Find Me");
 
       expect(key).toBe(`meowbase-${collection.id}`);
     });
 
-    it("should return null for non-existent collection", () => {
-      const key = storage.findKey("non-existent");
+    it("should return null for non-existent collection", async () => {
+      const key = await storage.findKey("non-existent");
 
       expect(key).toBeNull();
     });

@@ -5,19 +5,19 @@ import type {
   MeowbaseResult,
 } from "../types.js";
 import { CollectionCache } from "./cache.js";
-import { StorageAdapter } from "./storage.js";
+import type { IStorageAdapter } from "../storage/adapter-interface.js";
 import { generateUUID } from "../core/utils.js";
 
 /**
  * High-level collection operations that orchestrate between storage and cache
  */
 export class CollectionOperations {
-  private storage: StorageAdapter;
+  private storage: IStorageAdapter;
   private cache: CollectionCache;
   private config: MeowbaseConfig;
 
   constructor(
-    storage: StorageAdapter,
+    storage: IStorageAdapter,
     cache: CollectionCache,
     config: MeowbaseConfig
   ) {
@@ -29,7 +29,10 @@ export class CollectionOperations {
   /**
    * Create a new collection and persist it to localStorage
    */
-  create(name: string, cats: Cat[] = []): MeowbaseResult<Collection> {
+  async create(
+    name: string,
+    cats: Cat[] = []
+  ): Promise<MeowbaseResult<Collection>> {
     if (cats.length > this.config.maxCollectionSize) {
       return {
         success: false,
@@ -43,13 +46,15 @@ export class CollectionOperations {
       children: cats,
     };
 
-    return this.storage.create(collection);
+    return await this.storage.create(collection);
   }
 
   /**
    * Load a collection into memory
    */
-  load(identifier: string): MeowbaseResult<Collection> {
+  async load(
+    identifier: string
+  ): Promise<MeowbaseResult<Collection>> {
     // Check if already loaded
     const cached = this.cache.find(identifier);
     if (cached) {
@@ -60,7 +65,7 @@ export class CollectionOperations {
     }
 
     // Get from storage
-    const result = this.storage.read(identifier);
+    const result = await this.storage.read(identifier);
     if (!result.success) {
       return result;
     }
@@ -79,12 +84,14 @@ export class CollectionOperations {
   /**
    * Load multiple collections into memory
    */
-  loadMany(identifiers: string[]): MeowbaseResult<Collection[]> {
+  async loadMany(
+    identifiers: string[]
+  ): Promise<MeowbaseResult<Collection[]>> {
     const loadedCollections: Collection[] = [];
     const errors: string[] = [];
 
     for (const identifier of identifiers) {
-      const result = this.load(identifier);
+      const result = await this.load(identifier);
       if (result.success) {
         loadedCollections.push(result.data!);
       } else {
@@ -110,7 +117,7 @@ export class CollectionOperations {
   /**
    * Save a loaded collection back to localStorage
    */
-  save(identifier: string): MeowbaseResult {
+  async save(identifier: string): Promise<MeowbaseResult> {
     const metadata = this.cache.find(identifier);
 
     if (!metadata) {
@@ -130,7 +137,7 @@ export class CollectionOperations {
       };
     }
 
-    const result = this.storage.update(metadata.collection);
+    const result = await this.storage.update(metadata.collection);
 
     if (result.success) {
       this.cache.markClean(metadata.collection.id);
@@ -142,7 +149,7 @@ export class CollectionOperations {
   /**
    * Save all dirty collections to localStorage
    */
-  flush(): MeowbaseResult {
+  async flush(): Promise<MeowbaseResult> {
     const dirtyCollections = this.cache.getDirty();
     const errors: string[] = [];
     let savedCount = 0;
@@ -158,7 +165,7 @@ export class CollectionOperations {
         continue;
       }
 
-      const result = this.storage.update(metadata.collection);
+      const result = await this.storage.update(metadata.collection);
       if (result.success) {
         this.cache.markClean(metadata.collection.id);
         savedCount++;
@@ -240,14 +247,15 @@ export class CollectionOperations {
   /**
    * Delete a collection from localStorage
    */
-  delete(identifier: string): MeowbaseResult {
-    const result = this.storage.delete(identifier);
+  async delete(identifier: string): Promise<MeowbaseResult> {
+    const result = await this.storage.delete(identifier);
 
     // Also remove from cache if present
     if (result.success) {
-      const key = this.storage.findKey(identifier);
+      const key = await this.storage.findKey(identifier);
       if (key) {
-        const collectionId = this.storage.extractIdFromKey(key);
+        // Extract ID from key format "meowbase-{id}"
+        const collectionId = key.replace("meowbase-", "");
         this.cache.remove(collectionId);
       }
     }
@@ -258,17 +266,19 @@ export class CollectionOperations {
   /**
    * Get a collection from storage without loading into memory
    */
-  get(identifier: string): MeowbaseResult<Collection> {
-    return this.storage.read(identifier);
+  async get(identifier: string): Promise<MeowbaseResult<Collection>> {
+    return await this.storage.read(identifier);
   }
 
   /**
    * List all collections in storage
    */
-  list(): MeowbaseResult<
-    Array<{ id: string; name: string; catCount: number }>
+  async list(): Promise<
+    MeowbaseResult<
+      Array<{ id: string; name: string; catCount: number }>
+    >
   > {
-    return this.storage.list();
+    return await this.storage.list();
   }
 
   /**
@@ -298,8 +308,8 @@ export class CollectionOperations {
   /**
    * Get the size of a collection without loading it
    */
-  getSize(identifier: string): MeowbaseResult<number> {
-    const result = this.storage.read(identifier);
+  async getSize(identifier: string): Promise<MeowbaseResult<number>> {
+    const result = await this.storage.read(identifier);
 
     if (!result.success) {
       return result;
