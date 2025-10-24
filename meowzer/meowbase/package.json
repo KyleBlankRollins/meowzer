@@ -1,0 +1,31 @@
+{
+  "name": "meowbase",
+  "version": "0.1.0",
+  "description": "A localStorage wrapper that mimics a database for learning purposes",
+  "type": "module",
+  "main": "./meowbase.ts",
+  "exports": {
+    ".": "./meowbase.ts",
+    "./types": "./types.ts"
+  },
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:ui": "vitest --ui",
+    "test:coverage": "vitest run --coverage"
+  },
+  "keywords": [
+    "localStorage",
+    "database",
+    "learning",
+    "education"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@vitest/ui": "^3.2.4",
+    "happy-dom": "^20.0.8",
+    "typescript": "~5.9.3",
+    "vitest": "^3.2.4"
+  }
+}

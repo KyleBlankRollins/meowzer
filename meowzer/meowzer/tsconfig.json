@@ -1,0 +1,23 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./dist",
+    "rootDir": "..",
+    "composite": true
+  },
+  "include": [
+    "./**/*.ts",
+    "../types.ts",
+    "../meowkit/**/*.ts",
+    "../meowtion/**/*.ts",
+    "../meowbrain/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "__tests__",
+    "../**/__tests__",
+    "vitest.config.ts",
+    "../**/vitest.config.ts"
+  ]
+}

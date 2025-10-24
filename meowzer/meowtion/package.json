@@ -1,0 +1,30 @@
+{
+  "name": "meowtion",
+  "version": "1.0.0",
+  "description": "Animation library for bringing cat sprites to life with movement and physics",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest",
+    "test:run": "vitest --run"
+  },
+  "keywords": [
+    "animation",
+    "cat",
+    "sprite",
+    "physics",
+    "svg"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "gsap": "^3.13.0",
+    "lit": "^3.3.1"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0",
+    "vitest": "^4.0.2"
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "name": "meowbrain",
+  "version": "1.0.0",
+  "description": "Artificial intelligence library for autonomous cat behavior and decision-making",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest",
+    "test:run": "vitest --run"
+  },
+  "keywords": [
+    "ai",
+    "behavior",
+    "autonomous",
+    "cat",
+    "decision-making"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^5.0.0",
+    "vitest": "^4.0.2"
+  }
+}

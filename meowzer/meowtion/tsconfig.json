@@ -1,0 +1,17 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./dist",
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "experimentalDecorators": true,
+    "useDefineForClassFields": false
+  },
+  "include": [
+    "*.ts",
+    "__tests__/**/*.ts",
+    "../types.ts",
+    "moewtion-container/meowtion-container.ts"
+  ]
+}

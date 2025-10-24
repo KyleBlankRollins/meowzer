@@ -1,0 +1,19 @@
+{
+  "name": "meowbase-monorepo",
+  "version": "0.1.0",
+  "private": true,
+  "workspaces": [
+    "meowbase",
+    "docs"
+  ],
+  "scripts": {
+    "test": "npm run test --workspace=meowbase",
+    "test:watch": "npm run test:watch --workspace=meowbase",
+    "test:ui": "npm run test:ui --workspace=meowbase",
+    "test:coverage": "npm run test:coverage --workspace=meowbase",
+    "dev:docs": "npm run dev --workspace=docs",
+    "build:docs": "npm run build --workspace=docs"
+  },
+  "devDependencies": {},
+  "description": "Monorepo containing Meowbase library and documentation website"
+}

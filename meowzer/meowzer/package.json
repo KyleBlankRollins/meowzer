@@ -1,0 +1,36 @@
+{
+  "name": "meowzer",
+  "version": "1.0.0",
+  "description": "High-level API wrapper for creating, managing, and persisting autonomous cat instances",
+  "type": "module",
+  "main": "./meowzer.js",
+  "types": "./meowzer.d.ts",
+  "exports": {
+    ".": {
+      "import": "./meowzer.js",
+      "types": "./meowzer.d.ts"
+    }
+  },
+  "scripts": {
+    "test": "vitest",
+    "build": "tsc",
+    "typecheck": "tsc --noEmit"
+  },
+  "keywords": [
+    "cat",
+    "animation",
+    "autonomous",
+    "sprite",
+    "web",
+    "zero-dependency"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^20.11.19",
+    "@vitest/ui": "^4.0.2",
+    "happy-dom": "^20.0.8",
+    "typescript": "^5.3.3",
+    "vitest": "^4.0.2"
+  }
+}

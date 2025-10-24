@@ -1,0 +1,134 @@
+/* Import Quiet UI styles */
+@import "@quietui/quiet/themes/quiet.css";
+@import "@quietui/quiet/themes/restyle.css";
+
+/* Enable light and dark color schemes */
+:root {
+  color-scheme: light dark;
+}
+
+/* Apply Quiet UI's dark theme class based on system preference */
+@media (prefers-color-scheme: dark) {
+  .quiet-theme {
+    color-scheme: dark;
+  }
+  
+  .quiet-theme,
+  .quiet-theme * {
+    /* Apply all dark theme tokens to elements with quiet-theme class */
+    --quiet-silent: black;
+    --quiet-strident: white;
+    --quiet-background-color: var(--quiet-neutral-950);
+    --quiet-paper-color: color-mix(in oklab, var(--quiet-neutral-950), white 2.5%);
+    --quiet-text-body: var(--quiet-neutral-200);
+    --quiet-text-muted: var(--quiet-neutral-500);
+    --quiet-focus-color: var(--quiet-primary-fill-mid);
+    --quiet-backdrop-color: rgb(0 0 0 / 0.5);
+    --quiet-selection-background-color: var(--quiet-primary-700);
+    --quiet-selection-color: var(--quiet-text-body);
+    --quiet-shadow-color: black;
+    
+    /* Neutral fills for dark mode */
+    --quiet-neutral-fill-base: var(--quiet-background-color);
+    --quiet-neutral-fill-softer: color-mix(in oklab, var(--quiet-neutral-900), white 1%);
+    --quiet-neutral-fill-soft: var(--quiet-neutral-800);
+    --quiet-neutral-fill-mid: color-mix(in oklab, var(--quiet-neutral-600), black 7.5%);
+    --quiet-neutral-fill-loud: var(--quiet-neutral-200);
+    
+    /* Neutral text for dark mode */
+    --quiet-neutral-text-softer: var(--quiet-neutral-600);
+    --quiet-neutral-text-soft: var(--quiet-neutral-500);
+    --quiet-neutral-text-mid: var(--quiet-neutral-300);
+    --quiet-neutral-text-loud: var(--quiet-neutral-100);
+    
+    /* Neutral strokes for dark mode */
+    --quiet-neutral-stroke-softer: color-mix(in oklab, var(--quiet-neutral-900), white 7.5%);
+    --quiet-neutral-stroke-soft: var(--quiet-neutral-800);
+    --quiet-neutral-stroke-mid: var(--quiet-neutral-600);
+  }
+}
+
+/* Global Styles */
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, sans-serif;
+  line-height: 1.6;
+  background: var(--quiet-background-color, var(--quiet-neutral-fill-base));
+  color: var(--quiet-text-body, var(--quiet-neutral-text-mid));
+}
+
+/* Template layouts and component-specific styles are now in web components */
+
+/* Content Styles */
+.doc-content h2,
+.landing-content h2,
+.home-content h2 {
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  font-size: 1.75rem;
+}
+
+.doc-content h3,
+.landing-content h3,
+.home-content h3 {
+  margin-top: 1.5rem;
+  margin-bottom: 0.75rem;
+  font-size: 1.5rem;
+}
+
+.doc-content p,
+.landing-content p,
+.home-content p {
+  margin-bottom: 1rem;
+}
+
+/* 
+ * Code Styles - Shiki syntax highlighting
+ */
+
+/* Inline code (not in code blocks) */
+.doc-content code:not(pre code),
+.landing-content code:not(pre code),
+.home-content code:not(pre code) {
+  background: var(--quiet-neutral-fill-soft);
+  color: var(--quiet-neutral-text-loud);
+  padding: 0.125rem 0.375rem;
+  border-radius: var(--quiet-border-radius-sm);
+  font-family: ui-monospace, "Cascadia Code", "Source Code Pro", Menlo, Consolas, "DejaVu Sans Mono", monospace;
+  font-size: 0.875em;
+}
+
+/* Code blocks - Shiki provides background via inline styles */
+.doc-content pre,
+.landing-content pre,
+.home-content pre {
+  margin: 1.5rem 0;
+  border-radius: var(--quiet-border-radius-md);
+  overflow-x: auto;
+  /* Don't override background - Shiki provides it */
+}
+
+/* Code inside pre blocks */
+.doc-content pre code,
+.landing-content pre code,
+.home-content pre code {
+  display: block;
+  padding: 1rem;
+  font-family: ui-monospace, "Cascadia Code", "Source Code Pro", Menlo, Consolas, "DejaVu Sans Mono", monospace;
+  font-size: 0.875rem;
+  line-height: 1.7;
+}
+
+/* Support Shiki's dual theme mode based on color scheme */
+/* Shiki uses CSS custom properties for theme switching */
+@media (prefers-color-scheme: light) {
+  .shiki {
+    color-scheme: light;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .shiki {
+    color-scheme: dark;
+  }
+}
