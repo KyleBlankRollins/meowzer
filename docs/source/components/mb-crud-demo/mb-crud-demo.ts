@@ -1,20 +1,24 @@
 import { LitElement, html } from "lit";
 import { customElement, state } from "lit/decorators.js";
+import { consume } from "@lit/context";
 import { mbCrudDemoStyles } from "./mb-crud-demo.styles";
 
-// Import Meowbase from the local package
-import { Meowbase } from "meowbase";
-import type { Cat } from "meowbase/types";
+// Import from Meowzer SDK
+import type { Meowbase, Cat } from "meowzer";
+import { meowbaseContext } from "../../contexts/meowbase-context.js";
 
 /**
  * Interactive CRUD demo component for Meowbase
+ * Consumes Meowbase instance from provider context (via Meowzer SDK)
  */
 @customElement("mb-crud-demo")
 export class MeowbaseCrudDemo extends LitElement {
   static styles = mbCrudDemoStyles;
 
-  // Meowbase instance
-  private db = new Meowbase();
+  @consume({ context: meowbaseContext, subscribe: true })
+  @state()
+  private db: Meowbase | null = null;
+
   private readonly COLLECTION_NAME = "demo-cats";
 
   // Component state
@@ -34,43 +38,77 @@ export class MeowbaseCrudDemo extends LitElement {
   @state()
   private message = "";
 
+  @state()
+  private isInitialized = false;
+
   connectedCallback() {
     super.connectedCallback();
-    this.initializeCollection();
   }
 
-  private initializeCollection() {
-    // Try to load existing collection
-    let loadResult = this.db.loadCollection(this.COLLECTION_NAME);
+  // Watch for database becoming available
+  updated(changedProperties: Map<string, any>) {
+    if (
+      changedProperties.has("db") &&
+      this.db &&
+      !this.isInitialized
+    ) {
+      this.initializeCollection();
+    }
+  }
 
-    if (!loadResult.success) {
-      // Collection doesn't exist, create it
-      const createResult = this.db.createCollection(
-        this.COLLECTION_NAME,
-        []
+  private async initializeCollection() {
+    if (!this.db) {
+      return;
+    }
+
+    this.isInitialized = true;
+
+    try {
+      // Try to load existing collection
+      let loadResult = await this.db.loadCollection(
+        this.COLLECTION_NAME
       );
-      if (!createResult.success) {
-        this.message = `Error creating collection: ${createResult.message}`;
-        return;
-      }
-      // Load the newly created collection
-      loadResult = this.db.loadCollection(this.COLLECTION_NAME);
-    }
 
-    if (loadResult.success && loadResult.data) {
-      this.cats = loadResult.data.children;
+      if (!loadResult.success) {
+        // Collection doesn't exist, create it
+        const createResult = await this.db.createCollection(
+          this.COLLECTION_NAME,
+          []
+        );
+        if (!createResult.success) {
+          this.message = `Error creating collection: ${createResult.message}`;
+          return;
+        }
+        // Load the newly created collection
+        loadResult = await this.db.loadCollection(
+          this.COLLECTION_NAME
+        );
+      }
+
+      if (loadResult.success && loadResult.data) {
+        this.cats = loadResult.data.children;
+      }
+    } catch (error) {
+      this.message = `Error initializing collection: ${error}`;
     }
   }
 
-  private loadCats() {
-    const result = this.db.loadCollection(this.COLLECTION_NAME);
+  private async loadCats() {
+    if (!this.db) return;
+
+    const result = await this.db.loadCollection(this.COLLECTION_NAME);
     if (result.success && result.data) {
       this.cats = result.data.children;
     }
   }
 
-  private handleSubmit(e: Event) {
+  private async handleSubmit(e: Event) {
     e.preventDefault();
+
+    if (!this.db) {
+      this.message = "Database not available";
+      return;
+    }
 
     if (!this.formData.name || !this.formData.description) {
       this.message = "Please fill in name and description";
@@ -100,10 +138,10 @@ export class MeowbaseCrudDemo extends LitElement {
       );
 
       if (result.success) {
-        this.db.saveCollection(this.COLLECTION_NAME);
+        await this.db.saveCollection(this.COLLECTION_NAME);
         this.message = `Updated ${this.formData.name}!`;
         this.editingId = null;
-        this.loadCats();
+        await this.loadCats();
       } else {
         this.message = `Error: ${result.message}`;
       }
@@ -135,9 +173,9 @@ export class MeowbaseCrudDemo extends LitElement {
       );
 
       if (result.success) {
-        this.db.saveCollection(this.COLLECTION_NAME);
+        await this.db.saveCollection(this.COLLECTION_NAME);
         this.message = `Added ${newCat.name}!`;
-        this.loadCats();
+        await this.loadCats();
       } else {
         this.message = `Error: ${result.message}`;
       }
@@ -156,15 +194,20 @@ export class MeowbaseCrudDemo extends LitElement {
     this.message = "";
   }
 
-  private handleDelete(catId: string) {
+  private async handleDelete(catId: string) {
+    if (!this.db) {
+      this.message = "Database not available";
+      return;
+    }
+
     const result = this.db.removeCatFromCollection(
       this.COLLECTION_NAME,
       catId
     );
     if (result.success) {
-      this.db.saveCollection(this.COLLECTION_NAME);
+      await this.db.saveCollection(this.COLLECTION_NAME);
       this.message = "Cat deleted successfully";
-      this.loadCats();
+      await this.loadCats();
     } else {
       this.message = `Error: ${result.message}`;
     }
@@ -203,6 +246,19 @@ export class MeowbaseCrudDemo extends LitElement {
   }
 
   render() {
+    // Show loading state while database is initializing
+    if (!this.db || !this.isInitialized) {
+      return html`
+        <div class="crud-demo">
+          <quiet-card>
+            <div class="loading-message">
+              <p>Initializing database...</p>
+            </div>
+          </quiet-card>
+        </div>
+      `;
+    }
+
     return html`
       <div class="crud-demo">
         ${this.message

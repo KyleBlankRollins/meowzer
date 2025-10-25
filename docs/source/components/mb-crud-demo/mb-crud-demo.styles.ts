@@ -52,4 +52,10 @@ export const mbCrudDemoStyles = css`
     font-size: 4rem;
     opacity: 0.3;
   }
+
+  .loading-message {
+    padding: 2rem;
+    text-align: center;
+    color: var(--quiet-neutral-text-soft);
+  }
 `;

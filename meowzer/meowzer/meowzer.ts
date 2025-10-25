@@ -39,6 +39,19 @@ export {
 } from "./management.js";
 
 // ============================================================================
+// DATABASE FUNCTIONS
+// ============================================================================
+
+export {
+  Meowbase,
+  initializeDatabase,
+  getDatabase,
+  isDatabaseInitialized,
+  closeDatabase,
+  resetDatabase,
+} from "./database.js";
+
+// ============================================================================
 // UTILITY FUNCTIONS
 // ============================================================================
 
@@ -47,6 +60,23 @@ export {
   validateSettings,
   getViewportBoundaries,
 } from "./utils.js";
+
+// ============================================================================
+// MEOWKIT (CAT CREATION) FUNCTIONS
+// ============================================================================
+
+export {
+  buildCat,
+  buildCatFromSeed,
+  serializeCat,
+  deserializeCat,
+  CatBuilder,
+  validateSettings as validateCatSettings,
+  generateSeed,
+  parseSeed,
+} from "../meowkit/meowkit.js";
+
+export type { ProtoCat } from "../types.js";
 
 // ============================================================================
 // PERSONALITY UTILITIES
@@ -77,6 +107,16 @@ export type {
   FurLength,
   BehaviorType,
 } from "../types.js";
+
+// Meowbase type exports
+export type {
+  Cat,
+  Collection,
+  MeowbaseConfig,
+  MeowbaseResult,
+} from "../meowbase/types.js";
+
+export type { IStorageAdapter } from "../meowbase/storage/adapter-interface.js";
 
 // ============================================================================
 // INITIALIZATION

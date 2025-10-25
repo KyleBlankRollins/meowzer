@@ -10,7 +10,8 @@
     "../types.ts",
     "../meowkit/**/*.ts",
     "../meowtion/**/*.ts",
-    "../meowbrain/**/*.ts"
+    "../meowbrain/**/*.ts",
+    "../meowbase/**/*.ts"
   ],
   "exclude": [
     "node_modules",

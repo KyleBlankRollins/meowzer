@@ -3,13 +3,26 @@ title: CRUD Operations
 description: Interactive examples of Create, Read, Update, and Delete operations with Meowbase
 ---
 
-Try out Meowbase's CRUD operations with this interactive demo. Add cats, view them, update their information, and delete them.
+Create your own custom cats using our character creator! Uses Meowkit to build cats and Meowbase to store them.
 
-<mb-crud-demo></mb-crud-demo>
+<mb-meowbase-provider>
+  <mb-cat-creator></mb-cat-creator>
+</mb-meowbase-provider>
 
 ## How it works
 
-The demo above uses a real Meowbase instance running in your browser. All operations are performed in-memory, so your data will reset when you refresh the page.
+The cat creator above uses **Meowkit** to build ProtoCat objects from your settings, then stores them in **Meowbase** with IndexedDB. Your cats persist between page refreshes!
+
+### Creating cats
+
+1. Choose your cat's appearance (color, pattern, fur length)
+2. Set the size
+3. Give your cat a name and description
+4. Click "Create Cat" to save
+
+### Live Preview
+
+As you adjust the settings, the preview updates in real-time showing you exactly what your cat will look like.
 
 ### Creating cats
 
