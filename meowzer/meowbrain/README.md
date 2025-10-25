@@ -6,203 +6,245 @@ Artificial intelligence library for autonomous cat behavior and decision-making.
 
 Meowbrain gives cats "brains" - autonomous behavior systems that control `Cat` instances from Meowtion. Instead of users directly controlling cats, Meowbrain makes cats act independently based on personality traits, environmental stimuli, and decision-making algorithms. This creates lifelike, unpredictable behavior that makes cats feel alive.
 
+## Module Architecture
+
+```mermaid
+graph TB
+    subgraph "Brain Class (brain.ts)"
+        BRAIN[Brain<br/>Decision Coordinator]
+    end
+
+    subgraph "Decision Making"
+        ENGINE[decision-engine.ts<br/>calculateBehaviorWeights<br/>chooseBehavior<br/>updateMotivations]
+        PERS[personality.ts<br/>Personality presets<br/>validation]
+    end
+
+    subgraph "Behavior Execution"
+        BEH[behaviors.ts<br/>wandering<br/>resting<br/>playing<br/>observing<br/>exploring]
+    end
+
+    subgraph "Controlled"
+        CAT[Cat Instance<br/>from Meowtion]
+    end
+
+    BRAIN -->|consults| ENGINE
+    BRAIN -->|uses| PERS
+    BRAIN -->|executes| BEH
+    BEH -->|controls| CAT
+    ENGINE -->|weights influenced by| PERS
+
+    style BRAIN fill:#da70d6
+    style ENGINE fill:#4a9eff
+    style BEH fill:#50c878
+```
+
+## Decision Loop Flow
+
+```mermaid
+flowchart TD
+    START([Brain.start]) --> WAIT[Wait random interval<br/>2-5 seconds]
+    WAIT --> UPDATE[Update Motivations<br/>rest += 0.001/sec<br/>stimulation += 0.002/sec<br/>exploration += 0.0015/sec]
+
+    UPDATE --> CALC[Calculate Behavior Weights<br/>decision-engine.ts]
+
+    CALC --> W_WANDER[Wandering Weight<br/>= energy × curiosity × exploration]
+    CALC --> W_REST[Resting Weight<br/>= rest × (1 - energy)]
+    CALC --> W_PLAY[Playing Weight<br/>= playfulness × stimulation × energy]
+    CALC --> W_OBSERVE[Observing Weight<br/>= curiosity × (1 - playfulness)]
+    CALC --> W_EXPLORE[Exploring Weight<br/>= exploration × curiosity]
+
+    W_WANDER --> CHOOSE{Choose Behavior<br/>Weighted Random}
+    W_REST --> CHOOSE
+    W_PLAY --> CHOOSE
+    W_OBSERVE --> CHOOSE
+    W_EXPLORE --> CHOOSE
+
+    CHOOSE -->|selected| EXECUTE[Execute Behavior<br/>behaviors.ts]
+
+    EXECUTE --> B_WANDER[wandering:<br/>curved path to random point]
+    EXECUTE --> B_REST[resting:<br/>sit/sleep in place]
+    EXECUTE --> B_PLAY[playing:<br/>zigzag movements]
+    EXECUTE --> B_OBSERVE[observing:<br/>sit and watch]
+    EXECUTE --> B_EXPLORE[exploring:<br/>move to unvisited area]
+
+    B_WANDER --> CONTROL[Control Cat via<br/>cat.moveTo / cat.setState]
+    B_REST --> CONTROL
+    B_PLAY --> CONTROL
+    B_OBSERVE --> CONTROL
+    B_EXPLORE --> CONTROL
+
+    CONTROL --> MEMORY[Update Memory<br/>visited positions<br/>behavior history]
+
+    MEMORY --> CHECK{Brain Running?}
+    CHECK -->|Yes| WAIT
+    CHECK -->|No| STOP([Brain.stop])
+
+    style START fill:#50c878
+    style CHOOSE fill:#da70d6
+    style EXECUTE fill:#4a9eff
+    style STOP fill:#ff6b6b
+```
+
 ## Core Concepts
 
-### Brain (Primary Interface)
+### Brain Class
 
 A brain controls a single cat and makes autonomous decisions:
 
 ```typescript
-interface Brain {
-  id: string; // Unique identifier
-  cat: Cat; // The cat being controlled
-  personality: Personality; // Behavioral traits
-  state: BrainState; // Current decision state
-  memory: Memory; // Short-term memory for decision-making
+class Brain {
+  readonly id: string;
+  readonly cat: Cat;
 
-  // Lifecycle methods
-  start(): void; // Begin autonomous behavior
-  stop(): void; // Pause autonomous behavior
-  destroy(): void; // Clean up and remove
+  // Getters
+  get personality(): Personality;
+  get state(): BrainState;
+  get memory(): Memory;
+  get isRunning(): boolean;
+
+  // Lifecycle
+  start(): void;
+  stop(): void;
+  destroy(): void;
 
   // Configuration
-  setPersonality(personality: Partial<Personality>): void;
+  setPersonality(
+    personality: Partial<Personality> | PersonalityPreset
+  ): void;
   setEnvironment(environment: Environment): void;
 
-  // Observation (for debugging/monitoring)
+  // Events
   on(event: BrainEvent, handler: EventHandler): void;
   off(event: BrainEvent, handler: EventHandler): void;
 }
+```
 
+### Type Definitions
+
+```typescript
 interface BrainState {
-  currentBehavior: BehaviorType; // What the cat is currently doing
-  motivation: Motivation; // Current motivations/needs
-  lastDecisionTime: number; // When last decision was made
-  decisionCooldown: number; // Time until next decision
+  currentBehavior: BehaviorType;
+  motivation: Motivation;
+  lastDecisionTime: number;
+  decisionCooldown: number;
 }
 
 type BehaviorType =
-  | "wandering"
-  | "resting"
-  | "playing"
-  | "observing"
-  | "exploring";
+  | "wandering" // Random movement with curved paths
+  | "resting" // Sitting or sleeping
+  | "playing" // Erratic, playful movements
+  | "observing" // Sitting and watching
+  | "exploring"; // Moving to unvisited areas
+
 type BrainEvent =
-  | "behaviorChange"
-  | "decisionMade"
-  | "reactionTriggered";
-type EventHandler = (data: any) => void;
-```
+  | "behaviorChange" // Emitted when behavior changes
+  | "decisionMade" // Emitted when decision is made
+  | "reactionTriggered"; // Emitted on reactions (boundary hits, etc.)
 
-### Personality
+type EventHandler = (data?: any) => void;
 
-Personality traits influence decision-making and behavior patterns:
-
-```typescript
 interface Personality {
-  energy: number; // 0-1: Low energy = more resting, high = more active
-  curiosity: number; // 0-1: How likely to explore and investigate
+  energy: number; // 0-1: High = more active, low = more rest
+  curiosity: number; // 0-1: How likely to explore
   playfulness: number; // 0-1: Frequency of playful behaviors
-  independence: number; // 0-1: How much cat ignores vs reacts to stimuli
+  independence: number; // 0-1: Ignores vs reacts to stimuli
   sociability: number; // 0-1: Attraction to other cats/elements
 }
 
-// Preset personalities
 type PersonalityPreset =
-  | "lazy"
-  | "playful"
-  | "curious"
-  | "aloof"
-  | "energetic"
-  | "balanced";
-```
+  | "lazy" // Low energy, high rest frequency
+  | "playful" // High playfulness and energy
+  | "curious" // High curiosity, explores boundaries
+  | "aloof" // High independence, ignores stimuli
+  | "energetic" // High energy, constant movement
+  | "balanced"; // Medium values across all traits
 
-**Preset Examples:**
-
-- `lazy`: High rest frequency, low energy, minimal movement
-- `playful`: High playfulness, high energy, frequent state changes
-- `curious`: High curiosity, explores boundaries, investigates
-- `aloof`: High independence, ignores most stimuli
-- `energetic`: High energy, constant movement, rarely sits
-- `balanced`: Medium values across all traits
-
-### Motivation System
-
-Motivations are internal "needs" that drive behavior:
-
-```typescript
 interface Motivation {
-  rest: number; // 0-1: Need to rest/sleep (increases over time)
-  stimulation: number; // 0-1: Need for activity/play (increases when idle)
+  rest: number; // 0-1: Need to rest (increases over time)
+  stimulation: number; // 0-1: Need for activity (increases when idle)
   exploration: number; // 0-1: Desire to explore new areas
 }
-```
 
-Motivations naturally increase/decrease over time and influence behavior choices.
-
-### Memory
-
-Short-term memory for decision-making:
-
-```typescript
 interface Memory {
   visitedPositions: Position[]; // Recently visited locations
-  lastInteractionTime: number; // Last time cat reacted to stimulus
-  boundaryHits: number; // Number of recent boundary collisions
+  lastInteractionTime: number; // Last stimulus reaction
+  boundaryHits: number; // Recent boundary collisions
   previousBehaviors: BehaviorType[]; // Recent behavior history
 }
-```
 
-Memory helps prevent repetitive behaviors and creates variety.
-
-### Environment
-
-Environmental context that influences decisions:
-
-```typescript
 interface Environment {
   boundaries: Boundaries; // Movement constraints
   obstacles?: Obstacle[]; // Things to avoid
   attractors?: Attractor[]; // Things to approach
   otherCats?: Cat[]; // Other cats to interact with
 }
-
-interface Obstacle {
-  position: Position;
-  radius: number;
-}
-
-interface Attractor {
-  position: Position;
-  strength: number; // 0-1: How attractive
-  type: "point" | "area";
-}
 ```
 
-## API Design
+## API Reference
 
-### Primary Function
+### Creating Brains
 
-```typescript
-/**
- * Creates a brain for a cat, enabling autonomous behavior
- * @param cat - The Cat instance to control (from Meowtion)
- * @param options - Configuration for personality and environment
- */
-function createBrain(cat: Cat, options?: BrainOptions): Brain;
+#### `createBrain(cat: Cat, options?: BrainOptions): Brain`
 
-interface BrainOptions {
-  personality?: Personality | PersonalityPreset;
-  environment?: Environment;
-  decisionInterval?: number; // MS between decisions (default: 2000-5000 random)
-  motivationDecay?: MotivationDecay; // How fast motivations change
-}
-
-interface MotivationDecay {
-  rest: number; // Rate rest need increases (default: 0.001/sec)
-  stimulation: number; // Rate stimulation need increases (default: 0.002/sec)
-  exploration: number; // Rate exploration desire increases (default: 0.0015/sec)
-}
-```
-
-### Builder Pattern
+Creates a brain for a cat, enabling autonomous behavior.
 
 ```typescript
-class BrainBuilder {
-  constructor(cat: Cat);
+import { animateCat } from "@meowzer/meowtion";
+import { createBrain } from "@meowzer/meowbrain";
 
-  withPersonality(
-    personality: Personality | PersonalityPreset
-  ): BrainBuilder;
-  withEnvironment(environment: Environment): BrainBuilder;
-  withDecisionInterval(min: number, max: number): BrainBuilder;
-  withMotivationDecay(decay: MotivationDecay): BrainBuilder;
-
-  build(): Brain;
-}
-
-// Usage
-const brain = new BrainBuilder(cat)
-  .withPersonality("playful")
-  .withEnvironment({
+const cat = animateCat(protoCat);
+const brain = createBrain(cat, {
+  personality: "playful",
+  environment: {
     boundaries: { minX: 0, maxX: 800, minY: 0, maxY: 600 },
-  })
+  },
+  decisionInterval: [2000, 5000],
+});
+
+brain.start();
+```
+
+**Options:** See `BrainOptions` interface above.
+
+#### `BrainBuilder` (Builder Pattern)
+
+```typescript
+const brain = new BrainBuilder(cat)
+  .withPersonality("curious")
+  .withEnvironment({ boundaries: {...} })
   .withDecisionInterval(1000, 3000)
   .build();
 ```
 
-### Preset Personalities
+### Brain Class Methods
 
-```typescript
-/**
- * Get a preset personality configuration
- */
-function getPersonality(preset: PersonalityPreset): Personality;
+**Lifecycle:** `start()`, `stop()`, `destroy()`
 
-// Example
-const lazyPersonality = getPersonality("lazy");
-// Returns: { energy: 0.2, curiosity: 0.3, playfulness: 0.2, independence: 0.7, sociability: 0.4 }
-```
+**Configuration:** `setPersonality()`, `setEnvironment()`
+
+**Events:** `on()`, `off()`
+
+### Personality Functions
+
+#### `getPersonality(preset: PersonalityPreset): Personality`
+
+Gets a preset personality configuration.
+
+**Available Presets:**
+
+| Preset      | Energy | Curiosity | Playfulness | Independence | Sociability |
+| ----------- | ------ | --------- | ----------- | ------------ | ----------- |
+| `lazy`      | 0.2    | 0.3       | 0.2         | 0.7          | 0.4         |
+| `playful`   | 0.85   | 0.7       | 0.95        | 0.4          | 0.8         |
+| `curious`   | 0.7    | 0.95      | 0.6         | 0.5          | 0.6         |
+| `aloof`     | 0.5    | 0.4       | 0.3         | 0.95         | 0.2         |
+| `energetic` | 0.95   | 0.6       | 0.8         | 0.5          | 0.7         |
+| `balanced`  | 0.5    | 0.5       | 0.5         | 0.5          | 0.5         |
+
+#### Other Exports
+
+- `getPersonalityPresets()` - Returns array of preset names
+- `PERSONALITY_PRESETS` - Direct access to presets object
 
 ## Decision-Making System
 

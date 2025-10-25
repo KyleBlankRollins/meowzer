@@ -1,10 +1,119 @@
 # Meowbase
 
+IndexedDB wrapper for managing cat collections with a document database model.
+
+## Overview
+
 This wrapper around the browser's [IndexedDB](https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API) mimics a simple database and its operations. The goal is to provide a working development tool that can be used for various learning experiences.
 
 Meowbase uses a **document database model** (like MongoDB) where collections contain full cat objects, not just references. This design prioritizes simplicity and helps learners understand document-oriented data structures.
 
+## Result Pattern
+
+All Meowbase operations return a `MeowbaseResult<T>` type for consistent error handling:
+
+```typescript
+type MeowbaseResult<T = void> =
+  | { success: true; data?: T; message?: string }
+  | { success: false; message: string };
+```
+
+**Usage:**
+
+```typescript
+const result = await db.loadCollection("my-cats");
+if (result.success) {
+  console.log(result.data); // Collection object
+} else {
+  console.error(result.message); // Error message
+}
+```
+
+This pattern eliminates try-catch blocks for most operations and provides clear error messages.
+
 ## Architecture
+
+```mermaid
+graph TB
+    subgraph "Meowbase Facade"
+        MB[Meowbase<br/>Main API]
+    end
+
+    subgraph "Operations Layer"
+        COLL_OPS[CollectionOperations<br/>collections/operations.ts<br/>CRUD operations]
+        CAT_OPS[CatOperations<br/>cats/operations.ts<br/>Cat management]
+    end
+
+    subgraph "Memory Management"
+        CACHE[CollectionCache<br/>collections/cache.ts<br/>LRU cache<br/>max 5 collections]
+    end
+
+    subgraph "Storage Layer"
+        ADAPTER[IStorageAdapter<br/>storage/adapter-interface.ts]
+        IDB[IndexedDBAdapter<br/>storage/indexeddb-adapter.ts]
+    end
+
+    subgraph "Browser"
+        INDEXEDDB[(IndexedDB<br/>Browser Storage)]
+    end
+
+    MB -->|delegates to| COLL_OPS
+    MB -->|delegates to| CAT_OPS
+
+    COLL_OPS -->|uses| CACHE
+    COLL_OPS -->|persists via| ADAPTER
+    CAT_OPS -->|reads from| CACHE
+
+    ADAPTER -->|interface| IDB
+    IDB -->|stores| INDEXEDDB
+
+    style MB fill:#ffd700
+    style CACHE fill:#50c878
+    style IDB fill:#4a9eff
+```
+
+## LRU Cache Flow
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant Meowbase
+    participant Cache
+    participant Storage
+
+    User->>Meowbase: loadCollection("cats-1")
+    Meowbase->>Cache: get("cats-1")
+    Cache-->>Meowbase: null (not in cache)
+
+    Meowbase->>Storage: read("cats-1")
+    Storage-->>Meowbase: Collection data
+
+    Meowbase->>Cache: set("cats-1", collection)
+    Note over Cache: Cache size: 1/5
+    Cache-->>Meowbase: OK
+
+    User->>Meowbase: addCatToCollection("cats-1", cat)
+    Meowbase->>Cache: get("cats-1")
+    Cache-->>Meowbase: collection (in cache)
+    Meowbase->>Cache: mark as dirty
+
+    Note over User,Storage: ...load 4 more collections...
+    Note over Cache: Cache size: 5/5 (FULL)
+
+    User->>Meowbase: loadCollection("cats-6")
+    Meowbase->>Cache: get("cats-6")
+    Cache-->>Meowbase: null
+
+    Meowbase->>Cache: evict least recently used
+    Note over Cache: "cats-1" is dirty!
+    Cache->>Storage: save("cats-1")
+    Storage-->>Cache: OK
+    Cache->>Cache: remove("cats-1")
+
+    Meowbase->>Storage: read("cats-6")
+    Storage-->>Meowbase: Collection data
+    Meowbase->>Cache: set("cats-6", collection)
+```
 
 Meowbase is organized into focused, testable modules:
 

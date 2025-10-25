@@ -33,3 +33,11 @@
 ### Credits page
 
 - Need to update to reflect changes in tech used
+
+### Massive rework
+
+- Need to create a large amount of new documentation to reflect current state of Meowzer
+
+## Misc
+
+- Move `cat-names.json` out of `meta/` to somewhere more reasonable.
