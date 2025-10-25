@@ -4,7 +4,7 @@
  * High-level functions for creating MeowzerCat instances
  */
 
-import { buildCat, buildCatFromSeed } from "../meowkit/meowkit.js";
+import { buildCat, buildCatFromSeed } from "../meowkit/index.js";
 import { Cat } from "../meowtion/cat.js";
 import { createBrain } from "../meowbrain/index.js";
 import { MeowzerCat } from "./meowzer-cat.js";

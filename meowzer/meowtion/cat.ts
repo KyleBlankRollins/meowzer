@@ -21,7 +21,7 @@ import {
 import {
   EventEmitter,
   type EventHandler,
-} from "./utilities/event-emitter.js";
+} from "../utilities/event-emitter.js";
 import { CatDOM } from "./cat/dom.js";
 import { CatMovement, type MovementState } from "./cat/movement.js";
 import { CatPhysics, type PhysicsState } from "./cat/physics.js";

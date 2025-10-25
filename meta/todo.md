@@ -26,3 +26,9 @@
 ## Meowbase
 
 - Feat: Figure out how to create poper tests for Meowbase now that it's using IndexedDB.
+
+## Docs
+
+### Credits page
+
+- Need to update to reflect changes in tech used

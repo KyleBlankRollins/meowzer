@@ -74,7 +74,7 @@ export {
   validateSettings as validateCatSettings,
   generateSeed,
   parseSeed,
-} from "../meowkit/meowkit.js";
+} from "../meowkit/index.js";
 
 export type { ProtoCat } from "../types.js";
 

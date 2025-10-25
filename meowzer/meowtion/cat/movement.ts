@@ -11,7 +11,7 @@ import type {
   CatStateType,
 } from "../../types.js";
 import type { CatAnimationManager } from "../animations/index.js";
-import type { EventEmitter } from "../utilities/event-emitter.js";
+import type { EventEmitter } from "../../utilities/event-emitter.js";
 
 export interface MovementAnimation {
   startX: number;
