@@ -4,12 +4,13 @@
  * High-level functions for creating MeowzerCat instances
  */
 
-import { buildCat, buildCatFromSeed } from "../meowkit/meowkit.js";
+import { buildCat, buildCatFromSeed } from "../meowkit/index.js";
 import { Cat } from "../meowtion/cat.js";
 import { createBrain } from "../meowbrain/index.js";
 import { MeowzerCat } from "./meowzer-cat.js";
 import { catRegistry } from "./registry.js";
 import { getRandomSettings, getViewportBoundaries } from "./utils.js";
+import { getRandomCatName } from "./cat-names.js";
 import type {
   CatSettings,
   MeowzerOptions,
@@ -65,6 +66,9 @@ export function createCat(
 ): MeowzerCat {
   // Generate ProtoCat from settings
   const protoCat = buildCat(settings);
+
+  // Add name (use provided name or generate random one)
+  protoCat.name = options.name || getRandomCatName();
 
   // Determine position
   const position: Position = options.position || _getRandomPosition();
@@ -132,6 +136,9 @@ export function createCatFromSeed(
 ): MeowzerCat {
   // Create ProtoCat from seed
   const protoCat = buildCatFromSeed(seed);
+
+  // Add name (use provided name or generate random one)
+  protoCat.name = options.name || getRandomCatName();
 
   // Determine position
   const position: Position = options.position || _getRandomPosition();

@@ -4,7 +4,6 @@
 
 export type { IStorageAdapter } from "./adapter-interface.js";
 export { IndexedDBAdapter } from "./indexeddb-adapter.js";
-export { StorageAdapter } from "../collections/storage.js";
 export {
   MEOWBASE_SCHEMA,
   applyMeowbaseSchema,

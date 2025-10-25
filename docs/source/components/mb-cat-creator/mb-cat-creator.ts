@@ -13,12 +13,27 @@ import type {
 import {
   buildCat,
   validateCatSettings,
-  createCat,
   injectBaseStyles,
   setDefaultBoundaries,
   getPersonalityPresets,
 } from "meowzer";
 import { meowbaseContext } from "../../contexts/meowbase-context.js";
+
+// Import extracted modules
+import { validateCatForm } from "./logic/validation.js";
+import {
+  ensureCollectionExists,
+  createCatObject,
+  saveCatToCollection,
+  spawnRoamingCat,
+} from "./logic/cat-creation.js";
+import { renderPreview } from "./templates/preview.js";
+import {
+  renderBasicInfoSection,
+  renderAppearanceSection,
+  renderSizeSection,
+  renderBehaviorSection,
+} from "./templates/form-fields.js";
 
 /**
  * Cat Creator Component
@@ -33,7 +48,7 @@ export class CatCreator extends LitElement {
   @state()
   private db: Meowbase | null = null;
 
-  private readonly COLLECTION_NAME = "my-cats";
+  private readonly COLLECTION_NAME = "roaming-cats"; // Changed to match mb-meowzer-controls
 
   @state()
   private settings: CatSettings = {
@@ -73,6 +88,7 @@ export class CatCreator extends LitElement {
 
   connectedCallback() {
     super.connectedCallback();
+    console.log("[Cat Creator] Connected, db:", this.db);
     this.updatePreview();
 
     // Initialize Meowzer for roaming cats
@@ -91,11 +107,20 @@ export class CatCreator extends LitElement {
   }
 
   updated(changedProperties: Map<string, any>) {
+    console.log(
+      "[Cat Creator] Updated, db changed:",
+      changedProperties.has("db"),
+      "db:",
+      this.db,
+      "isInitialized:",
+      this.isInitialized
+    );
     if (
       changedProperties.has("db") &&
       this.db &&
       !this.isInitialized
     ) {
+      console.log("[Cat Creator] Initializing collection...");
       this.initializeCollection();
     }
   }
@@ -103,46 +128,70 @@ export class CatCreator extends LitElement {
   private async initializeCollection() {
     if (!this.db) return;
 
-    this.isInitialized = true;
+    const result = await ensureCollectionExists(
+      this.db,
+      this.COLLECTION_NAME
+    );
 
-    try {
-      const loadResult = await this.db.loadCollection(
-        this.COLLECTION_NAME
-      );
-
-      if (!loadResult.success) {
-        await this.db.createCollection(this.COLLECTION_NAME, []);
-        await this.db.loadCollection(this.COLLECTION_NAME);
-      }
-    } catch (error) {
-      this.message = `Error initializing collection: ${error}`;
+    if (result.success) {
+      this.isInitialized = true;
+    } else {
+      this.message =
+        result.message || "Failed to initialize collection";
+      this.isInitialized = false;
     }
   }
 
   private updatePreview() {
+    console.log(
+      "[Cat Creator] updatePreview called with settings:",
+      this.settings
+    );
     const validation = validateCatSettings(this.settings);
 
     if (validation.valid) {
+      console.log("[Cat Creator] Settings valid, building cat...");
       this.validationErrors = [];
       try {
         this.preview = buildCat(this.settings);
+        console.log(
+          "[Cat Creator] Preview built successfully:",
+          this.preview?.id
+        );
       } catch (error) {
+        console.error("[Cat Creator] Error building cat:", error);
         this.validationErrors = [`Error building cat: ${error}`];
         this.preview = null;
       }
     } else {
+      console.log(
+        "[Cat Creator] Settings invalid:",
+        validation.errors
+      );
       this.validationErrors = validation.errors;
       this.preview = null;
     }
   }
 
   private handleColorChange(e: CustomEvent) {
+    console.log(
+      "[Cat Creator] Fur color change event received:",
+      e.detail.value
+    );
+    console.log("[Cat Creator] Current settings:", this.settings);
     this.settings = { ...this.settings, color: e.detail.value };
+    console.log("[Cat Creator] New settings:", this.settings);
     this.updatePreview();
   }
 
   private handleEyeColorChange(e: CustomEvent) {
+    console.log(
+      "[Cat Creator] Eye color change event received:",
+      e.detail.value
+    );
+    console.log("[Cat Creator] Current settings:", this.settings);
     this.settings = { ...this.settings, eyeColor: e.detail.value };
+    console.log("[Cat Creator] New settings:", this.settings);
     this.updatePreview();
   }
 
@@ -155,10 +204,16 @@ export class CatCreator extends LitElement {
   }
 
   private handleSizeChange(e: CustomEvent) {
+    console.log(
+      "[Cat Creator] Size change event received:",
+      (e.target as any).value
+    );
+    console.log("[Cat Creator] Current settings:", this.settings);
     this.settings = {
       ...this.settings,
       size: (e.target as any).value as CatSettings["size"],
     };
+    console.log("[Cat Creator] New settings:", this.settings);
     this.updatePreview();
   }
 
@@ -177,54 +232,49 @@ export class CatCreator extends LitElement {
       return;
     }
 
-    if (!this.catName.trim()) {
-      this.message = "Please enter a name for your cat";
+    // Validate form
+    const validation = validateCatForm({
+      name: this.catName,
+      description: this.catDescription,
+    });
+
+    if (!validation.valid) {
+      this.message = validation.errors.join(", ");
       return;
     }
 
     try {
-      const newCat = {
-        id: this.preview.id,
-        name: this.catName,
-        image: this.preview.spriteData.svg, // Use SVG as image
-        birthday: new Date(),
-        favoriteToy: {
-          id: crypto.randomUUID(),
-          name: "Yarn Ball",
-          image: "🧶",
-          type: "toy",
-          description: "A colorful ball of yarn",
-        },
-        description:
-          this.catDescription || `A ${this.settings.pattern} cat`,
-        currentEmotion: {
-          id: crypto.randomUUID(),
-          name: "Happy",
-        },
-        importantHumans: [],
-      };
+      // Spawn roaming cat first to get its ID
+      let spawnedCat = null;
+      if (this.makeRoaming) {
+        spawnedCat = spawnRoamingCat(this.settings, {
+          name: this.catName,
+          personality: this.selectedPersonality,
+        });
+      }
 
-      const result = this.db.addCatToCollection(
+      // Create cat object with the spawned cat's ID if available
+      const newCat = createCatObject({
+        protoCat: this.preview,
+        name: this.catName,
+        description: this.catDescription,
+        settings: this.settings,
+      });
+
+      // Use spawned cat's ID instead of protoCat's ID for consistency
+      if (spawnedCat) {
+        newCat.id = spawnedCat.id;
+      }
+
+      // Save to database
+      const result = await saveCatToCollection(
+        this.db,
         this.COLLECTION_NAME,
         newCat
       );
 
       if (result.success) {
-        await this.db.saveCollection(this.COLLECTION_NAME);
-
-        // Make cat roam the viewport if enabled
-        if (this.makeRoaming) {
-          const playground =
-            document.getElementById("cat-playground");
-          const container = playground || document.body;
-          createCat(this.settings, {
-            container,
-            personality: this.selectedPersonality,
-            autoStart: true,
-          });
-        }
-
-        this.message = `Created ${this.catName}! 🎉`;
+        this.message = result.message;
 
         // Reset form
         this.catName = "";
@@ -247,7 +297,7 @@ export class CatCreator extends LitElement {
           })
         );
       } else {
-        this.message = `Error: ${result.message}`;
+        this.message = result.message;
       }
     } catch (error) {
       this.message = `Error creating cat: ${error}`;
@@ -277,33 +327,7 @@ export class CatCreator extends LitElement {
           <div class="preview-panel">
             <quiet-card>
               <h3 slot="header">Preview</h3>
-              ${this.preview
-                ? html`
-                    <div class="preview-container">
-                      <div
-                        class="cat-preview"
-                        .innerHTML=${this.preview.spriteData.svg}
-                      ></div>
-                      <div class="preview-details">
-                        <p>
-                          <strong>Seed:</strong> ${this.preview.seed}
-                        </p>
-                        <p>
-                          <strong>Size:</strong> ${this.preview
-                            .dimensions.size}
-                        </p>
-                      </div>
-                    </div>
-                  `
-                : html`
-                    <div class="preview-error">
-                      <p>Invalid settings</p>
-                      ${this.validationErrors.map(
-                        (err) =>
-                          html`<p class="error-text">${err}</p>`
-                      )}
-                    </div>
-                  `}
+              ${renderPreview(this.preview, this.validationErrors)}
             </quiet-card>
           </div>
 
@@ -314,113 +338,55 @@ export class CatCreator extends LitElement {
 
               <div class="creator-form">
                 <!-- Basic Info -->
-                <div class="form-section">
-                  <h4>Basic Info</h4>
-                  <quiet-text-field
-                    label="Name"
-                    .value=${this.catName}
-                    @quiet-input=${(e: CustomEvent) =>
-                      (this.catName = (e.target as any).value)}
-                    required
-                  ></quiet-text-field>
-
-                  <quiet-text-area
-                    label="Description"
-                    .value=${this.catDescription}
-                    @quiet-input=${(e: CustomEvent) =>
-                      (this.catDescription = (e.target as any).value)}
-                    rows="3"
-                  ></quiet-text-area>
-                </div>
+                ${renderBasicInfoSection(
+                  {
+                    catName: this.catName,
+                    catDescription: this.catDescription,
+                  },
+                  {
+                    onNameChange: (e: CustomEvent) =>
+                      (this.catName = (e.target as any).value),
+                    onDescriptionChange: (e: CustomEvent) =>
+                      (this.catDescription = (e.target as any).value),
+                  }
+                )}
 
                 <quiet-divider></quiet-divider>
 
                 <!-- Appearance -->
-                <div class="form-section">
-                  <h4>Appearance</h4>
-
-                  <div class="appearance-grid">
-                    <mb-color-picker
-                      label="Fur Color"
-                      .value=${this.settings.color}
-                      @color-change=${this.handleColorChange}
-                    ></mb-color-picker>
-
-                    <mb-color-picker
-                      label="Eye Color"
-                      .value=${this.settings.eyeColor}
-                      @color-change=${this.handleEyeColorChange}
-                    ></mb-color-picker>
-
-                    <quiet-select
-                      label="Pattern"
-                      .value=${this.settings.pattern}
-                      @quiet-change=${this.handlePatternChange}
-                    >
-                      <option value="solid">Solid</option>
-                      <option value="tabby">Tabby</option>
-                      <option value="calico">Calico</option>
-                      <option value="tuxedo">Tuxedo</option>
-                      <option value="spotted">Spotted</option>
-                    </quiet-select>
-
-                    <quiet-select
-                      label="Fur Length"
-                      .value=${this.settings.furLength}
-                      @quiet-change=${this.handleFurLengthChange}
-                    >
-                      <option value="short">Short</option>
-                      <option value="medium">Medium</option>
-                      <option value="long">Long</option>
-                    </quiet-select>
-                  </div>
-                </div>
+                ${renderAppearanceSection(this.settings, {
+                  onColorChange: this.handleColorChange,
+                  onEyeColorChange: this.handleEyeColorChange,
+                  onPatternChange: this.handlePatternChange,
+                  onFurLengthChange: this.handleFurLengthChange,
+                })}
 
                 <quiet-divider></quiet-divider>
 
                 <!-- Size -->
-                <div class="form-section">
-                  <h4>Size</h4>
-                  <quiet-select
-                    label="Body Size"
-                    .value=${this.settings.size}
-                    @quiet-change=${this.handleSizeChange}
-                  >
-                    <option value="small">Small</option>
-                    <option value="medium">Medium</option>
-                    <option value="large">Large</option>
-                  </quiet-select>
-                </div>
+                ${renderSizeSection(
+                  this.settings.size,
+                  this.handleSizeChange
+                )}
 
                 <quiet-divider></quiet-divider>
 
                 <!-- Behavior -->
-                <div class="form-section">
-                  <h4>Behavior</h4>
-                  <quiet-select
-                    label="Personality"
-                    .value=${this.selectedPersonality}
-                    @quiet-change=${(e: CustomEvent) =>
+                ${renderBehaviorSection(
+                  {
+                    selectedPersonality: this.selectedPersonality,
+                    availablePersonalities:
+                      this.availablePersonalities,
+                    makeRoaming: this.makeRoaming,
+                  },
+                  {
+                    onPersonalityChange: (e: CustomEvent) =>
                       (this.selectedPersonality = (e.target as any)
-                        .value as PersonalityPreset)}
-                  >
-                    ${this.availablePersonalities.map(
-                      (p) => html`
-                        <option value=${p}>
-                          ${p.charAt(0).toUpperCase() + p.slice(1)}
-                        </option>
-                      `
-                    )}
-                  </quiet-select>
-
-                  <quiet-checkbox
-                    .checked=${this.makeRoaming}
-                    @quiet-change=${(e: CustomEvent) =>
-                      (this.makeRoaming = (e.target as any).checked)}
-                  >
-                    Make cat roam the viewport
-                  </quiet-checkbox>
-                </div>
+                        .value as PersonalityPreset),
+                    onRoamingChange: (e: CustomEvent) =>
+                      (this.makeRoaming = (e.target as any).checked),
+                  }
+                )}
 
                 <!-- Actions -->
                 <div class="form-actions">

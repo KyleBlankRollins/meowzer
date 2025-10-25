@@ -7,9 +7,9 @@ Welcome to the Getting Started section! This section will help you understand th
 
 ## What is Meowbase?
 
-Meowbase is a localStorage wrapper that mimics a database for learning purposes. It provides a MongoDB-like document model with:
+Meowbase is an IndexedDB wrapper that mimics a database for learning purposes. It provides a MongoDB-like document model with:
 
-- Document-based collections stored in localStorage
+- Document-based collections stored in IndexedDB
 - LRU cache with automatic eviction
 - Full CRUD operations for collections and documents
 - Sample dataset for learning and demos

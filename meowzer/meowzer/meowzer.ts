@@ -24,7 +24,7 @@ export { MeowtionContainer } from "../meowtion/moewtion-container/meowtion-conta
 export {
   injectBaseStyles,
   CatAnimationManager,
-} from "../meowtion/animations.js";
+} from "../meowtion/animations/index.js";
 
 // ============================================================================
 // MANAGEMENT FUNCTIONS
@@ -74,7 +74,7 @@ export {
   validateSettings as validateCatSettings,
   generateSeed,
   parseSeed,
-} from "../meowkit/meowkit.js";
+} from "../meowkit/index.js";
 
 export type { ProtoCat } from "../types.js";
 

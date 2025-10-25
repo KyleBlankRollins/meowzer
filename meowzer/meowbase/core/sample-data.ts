@@ -6,11 +6,31 @@ import type {
   Human,
 } from "../types.js";
 import { generateUUID } from "./utils.js";
+import catNamesData from "../../../docs/source/utilities/../../../meta/cat-names.json";
 
 /**
  * Sample dataset for Meowbase
  * Contains three collections: shelter, neighborhood, and home
  */
+
+// Get unique cat names for sample data
+function getUniqueCatNames(count: number): string[] {
+  const availableNames = [...catNamesData.names];
+  const selectedNames: string[] = [];
+
+  for (let i = 0; i < count && availableNames.length > 0; i++) {
+    const randomIndex = Math.floor(
+      Math.random() * availableNames.length
+    );
+    selectedNames.push(availableNames[randomIndex]);
+    availableNames.splice(randomIndex, 1); // Remove to avoid duplicates
+  }
+
+  return selectedNames;
+}
+
+// Generate 15 unique names for all cats (5 shelter + 4 neighborhood + 6 home)
+const catNames = getUniqueCatNames(15);
 
 // Common emotions
 const emotions: Emotion[] = [
@@ -108,7 +128,7 @@ const humans: Human[] = [
 const shelterCats: Cat[] = [
   {
     id: generateUUID(),
-    name: "Whiskers",
+    name: catNames[0],
     image: "https://example.com/cats/whiskers.jpg",
     birthday: new Date("2022-03-15"),
     favoriteToy: toys[1], // Catnip Mouse
@@ -118,7 +138,7 @@ const shelterCats: Cat[] = [
   },
   {
     id: generateUUID(),
-    name: "Shadow",
+    name: catNames[1],
     image: "https://example.com/cats/shadow.jpg",
     birthday: new Date("2021-11-20"),
     favoriteToy: toys[3], // Cardboard Box
@@ -129,7 +149,7 @@ const shelterCats: Cat[] = [
   },
   {
     id: generateUUID(),
-    name: "Luna",
+    name: catNames[2],
     image: "https://example.com/cats/luna.jpg",
     birthday: new Date("2023-01-10"),
     favoriteToy: toys[0], // Feather Wand
@@ -139,7 +159,7 @@ const shelterCats: Cat[] = [
   },
   {
     id: generateUUID(),
-    name: "Oliver",
+    name: catNames[3],
     image: "https://example.com/cats/oliver.jpg",
     birthday: new Date("2020-07-04"),
     favoriteToy: toys[2], // Laser Pointer
@@ -149,7 +169,7 @@ const shelterCats: Cat[] = [
   },
   {
     id: generateUUID(),
-    name: "Mittens",
+    name: catNames[4],
     image: "https://example.com/cats/mittens.jpg",
     birthday: new Date("2022-09-12"),
     favoriteToy: toys[4], // Crinkle Ball
@@ -163,7 +183,7 @@ const shelterCats: Cat[] = [
 const neighborhoodCats: Cat[] = [
   {
     id: generateUUID(),
-    name: "Streetwise",
+    name: catNames[5],
     image: "https://example.com/cats/streetwise.jpg",
     birthday: new Date("2019-05-20"),
     favoriteToy: toys[5], // String
@@ -174,7 +194,7 @@ const neighborhoodCats: Cat[] = [
   },
   {
     id: generateUUID(),
-    name: "Patches",
+    name: catNames[6],
     image: "https://example.com/cats/patches.jpg",
     birthday: new Date("2020-03-08"),
     favoriteToy: toys[3], // Cardboard Box
@@ -185,7 +205,7 @@ const neighborhoodCats: Cat[] = [
   },
   {
     id: generateUUID(),
-    name: "Bandit",
+    name: catNames[7],
     image: "https://example.com/cats/bandit.jpg",
     birthday: new Date("2021-08-14"),
     favoriteToy: toys[1], // Catnip Mouse
@@ -196,7 +216,7 @@ const neighborhoodCats: Cat[] = [
   },
   {
     id: generateUUID(),
-    name: "Princess",
+    name: catNames[8],
     image: "https://example.com/cats/princess.jpg",
     birthday: new Date("2018-12-25"),
     favoriteToy: toys[0], // Feather Wand
@@ -210,7 +230,7 @@ const neighborhoodCats: Cat[] = [
 const homeCats: Cat[] = [
   {
     id: generateUUID(),
-    name: "Mr. Fluffington",
+    name: catNames[9],
     image: "https://example.com/cats/mr-fluffington.jpg",
     birthday: new Date("2019-02-14"),
     favoriteToy: toys[2], // Laser Pointer
@@ -221,7 +241,7 @@ const homeCats: Cat[] = [
   },
   {
     id: generateUUID(),
-    name: "Bella",
+    name: catNames[10],
     image: "https://example.com/cats/bella.jpg",
     birthday: new Date("2020-06-10"),
     favoriteToy: toys[0], // Feather Wand
@@ -232,7 +252,7 @@ const homeCats: Cat[] = [
   },
   {
     id: generateUUID(),
-    name: "Simba",
+    name: catNames[11],
     image: "https://example.com/cats/simba.jpg",
     birthday: new Date("2021-04-22"),
     favoriteToy: toys[3], // Cardboard Box
@@ -242,7 +262,7 @@ const homeCats: Cat[] = [
   },
   {
     id: generateUUID(),
-    name: "Cleo",
+    name: catNames[12],
     image: "https://example.com/cats/cleo.jpg",
     birthday: new Date("2022-10-31"),
     favoriteToy: toys[4], // Crinkle Ball
@@ -252,7 +272,7 @@ const homeCats: Cat[] = [
   },
   {
     id: generateUUID(),
-    name: "Gizmo",
+    name: catNames[13],
     image: "https://example.com/cats/gizmo.jpg",
     birthday: new Date("2023-05-18"),
     favoriteToy: toys[5], // String
@@ -262,7 +282,7 @@ const homeCats: Cat[] = [
   },
   {
     id: generateUUID(),
-    name: "Duchess",
+    name: catNames[14],
     image: "https://example.com/cats/duchess.jpg",
     birthday: new Date("2017-09-03"),
     favoriteToy: toys[1], // Catnip Mouse

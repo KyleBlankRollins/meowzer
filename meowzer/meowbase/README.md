@@ -1,10 +1,119 @@
 # Meowbase
 
-This wrapper around the browser's [localStorage](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage) mimics a simple database and its operations. The goal is to provide a working development tool that can be used for various learning experiences.
+IndexedDB wrapper for managing cat collections with a document database model.
+
+## Overview
+
+This wrapper around the browser's [IndexedDB](https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API) mimics a simple database and its operations. The goal is to provide a working development tool that can be used for various learning experiences.
 
 Meowbase uses a **document database model** (like MongoDB) where collections contain full cat objects, not just references. This design prioritizes simplicity and helps learners understand document-oriented data structures.
 
+## Result Pattern
+
+All Meowbase operations return a `MeowbaseResult<T>` type for consistent error handling:
+
+```typescript
+type MeowbaseResult<T = void> =
+  | { success: true; data?: T; message?: string }
+  | { success: false; message: string };
+```
+
+**Usage:**
+
+```typescript
+const result = await db.loadCollection("my-cats");
+if (result.success) {
+  console.log(result.data); // Collection object
+} else {
+  console.error(result.message); // Error message
+}
+```
+
+This pattern eliminates try-catch blocks for most operations and provides clear error messages.
+
 ## Architecture
+
+```mermaid
+graph TB
+    subgraph "Meowbase Facade"
+        MB[Meowbase<br/>Main API]
+    end
+
+    subgraph "Operations Layer"
+        COLL_OPS[CollectionOperations<br/>collections/operations.ts<br/>CRUD operations]
+        CAT_OPS[CatOperations<br/>cats/operations.ts<br/>Cat management]
+    end
+
+    subgraph "Memory Management"
+        CACHE[CollectionCache<br/>collections/cache.ts<br/>LRU cache<br/>max 5 collections]
+    end
+
+    subgraph "Storage Layer"
+        ADAPTER[IStorageAdapter<br/>storage/adapter-interface.ts]
+        IDB[IndexedDBAdapter<br/>storage/indexeddb-adapter.ts]
+    end
+
+    subgraph "Browser"
+        INDEXEDDB[(IndexedDB<br/>Browser Storage)]
+    end
+
+    MB -->|delegates to| COLL_OPS
+    MB -->|delegates to| CAT_OPS
+
+    COLL_OPS -->|uses| CACHE
+    COLL_OPS -->|persists via| ADAPTER
+    CAT_OPS -->|reads from| CACHE
+
+    ADAPTER -->|interface| IDB
+    IDB -->|stores| INDEXEDDB
+
+    style MB fill:#ffd700
+    style CACHE fill:#50c878
+    style IDB fill:#4a9eff
+```
+
+## LRU Cache Flow
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant Meowbase
+    participant Cache
+    participant Storage
+
+    User->>Meowbase: loadCollection("cats-1")
+    Meowbase->>Cache: get("cats-1")
+    Cache-->>Meowbase: null (not in cache)
+
+    Meowbase->>Storage: read("cats-1")
+    Storage-->>Meowbase: Collection data
+
+    Meowbase->>Cache: set("cats-1", collection)
+    Note over Cache: Cache size: 1/5
+    Cache-->>Meowbase: OK
+
+    User->>Meowbase: addCatToCollection("cats-1", cat)
+    Meowbase->>Cache: get("cats-1")
+    Cache-->>Meowbase: collection (in cache)
+    Meowbase->>Cache: mark as dirty
+
+    Note over User,Storage: ...load 4 more collections...
+    Note over Cache: Cache size: 5/5 (FULL)
+
+    User->>Meowbase: loadCollection("cats-6")
+    Meowbase->>Cache: get("cats-6")
+    Cache-->>Meowbase: null
+
+    Meowbase->>Cache: evict least recently used
+    Note over Cache: "cats-1" is dirty!
+    Cache->>Storage: save("cats-1")
+    Storage-->>Cache: OK
+    Cache->>Cache: remove("cats-1")
+
+    Meowbase->>Storage: read("cats-6")
+    Storage-->>Meowbase: Collection data
+    Meowbase->>Cache: set("cats-6", collection)
+```
 
 Meowbase is organized into focused, testable modules:
 
@@ -13,9 +122,12 @@ meowbase/
 ├── core/
 │   └── utils.ts              # UUID generation and utilities
 ├── collections/
-│   ├── storage.ts            # localStorage adapter
 │   ├── cache.ts              # LRU memory cache
 │   └── operations.ts         # Collection CRUD operations
+├── storage/
+│   ├── adapter-interface.ts  # Storage interface
+│   ├── indexeddb-adapter.ts  # IndexedDB implementation
+│   └── schema.ts             # Database schema
 ├── cats/
 │   └── operations.ts         # Cat operations within collections
 ├── types.ts                  # TypeScript interfaces
@@ -31,7 +143,7 @@ Collections are the top-level containers in Meowbase. Each collection:
 - Has a unique `id` (UUID string)
 - Has a `name` (string, not required to be unique)
 - Contains an array of `Cat` objects as `children`
-- Is stored in localStorage with the key `meowbase-{id}`
+- Is stored in IndexedDB
 
 ### Cats
 
@@ -72,7 +184,7 @@ const db = new Meowbase({
 
 #### `createCollection(name: string, cats?: Cat[]): MeowbaseResult<Collection>`
 
-Create a new collection and persist it to localStorage.
+Create a new collection and persist it to storage.
 
 ```ts
 const result = db.createCollection("My Cats", []);
@@ -95,7 +207,7 @@ Load multiple collections at once.
 
 #### `saveCollection(identifier: string): MeowbaseResult`
 
-Save a loaded collection's changes back to localStorage. Required before unloading.
+Save a loaded collection's changes back to storage. Required before unloading.
 
 ```ts
 db.saveCollection("My Cats");
@@ -103,7 +215,7 @@ db.saveCollection("My Cats");
 
 #### `flushChanges(): MeowbaseResult`
 
-Save all dirty (modified) collections to localStorage.
+Save all dirty (modified) collections to storage.
 
 ```ts
 db.flushChanges();
@@ -123,15 +235,15 @@ Remove all collections from memory. Fails if any collection has unsaved changes.
 
 #### `deleteCollection(identifier: string): MeowbaseResult`
 
-Permanently delete a collection from localStorage.
+Permanently delete a collection from storage.
 
 #### `getCollection(identifier: string): MeowbaseResult<Collection>`
 
-Read a collection from localStorage without loading it into memory.
+Read a collection from storage without loading it into memory.
 
 #### `listCollections(): MeowbaseResult<Array<{id, name, catCount}>>`
 
-List all collections in localStorage with metadata.
+List all collections in storage with metadata.
 
 #### `getLoadedCollections(): Array<{id, name, isDirty, lastAccessed}>`
 
@@ -184,7 +296,7 @@ Update a cat within a loaded collection. Finds the cat by `id` and replaces it.
 
 #### `loadSampleData(): MeowbaseResult<{collectionsCreated: number, totalCats: number}>`
 
-Load a pre-built sample dataset into localStorage. This is useful for testing, demos, or learning.
+Load a pre-built sample dataset into storage. This is useful for testing, demos, or learning.
 
 This generates an HTML report in `coverage/index.html` showing line-by-line coverage for all modules.
 
@@ -262,7 +374,7 @@ if (result.success) {
 
 #### `clearAllData(): MeowbaseResult`
 
-Clear all Meowbase data from localStorage and unload all collections from memory.
+Clear all Meowbase data from storage and unload all collections from memory.
 
 ```ts
 db.clearAllData();
@@ -349,11 +461,12 @@ Meowbase uses **Vitest** with **happy-dom** for testing. This setup provides fas
 
 **happy-dom** simulates browser APIs including:
 
-- `localStorage` (critical for Meowbase)
 - DOM APIs
 - Window and document objects
 
-This combination allows us to test localStorage operations in a Node.js environment without the overhead of launching a real browser.
+This combination allows us to test in a Node.js environment without the overhead of launching a real browser.
+
+**Note:** IndexedDB tests require additional setup (e.g., fake-indexeddb) and are pending implementation.
 
 ### Running Tests
 
@@ -379,7 +492,6 @@ Tests are organized alongside the source code in `__tests__` directories:
 meowbase/
 ├── __tests__/
 │   ├── helpers.ts          # Test utilities and mock factories
-│   ├── storage.test.ts     # StorageAdapter tests
 │   └── cache.test.ts       # CollectionCache tests
 ├── collections/
 ├── cats/
@@ -393,11 +505,7 @@ meowbase/
 The `helpers.ts` file provides factory functions for creating test data:
 
 ```ts
-import {
-  createMockCat,
-  createMockCollection,
-  clearMeowbaseStorage,
-} from "./helpers.js";
+import { createMockCat, createMockCollection } from "./helpers.js";
 
 // Create a mock cat with default values
 const cat = createMockCat({ name: "Custom Name" });
@@ -407,9 +515,6 @@ const collection = createMockCollection({
   name: "Test Collection",
   children: [cat],
 });
-
-// Clear localStorage between tests
-clearMeowbaseStorage();
 ```
 
 Available factory functions:
@@ -419,49 +524,34 @@ Available factory functions:
 - `createMockToy(overrides?)` - Creates a Toy object
 - `createMockEmotion(overrides?)` - Creates an Emotion object
 - `createMockHuman(overrides?)` - Creates a Human object
-- `clearMeowbaseStorage()` - Removes all meowbase items from localStorage
-- `getMeowbaseKeys()` - Returns array of all meowbase localStorage keys
-- `countMeowbaseItems()` - Returns count of meowbase items in localStorage
 
 #### Example Test
 
 ```ts
-import { describe, it, expect, beforeEach, afterEach } from "vitest";
-import { StorageAdapter } from "../collections/storage.js";
-import {
-  createMockCollection,
-  clearMeowbaseStorage,
-} from "./helpers.js";
+import { describe, it, expect, beforeEach } from "vitest";
+import { CollectionCache } from "../collections/cache.js";
+import { createMockCollection } from "./helpers.js";
 
-describe("StorageAdapter", () => {
-  let storage: StorageAdapter;
+describe("CollectionCache", () => {
+  let cache: CollectionCache;
 
   beforeEach(() => {
-    storage = new StorageAdapter();
-    clearMeowbaseStorage();
+    cache = new CollectionCache();
   });
 
-  afterEach(() => {
-    clearMeowbaseStorage();
-  });
-
-  it("should create a collection in localStorage", () => {
+  it("should add a collection to cache", () => {
     const collection = createMockCollection({ name: "My Cats" });
-    const result = storage.create(collection);
+    cache.set(collection.id, collection);
 
-    expect(result.success).toBe(true);
-    if (result.success) {
-      expect(result.data).toEqual(collection);
-    }
+    const retrieved = cache.get(collection.id);
+    expect(retrieved).toEqual(collection);
   });
 });
 ```
 
 #### Testing Best Practices
 
-1. **Clear localStorage between tests** - Use `beforeEach` and `afterEach` hooks with `clearMeowbaseStorage()`
-
-2. **Type-safe assertions** - Always check `result.success` before accessing `result.data`:
+1. **Type-safe assertions** - Always check `result.success` before accessing `result.data`:
 
    ```ts
    expect(result.success).toBe(true);
@@ -470,11 +560,11 @@ describe("StorageAdapter", () => {
    }
    ```
 
-3. **Use factory functions** - Don't manually create test objects; use the provided helpers for consistency
+2. **Use factory functions** - Don't manually create test objects; use the provided helpers for consistency
 
-4. **Test isolation** - Each test should be independent and not rely on state from other tests
+3. **Test isolation** - Each test should be independent and not rely on state from other tests
 
-5. **Descriptive test names** - Use clear, behavior-focused descriptions:
+4. **Descriptive test names** - Use clear, behavior-focused descriptions:
    ```ts
    it("should mark collection as dirty when adding a cat", () => { ... });
    ```
@@ -483,7 +573,7 @@ describe("StorageAdapter", () => {
 
 Current test coverage:
 
-- **StorageAdapter**: 19 tests covering CRUD operations, find by ID/name, localStorage namespacing
+- **CollectionCache**: 20 tests covering cache operations and collection management
 - **CollectionCache**: 20 tests covering LRU eviction, dirty tracking, get/set/remove operations
 
 To view detailed coverage reports:

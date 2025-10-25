@@ -27,12 +27,13 @@ import {
   updateMemory,
   isValidBehaviorTransition,
 } from "./decision-engine.js";
+import { EventEmitter } from "../utilities/event-emitter.js";
+import type { EventHandler } from "../utilities/event-emitter.js";
 
 type BrainEvent =
   | "behaviorChange"
   | "decisionMade"
   | "reactionTriggered";
-type EventHandler = (data: any) => void;
 
 export interface BrainOptions {
   personality?: Personality | PersonalityPreset;
@@ -67,12 +68,14 @@ export class Brain {
   private _lastUpdateTime: number = Date.now();
   private _boundaryHitCount: number = 0;
 
-  private _eventHandlers: Map<BrainEvent, Set<EventHandler>> =
-    new Map();
+  private events: EventEmitter<BrainEvent>;
 
   constructor(cat: Cat, options: BrainOptions = {}) {
     this.cat = cat;
     this.id = `brain-${cat.id}`;
+
+    // Initialize event system
+    this.events = new EventEmitter<BrainEvent>();
 
     // Initialize personality
     this._personality = options.personality
@@ -186,7 +189,7 @@ export class Brain {
 
     this.stop();
     this._destroyed = true;
-    this._eventHandlers.clear();
+    this.events.clear();
   }
 
   // Configuration methods
@@ -209,24 +212,15 @@ export class Brain {
 
   // Event system
   on(event: BrainEvent, handler: EventHandler): void {
-    if (!this._eventHandlers.has(event)) {
-      this._eventHandlers.set(event, new Set());
-    }
-    this._eventHandlers.get(event)!.add(handler);
+    this.events.on(event, handler);
   }
 
   off(event: BrainEvent, handler: EventHandler): void {
-    this._eventHandlers.get(event)?.delete(handler);
+    this.events.off(event, handler);
   }
 
   private _emit(event: BrainEvent, data: any): void {
-    this._eventHandlers.get(event)?.forEach((handler) => {
-      try {
-        handler(data);
-      } catch (error) {
-        console.error(`Error in ${event} handler:`, error);
-      }
-    });
+    this.events.emit(event, data);
   }
 
   // Private methods

@@ -16,8 +16,9 @@ import type {
   PersonalityPreset,
   Environment,
   MeowzerEvent,
-  EventHandler,
 } from "../types.js";
+import { EventEmitter } from "../utilities/event-emitter.js";
+import type { EventHandler } from "../utilities/event-emitter.js";
 
 export interface MeowzerCatConfig {
   id: string;
@@ -34,8 +35,7 @@ export class MeowzerCat {
   private _cat: Cat;
   private _brain: Brain;
   private _isActive: boolean = false;
-  private _eventHandlers: Map<MeowzerEvent, Set<EventHandler>> =
-    new Map();
+  private events: EventEmitter<MeowzerEvent>;
 
   constructor(config: MeowzerCatConfig) {
     this.id = config.id;
@@ -43,6 +43,9 @@ export class MeowzerCat {
     this._cat = config.cat;
     this._brain = config.brain;
     this.element = config.cat.element;
+
+    // Initialize event system
+    this.events = new EventEmitter<MeowzerEvent>();
 
     // Forward events from cat and brain
     this._setupEventForwarding();
@@ -66,6 +69,10 @@ export class MeowzerCat {
 
   get isActive(): boolean {
     return this._isActive;
+  }
+
+  get name(): string | undefined {
+    return this._cat.protoCat.name;
   }
 
   // ============================================================================
@@ -98,7 +105,7 @@ export class MeowzerCat {
 
     // Emit destroy event before clearing handlers
     this._emit("destroy", { id: this.id });
-    this._eventHandlers.clear();
+    this.events.clear();
   }
 
   // ============================================================================
@@ -125,24 +132,15 @@ export class MeowzerCat {
   // ============================================================================
 
   on(event: MeowzerEvent, handler: EventHandler): void {
-    if (!this._eventHandlers.has(event)) {
-      this._eventHandlers.set(event, new Set());
-    }
-    this._eventHandlers.get(event)!.add(handler);
+    this.events.on(event, handler);
   }
 
   off(event: MeowzerEvent, handler: EventHandler): void {
-    const handlers = this._eventHandlers.get(event);
-    if (handlers) {
-      handlers.delete(handler);
-    }
+    this.events.off(event, handler);
   }
 
   private _emit(event: MeowzerEvent, data: any): void {
-    const handlers = this._eventHandlers.get(event);
-    if (handlers) {
-      handlers.forEach((handler) => handler(data));
-    }
+    this.events.emit(event, data);
   }
 
   // ============================================================================

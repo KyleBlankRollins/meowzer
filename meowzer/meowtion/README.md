@@ -6,38 +6,122 @@ Animation library for bringing cat sprites to life with movement and physics.
 
 Meowtion takes a `ProtoCat` object (from Meowkit) and creates an animated `Cat` instance that can move around a web page. This library handles rendering, animation states, and physics primitives. It provides low-level animation controls that are meant to be controlled by Meowbrain (the AI library) rather than directly by users.
 
+## Module Architecture
+
+```mermaid
+graph TB
+    subgraph "Cat Class (cat.ts)"
+        CAT[Cat<br/>Orchestration Layer]
+    end
+
+    subgraph "Internal Modules"
+        DOM[CatDOM<br/>cat/dom.ts<br/>Element management,<br/>position updates]
+        MOVE[CatMovement<br/>cat/movement.ts<br/>GSAP animations,<br/>path following]
+        PHYS[CatPhysics<br/>cat/physics.ts<br/>Velocity, friction,<br/>boundaries]
+        ANIM[CatAnimationManager<br/>animations/index.ts<br/>State animations]
+    end
+
+    subgraph "Support"
+        SM[state-machine.ts<br/>Transition validation,<br/>easing functions]
+        EVENTS[EventEmitter<br/>../utilities/event-emitter.ts]
+    end
+
+    CAT -->|manages| DOM
+    CAT -->|delegates movement to| MOVE
+    CAT -->|delegates physics to| PHYS
+    CAT -->|controls| ANIM
+    CAT -->|validates with| SM
+    CAT -->|emits via| EVENTS
+
+    MOVE -->|updates position via| DOM
+    PHYS -->|updates position via| DOM
+
+    style CAT fill:#50c878
+    style DOM fill:#4a9eff
+    style MOVE fill:#da70d6
+    style PHYS fill:#ffd700
+```
+
+## Cat Instance Lifecycle
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant Cat
+    participant CatDOM
+    participant CatMovement
+    participant CatPhysics
+    participant AnimationManager
+
+    User->>Cat: new Cat(protoCat, options)
+    Cat->>CatDOM: create element
+    CatDOM-->>Cat: HTML element
+    Cat->>AnimationManager: init state animations
+    Cat->>Cat: start animation loop
+
+    User->>Cat: moveTo(x, y, duration)
+    Cat->>CatMovement: moveTo(x, y, duration)
+    CatMovement->>CatDOM: updatePosition() [60fps]
+    CatMovement-->>Cat: Promise resolves
+
+    loop Animation Loop (60fps)
+        Cat->>CatPhysics: update(deltaTime)
+        CatPhysics->>CatDOM: updatePosition()
+    end
+
+    User->>Cat: destroy()
+    Cat->>AnimationManager: destroy()
+    Cat->>CatDOM: remove()
+    Cat->>Cat: clear events
+```
+
 ## Core Concepts
 
-### Cat (Output)
+### Cat Class
 
 The primary object created by Meowtion - a fully animated cat instance:
 
 ```typescript
-interface Cat {
-  id: string; // Unique identifier
-  element: HTMLElement; // DOM element containing the cat
-  state: CatState; // Current animation state
-  position: Position; // Current position on page
-  velocity: Velocity; // Current movement velocity
-  boundaries: Boundaries; // Movement constraints
+class Cat {
+  readonly id: string;
+  readonly element: HTMLElement;
+  readonly protoCat: ProtoCat;
 
-  // Low-level animation methods (controlled by Meowbrain)
+  // Getters
+  get state(): CatState;
+  get position(): Position;
+  get velocity(): Velocity;
+  get boundaries(): Boundaries;
+  get isActive(): boolean;
+
+  // State management
+  setState(newState: CatStateType): void;
+
+  // Movement methods
   moveTo(x: number, y: number, duration?: number): Promise<void>;
+  moveAlongPath(
+    points: Position[],
+    duration?: number,
+    options?: PathOptions
+  ): Promise<void>;
   setPosition(x: number, y: number): void;
   setVelocity(vx: number, vy: number): void;
-  setState(state: CatStateType): void;
   stop(): void;
 
-  // Lifecycle methods
-  destroy(): void;
+  // Lifecycle
   pause(): void;
   resume(): void;
+  destroy(): void;
 
-  // Event listeners (for Meowbrain to observe)
+  // Events
   on(event: CatEvent, handler: EventHandler): void;
   off(event: CatEvent, handler: EventHandler): void;
 }
+```
 
+### Type Definitions
+
+```typescript
 interface Position {
   x: number; // X coordinate (pixels)
   y: number; // Y coordinate (pixels)
@@ -58,46 +142,22 @@ type CatStateType =
 
 interface CatState {
   type: CatStateType;
-  startTime: number; // When this state began
+  startTime: number; // When this state began (timestamp)
   loop: boolean; // Whether animation loops
 }
 
+interface PathOptions {
+  ease?: string; // GSAP easing (default: "power1.inOut")
+  loop?: boolean; // Loop the path (default: false)
+}
+
 type CatEvent =
-  | "stateChange"
-  | "moveStart"
-  | "moveEnd"
-  | "boundaryHit";
-type EventHandler = (data: any) => void;
-```
+  | "stateChange" // Emitted when state changes
+  | "moveStart" // Emitted when movement begins
+  | "moveEnd" // Emitted when movement completes
+  | "boundaryHit"; // Emitted when hitting boundaries
 
-## API Design
-
-### Primary Animation Function
-
-```typescript
-/**
- * Creates an animated Cat instance from a ProtoCat
- * @param protoCat - The cat definition from Meowkit
- * @param options - Optional configuration for behavior and rendering
- */
-function animateCat(
-  protoCat: ProtoCat,
-  options?: AnimationOptions
-): Cat;
-
-interface AnimationOptions {
-  container?: HTMLElement; // Where to append cat (default: document.body)
-  initialPosition?: Position; // Starting position (default: {x: 0, y: 0})
-  initialState?: CatStateType; // Starting animation state (default: 'idle')
-  physics?: PhysicsOptions; // Movement physics configuration
-  boundaries?: Boundaries; // Keep cat within certain bounds
-}
-
-interface PhysicsOptions {
-  gravity?: boolean; // Apply gravity effect (default: false)
-  friction?: number; // Movement friction 0-1 (default: 0.1)
-  maxSpeed?: number; // Maximum velocity (default: 300)
-}
+type EventHandler = (data?: any) => void;
 
 interface Boundaries {
   minX?: number;
@@ -105,124 +165,308 @@ interface Boundaries {
   minY?: number;
   maxY?: number;
 }
+
+interface PhysicsOptions {
+  gravity?: boolean; // Apply gravity effect (default: false)
+  friction?: number; // Movement friction 0-1 (default: 0.1)
+  maxSpeed?: number; // Maximum velocity pixels/second (default: 300)
+}
 ```
 
-### Cat Builder Pattern
+## API Reference
 
-For more control over configuration:
+### Creating Animated Cats
+
+#### `animateCat(protoCat: ProtoCat, options?: AnimationOptions): Cat`
+
+Creates an animated Cat instance from a ProtoCat.
 
 ```typescript
-class CatAnimator {
-  constructor(protoCat: ProtoCat);
+import { animateCat } from "@meowzer/meowtion";
 
-  in(container: HTMLElement): CatAnimator;
-  at(x: number, y: number): CatAnimator;
-  withState(state: CatStateType): CatAnimator;
-  withPhysics(options: PhysicsOptions): CatAnimator;
-  withinBounds(boundaries: Boundaries): CatAnimator;
+const cat = animateCat(protoCat, {
+  container: document.getElementById("playground"),
+  initialPosition: { x: 100, y: 100 },
+  initialState: "idle",
+  physics: {
+    gravity: false,
+    friction: 0.1,
+    maxSpeed: 300,
+  },
+  boundaries: {
+    minX: 0,
+    maxX: 800,
+    minY: 0,
+    maxY: 600,
+  },
+});
+```
 
-  animate(): Cat;
+**Options:**
+
+```typescript
+interface AnimationOptions {
+  container?: HTMLElement; // Where to append (default: document.body)
+  initialPosition?: Position; // Starting position (default: {x: 0, y: 0})
+  initialState?: CatStateType; // Starting state (default: 'idle')
+  physics?: PhysicsOptions; // Physics configuration
+  boundaries?: Boundaries; // Movement constraints
 }
+```
 
-// Usage
+#### `CatAnimator` (Builder Pattern)
+
+For more controlled configuration:
+
+```typescript
+import { CatAnimator } from "@meowzer/meowtion";
+
 const cat = new CatAnimator(protoCat)
   .in(document.getElementById("playground"))
   .at(100, 100)
   .withState("idle")
+  .withPhysics({ friction: 0.2, maxSpeed: 200 })
   .withinBounds({ minX: 0, maxX: 800, minY: 0, maxY: 600 })
   .animate();
 ```
+
+**Methods:**
+
+- `in(container: HTMLElement): CatAnimator`
+- `at(x: number, y: number): CatAnimator`
+- `withState(state: CatStateType): CatAnimator`
+- `withPhysics(options: PhysicsOptions): CatAnimator`
+- `withinBounds(boundaries: Boundaries): CatAnimator`
+- `animate(): Cat` - Creates the Cat instance
+
+### Cat Class Methods
+
+#### State Management
+
+**`setState(newState: CatStateType): void`**
+
+Changes the cat's animation state. Validates transitions using state machine.
+
+```typescript
+cat.setState("walking"); // Valid from idle
+cat.setState("sleeping"); // Invalid from walking - logs warning
+```
+
+#### Movement
+
+**`moveTo(x: number, y: number, duration?: number): Promise<void>`**
+
+Smoothly moves cat to target position with animation.
+
+```typescript
+await cat.moveTo(400, 200, 2000); // Move to (400, 200) over 2 seconds
+console.log("Movement complete!");
+```
+
+**`moveAlongPath(points: Position[], duration?: number, options?: PathOptions): Promise<void>`**
+
+Moves cat along a curved path through multiple points.
+
+```typescript
+await cat.moveAlongPath(
+  [
+    { x: 100, y: 100 },
+    { x: 200, y: 150 },
+    { x: 300, y: 100 },
+  ],
+  3000,
+  { ease: "power2.inOut" }
+);
+```
+
+**`setPosition(x: number, y: number): void`**
+
+Immediately sets position without animation. Clamps to boundaries.
+
+```typescript
+cat.setPosition(200, 150);
+```
+
+**`setVelocity(vx: number, vy: number): void`**
+
+Sets velocity for physics-based movement.
+
+```typescript
+cat.setVelocity(100, 0); // Move right at 100 px/s
+```
+
+**`stop(): void`**
+
+Stops all movement and returns to idle state if currently walking/running.
+
+```typescript
+cat.stop();
+```
+
+#### Lifecycle
+
+**`pause(): void`**
+
+Pauses all animations and movement.
+
+```typescript
+cat.pause();
+```
+
+**`resume(): void`**
+
+Resumes paused animations and movement.
+
+```typescript
+cat.resume();
+```
+
+**`destroy(): void`**
+
+Destroys the cat instance and removes from DOM. Cleans up all resources.
+
+```typescript
+cat.destroy();
+```
+
+#### Events
+
+**`on(event: CatEvent, handler: EventHandler): void`**
+
+Registers an event listener.
+
+```typescript
+cat.on("stateChange", ({ oldState, newState }) => {
+  console.log(`State: ${oldState} → ${newState}`);
+});
+
+cat.on("moveEnd", () => {
+  console.log("Movement finished");
+});
+
+cat.on("boundaryHit", ({ direction }) => {
+  console.log(`Hit ${direction} boundary`);
+});
+```
+
+**`off(event: CatEvent, handler: EventHandler): void`**
+
+Removes an event listener.
+
+```typescript
+const handler = () => console.log("Moved");
+cat.on("moveEnd", handler);
+cat.off("moveEnd", handler);
+```
+
+### Other Exports
+
+#### `injectBaseStyles(): void`
+
+Injects required CSS animations into the document. Called automatically by Cat constructor.
+
+#### `CatAnimationManager`
+
+Internal class managing GSAP animations. Typically not used directly.
+
+#### `MeowtionContainer`
+
+Web component for declarative cat rendering (experimental).
 
 ## Animation System
 
 ### State Machine
 
-Cats use a state machine to manage animation transitions:
-
-```typescript
-interface StateTransition {
-  from: CatStateType;
-  to: CatStateType;
-  duration: number; // Transition time in ms
-  easing?: EasingFunction;
-}
-
-type EasingFunction = (t: number) => number;
-```
+Cats use a state machine to manage animation transitions. Not all transitions are allowed:
 
 **Valid State Transitions:**
 
-- `idle` ↔ `walking` ↔ `running`
-- `idle` ↔ `sitting` ↔ `sleeping`
-- `idle` ↔ `playing`
+- `idle` → `walking`, `running`, `sitting`, `playing`, `sleeping`
+- `walking` → `idle`, `running`, `sitting`
+- `running` → `idle`, `walking`
+- `sitting` → `idle`, `sleeping`
+- `sleeping` → `idle`, `sitting`
+- `playing` → `idle`, `walking`
 - Any state → `idle` (always allowed)
 
-### SVG Animation Techniques
+**Transition Durations:**
 
-Meowtion animates SVG elements using:
+The state machine defines transition times for smooth state changes:
 
-1. **CSS Transforms**: For position and rotation
-2. **SMIL/CSS Animations**: For looping behaviors (tail swaying, breathing)
-3. **JavaScript RAF**: For physics-based movement
-4. **Keyframe Sequences**: For complex state animations
+- `idle` ↔ `walking`: 300ms
+- `walking` ↔ `running`: 200ms
+- `running` → `idle`: 400ms
+- `idle` ↔ `sitting`: 500ms
+- `sitting` ↔ `sleeping`: 1000-2000ms
+- `idle` ↔ `playing`: 300ms
 
-Example internal animation:
+**Easing Functions:**
 
-```typescript
-// Walking animation - alternating leg movement
-function applyWalkingAnimation(cat: Cat) {
-  const svg = cat.element.querySelector("svg");
-  const tail = svg.querySelector(
-    `#${cat.protoCat.spriteData.elements.tail}`
-  );
+Available in `state-machine.ts`:
 
-  // Sway tail while walking
-  tail.style.animation = "tail-sway 0.6s ease-in-out infinite";
+- `easeInOutCubic(t)` - Smooth acceleration/deceleration
+- `easeOutQuad(t)` - Decelerating to zero
+- `easeOutElastic(t)` - Bouncy effect
 
-  // Slight body bounce
-  svg.style.animation = "body-bounce 0.4s ease-in-out infinite";
-}
-```
+### GSAP Animations
+
+Meowtion uses GSAP for state-based animations:
+
+- **Idle**: Gentle breathing, occasional tail sway, rare blinks
+- **Walking**: Leg movement, moderate tail sway, slight body bounce
+- **Running**: Fast leg movement, tail horizontal, pronounced bounce
+- **Sitting**: Slow breathing, gentle tail movement
+- **Sleeping**: Very slow breathing, minimal movement
+- **Playing**: Energetic movements, rapid tail swaying
+
+Animations are managed by `CatAnimationManager` and applied to specific SVG elements using IDs from the ProtoCat's `spriteData.elements`.
 
 ## Movement System
 
-### Movement Primitives
+### Movement Architecture
 
-Meowtion provides low-level movement controls:
+Meowtion separates movement into two systems:
 
-```typescript
-interface Cat {
-  // Smooth interpolated movement to position
-  moveTo(x: number, y: number, duration?: number): Promise<void>;
+1. **Animated Movement** (`cat/movement.ts`): GSAP-based tweened movement for `moveTo()` and `moveAlongPath()`
+2. **Physics Movement** (`cat/physics.ts`): Velocity-based movement with friction, gravity, and boundaries
 
-  // Immediate position change (no animation)
-  setPosition(x: number, y: number): void;
+### Movement Methods
 
-  // Set velocity for physics-based movement
-  setVelocity(vx: number, vy: number): void;
+**`moveTo(x, y, duration)`**
 
-  // Stop all movement immediately
-  stop(): void;
-}
-```
+- Uses GSAP for smooth interpolation
+- Automatically sets state to "walking" or "running" based on distance
+- Returns Promise that resolves when movement completes
+- Can be cancelled with `stop()`
+- Respects boundaries (clamps to edges)
 
-### Movement Characteristics
+**`moveAlongPath(points, duration, options)`**
 
-- **Smooth interpolation**: Uses easing functions for natural movement
-- **Boundary enforcement**: Automatically prevents cats from moving outside defined boundaries
-- **Physics integration**: Respects friction and max speed settings
-- **State synchronization**: Automatically matches animation state to movement speed
+- Creates curved path through multiple points
+- Uses Bezier curves for natural movement
+- Configurable easing (default: "power1.inOut")
+- Optional looping
+- Automatically faces direction of movement
+
+**`setVelocity(vx, vy)`**
+
+- Sets physics-based velocity
+- Physics system updates position each frame
+- Applies friction over time
+- Clamped to `maxSpeed` setting
+- Used for continuous movement (e.g., wandering)
 
 ### Boundary Behavior
 
 When a cat hits a boundary:
 
-- Movement is stopped at the boundary edge
-- `boundaryHit` event is emitted with direction information
-- Velocity is reset to zero
-- Meowbrain can listen to this event and decide new behavior
+1. Position is clamped to boundary edge
+2. Velocity is set to zero
+3. `boundaryHit` event is emitted with `{ direction: "left" | "right" | "top" | "bottom" }`
+4. Movement tween is cancelled (for `moveTo`)
+5. Cat can decide new behavior (typically via Meowbrain)
 
-## Implementation Considerations
+## Implementation Details
 
 ### DOM Structure
 
@@ -231,79 +475,91 @@ Each cat creates this DOM structure:
 ```html
 <div
   class="meowtion-cat"
-  data-cat-id="abc123"
-  style="position: absolute; left: 100px; top: 100px;"
+  data-cat-id="cat-1234567890-abc123"
+  data-state="idle"
+  style="position: absolute; left: 100px; top: 100px; transform: scaleX(1);"
 >
-  <svg viewBox="0 0 100 100" width="100" height="100">
+  <svg
+    viewBox="0 0 100 100"
+    width="100"
+    height="100"
+    shape-rendering="crispEdges"
+  >
     <!-- SVG content from ProtoCat -->
   </svg>
 </div>
 ```
 
-### CSS Animations
+The container element is managed by `CatDOM` class which handles:
 
-Meowtion includes built-in CSS animations:
+- Position updates via CSS transforms
+- State attribute updates
+- Facing direction (scaleX for flipping)
+- Paused state
+- Removal from DOM
 
-```css
-@keyframes tail-sway {
-  0%,
-  100% {
-    transform: rotate(-10deg);
-  }
-  50% {
-    transform: rotate(10deg);
-  }
-}
+### Modular Components
 
-@keyframes body-bounce {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-2px);
-  }
-}
+**`CatDOM`** (`cat/dom.ts`)
 
-@keyframes blink {
-  0%,
-  90%,
-  100% {
-    transform: scaleY(1);
-  }
-  95% {
-    transform: scaleY(0.1);
-  }
-}
-```
+- Creates and manages the DOM element
+- Updates position, state, and direction
+- Handles element removal
+
+**`CatMovement`** (`cat/movement.ts`)
+
+- GSAP-based movement animations
+- Path following with Bezier curves
+- Automatic direction facing
+- Movement cancellation
+
+**`CatPhysics`** (`cat/physics.ts`)
+
+- Velocity-based movement
+- Friction and gravity simulation
+- Boundary collision detection
+- Speed clamping
+
+**`CatAnimationManager`** (`animations/index.ts`)
+
+- State-based GSAP animations
+- Manages timelines for each state
+- Animates specific SVG elements (tail, legs, body, etc.)
 
 ### Performance Optimization
 
-- Use `transform` and `opacity` for animations (GPU-accelerated)
-- Throttle physics calculations to 60 FPS
-- Pause animations for off-screen cats
-- Use `will-change` hint for frequently animated properties
-- Debounce event handlers
+- Uses CSS `transform` and `opacity` for GPU acceleration
+- Animation loop runs at 60 FPS using `requestAnimationFrame`
+- Paused cats skip frame updates
+- GSAP handles animation optimization internally
+- Physics calculations only run when velocity is non-zero
+- Event emitter uses WeakMap for efficient cleanup
 
-### Zero Dependencies
+### Dependencies
 
-Like Meowkit, Meowtion has no dependencies:
+Meowtion has **one external dependency**:
 
-- Native Web Animations API
-- RequestAnimationFrame for physics
-- Native event listeners
-- Pure CSS animations where possible
+- **GSAP** (GreenSock Animation Platform) - For professional-grade animations
+
+GSAP provides:
+
+- Smooth tweening and easing
+- Timeline management
+- Path morphing and following
+- Performance-optimized animations
+- Pause/resume capabilities
 
 ## Usage Examples
 
-### Basic Setup (Typically controlled by Meowbrain)
+### Basic Setup
 
 ```typescript
-import { buildCatFromSeed } from "meowkit";
-import { animateCat } from "meowtion";
+import { buildCatFromSeed } from "@meowzer/meowkit";
+import { animateCat } from "@meowzer/meowtion";
 
 const protoCat = buildCatFromSeed("tabby-FF9500-00FF00-m-short-v1");
 const cat = animateCat(protoCat, {
+  container: document.getElementById("playground"),
   initialPosition: { x: 100, y: 100 },
   initialState: "idle",
   boundaries: {
@@ -313,37 +569,68 @@ const cat = animateCat(protoCat, {
     maxY: window.innerHeight,
   },
 });
-
-// Low-level movement (normally Meowbrain does this)
-await cat.moveTo(400, 200, 2000);
-cat.setState("sitting");
 ```
 
-### Observing Events
+### Movement Examples
 
 ```typescript
-// Meowbrain listens to these events to make decisions
+// Simple movement
+await cat.moveTo(400, 200, 2000); // Move over 2 seconds
+cat.setState("sitting");
+
+// Path following
+await cat.moveAlongPath(
+  [
+    { x: 100, y: 100 },
+    { x: 300, y: 200 },
+    { x: 500, y: 100 },
+  ],
+  3000,
+  { ease: "power2.inOut" }
+);
+
+// Physics-based movement
+cat.setVelocity(150, 0); // Move right continuously
+setTimeout(() => cat.stop(), 2000); // Stop after 2s
+
+// Immediate position change
+cat.setPosition(200, 150); // No animation
+```
+
+### Event Handling
+
+```typescript
+// Listen for state changes
+cat.on("stateChange", ({ oldState, newState }) => {
+  console.log(`Cat changed from ${oldState} to ${newState}`);
+});
+
+// Detect when movement finishes
 cat.on("moveEnd", () => {
-  console.log("Cat finished moving");
+  console.log("Cat arrived at destination");
+  cat.setState("sitting");
 });
 
-cat.on("boundaryHit", (data) => {
-  console.log("Cat hit boundary:", data.direction);
-});
-
-cat.on("stateChange", (data) => {
-  console.log("Cat state changed to:", data.newState);
+// Handle boundary collisions
+cat.on("boundaryHit", ({ direction }) => {
+  console.log(`Cat hit the ${direction} boundary`);
+  // Meowbrain would decide what to do here
 });
 ```
 
 ### Multiple Cats
 
 ```typescript
-const cats = [
+import { buildCatFromSeed } from "@meowzer/meowkit";
+import { animateCat } from "@meowzer/meowtion";
+
+const seeds = [
   "tabby-FF9500-00FF00-m-short-v1",
   "calico-FFFFFF-0000FF-s-long-v1",
   "tuxedo-000000-FFFF00-l-short-v1",
-].map((seed, index) => {
+];
+
+const cats = seeds.map((seed, index) => {
   const protoCat = buildCatFromSeed(seed);
   return animateCat(protoCat, {
     initialPosition: { x: 100 + index * 150, y: 100 },
@@ -356,7 +643,59 @@ const cats = [
   });
 });
 
-// Meowbrain would control these cats autonomously
+// Control each cat independently
+cats[0].moveTo(300, 200);
+cats[1].setState("playing");
+cats[2].setVelocity(100, 50);
+```
+
+### Builder Pattern
+
+```typescript
+import { buildCat } from "@meowzer/meowkit";
+import { CatAnimator } from "@meowzer/meowtion";
+
+const protoCat = buildCat({
+  color: "#FF9500",
+  eyeColor: "#00FF00",
+  pattern: "spotted",
+  size: "large",
+  furLength: "medium",
+});
+
+const cat = new CatAnimator(protoCat)
+  .in(document.getElementById("playground"))
+  .at(200, 300)
+  .withState("idle")
+  .withPhysics({
+    friction: 0.15,
+    maxSpeed: 250,
+  })
+  .withinBounds({
+    minX: 0,
+    maxX: 800,
+    minY: 0,
+    maxY: 600,
+  })
+  .animate();
+```
+
+### Lifecycle Management
+
+```typescript
+// Pause animations (useful when tab is inactive)
+document.addEventListener("visibilitychange", () => {
+  if (document.hidden) {
+    cat.pause();
+  } else {
+    cat.resume();
+  }
+});
+
+// Cleanup when done
+function cleanup() {
+  cat.destroy(); // Removes from DOM and clears event listeners
+}
 ```
 
 ## Integration with Meowbrain
