@@ -7,7 +7,7 @@ export { CatAnimator } from "./animator.js";
 export {
   injectBaseStyles,
   CatAnimationManager,
-} from "./animations.js";
+} from "./animations/index.js";
 export { MeowtionContainer } from "./moewtion-container/meowtion-container.js";
 
 import type {

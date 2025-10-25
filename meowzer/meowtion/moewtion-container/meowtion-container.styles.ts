@@ -1,5 +1,5 @@
 import { css } from "lit";
-import { baseStyles } from "../animations.js";
+import { baseStyles } from "../animations/index.js";
 
 export const meowtionContainerStyles = [
   baseStyles,
