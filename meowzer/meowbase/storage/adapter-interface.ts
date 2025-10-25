@@ -6,20 +6,18 @@ import type { CollectionInfo } from "./schema.js";
  * Defines the contract that all storage implementations must follow
  *
  * This abstraction allows Meowbase to work with different storage backends
- * (localStorage, IndexedDB, etc.) while maintaining a consistent API
+ * (IndexedDB, or future alternatives) while maintaining a consistent API
  */
 export interface IStorageAdapter {
   /**
    * Initialize the storage adapter
    * For IndexedDB: Opens database connection and applies schema
-   * For localStorage: No-op (always ready)
    */
   initialize(): Promise<void>;
 
   /**
    * Close the storage connection
    * For IndexedDB: Closes database connection
-   * For localStorage: No-op
    */
   close(): Promise<void>;
 

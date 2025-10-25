@@ -7,11 +7,11 @@ Learn about collection operations in Meowbase.
 
 ## Overview
 
-Collections are the top-level containers for cats in Meowbase. Each collection is stored in localStorage and can be loaded into memory for fast access.
+Collections are the top-level containers for cats in Meowbase. Each collection is stored in IndexedDB and can be loaded into memory for fast access.
 
 ## Key Concepts
 
-- Collections are stored in localStorage with the prefix `meowbase-{id}`
+- Collections are stored in IndexedDB with the prefix `meowbase-{id}`
 - Maximum of 5 collections can be loaded in memory at once
 - Collections use LRU (Least Recently Used) eviction when memory is full
 - Each collection can hold up to 100 cats

@@ -6,11 +6,11 @@ This repository contains two projects:
 
 ### `/meowbase` - Meowbase Library
 
-A localStorage wrapper that mimics a database for learning purposes. This is the core library with a MongoDB-like document model, LRU caching, and comprehensive test coverage.
+An IndexedDB wrapper that mimics a database for learning purposes. This is the core library with a MongoDB-like document model, LRU caching, and comprehensive test coverage.
 
 **Key Features:**
 
-- Document-based collections stored in localStorage
+- Document-based collections stored in IndexedDB
 - LRU cache with automatic eviction
 - Full CRUD operations for collections and documents (cats)
 - Sample dataset for learning and demos
@@ -121,13 +121,12 @@ The root `package.json` provides convenient scripts for working with both projec
 All tests are located in the `/meowbase/__tests__/` directory. The test suite uses:
 
 - **Vitest** for the test runner
-- **happy-dom** for simulating browser APIs (localStorage) in Node.js
+- **happy-dom** for simulating browser APIs in Node.js
 
 Current test coverage:
 
-- ✅ Storage adapter tests (19 tests)
 - ✅ Cache tests (20 tests)
-- ✅ Sample data tests (9 tests)
+- 🚧 IndexedDB storage tests (pending - requires fake-indexeddb)
 - 🚧 Collection operations tests (pending)
 - 🚧 Cat operations tests (pending)
 

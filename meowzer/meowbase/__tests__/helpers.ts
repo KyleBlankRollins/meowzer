@@ -66,38 +66,3 @@ export function createMockCollection(
     ...overrides,
   };
 }
-
-/**
- * Clear localStorage before/after tests
- */
-export function clearMeowbaseStorage(): void {
-  const keys: string[] = [];
-  for (let i = 0; i < localStorage.length; i++) {
-    const key = localStorage.key(i);
-    if (key?.startsWith("meowbase-")) {
-      keys.push(key);
-    }
-  }
-  keys.forEach((key) => localStorage.removeItem(key));
-}
-
-/**
- * Get all meowbase keys from localStorage
- */
-export function getMeowbaseKeys(): string[] {
-  const keys: string[] = [];
-  for (let i = 0; i < localStorage.length; i++) {
-    const key = localStorage.key(i);
-    if (key?.startsWith("meowbase-")) {
-      keys.push(key);
-    }
-  }
-  return keys;
-}
-
-/**
- * Count meowbase items in localStorage
- */
-export function countMeowbaseItems(): number {
-  return getMeowbaseKeys().length;
-}

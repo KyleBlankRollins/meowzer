@@ -22,3 +22,7 @@
 ## Meowkit
 
 - Feat: add different SVG templates for different fur lengths
+
+## Meowbase
+
+- Feat: Figure out how to create poper tests for Meowbase now that it's using IndexedDB.

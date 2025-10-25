@@ -269,7 +269,7 @@ const settings = {
 const protoCat = buildCat(settings);
 
 // Store only the seed (tiny!)
-localStorage.setItem("myCatSeed", protoCat.seed);
+const seed = protoCat.seed;
 // Example seed: "tabby-FF9500-00FF00-m-short-v1"
 ```
 
@@ -278,8 +278,7 @@ localStorage.setItem("myCatSeed", protoCat.seed);
 ```typescript
 import { buildCatFromSeed } from "meowkit";
 
-// On next page load
-const seed = localStorage.getItem("myCatSeed");
+// Retrieve stored seed
 const protoCat = buildCatFromSeed(seed);
 
 // Same cat, freshly generated
@@ -302,7 +301,9 @@ const friendsCat = buildCatFromSeed("tabby-FF9500-00FF00-m-short-v1");
 ```typescript
 // If you need to store additional metadata
 const json = serializeCat(protoCat);
-localStorage.setItem("myCat", json);
+
+// Store or transmit the JSON string
+// ...
 
 // Recreate later
 const restoredCat = deserializeCat(json);

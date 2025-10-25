@@ -1,7 +1,7 @@
 {
   "name": "meowbase",
   "version": "0.1.0",
-  "description": "A localStorage wrapper that mimics a database for learning purposes",
+  "description": "An IndexedDB wrapper that mimics a database for learning purposes",
   "type": "module",
   "main": "./meowbase.ts",
   "exports": {
@@ -15,7 +15,7 @@
     "test:coverage": "vitest run --coverage"
   },
   "keywords": [
-    "localStorage",
+    "IndexedDB",
     "database",
     "learning",
     "education"

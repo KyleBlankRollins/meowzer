@@ -27,7 +27,7 @@ export class CollectionOperations {
   }
 
   /**
-   * Create a new collection and persist it to localStorage
+   * Create a new collection and persist it to storage
    */
   async create(
     name: string,
@@ -115,7 +115,7 @@ export class CollectionOperations {
   }
 
   /**
-   * Save a loaded collection back to localStorage
+   * Save a loaded collection back to storage
    */
   async save(identifier: string): Promise<MeowbaseResult> {
     const metadata = this.cache.find(identifier);
@@ -147,7 +147,7 @@ export class CollectionOperations {
   }
 
   /**
-   * Save all dirty collections to localStorage
+   * Save all dirty collections to storage
    */
   async flush(): Promise<MeowbaseResult> {
     const dirtyCollections = this.cache.getDirty();
@@ -185,7 +185,7 @@ export class CollectionOperations {
 
     return {
       success: true,
-      message: `Flushed ${savedCount} collection(s) to localStorage`,
+      message: `Flushed ${savedCount} collection(s) to storage`,
     };
   }
 
@@ -245,7 +245,7 @@ export class CollectionOperations {
   }
 
   /**
-   * Delete a collection from localStorage
+   * Delete a collection from storage
    */
   async delete(identifier: string): Promise<MeowbaseResult> {
     const result = await this.storage.delete(identifier);
