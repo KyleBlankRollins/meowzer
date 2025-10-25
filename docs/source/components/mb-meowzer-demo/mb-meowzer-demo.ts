@@ -125,9 +125,9 @@ export class MeowzerDemo extends LitElement {
     this.updateCatCount();
   }
 
-  private handlePersonalityChange(e: Event) {
-    const select = e.target as HTMLSelectElement;
-    this.selectedPersonality = select.value as PersonalityPreset;
+  private handlePersonalityChange(e: CustomEvent) {
+    this.selectedPersonality = (e.target as any)
+      .value as PersonalityPreset;
   }
 
   render() {
@@ -176,24 +176,19 @@ export class MeowzerDemo extends LitElement {
               Clear All
             </quiet-button>
 
-            <label class="personality-label">
-              <span>Personality:</span>
-              <select
-                class="personality-select"
-                @change=${this.handlePersonalityChange}
-              >
-                ${this.availablePersonalities.map(
-                  (p) => html`
-                    <option
-                      value=${p}
-                      ?selected=${p === this.selectedPersonality}
-                    >
-                      ${p.charAt(0).toUpperCase() + p.slice(1)}
-                    </option>
-                  `
-                )}
-              </select>
-            </label>
+            <quiet-select
+              label="Personality"
+              .value=${this.selectedPersonality}
+              @quiet-change=${this.handlePersonalityChange}
+            >
+              ${this.availablePersonalities.map(
+                (p) => html`
+                  <option value=${p}>
+                    ${p.charAt(0).toUpperCase() + p.slice(1)}
+                  </option>
+                `
+              )}
+            </quiet-select>
           </div>
 
           <div class="stats">

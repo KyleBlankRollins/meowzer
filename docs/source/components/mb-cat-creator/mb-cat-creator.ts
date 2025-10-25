@@ -136,41 +136,36 @@ export class CatCreator extends LitElement {
     }
   }
 
-  private handleColorChange(e: Event) {
-    const input = e.target as HTMLInputElement;
-    this.settings = { ...this.settings, color: input.value };
+  private handleColorChange(e: CustomEvent) {
+    this.settings = { ...this.settings, color: e.detail.value };
     this.updatePreview();
   }
 
-  private handleEyeColorChange(e: Event) {
-    const input = e.target as HTMLInputElement;
-    this.settings = { ...this.settings, eyeColor: input.value };
+  private handleEyeColorChange(e: CustomEvent) {
+    this.settings = { ...this.settings, eyeColor: e.detail.value };
     this.updatePreview();
   }
 
-  private handlePatternChange(e: Event) {
-    const select = e.target as HTMLSelectElement;
+  private handlePatternChange(e: CustomEvent) {
     this.settings = {
       ...this.settings,
-      pattern: select.value as CatSettings["pattern"],
+      pattern: (e.target as any).value as CatSettings["pattern"],
     };
     this.updatePreview();
   }
 
-  private handleSizeChange(e: Event) {
-    const select = e.target as HTMLSelectElement;
+  private handleSizeChange(e: CustomEvent) {
     this.settings = {
       ...this.settings,
-      size: select.value as CatSettings["size"],
+      size: (e.target as any).value as CatSettings["size"],
     };
     this.updatePreview();
   }
 
-  private handleFurLengthChange(e: Event) {
-    const select = e.target as HTMLSelectElement;
+  private handleFurLengthChange(e: CustomEvent) {
     this.settings = {
       ...this.settings,
-      furLength: select.value as CatSettings["furLength"],
+      furLength: (e.target as any).value as CatSettings["furLength"],
     };
     this.updatePreview();
   }
@@ -263,6 +258,7 @@ export class CatCreator extends LitElement {
     if (!this.db || !this.isInitialized) {
       return html`
         <div class="creator-loading">
+          <quiet-spinner size="lg"></quiet-spinner>
           <p>Initializing cat creator...</p>
         </div>
       `;
@@ -328,124 +324,102 @@ export class CatCreator extends LitElement {
                     required
                   ></quiet-text-field>
 
-                  <quiet-text-field
+                  <quiet-text-area
                     label="Description"
                     .value=${this.catDescription}
                     @quiet-input=${(e: CustomEvent) =>
                       (this.catDescription = (e.target as any).value)}
-                  ></quiet-text-field>
+                    rows="3"
+                  ></quiet-text-area>
                 </div>
+
+                <quiet-divider></quiet-divider>
 
                 <!-- Appearance -->
                 <div class="form-section">
                   <h4>Appearance</h4>
 
                   <div class="appearance-grid">
-                    <div class="color-picker">
-                      <label>
-                        <span>Fur Color</span>
-                        <input
-                          type="color"
-                          .value=${this.settings.color}
-                          @input=${this.handleColorChange}
-                        />
-                        <span class="color-value"
-                          >${this.settings.color}</span
-                        >
-                      </label>
-                    </div>
+                    <mb-color-picker
+                      label="Fur Color"
+                      .value=${this.settings.color}
+                      @color-change=${this.handleColorChange}
+                    ></mb-color-picker>
 
-                    <div class="color-picker">
-                      <label>
-                        <span>Eye Color</span>
-                        <input
-                          type="color"
-                          .value=${this.settings.eyeColor}
-                          @input=${this.handleEyeColorChange}
-                        />
-                        <span class="color-value"
-                          >${this.settings.eyeColor}</span
-                        >
-                      </label>
-                    </div>
+                    <mb-color-picker
+                      label="Eye Color"
+                      .value=${this.settings.eyeColor}
+                      @color-change=${this.handleEyeColorChange}
+                    ></mb-color-picker>
 
-                    <label>
-                      <span>Pattern</span>
-                      <select
-                        @change=${this.handlePatternChange}
-                        .value=${this.settings.pattern}
-                      >
-                        <option value="solid">Solid</option>
-                        <option value="tabby">Tabby</option>
-                        <option value="calico">Calico</option>
-                        <option value="tuxedo">Tuxedo</option>
-                        <option value="spotted">Spotted</option>
-                      </select>
-                    </label>
+                    <quiet-select
+                      label="Pattern"
+                      .value=${this.settings.pattern}
+                      @quiet-change=${this.handlePatternChange}
+                    >
+                      <option value="solid">Solid</option>
+                      <option value="tabby">Tabby</option>
+                      <option value="calico">Calico</option>
+                      <option value="tuxedo">Tuxedo</option>
+                      <option value="spotted">Spotted</option>
+                    </quiet-select>
 
-                    <label>
-                      <span>Fur Length</span>
-                      <select
-                        @change=${this.handleFurLengthChange}
-                        .value=${this.settings.furLength}
-                      >
-                        <option value="short">Short</option>
-                        <option value="medium">Medium</option>
-                        <option value="long">Long</option>
-                      </select>
-                    </label>
+                    <quiet-select
+                      label="Fur Length"
+                      .value=${this.settings.furLength}
+                      @quiet-change=${this.handleFurLengthChange}
+                    >
+                      <option value="short">Short</option>
+                      <option value="medium">Medium</option>
+                      <option value="long">Long</option>
+                    </quiet-select>
                   </div>
                 </div>
+
+                <quiet-divider></quiet-divider>
 
                 <!-- Size -->
                 <div class="form-section">
                   <h4>Size</h4>
-                  <label>
-                    <span>Body Size</span>
-                    <select
-                      @change=${this.handleSizeChange}
-                      .value=${this.settings.size}
-                    >
-                      <option value="small">Small</option>
-                      <option value="medium">Medium</option>
-                      <option value="large">Large</option>
-                    </select>
-                  </label>
+                  <quiet-select
+                    label="Body Size"
+                    .value=${this.settings.size}
+                    @quiet-change=${this.handleSizeChange}
+                  >
+                    <option value="small">Small</option>
+                    <option value="medium">Medium</option>
+                    <option value="large">Large</option>
+                  </quiet-select>
                 </div>
+
+                <quiet-divider></quiet-divider>
 
                 <!-- Behavior -->
                 <div class="form-section">
                   <h4>Behavior</h4>
-                  <label>
-                    <span>Personality</span>
-                    <select
-                      @change=${(e: Event) =>
-                        (this.selectedPersonality = (
-                          e.target as HTMLSelectElement
-                        ).value as PersonalityPreset)}
-                      .value=${this.selectedPersonality}
-                    >
-                      ${this.availablePersonalities.map(
-                        (p) => html`
-                          <option value=${p}>
-                            ${p.charAt(0).toUpperCase() + p.slice(1)}
-                          </option>
-                        `
-                      )}
-                    </select>
-                  </label>
+                  <quiet-select
+                    label="Personality"
+                    .value=${this.selectedPersonality}
+                    @quiet-change=${(e: CustomEvent) =>
+                      (this.selectedPersonality = (e.target as any)
+                        .value as PersonalityPreset)}
+                  >
+                    ${this.availablePersonalities.map(
+                      (p) => html`
+                        <option value=${p}>
+                          ${p.charAt(0).toUpperCase() + p.slice(1)}
+                        </option>
+                      `
+                    )}
+                  </quiet-select>
 
-                  <label class="checkbox-label">
-                    <input
-                      type="checkbox"
-                      .checked=${this.makeRoaming}
-                      @change=${(e: Event) =>
-                        (this.makeRoaming = (
-                          e.target as HTMLInputElement
-                        ).checked)}
-                    />
-                    <span>Make cat roam the viewport</span>
-                  </label>
+                  <quiet-checkbox
+                    .checked=${this.makeRoaming}
+                    @quiet-change=${(e: CustomEvent) =>
+                      (this.makeRoaming = (e.target as any).checked)}
+                  >
+                    Make cat roam the viewport
+                  </quiet-checkbox>
                 </div>
 
                 <!-- Actions -->

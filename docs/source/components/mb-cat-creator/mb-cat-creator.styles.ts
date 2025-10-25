@@ -106,31 +106,6 @@ export const mbCatCreatorStyles = css`
     padding-bottom: 0.5rem;
   }
 
-  /* Color Pickers */
-  .color-picker {
-    display: grid;
-    gap: 0.5rem;
-  }
-
-  .color-picker label {
-    display: grid;
-    gap: 0.5rem;
-  }
-
-  .color-picker input[type="color"] {
-    width: 100%;
-    height: 3rem;
-    border: 2px solid var(--quiet-neutral-stroke-soft);
-    border-radius: var(--quiet-radius-sm);
-    cursor: pointer;
-  }
-
-  .color-value {
-    font-family: monospace;
-    font-size: 0.875rem;
-    color: var(--quiet-neutral-text-soft);
-  }
-
   /* Select Fields */
   label {
     display: grid;

@@ -51,16 +51,18 @@ export class MbCatCard extends LitElement {
           <p class="cat-id">ID: ${this.cat.id.substring(0, 8)}...</p>
         </div>
         <div class="cat-actions" slot="footer">
-          <quiet-button size="sm" @click=${this.handleEdit}>
-            Edit
-          </quiet-button>
-          <quiet-button
-            size="sm"
-            variant="destructive"
-            @click=${this.handleDelete}
-          >
-            Delete
-          </quiet-button>
+          <quiet-button-group>
+            <quiet-button size="sm" @click=${this.handleEdit}>
+              Edit
+            </quiet-button>
+            <quiet-button
+              size="sm"
+              variant="destructive"
+              @click=${this.handleDelete}
+            >
+              Delete
+            </quiet-button>
+          </quiet-button-group>
         </div>
       </quiet-card>
     `;

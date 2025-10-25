@@ -252,6 +252,7 @@ export class MeowbaseCrudDemo extends LitElement {
         <div class="crud-demo">
           <quiet-card>
             <div class="loading-message">
+              <quiet-spinner size="lg"></quiet-spinner>
               <p>Initializing database...</p>
             </div>
           </quiet-card>
@@ -289,7 +290,7 @@ export class MeowbaseCrudDemo extends LitElement {
               placeholder="🐱"
             ></quiet-text-field>
 
-            <quiet-text-field
+            <quiet-text-area
               label="Description"
               .value=${this.formData.description}
               @quiet-input=${(e: CustomEvent) =>
@@ -298,7 +299,8 @@ export class MeowbaseCrudDemo extends LitElement {
                   (e.target as any).value
                 )}
               required
-            ></quiet-text-field>
+              rows="3"
+            ></quiet-text-area>
 
             <div class="form-actions" slot="footer">
               ${this.editingId
