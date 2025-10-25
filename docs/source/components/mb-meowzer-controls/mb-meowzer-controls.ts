@@ -357,30 +357,54 @@ export class MbMeowzerControls extends LitElement {
               : this.savedCats.length === 0
               ? html`<div class="empty-state">No saved cats yet</div>`
               : html`
-                  <div class="saved-cats-list">
+                  <quiet-search-list
+                    match="fuzzy"
+                    id="search-list__overview"
+                  >
+                    <quiet-text-field
+                      slot="controller"
+                      label="Search"
+                      description="Filter by cat name"
+                      with-clear
+                    >
+                      <quiet-icon
+                        slot="start"
+                        name="search"
+                      ></quiet-icon>
+                    </quiet-text-field>
+
+                    <!-- <quiet-empty-state slot="empty">
+                      <quiet-icon
+                        slot="illustration"
+                        name="cat"
+                      ></quiet-icon>
+                      <p>No matching results</p>
+                    </quiet-empty-state> -->
+
                     ${this.savedCats.map(
                       (cat) => html`
-                        <div class="cat-card">
-                          <div class="cat-info">
-                            <div
-                              class="cat-preview"
-                              .innerHTML=${this.generatePreview(cat)}
-                            ></div>
-                            <div class="cat-details">
-                              <div class="cat-name">${cat.name}</div>
-                              <div class="cat-meta">
-                                ${this.isCatLoaded(cat.id)
-                                  ? html`<span
-                                      class="status-badge active"
-                                      >Active</span
-                                    >`
-                                  : html`<span class="status-badge"
-                                      >Saved</span
-                                    >`}
-                              </div>
+                        <quiet-card orientation="horizontal">
+                          <div
+                            slot="media"
+                            class="cat-preview"
+                            .innerHTML=${this.generatePreview(cat)}
+                          ></div>
+
+                          <div class="cat-details">
+                            <div class="cat-name">${cat.name}</div>
+                            <div class="cat-meta">
+                              ${this.isCatLoaded(cat.id)
+                                ? html`<span
+                                    class="status-badge active"
+                                    >Active</span
+                                  >`
+                                : html`<span class="status-badge"
+                                    >Saved</span
+                                  >`}
                             </div>
                           </div>
-                          <div class="cat-actions">
+
+                          <div slot="footer" class="cat-actions">
                             ${this.isCatLoaded(cat.id)
                               ? html`
                                   ${this.isCatPaused(cat.id)
@@ -424,10 +448,10 @@ export class MbMeowzerControls extends LitElement {
                               🗑️
                             </button>
                           </div>
-                        </div>
+                        </quiet-card>
                       `
                     )}
-                  </div>
+                  </quiet-search-list>
                 `}
           </div>
         </div>

@@ -151,29 +151,55 @@ export class CatCreator extends LitElement {
   }
 
   private updatePreview() {
+    console.log(
+      "[Cat Creator] updatePreview called with settings:",
+      this.settings
+    );
     const validation = validateCatSettings(this.settings);
 
     if (validation.valid) {
+      console.log("[Cat Creator] Settings valid, building cat...");
       this.validationErrors = [];
       try {
         this.preview = buildCat(this.settings);
+        console.log(
+          "[Cat Creator] Preview built successfully:",
+          this.preview?.id
+        );
       } catch (error) {
+        console.error("[Cat Creator] Error building cat:", error);
         this.validationErrors = [`Error building cat: ${error}`];
         this.preview = null;
       }
     } else {
+      console.log(
+        "[Cat Creator] Settings invalid:",
+        validation.errors
+      );
       this.validationErrors = validation.errors;
       this.preview = null;
     }
   }
 
   private handleColorChange(e: CustomEvent) {
+    console.log(
+      "[Cat Creator] Fur color change event received:",
+      e.detail.value
+    );
+    console.log("[Cat Creator] Current settings:", this.settings);
     this.settings = { ...this.settings, color: e.detail.value };
+    console.log("[Cat Creator] New settings:", this.settings);
     this.updatePreview();
   }
 
   private handleEyeColorChange(e: CustomEvent) {
+    console.log(
+      "[Cat Creator] Eye color change event received:",
+      e.detail.value
+    );
+    console.log("[Cat Creator] Current settings:", this.settings);
     this.settings = { ...this.settings, eyeColor: e.detail.value };
+    console.log("[Cat Creator] New settings:", this.settings);
     this.updatePreview();
   }
 
@@ -186,10 +212,16 @@ export class CatCreator extends LitElement {
   }
 
   private handleSizeChange(e: CustomEvent) {
+    console.log(
+      "[Cat Creator] Size change event received:",
+      (e.target as any).value
+    );
+    console.log("[Cat Creator] Current settings:", this.settings);
     this.settings = {
       ...this.settings,
       size: (e.target as any).value as CatSettings["size"],
     };
+    console.log("[Cat Creator] New settings:", this.settings);
     this.updatePreview();
   }
 
@@ -313,11 +345,14 @@ export class CatCreator extends LitElement {
                     <div class="preview-container">
                       <div
                         class="cat-preview"
+                        style="--cat-scale: ${this.preview.dimensions
+                          .scale}"
                         .innerHTML=${this.preview.spriteData.svg}
                       ></div>
                       <div class="preview-details">
                         <p>
-                          <strong>Seed:</strong> ${this.preview.seed}
+                          <strong>Seed:</strong>
+                          <code>${this.preview.seed}</code>
                         </p>
                         <p>
                           <strong>Size:</strong> ${this.preview

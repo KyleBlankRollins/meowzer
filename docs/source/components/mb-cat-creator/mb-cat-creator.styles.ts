@@ -55,8 +55,14 @@ export const mbCatCreatorStyles = css`
   }
 
   .cat-preview svg {
-    max-width: 100%;
+    /* Display at natural size to show size differences */
+    width: auto;
     height: auto;
+    max-width: 100%;
+    max-height: 300px;
+    /* Apply the scale from dimensions */
+    transform: scale(var(--cat-scale, 1));
+    transform-origin: center center;
   }
 
   .preview-details {
@@ -66,6 +72,19 @@ export const mbCatCreatorStyles = css`
 
   .preview-details p {
     margin: 0.5rem 0;
+  }
+
+  .preview-details strong {
+    display: inline-block;
+    min-width: 60px;
+  }
+
+  .preview-details code {
+    font-family: monospace;
+    background: var(--quiet-neutral-fill-softer);
+    padding: 0.125rem 0.375rem;
+    border-radius: var(--quiet-radius-sm);
+    font-size: 0.8125rem;
   }
 
   .preview-error {

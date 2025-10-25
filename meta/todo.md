@@ -9,9 +9,16 @@
 - add back arching animation
 - add standing animation for edges of viewport
 
-## Docs site
+## Meowzer UI
 
-- Migrate cat creator to Meowzer UI
-- Remove demo components
-- Add cat names and display them
-  - Need a good list of names to randomly pull from
+- Fix: search list doesn't work. Currently always returns 0 results.
+- Fix: make list of cats scrollable and fixed height.
+
+### Cat creator
+
+- Fix: Color pickers don't close reliably on outside clicks
+- Feat: add random name generator
+
+## Meowkit
+
+- Feat: add different SVG templates for different fur lengths

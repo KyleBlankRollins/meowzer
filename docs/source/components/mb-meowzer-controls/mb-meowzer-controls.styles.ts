@@ -11,7 +11,7 @@ export const mbMeowzerControlsStyles = css`
   .controls-container {
     position: fixed;
     bottom: 0;
-    right: 20px;
+    left: 20px;
     z-index: 9999;
     transition: transform 0.3s ease;
   }
@@ -19,7 +19,7 @@ export const mbMeowzerControlsStyles = css`
   .toggle-button {
     position: absolute;
     bottom: 0;
-    right: 0;
+    left: 0;
     width: 56px;
     height: 56px;
     border-radius: 28px 28px 0 0;
@@ -42,7 +42,7 @@ export const mbMeowzerControlsStyles = css`
   .controls-panel {
     position: absolute;
     bottom: 56px;
-    right: 0;
+    left: 0;
     width: 300px;
     background: var(--control-bg);
     border: 1px solid var(--control-border);
@@ -244,7 +244,15 @@ export const mbMeowzerControlsStyles = css`
     color: var(--quiet-text-color-secondary);
   }
 
-  .saved-cats-list {
+  quiet-search-list {
+    display: block;
+  }
+
+  quiet-search-list quiet-text-field {
+    margin-bottom: 12px;
+  }
+
+  quiet-search-list::part(items) {
     max-height: 300px;
     overflow-y: auto;
     display: flex;
@@ -252,46 +260,39 @@ export const mbMeowzerControlsStyles = css`
     gap: 8px;
   }
 
-  .saved-cats-list::-webkit-scrollbar {
+  quiet-search-list::part(items)::-webkit-scrollbar {
     width: 6px;
   }
 
-  .saved-cats-list::-webkit-scrollbar-track {
+  quiet-search-list::part(items)::-webkit-scrollbar-track {
     background: var(--quiet-background-color-secondary);
     border-radius: 3px;
   }
 
-  .saved-cats-list::-webkit-scrollbar-thumb {
+  quiet-search-list::part(items)::-webkit-scrollbar-thumb {
     background: var(--control-border);
     border-radius: 3px;
   }
 
-  .saved-cats-list::-webkit-scrollbar-thumb:hover {
+  quiet-search-list::part(items)::-webkit-scrollbar-thumb:hover {
     background: var(--quiet-text-color-secondary);
   }
 
-  .cat-card {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 8px;
-    background: var(--quiet-background-color-secondary);
-    border: 1px solid var(--control-border);
-    border-radius: 6px;
-    transition: all 0.2s ease;
+  /* Quiet Card Customization */
+  quiet-card {
+    --spacing: 0.75rem;
   }
 
-  .cat-card:hover {
-    background: var(--quiet-background-color-hover);
-    transform: translateX(2px);
-  }
-
-  .cat-info {
+  quiet-card::part(media) {
+    width: 48px;
     display: flex;
     align-items: center;
-    gap: 10px;
-    flex: 1;
-    min-width: 0;
+    justify-content: center;
+  }
+
+  quiet-card::part(footer) {
+    justify-content: flex-end;
+    padding: 0.5rem 0.75rem;
   }
 
   .cat-preview {
@@ -301,9 +302,6 @@ export const mbMeowzerControlsStyles = css`
     display: flex;
     align-items: center;
     justify-content: center;
-    background: var(--quiet-background-color);
-    border-radius: 6px;
-    border: 1px solid var(--control-border);
   }
 
   .cat-preview svg {
@@ -311,15 +309,10 @@ export const mbMeowzerControlsStyles = css`
     height: 100%;
   }
 
-  .cat-emoji {
-    font-size: 24px;
-    flex-shrink: 0;
-  }
-
   .cat-details {
     display: flex;
     flex-direction: column;
-    gap: 2px;
+    gap: 4px;
     min-width: 0;
     flex: 1;
   }

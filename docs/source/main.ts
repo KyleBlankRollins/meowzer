@@ -15,6 +15,7 @@ import "@quietui/quiet/components/text-area/text-area.js";
 import "@quietui/quiet/components/spinner/spinner.js";
 import "@quietui/quiet/components/button-group/button-group.js";
 import "@quietui/quiet/components/divider/divider.js";
+import "@quietui/quiet/components/icon/icon.js";
 
 // Import custom components
 import "./components/mb-nav/mb-nav.js";
