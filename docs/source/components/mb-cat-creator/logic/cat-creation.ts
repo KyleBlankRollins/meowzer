@@ -18,7 +18,7 @@ export interface CatCreationData {
 }
 
 export interface CatCreationOptions {
-  makeRoaming?: boolean;
+  name?: string;
   personality?: PersonalityPreset;
   container?: HTMLElement;
 }
@@ -30,7 +30,7 @@ export function createCatObject(data: CatCreationData) {
   return {
     id: data.protoCat.id,
     name: data.name,
-    image: data.protoCat.spriteData.svg,
+    image: data.protoCat.seed, // Store seed instead of SVG for consistency
     birthday: new Date(),
     favoriteToy: {
       id: crypto.randomUUID(),
@@ -79,16 +79,18 @@ export async function saveCatToCollection(
 
 /**
  * Spawn a roaming cat in the viewport
+ * Returns the created MeowzerCat instance
  */
 export function spawnRoamingCat(
   settings: CatSettings,
   options: CatCreationOptions = {}
-): void {
+) {
   const playground = document.getElementById("cat-playground");
   const container = options.container || playground || document.body;
 
-  createCat(settings, {
+  return createCat(settings, {
     container,
+    name: options.name, // Pass the name through
     personality: options.personality || "balanced",
     autoStart: true,
   });

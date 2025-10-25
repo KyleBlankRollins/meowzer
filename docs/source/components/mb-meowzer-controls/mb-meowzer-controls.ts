@@ -204,8 +204,9 @@ export class MbMeowzerControls extends LitElement {
     this.showCreator = false;
   }
 
-  private handleCatCreated() {
+  private async handleCatCreated() {
     this.updateCatCount();
+    await this.loadSavedCatsData(); // Reload the cats list
   }
 
   private getCatStatus(cat: Cat): {

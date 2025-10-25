@@ -48,7 +48,7 @@ export class CatCreator extends LitElement {
   @state()
   private db: Meowbase | null = null;
 
-  private readonly COLLECTION_NAME = "my-cats";
+  private readonly COLLECTION_NAME = "roaming-cats"; // Changed to match mb-meowzer-controls
 
   @state()
   private settings: CatSettings = {
@@ -244,13 +244,27 @@ export class CatCreator extends LitElement {
     }
 
     try {
-      // Create cat object
+      // Spawn roaming cat first to get its ID
+      let spawnedCat = null;
+      if (this.makeRoaming) {
+        spawnedCat = spawnRoamingCat(this.settings, {
+          name: this.catName,
+          personality: this.selectedPersonality,
+        });
+      }
+
+      // Create cat object with the spawned cat's ID if available
       const newCat = createCatObject({
         protoCat: this.preview,
         name: this.catName,
         description: this.catDescription,
         settings: this.settings,
       });
+
+      // Use spawned cat's ID instead of protoCat's ID for consistency
+      if (spawnedCat) {
+        newCat.id = spawnedCat.id;
+      }
 
       // Save to database
       const result = await saveCatToCollection(
@@ -260,13 +274,6 @@ export class CatCreator extends LitElement {
       );
 
       if (result.success) {
-        // Spawn roaming cat if enabled
-        if (this.makeRoaming) {
-          spawnRoamingCat(this.settings, {
-            personality: this.selectedPersonality,
-          });
-        }
-
         this.message = result.message;
 
         // Reset form

@@ -17,6 +17,7 @@
 ### Cat creator
 
 - Fix: Color pickers don't close reliably on outside clicks
+- Fix: After creating a cat, close the cat creator UI
 - Feat: add random name generator
 
 ## Meowkit
