@@ -52,6 +52,7 @@ export type FurLength = "short" | "medium" | "long";
 
 export interface ProtoCat {
   id: string; // Unique identifier
+  name?: string; // Optional cat name
   seed: string; // Compact seed for regeneration
   appearance: AppearanceData; // Visual properties
   dimensions: DimensionData; // Size and hitbox information
@@ -346,6 +347,7 @@ export type MeowzerEvent =
   | "destroy";
 
 export interface MeowzerOptions {
+  name?: string; // Optional cat name (default: random from cat-names.json)
   container?: HTMLElement; // Where to append cat (default: document.body)
   position?: Position; // Starting position (default: random)
   personality?: Personality | PersonalityPreset; // Behavior traits (default: 'balanced')

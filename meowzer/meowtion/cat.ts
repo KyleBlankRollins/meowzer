@@ -561,6 +561,12 @@ export class Cat {
     div.setAttribute("data-paused", "false");
     div.innerHTML = this.protoCat.spriteData.svg;
 
+    // Add name label below the cat
+    const nameLabel = document.createElement("div");
+    nameLabel.className = "meowtion-cat-name";
+    nameLabel.textContent = this.protoCat.name || "Unknown Cat";
+    div.appendChild(nameLabel);
+
     // Set initial position
     div.style.left = `${this._position.x}px`;
     div.style.top = `${this._position.y}px`;
