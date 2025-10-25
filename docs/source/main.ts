@@ -28,9 +28,16 @@ import "./components/mb-cat-creator/mb-cat-creator.js";
 import "./components/mb-cat-card/mb-cat-card.js";
 import "./components/mb-meowzer-demo/mb-meowzer-demo.js";
 import "./components/mb-color-picker/mb-color-picker.js";
+import "./components/mb-meowzer-controls/mb-meowzer-controls.js";
+
+// Import client-side router for navigation without page reloads
+import { initializeRouter } from "./utilities/router.js";
 
 try {
   await allDefined();
+
+  // Initialize client-side router to preserve cat state across navigation
+  initializeRouter();
 } catch (error) {
   console.error(error);
 }

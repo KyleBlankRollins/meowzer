@@ -9,7 +9,9 @@
 - add back arching animation
 - add standing animation for edges of viewport
 
-## Meowkit and docs site
+## Docs site
 
+- Migrate cat creator to Meowzer UI
+- Remove demo components
 - Add cat names and display them
   - Need a good list of names to randomly pull from

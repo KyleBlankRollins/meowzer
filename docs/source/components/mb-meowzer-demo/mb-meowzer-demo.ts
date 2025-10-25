@@ -37,6 +37,7 @@ export class MeowzerDemo extends LitElement {
   private availablePersonalities: PersonalityPreset[] = [];
 
   private resizeObserver?: ResizeObserver;
+  private componentCatIds: Set<string> = new Set(); // Track cats created by this component
 
   connectedCallback() {
     super.connectedCallback();
@@ -65,8 +66,13 @@ export class MeowzerDemo extends LitElement {
       this.resizeObserver.disconnect();
     }
 
-    // Clean up all cats when component is removed
-    destroyAllCats();
+    // Clean up only the cats created by this component
+    const allCats = getAllCats();
+    allCats.forEach((cat) => {
+      if (this.componentCatIds.has(cat.id)) {
+        cat.destroy();
+      }
+    });
   }
 
   private updateBoundaries() {
@@ -83,12 +89,13 @@ export class MeowzerDemo extends LitElement {
   }
 
   private handleAddRandomCat() {
-    createRandomCat({
+    const cat = createRandomCat({
       container: document.body,
       personality: this.selectedPersonality,
       autoStart: !this.isPaused,
     });
 
+    this.componentCatIds.add(cat.id);
     this.updateCatCount();
   }
 
@@ -101,12 +108,13 @@ export class MeowzerDemo extends LitElement {
       furLength: "short",
     };
 
-    createCat(settings, {
+    const cat = createCat(settings, {
       container: document.body,
       personality: this.selectedPersonality,
       autoStart: !this.isPaused,
     });
 
+    this.componentCatIds.add(cat.id);
     this.updateCatCount();
   }
 
