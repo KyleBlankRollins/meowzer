@@ -91,3 +91,16 @@ body {
     color-scheme: dark;
   }
 }
+/* Cat Playground - Fixed viewport overlay for roaming cats */
+#cat-playground {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  overflow: hidden;
+}
+
+/* Allow cats inside playground to be interactive */
+#cat-playground > * {
+  pointer-events: auto;
+}

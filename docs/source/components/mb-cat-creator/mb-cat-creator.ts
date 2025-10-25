@@ -4,8 +4,20 @@ import { consume } from "@lit/context";
 import { mbCatCreatorStyles } from "./mb-cat-creator.styles.js";
 
 // Import from Meowzer SDK
-import type { Meowbase, CatSettings, ProtoCat } from "meowzer";
-import { buildCat, validateCatSettings } from "meowzer";
+import type {
+  Meowbase,
+  CatSettings,
+  ProtoCat,
+  PersonalityPreset,
+} from "meowzer";
+import {
+  buildCat,
+  validateCatSettings,
+  createCat,
+  injectBaseStyles,
+  setDefaultBoundaries,
+  getPersonalityPresets,
+} from "meowzer";
 import { meowbaseContext } from "../../contexts/meowbase-context.js";
 
 /**
@@ -50,9 +62,32 @@ export class CatCreator extends LitElement {
   @state()
   private validationErrors: string[] = [];
 
+  @state()
+  private selectedPersonality: PersonalityPreset = "balanced";
+
+  @state()
+  private availablePersonalities: PersonalityPreset[] = [];
+
+  @state()
+  private makeRoaming = true;
+
   connectedCallback() {
     super.connectedCallback();
     this.updatePreview();
+
+    // Initialize Meowzer for roaming cats
+    injectBaseStyles();
+    this.updateBoundaries();
+    this.availablePersonalities = getPersonalityPresets();
+  }
+
+  private updateBoundaries() {
+    setDefaultBoundaries({
+      minX: 0,
+      minY: 0,
+      maxX: window.innerWidth,
+      maxY: window.innerHeight,
+    });
   }
 
   updated(changedProperties: Map<string, any>) {
@@ -181,6 +216,19 @@ export class CatCreator extends LitElement {
 
       if (result.success) {
         await this.db.saveCollection(this.COLLECTION_NAME);
+
+        // Make cat roam the viewport if enabled
+        if (this.makeRoaming) {
+          const playground =
+            document.getElementById("cat-playground");
+          const container = playground || document.body;
+          createCat(this.settings, {
+            container,
+            personality: this.selectedPersonality,
+            autoStart: true,
+          });
+        }
+
         this.message = `Created ${this.catName}! 🎉`;
 
         // Reset form
@@ -292,59 +340,61 @@ export class CatCreator extends LitElement {
                 <div class="form-section">
                   <h4>Appearance</h4>
 
-                  <div class="color-picker">
+                  <div class="appearance-grid">
+                    <div class="color-picker">
+                      <label>
+                        <span>Fur Color</span>
+                        <input
+                          type="color"
+                          .value=${this.settings.color}
+                          @input=${this.handleColorChange}
+                        />
+                        <span class="color-value"
+                          >${this.settings.color}</span
+                        >
+                      </label>
+                    </div>
+
+                    <div class="color-picker">
+                      <label>
+                        <span>Eye Color</span>
+                        <input
+                          type="color"
+                          .value=${this.settings.eyeColor}
+                          @input=${this.handleEyeColorChange}
+                        />
+                        <span class="color-value"
+                          >${this.settings.eyeColor}</span
+                        >
+                      </label>
+                    </div>
+
                     <label>
-                      <span>Fur Color</span>
-                      <input
-                        type="color"
-                        .value=${this.settings.color}
-                        @input=${this.handleColorChange}
-                      />
-                      <span class="color-value"
-                        >${this.settings.color}</span
+                      <span>Pattern</span>
+                      <select
+                        @change=${this.handlePatternChange}
+                        .value=${this.settings.pattern}
                       >
+                        <option value="solid">Solid</option>
+                        <option value="tabby">Tabby</option>
+                        <option value="calico">Calico</option>
+                        <option value="tuxedo">Tuxedo</option>
+                        <option value="spotted">Spotted</option>
+                      </select>
+                    </label>
+
+                    <label>
+                      <span>Fur Length</span>
+                      <select
+                        @change=${this.handleFurLengthChange}
+                        .value=${this.settings.furLength}
+                      >
+                        <option value="short">Short</option>
+                        <option value="medium">Medium</option>
+                        <option value="long">Long</option>
+                      </select>
                     </label>
                   </div>
-
-                  <div class="color-picker">
-                    <label>
-                      <span>Eye Color</span>
-                      <input
-                        type="color"
-                        .value=${this.settings.eyeColor}
-                        @input=${this.handleEyeColorChange}
-                      />
-                      <span class="color-value"
-                        >${this.settings.eyeColor}</span
-                      >
-                    </label>
-                  </div>
-
-                  <label>
-                    <span>Pattern</span>
-                    <select
-                      @change=${this.handlePatternChange}
-                      .value=${this.settings.pattern}
-                    >
-                      <option value="solid">Solid</option>
-                      <option value="tabby">Tabby</option>
-                      <option value="calico">Calico</option>
-                      <option value="tuxedo">Tuxedo</option>
-                      <option value="spotted">Spotted</option>
-                    </select>
-                  </label>
-
-                  <label>
-                    <span>Fur Length</span>
-                    <select
-                      @change=${this.handleFurLengthChange}
-                      .value=${this.settings.furLength}
-                    >
-                      <option value="short">Short</option>
-                      <option value="medium">Medium</option>
-                      <option value="long">Long</option>
-                    </select>
-                  </label>
                 </div>
 
                 <!-- Size -->
@@ -360,6 +410,41 @@ export class CatCreator extends LitElement {
                       <option value="medium">Medium</option>
                       <option value="large">Large</option>
                     </select>
+                  </label>
+                </div>
+
+                <!-- Behavior -->
+                <div class="form-section">
+                  <h4>Behavior</h4>
+                  <label>
+                    <span>Personality</span>
+                    <select
+                      @change=${(e: Event) =>
+                        (this.selectedPersonality = (
+                          e.target as HTMLSelectElement
+                        ).value as PersonalityPreset)}
+                      .value=${this.selectedPersonality}
+                    >
+                      ${this.availablePersonalities.map(
+                        (p) => html`
+                          <option value=${p}>
+                            ${p.charAt(0).toUpperCase() + p.slice(1)}
+                          </option>
+                        `
+                      )}
+                    </select>
+                  </label>
+
+                  <label class="checkbox-label">
+                    <input
+                      type="checkbox"
+                      .checked=${this.makeRoaming}
+                      @change=${(e: Event) =>
+                        (this.makeRoaming = (
+                          e.target as HTMLInputElement
+                        ).checked)}
+                    />
+                    <span>Make cat roam the viewport</span>
                   </label>
                 </div>
 

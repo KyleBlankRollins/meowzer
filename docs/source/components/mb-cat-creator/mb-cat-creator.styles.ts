@@ -90,6 +90,13 @@ export const mbCatCreatorStyles = css`
     gap: 1rem;
   }
 
+  /* Appearance section uses 2x2 grid */
+  .appearance-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+
   .form-section h4 {
     margin: 0;
     font-size: 1rem;
@@ -154,6 +161,26 @@ export const mbCatCreatorStyles = css`
   select:focus {
     outline: none;
     border-color: var(--quiet-primary-stroke-mid);
+  }
+
+  /* Checkbox */
+  .checkbox-label {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.75rem;
+    cursor: pointer;
+  }
+
+  .checkbox-label input[type="checkbox"] {
+    width: 1.25rem;
+    height: 1.25rem;
+    cursor: pointer;
+  }
+
+  .checkbox-label span {
+    font-size: 1rem;
+    color: var(--quiet-neutral-text-loud);
   }
 
   /* Form Actions */

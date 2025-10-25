@@ -82,6 +82,7 @@ function createBaseTemplate(
           data-site-title="Meowbase Docs 🐈‍⬛"
         ></mb-nav>
         ${templateContent}
+        <div id="cat-playground"></div>
       </body>
     </html>`;
 }
