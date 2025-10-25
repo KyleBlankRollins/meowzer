@@ -15,6 +15,7 @@ export { Meowbase };
  * Initialize before use with initializeDatabase()
  */
 let databaseInstance: Meowbase | null = null;
+let initializationPromise: Promise<Meowbase> | null = null;
 
 /**
  * Initialize the Meowbase database
@@ -28,16 +29,25 @@ export async function initializeDatabase(
   config?: Partial<MeowbaseConfig>,
   storage?: IStorageAdapter
 ): Promise<Meowbase> {
+  // If initialization is already in progress, wait for it
+  if (initializationPromise) {
+    return initializationPromise;
+  }
+
+  // If already initialized, return existing instance
   if (databaseInstance) {
-    console.warn(
-      "Database already initialized. Returning existing instance."
-    );
     return databaseInstance;
   }
 
-  databaseInstance = new Meowbase(config, storage);
-  await databaseInstance.initialize();
-  return databaseInstance;
+  // Start initialization
+  initializationPromise = (async () => {
+    databaseInstance = new Meowbase(config, storage);
+    await databaseInstance.initialize();
+    initializationPromise = null; // Clear promise after completion
+    return databaseInstance;
+  })();
+
+  return initializationPromise;
 }
 
 /**
@@ -74,6 +84,7 @@ export async function closeDatabase(): Promise<void> {
   if (databaseInstance) {
     await databaseInstance.close();
     databaseInstance = null;
+    initializationPromise = null;
   }
 }
 

@@ -23,10 +23,8 @@ import "./components/templates/mb-home-template/mb-home-template.js";
 import "./components/templates/mb-landing-template/mb-landing-template.js";
 import "./components/templates/mb-doc-template/mb-doc-template.js";
 import "./components/mb-meowbase-provider/mb-meowbase-provider.js";
-import "./components/mb-crud-demo/mb-crud-demo.js";
 import "./components/mb-cat-creator/mb-cat-creator.js";
 import "./components/mb-cat-card/mb-cat-card.js";
-import "./components/mb-meowzer-demo/mb-meowzer-demo.js";
 import "./components/mb-color-picker/mb-color-picker.js";
 import "./components/mb-meowzer-controls/mb-meowzer-controls.js";
 

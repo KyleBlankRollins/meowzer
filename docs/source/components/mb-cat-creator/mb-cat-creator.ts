@@ -73,6 +73,7 @@ export class CatCreator extends LitElement {
 
   connectedCallback() {
     super.connectedCallback();
+    console.log("[Cat Creator] Connected, db:", this.db);
     this.updatePreview();
 
     // Initialize Meowzer for roaming cats
@@ -91,11 +92,20 @@ export class CatCreator extends LitElement {
   }
 
   updated(changedProperties: Map<string, any>) {
+    console.log(
+      "[Cat Creator] Updated, db changed:",
+      changedProperties.has("db"),
+      "db:",
+      this.db,
+      "isInitialized:",
+      this.isInitialized
+    );
     if (
       changedProperties.has("db") &&
       this.db &&
       !this.isInitialized
     ) {
+      console.log("[Cat Creator] Initializing collection...");
       this.initializeCollection();
     }
   }
@@ -103,19 +113,40 @@ export class CatCreator extends LitElement {
   private async initializeCollection() {
     if (!this.db) return;
 
-    this.isInitialized = true;
-
     try {
       const loadResult = await this.db.loadCollection(
         this.COLLECTION_NAME
       );
 
       if (!loadResult.success) {
-        await this.db.createCollection(this.COLLECTION_NAME, []);
-        await this.db.loadCollection(this.COLLECTION_NAME);
+        // Collection doesn't exist, create it
+        const createResult = await this.db.createCollection(
+          this.COLLECTION_NAME,
+          []
+        );
+
+        if (!createResult.success) {
+          this.message = `Error creating collection: ${createResult.message}`;
+          this.isInitialized = false;
+          return;
+        }
+
+        // Load the newly created collection
+        const secondLoadResult = await this.db.loadCollection(
+          this.COLLECTION_NAME
+        );
+
+        if (!secondLoadResult.success) {
+          this.message = `Error loading collection: ${secondLoadResult.message}`;
+          this.isInitialized = false;
+          return;
+        }
       }
+
+      this.isInitialized = true;
     } catch (error) {
       this.message = `Error initializing collection: ${error}`;
+      this.isInitialized = false;
     }
   }
 

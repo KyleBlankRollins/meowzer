@@ -1,7 +1,7 @@
 import { LitElement, html } from "lit";
 import { customElement, state } from "lit/decorators.js";
 import { provide } from "@lit/context";
-import { initializeDatabase, closeDatabase, Meowbase } from "meowzer";
+import { initializeDatabase, Meowbase } from "meowzer";
 import { meowbaseContext } from "../../contexts/meowbase-context.js";
 import { mbMeowbaseProviderStyles } from "./mb-meowbase-provider.styles";
 
@@ -16,13 +16,7 @@ export class MeowbaseProvider extends LitElement {
 
   @provide({ context: meowbaseContext })
   @state()
-  private meowbase: Meowbase | null = null;
-
-  @state()
-  private isInitialized = false;
-
-  @state()
-  private error: string | null = null;
+  meowbase: Meowbase | null = null;
 
   async connectedCallback() {
     super.connectedCallback();
@@ -31,37 +25,22 @@ export class MeowbaseProvider extends LitElement {
 
   async disconnectedCallback() {
     super.disconnectedCallback();
-    await closeDatabase();
+    // Don't close the database - it's a singleton that may be used by other providers
+    // The database will persist for the lifetime of the application
   }
 
   private async initializeDatabase() {
     try {
       const db = await initializeDatabase();
       this.meowbase = db;
-      this.isInitialized = true;
+      this.requestUpdate("meowbase");
     } catch (err) {
-      this.error = `Failed to initialize Meowbase: ${err}`;
       console.error("Meowbase initialization error:", err);
     }
   }
 
   render() {
-    if (this.error) {
-      return html`
-        <div class="provider-error">
-          <p><strong>Database Error:</strong> ${this.error}</p>
-        </div>
-      `;
-    }
-
-    if (!this.isInitialized || !this.meowbase) {
-      return html`
-        <div class="provider-loading">
-          <p>Initializing database...</p>
-        </div>
-      `;
-    }
-
+    // Always render slot to allow children to receive context when it becomes available
     return html`<slot></slot>`;
   }
 }

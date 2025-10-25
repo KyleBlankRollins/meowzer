@@ -28,7 +28,9 @@ export class IndexedDBAdapter implements IStorageAdapter {
         MEOWBASE_SCHEMA.version
       );
 
-      request.onerror = () => reject(request.error);
+      request.onerror = () => {
+        reject(request.error);
+      };
       request.onsuccess = () => {
         this.db = request.result;
         resolve();

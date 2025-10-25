@@ -82,7 +82,9 @@ function createBaseTemplate(
           data-site-title="Meowbase Docs 🐈‍⬛"
         ></mb-nav>
         ${templateContent}
-        <mb-meowzer-controls></mb-meowzer-controls>
+        <mb-meowbase-provider>
+          <mb-meowzer-controls></mb-meowzer-controls>
+        </mb-meowbase-provider>
         <div id="cat-playground" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 9998;"></div>
       </body>
     </html>`;

@@ -68,6 +68,10 @@ export class MeowzerCat {
     return this._isActive;
   }
 
+  get name(): string | undefined {
+    return this._cat.protoCat.name;
+  }
+
   // ============================================================================
   // LIFECYCLE METHODS
   // ============================================================================
