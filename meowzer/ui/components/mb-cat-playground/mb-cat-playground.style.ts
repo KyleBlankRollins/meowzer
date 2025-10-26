@@ -34,7 +34,7 @@ export const catPlaygroundStyles = css`
     color: var(--text-secondary);
   }
 
-  .preview-empty q-icon {
+  .preview-empty quiet-icon {
     font-size: 4rem;
     opacity: 0.3;
     margin-bottom: 1rem;

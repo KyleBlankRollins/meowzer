@@ -3,6 +3,11 @@
  *
  * Drop-in cat animations for any website using Lit Element and Quiet UI.
  * Inspired by Realm React's provider pattern.
+ *
+ * For automatic setup (stylesheets + component registration), import the setup module:
+ * ```typescript
+ * import '@meowzer/ui/setup';
+ * ```
  */
 
 // Contexts

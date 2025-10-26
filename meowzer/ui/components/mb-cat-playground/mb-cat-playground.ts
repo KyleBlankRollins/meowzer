@@ -183,9 +183,13 @@ export class MbCatPlayground extends LitElement {
     if (this.error) {
       return html`
         <div class="playground-container">
-          <q-callout variant="error">
-            <strong>Playground Error:</strong> ${this.error.message}
-          </q-callout>
+          <quiet-card>
+            <div
+              style="padding: 1rem; color: var(--quiet-destructive-text);"
+            >
+              <strong>Playground Error:</strong> ${this.error.message}
+            </div>
+          </quiet-card>
         </div>
       `;
     }
@@ -194,9 +198,9 @@ export class MbCatPlayground extends LitElement {
       return html`
         <div class="playground-container">
           <div style="text-align: center; padding: 2rem;">
-            <q-spinner size="large"></q-spinner>
+            <quiet-spinner></quiet-spinner>
             <p
-              style="margin-top: 1rem; color: var(--text-secondary);"
+              style="margin-top: 1rem; color: var(--quiet-neutral-text-mid);"
             >
               Initializing playground...
             </p>
@@ -222,7 +226,7 @@ export class MbCatPlayground extends LitElement {
         ${this.cats.length === 0
           ? html`
               <div class="preview-empty">
-                <q-icon name="cat"></q-icon>
+                <quiet-icon name="cat"></quiet-icon>
                 <p>No cats yet!</p>
                 <p style="font-size: 0.875rem;">
                   Click "Create Random Cat" to get started
@@ -239,7 +243,7 @@ export class MbCatPlayground extends LitElement {
                   ${this.cats.length === 1 ? "Cat" : "Cats"}
                 </p>
                 <p
-                  style="font-size: 0.875rem; color: var(--text-secondary);"
+                  style="font-size: 0.875rem; color: var(--quiet-neutral-text-mid);"
                 >
                   ${this.activeCount} active, ${this.pausedCount}
                   paused
@@ -260,37 +264,37 @@ export class MbCatPlayground extends LitElement {
         <div class="controls-section">
           <h3>Quick Actions</h3>
           <div class="quick-actions">
-            <q-button @click=${this.createRandomCat}>
-              <q-icon name="plus-circle"></q-icon>
+            <quiet-button @click=${this.createRandomCat}>
+              <quiet-icon name="plus-circle"></quiet-icon>
               Create Random Cat
-            </q-button>
+            </quiet-button>
 
-            <q-button
-              variant="secondary"
+            <quiet-button
+              variant="neutral"
               @click=${this.pauseAll}
               ?disabled=${this.cats.length === 0}
             >
-              <q-icon name="pause"></q-icon>
+              <quiet-icon name="pause"></quiet-icon>
               Pause All
-            </q-button>
+            </quiet-button>
 
-            <q-button
-              variant="secondary"
+            <quiet-button
+              variant="neutral"
               @click=${this.resumeAll}
               ?disabled=${this.cats.length === 0}
             >
-              <q-icon name="play"></q-icon>
+              <quiet-icon name="play"></quiet-icon>
               Resume All
-            </q-button>
+            </quiet-button>
 
-            <q-button
-              variant="error"
+            <quiet-button
+              variant="destructive"
               @click=${this.destroyAll}
               ?disabled=${this.cats.length === 0}
             >
-              <q-icon name="trash-2"></q-icon>
+              <quiet-icon name="trash-2"></quiet-icon>
               Destroy All
-            </q-button>
+            </quiet-button>
           </div>
         </div>
 

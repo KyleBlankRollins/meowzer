@@ -75,7 +75,7 @@ export const catOverlayStyles = css`
     gap: 0.5rem;
   }
 
-  .header-controls q-button {
+  .header-controls quiet-button {
     min-width: 2rem;
     padding: 0.25rem 0.5rem;
   }

@@ -207,9 +207,13 @@ export class MbCatOverlay extends LitElement {
     if (this.error) {
       return html`
         <div class="overlay-panel ${this.position}">
-          <q-callout variant="error">
-            <strong>Meowzer Error:</strong> ${this.error.message}
-          </q-callout>
+          <quiet-card>
+            <div
+              style="padding: 1rem; color: var(--quiet-destructive-text);"
+            >
+              <strong>Meowzer Error:</strong> ${this.error.message}
+            </div>
+          </quiet-card>
         </div>
       `;
     }
@@ -219,9 +223,9 @@ export class MbCatOverlay extends LitElement {
       return html`
         <div class="overlay-panel ${this.position}">
           <div style="padding: 1rem; text-align: center;">
-            <q-spinner size="large"></q-spinner>
+            <quiet-spinner></quiet-spinner>
             <p
-              style="margin-top: 1rem; color: var(--text-secondary);"
+              style="margin-top: 1rem; color: var(--quiet-neutral-text-mid);"
             >
               Initializing Meowzer...
             </p>
@@ -264,22 +268,22 @@ export class MbCatOverlay extends LitElement {
         <div class="overlay-header">
           <h2>Meowzer Cats</h2>
           <div class="header-controls">
-            <q-button
-              variant="ghost"
-              size="small"
+            <quiet-button
+              variant="neutral"
+              size="sm"
               @click=${this.toggleMinimized}
               aria-label="Minimize overlay"
             >
-              <q-icon name="minus"></q-icon>
-            </q-button>
-            <q-button
-              variant="ghost"
-              size="small"
+              <quiet-icon name="minus"></quiet-icon>
+            </quiet-button>
+            <quiet-button
+              variant="neutral"
+              size="sm"
               @click=${this.handleClose}
               aria-label="Close overlay"
             >
-              <q-icon name="x"></q-icon>
-            </q-button>
+              <quiet-icon name="x"></quiet-icon>
+            </quiet-button>
           </div>
         </div>
 
