@@ -553,10 +553,8 @@ import { serializeCat, deserializeCat } from "@meowzer/meowkit";
 
 // Serialize for storage (includes ID and creation date)
 const json = serializeCat(protoCat);
-localStorage.setItem("myCat", json);
 
 // Later: Deserialize
-const json = localStorage.getItem("myCat");
 const restoredCat = deserializeCat(json);
 
 console.log(restoredCat.id); // Original ID preserved

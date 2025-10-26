@@ -1,8 +1,7 @@
 import type { Preview } from "@storybook/web-components";
-import { setCustomElementsManifest } from "@storybook/web-components";
 
 // Import Quiet UI styles (needed for components)
-import "@quietui/quiet/dist/index.css";
+import "@quietui/quiet/themes/quiet.css";
 
 const preview: Preview = {
   parameters: {

@@ -6,31 +6,15 @@ import type {
   Human,
 } from "../types.js";
 import { generateUUID } from "./utils.js";
-import catNamesData from "../../../docs/source/utilities/../../../meta/cat-names.json";
+import { CatNameGenerator } from "./cat-names.js";
 
 /**
  * Sample dataset for Meowbase
  * Contains three collections: shelter, neighborhood, and home
  */
 
-// Get unique cat names for sample data
-function getUniqueCatNames(count: number): string[] {
-  const availableNames = [...catNamesData.names];
-  const selectedNames: string[] = [];
-
-  for (let i = 0; i < count && availableNames.length > 0; i++) {
-    const randomIndex = Math.floor(
-      Math.random() * availableNames.length
-    );
-    selectedNames.push(availableNames[randomIndex]);
-    availableNames.splice(randomIndex, 1); // Remove to avoid duplicates
-  }
-
-  return selectedNames;
-}
-
 // Generate 15 unique names for all cats (5 shelter + 4 neighborhood + 6 home)
-const catNames = getUniqueCatNames(15);
+const catNames = CatNameGenerator.generateMultiple(15);
 
 // Common emotions
 const emotions: Emotion[] = [
