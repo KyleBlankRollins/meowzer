@@ -5,4 +5,5 @@
 export {
   CatsController,
   CatController,
+  StorageController,
 } from "./reactive-controllers.js";

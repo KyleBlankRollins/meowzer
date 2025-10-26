@@ -186,3 +186,143 @@ export class CatController implements ReactiveController {
     this.host.requestUpdate();
   }
 }
+
+/**
+ * StorageController - Manages storage and collections reactively
+ *
+ * Provides access to storage operations and keeps track of collections.
+ * Auto-updates when collections are created, deleted, or modified.
+ *
+ * @example
+ * ```typescript
+ * class GalleryComponent extends LitElement {
+ *   private storageController = new StorageController(this);
+ *
+ *   render() {
+ *     return html`
+ *       <div>Collections: ${this.storageController.collections.length}</div>
+ *     `;
+ *   }
+ * }
+ * ```
+ */
+export class StorageController implements ReactiveController {
+  private host: ReactiveControllerHost;
+  private meowzer?: Meowzer;
+
+  /**
+   * List of all collections in storage
+   */
+  collections: Array<{ id: string; name: string; catCount: number }> =
+    [];
+
+  /**
+   * Current error if any
+   */
+  error?: Error;
+
+  /**
+   * Loading state
+   */
+  loading = false;
+
+  constructor(host: ReactiveControllerHost) {
+    this.host = host;
+    host.addController(this);
+  }
+
+  async hostConnected() {
+    this.meowzer = (this.host as any).meowzer;
+    await this.refresh();
+  }
+
+  hostDisconnected() {
+    // No cleanup needed currently
+  }
+
+  /**
+   * Refresh collections list from storage
+   */
+  async refresh() {
+    if (!this.meowzer?.storage) {
+      this.collections = [];
+      return;
+    }
+
+    this.loading = true;
+    this.error = undefined;
+    this.host.requestUpdate();
+
+    try {
+      this.collections =
+        await this.meowzer.storage.listCollections();
+    } catch (err) {
+      this.error = err as Error;
+      this.collections = [];
+    } finally {
+      this.loading = false;
+      this.host.requestUpdate();
+    }
+  }
+
+  /**
+   * Create a new collection
+   */
+  async createCollection(name: string) {
+    if (!this.meowzer?.storage) {
+      throw new Error("Storage not available");
+    }
+
+    await this.meowzer.storage.createCollection(name);
+    await this.refresh();
+  }
+
+  /**
+   * Delete a collection
+   */
+  async deleteCollection(identifier: string) {
+    if (!this.meowzer?.storage) {
+      throw new Error("Storage not available");
+    }
+
+    await this.meowzer.storage.deleteCollection(identifier);
+    await this.refresh();
+  }
+
+  /**
+   * Get a collection info by identifier
+   */
+  async getCollectionInfo(identifier: string) {
+    if (!this.meowzer?.storage) {
+      throw new Error("Storage not available");
+    }
+
+    return await this.meowzer.storage.getCollectionInfo(identifier);
+  }
+
+  /**
+   * Load cats from a collection
+   */
+  async loadCollection(identifier: string) {
+    if (!this.meowzer?.storage) {
+      throw new Error("Storage not available");
+    }
+
+    const cats = await this.meowzer.storage.loadCollection(identifier);
+
+    await this.refresh();
+    return cats;
+  }
+
+  /**
+   * Save a cat to a collection
+   */
+  async saveCat(cat: MeowzerCat, collection?: string) {
+    if (!this.meowzer?.storage) {
+      throw new Error("Storage not available");
+    }
+
+    await this.meowzer.storage.saveCat(cat, { collection });
+    await this.refresh();
+  }
+}
