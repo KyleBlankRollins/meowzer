@@ -254,8 +254,7 @@ export class StorageController implements ReactiveController {
     this.host.requestUpdate();
 
     try {
-      this.collections =
-        await this.meowzer.storage.listCollections();
+      this.collections = await this.meowzer.storage.listCollections();
     } catch (err) {
       this.error = err as Error;
       this.collections = [];
@@ -308,7 +307,9 @@ export class StorageController implements ReactiveController {
       throw new Error("Storage not available");
     }
 
-    const cats = await this.meowzer.storage.loadCollection(identifier);
+    const cats = await this.meowzer.storage.loadCollection(
+      identifier
+    );
 
     await this.refresh();
     return cats;

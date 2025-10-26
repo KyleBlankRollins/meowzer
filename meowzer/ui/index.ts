@@ -16,6 +16,7 @@ export { MeowzerProvider } from "./providers/index.js";
 export {
   CatsController,
   CatController,
+  StorageController,
 } from "./controllers/index.js";
 
 // Components (Phase 2: Creation Components)
@@ -24,6 +25,23 @@ export {
   CatAppearanceForm,
   CatPersonalityPicker,
   CatPreview,
+} from "./components/index.js";
+
+// Components (Phase 3: Management Components)
+export {
+  CatManager,
+  CatCard,
+  CatControls,
+  CatListItem,
+} from "./components/index.js";
+
+// Components (Phase 4: Gallery & Storage Components)
+export {
+  CatGallery,
+  CollectionPicker,
+  CatThumbnail,
+  CatExporter,
+  CatImporter,
 } from "./components/index.js";
 
 // Re-export Meowzer SDK types for convenience
