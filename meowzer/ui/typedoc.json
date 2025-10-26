@@ -1,0 +1,63 @@
+{
+  "$schema": "https://typedoc.org/schema.json",
+  "entryPoints": [
+    "./index.ts"
+  ],
+  "entryPointStrategy": "expand",
+  "out": "./docs/api",
+  "plugin": [],
+  "name": "@meowzer/ui",
+  "includeVersion": true,
+  "readme": "./README.md",
+  "exclude": [
+    "**/__tests__/**",
+    "**/*.test.ts",
+    "**/*.spec.ts",
+    "**/node_modules/**",
+    "**/dist/**"
+  ],
+  "excludePrivate": true,
+  "excludeProtected": false,
+  "excludeInternal": false,
+  "categoryOrder": [
+    "Providers",
+    "Components",
+    "Controllers",
+    "Contexts",
+    "Types",
+    "*"
+  ],
+  "categorizeByGroup": true,
+  "sort": [
+    "source-order",
+    "required-first",
+    "alphabetical"
+  ],
+  "kindSortOrder": [
+    "Class",
+    "Interface",
+    "Type alias",
+    "Function",
+    "Variable",
+    "Property",
+    "Method",
+    "Accessor"
+  ],
+  "navigationLinks": {
+    "GitHub": "https://github.com/KyleBlankRollins/meowzer",
+    "Storybook": "./storybook"
+  },
+  "visibilityFilters": {
+    "protected": true,
+    "private": false,
+    "inherited": true,
+    "external": false
+  },
+  "searchInComments": true,
+  "cleanOutputDir": true,
+  "validation": {
+    "notExported": true,
+    "invalidLink": true,
+    "notDocumented": false
+  }
+}

@@ -1,0 +1,74 @@
+# Meowzer UI
+
+Welcome to the Meowzer UI component library! This is a collection of Lit Element web components that provide a complete, drop-in solution for adding animated cats to any website.
+
+## Features
+
+- 🎨 **Beautiful Components** - Pre-built UI for cat creation, management, and galleries
+- 🔌 **Drop-in Ready** - Add cats to your site with a single HTML tag
+- 🎯 **Framework Agnostic** - Works with React, Vue, Angular, Svelte, or vanilla HTML
+- 📦 **Zero Configuration** - Components work out of the box
+- 🎨 **Themeable** - Built on Quiet UI with CSS variables
+- ♿ **Accessible** - WCAG AA compliant components
+- 📱 **Responsive** - Mobile-first design
+
+## Quick Start
+
+The fastest way to add cats to your website:
+
+```html
+<!-- Add this to any HTML page -->
+<script type="module" src="https://cdn.meowzer.dev/ui@1/all.js"></script>
+<mb-cat-overlay></mb-cat-overlay>
+```
+
+That's it! You now have fully-functional cat animations.
+
+## Component Categories
+
+### Providers
+Context providers that manage Meowzer SDK state and make it available to child components.
+
+### Creation Components
+UI for creating and customizing cats with appearance, personality, and preview.
+
+### Management Components
+Tools for managing active cats - pause, resume, destroy, save to collections.
+
+### Gallery Components
+Browse, load, and manage saved cats from collections with import/export functionality.
+
+### Drop-in Solutions
+Complete, self-contained components that include everything needed:
+- **`mb-cat-overlay`** - Floating overlay with tabs
+- **`mb-cat-playground`** - Full sandbox environment
+
+## Installation
+
+\`\`\`bash
+npm install @meowzer/ui
+\`\`\`
+
+## Usage with Provider Pattern
+
+\`\`\`html
+<meowzer-provider>
+  <cat-creator></cat-creator>
+  <cat-manager></cat-manager>
+  <cat-gallery></cat-gallery>
+</meowzer-provider>
+\`\`\`
+
+## Browser Support
+
+- ✅ Chrome/Edge (Chromium)
+- ✅ Firefox
+- ✅ Safari 14+
+- ✅ Web Components v1
+- ✅ Shadow DOM v1
+
+## Resources
+
+- [GitHub Repository](https://github.com/KyleBlankRollins/meowzer)
+- [Full Documentation](https://meowzer.dev)
+- [API Reference](../docs/api)
