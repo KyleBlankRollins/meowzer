@@ -1,0 +1,128 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+---
+
+<Layout title="About - Meowzer Playground">
+  <Header />
+
+  <main>
+    <article class="about-content">
+      <h1>What is this?</h1>
+      <p>
+        A fun playground for creating and playing with animated cats!
+        🐱
+      </p>
+
+      <h2>How to use it</h2>
+      <ul>
+        <li>Click "Create Cat" to make a new friend</li>
+        <li>Customize colors, patterns, and personality</li>
+        <li>Watch them roam around the screen</li>
+        <li>Save your favorites and share them!</li>
+      </ul>
+
+      <h2>Want cats on your site?</h2>
+      <p>
+        Check out the <a
+          href="https://github.com/yourusername/meowzer"
+          target="_blank">GitHub repo</a
+        >
+        to add Meowzer to your own website!
+      </p>
+
+      <h2>Credits</h2>
+      <p>
+        Built with <a href="https://quietui.org" target="_blank"
+          >Quiet UI</a
+        >,
+        <a href="https://lit.dev" target="_blank">Lit</a>, and <a
+          href="https://astro.build"
+          target="_blank">Astro</a
+        >.
+      </p>
+
+      <div class="demo-cats">
+        <p class="demo-label">
+          ← Some cats roaming on this page too! →
+        </p>
+        <meowzer-provider auto-init>
+          <mb-cat-playground></mb-cat-playground>
+        </meowzer-provider>
+      </div>
+    </article>
+  </main>
+
+  <Footer />
+</Layout>
+
+<script>
+  import "@meowzer/ui";
+</script>
+
+<style>
+  main {
+    flex: 1;
+    padding: 2rem 1rem;
+  }
+
+  .about-content {
+    max-width: 700px;
+    margin: 0 auto;
+    line-height: 1.7;
+  }
+
+  h1 {
+    color: var(--accent-orange);
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+  }
+
+  h2 {
+    color: #333;
+    font-size: 1.75rem;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+  }
+
+  p {
+    color: #555;
+    font-size: 1.125rem;
+  }
+
+  ul {
+    color: #555;
+    font-size: 1.125rem;
+    padding-left: 1.5rem;
+  }
+
+  li {
+    margin-bottom: 0.5rem;
+  }
+
+  a {
+    color: var(--accent-blue);
+    text-decoration: none;
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
+
+  .demo-cats {
+    margin-top: 3rem;
+    padding: 2rem;
+    background: #f9f9f9;
+    border-radius: 8px;
+    position: relative;
+    min-height: 300px;
+  }
+
+  .demo-label {
+    text-align: center;
+    color: #999;
+    font-size: 0.875rem;
+    margin-bottom: 1rem;
+  }
+</style>
