@@ -5,7 +5,8 @@ Web Components library for adding Meowzer cats to any website. Built with Lit El
 
 ## Status
 
-✅ **Phase 1 Complete** - Core Infrastructure
+✅ **Phase 1 Complete** - Core Infrastructure  
+✅ **Phase 2 Complete** - Creation Components
 
 ## Quick Start
 
@@ -120,6 +121,44 @@ render() {
 }
 ```
 
+## Phase 2: Creation Components ✅
+
+- [x] CatCreator - Main creation interface
+- [x] CatAppearanceForm - Color, pattern, size customization
+- [x] CatPersonalityPicker - Personality trait selection
+- [x] CatPreview - Live preview with updates
+- [x] Tests and TypeScript compilation
+
+### Using Creation Components
+
+```html
+<meowzer-provider>
+  <cat-creator></cat-creator>
+</meowzer-provider>
+```
+
+The `<cat-creator>` component provides a complete interface for creating cats with:
+
+- **Name & description** fields
+- **Appearance customization**: Color picker with presets, pattern, size, fur length
+- **Personality selection**: Choose from presets (playful, lazy, curious, etc.) or customize individual traits
+- **Live preview**: See your cat update in real-time as you change settings
+- **Form actions**: Create or reset
+
+**Events:**
+
+- `cat-created` - Emitted when a cat is successfully created (detail contains the MeowzerCat instance)
+- `cat-creation-error` - Emitted if cat creation fails (detail contains the error)
+
+**Example with event handling:**
+
+```typescript
+const creator = document.querySelector("cat-creator");
+creator.addEventListener("cat-created", (e) => {
+  console.log("New cat created:", e.detail.cat);
+});
+```
+
 ## Architecture
 
 Inspired by Realm React's provider pattern, adapted for Web Components:
@@ -135,12 +174,11 @@ Inspired by Realm React's provider pattern, adapted for Web Components:
 
 ## Next Phase
 
-**Phase 2: Creation Components** (Coming Soon)
+**Phase 3: Management Components** (Coming Soon)
 
-- cat-creator
-- appearance-form
-- personality-picker
-- cat-preview
+- cat-manager - Display and manage all active cats
+- cat-card - Individual cat card with controls
+- cat-controls - Pause/resume/delete controls
 
 ## Documentation
 

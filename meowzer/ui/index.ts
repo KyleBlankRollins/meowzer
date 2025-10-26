@@ -18,6 +18,14 @@ export {
   CatController,
 } from "./controllers/index.js";
 
+// Components (Phase 2: Creation Components)
+export {
+  CatCreator,
+  CatAppearanceForm,
+  CatPersonalityPicker,
+  CatPreview,
+} from "./components/index.js";
+
 // Re-export Meowzer SDK types for convenience
 export type {
   Meowzer,
