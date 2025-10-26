@@ -1,0 +1,31 @@
+# Development files
+__tests__/
+stories/
+.storybook/
+scripts/
+*.test.ts
+*.test.js
+vitest.config.ts
+vite.config.ts
+tsconfig.json
+typedoc.json
+
+# Build artifacts
+tsconfig.tsbuildinfo
+*.tsbuildinfo
+
+# Documentation (published separately)
+storybook-static/
+docs/
+
+# Node
+node_modules/
+
+# IDE
+.vscode/
+.idea/
+
+# Misc
+.DS_Store
+*.log
+npm-debug.log*

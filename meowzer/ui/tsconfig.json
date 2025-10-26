@@ -20,6 +20,8 @@
     "node_modules",
     "dist",
     "__tests__",
+    "stories",
+    ".storybook",
     "vitest.config.ts"
   ]
 }

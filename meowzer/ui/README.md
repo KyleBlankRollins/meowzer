@@ -3,40 +3,80 @@
 
 Web Components library for adding Meowzer cats to any website. Built with Lit Element and Quiet UI.
 
+## Installation
+
+```bash
+npm install meowzer @meowzer/ui @quietui/quiet lit
+```
+
+**Peer Dependencies:**
+
+- `meowzer` ^1.0.0 - Core Meowzer SDK
+- `@quietui/quiet` ^1.3.0 - UI component library
+- `lit` ^3.0.0 - Web components framework
+
 ## Status
 
 ✅ **Phase 1 Complete** - Core Infrastructure  
 ✅ **Phase 2 Complete** - Creation Components  
-✅ **Phase 3 Complete** - Management Components
+✅ **Phase 3 Complete** - Management Components  
+✅ **Phase 4 Complete** - Gallery & Storage Components  
+✅ **Phase 5 Complete** - Drop-in Solutions  
+✅ **Phase 6 Complete** - Storybook Documentation
 
 ## Quick Start
+
+### Option 1: CDN (Fastest)
 
 ```html
 <!DOCTYPE html>
 <html>
   <head>
-    <script
-      type="module"
-      src="https://cdn.jsdelivr.net/npm/@meowzer/ui"
-    ></script>
+    <!-- Quiet UI styles -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@quietui/quiet@1.3.0/dist/themes/quiet.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@quietui/quiet@1.3.0/dist/themes/restyle.css"
+    />
   </head>
   <body>
-    <!-- Drop-in overlay - that's it! -->
-    <meowzer-provider>
-      <cat-overlay></cat-overlay>
+    <!-- Drop-in playground - that's it! -->
+    <meowzer-provider auto-init>
+      <mb-cat-playground></mb-cat-playground>
     </meowzer-provider>
+
+    <script type="module">
+      import "@meowzer/ui";
+    </script>
   </body>
 </html>
 ```
 
-## Custom Integration
+### Option 2: NPM (Recommended)
+
+```bash
+npm install meowzer @meowzer/ui @quietui/quiet lit
+```
+
+```typescript
+// Import Quiet UI styles
+import "@quietui/quiet/themes/quiet.css";
+import "@quietui/quiet/themes/restyle.css";
+
+// Import components
+import "@meowzer/ui";
+
+// Or import specific components
+import { MeowzerProvider, CatCreator, CatManager } from "@meowzer/ui";
+```
 
 ```html
-<meowzer-provider>
-  <cat-boundary mode="block" block-width="100%" block-height="600px">
-    <cat-creator></cat-creator>
-    <cat-manager></cat-manager>
-  </cat-boundary>
+<meowzer-provider auto-init>
+  <cat-creator></cat-creator>
+  <cat-manager></cat-manager>
 </meowzer-provider>
 ```
 
