@@ -55,6 +55,37 @@ export {
   type LoadCollectionOptions,
   type CollectionInfo,
 } from "./managers/storage-manager.js";
+export {
+  HookManager,
+  LifecycleHook,
+  type LifecycleHookType,
+  type HookHandler,
+  type HookContext,
+  type CreateHookContext,
+  type SaveHookContext,
+  type LoadHookContext,
+  type DeleteHookContext,
+  type DestroyHookContext,
+} from "./managers/hook-manager.js";
+
+// Plugins
+export {
+  PluginManager,
+  type MeowzerPlugin,
+  type PluginContext,
+  type PluginInstallOptions,
+  type InstalledPlugin,
+} from "./plugin.js";
+
+// Builders and type helpers
+export {
+  CatBuilder,
+  type WithMetadata,
+  type TypedCreateCatOptions,
+} from "./builder.js";
+
+// Utilities
+export { MeowzerUtils } from "./utils.js";
 
 // Errors
 export {

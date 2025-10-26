@@ -9,6 +9,9 @@ import { Cat } from "../../meowtion/cat.js";
 import { NotFoundError, InvalidSettingsError } from "../errors.js";
 import type { CatMetadata } from "../types.js";
 import type { ConfigManager } from "../config.js";
+import type { HookManager } from "./hook-manager.js";
+import { LifecycleHook } from "./hook-manager.js";
+import { CatBuilder } from "../builder.js";
 import { generateId } from "../../meowkit/utils.js";
 
 /**
@@ -41,9 +44,11 @@ export interface FindCatsOptions {
  */
 export class CatManager {
   private cats = new Map<string, MeowzerCat>();
+  private hooks: HookManager;
 
-  constructor(_config: ConfigManager) {
+  constructor(_config: ConfigManager, hooks: HookManager) {
     // Config will be used in future for default behaviors and boundaries
+    this.hooks = hooks;
   }
 
   /**
@@ -59,6 +64,11 @@ export class CatManager {
    * ```
    */
   async create(options: CreateCatOptions = {}): Promise<MeowzerCat> {
+    // Trigger beforeCreate hook
+    await this.hooks._trigger(LifecycleHook.BEFORE_CREATE, {
+      options,
+    });
+
     // Generate ID
     const id = generateId();
 
@@ -115,7 +125,53 @@ export class CatManager {
     // Register in memory
     this.cats.set(cat.id, cat);
 
+    // Trigger afterCreate hook
+    await this.hooks._trigger(LifecycleHook.AFTER_CREATE, {
+      options,
+      cat,
+    });
+
     return cat;
+  }
+
+  /**
+   * Create a fluent builder for cat creation
+   *
+   * @example
+   * ```ts
+   * const builder = catManager.builder()
+   *   .name("Whiskers")
+   *   .appearance({ color: "orange", pattern: "tabby" })
+   *   .tags("playful", "friendly");
+   *
+   * const cat = await this.create(builder.build());
+   * ```
+   */
+  builder(): CatBuilder {
+    return new CatBuilder();
+  }
+
+  /**
+   * Create multiple cats at once
+   *
+   * @example
+   * ```ts
+   * const cats = await catManager.createMany([
+   *   { name: "Whiskers" },
+   *   { name: "Mittens" },
+   *   { seed: "abc123" }
+   * ]);
+   * ```
+   */
+  async createMany(
+    optionsArray: CreateCatOptions[]
+  ): Promise<MeowzerCat[]> {
+    const cats: MeowzerCat[] = [];
+    for (const options of optionsArray) {
+      const cat = await this.create(options);
+      cats.push(cat);
+    }
+    return cats;
   }
 
   /**
@@ -257,6 +313,20 @@ export class CatManager {
     const cat = this.get(id); // Throws if not found
     cat.destroy();
     this.cats.delete(id);
+  }
+
+  /**
+   * Destroy multiple cats by ID
+   *
+   * @example
+   * ```ts
+   * catManager.destroyMany(["cat-1", "cat-2", "cat-3"]);
+   * ```
+   */
+  destroyMany(ids: string[]): void {
+    for (const id of ids) {
+      this.destroy(id);
+    }
   }
 
   /**

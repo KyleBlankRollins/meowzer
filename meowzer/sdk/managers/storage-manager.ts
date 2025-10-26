@@ -2,6 +2,8 @@ import { Meowbase } from "../../meowbase/meowbase.js";
 import { MeowzerCat } from "../meowzer-cat.js";
 import { CatManager } from "./cat-manager.js";
 import type { ConfigManager } from "../config.js";
+import type { HookManager } from "./hook-manager.js";
+import { LifecycleHook } from "./hook-manager.js";
 import {
   StorageError,
   NotFoundError,
@@ -52,11 +54,17 @@ export interface CollectionInfo {
 export class StorageManager {
   private meowbase: Meowbase;
   private catManager: CatManager;
+  private hooks: HookManager;
   private initialized = false;
   private defaultCollection: string;
 
-  constructor(catManager: CatManager, config: ConfigManager) {
+  constructor(
+    catManager: CatManager,
+    config: ConfigManager,
+    hooks: HookManager
+  ) {
     this.catManager = catManager;
+    this.hooks = hooks;
     this.meowbase = new Meowbase({
       maxLoadedCollections: config.get().storage.cacheSize,
     });
@@ -130,6 +138,12 @@ export class StorageManager {
   ): Promise<void> {
     this._ensureInitialized();
 
+    // Trigger beforeSave hook
+    await this.hooks._trigger(LifecycleHook.BEFORE_SAVE, {
+      cat,
+      options,
+    });
+
     const collectionName =
       options?.collection ?? this.defaultCollection;
 
@@ -188,6 +202,12 @@ export class StorageManager {
 
       // Update cat's internal collection reference
       cat._setCollectionName(collectionName);
+
+      // Trigger afterSave hook
+      await this.hooks._trigger(LifecycleHook.AFTER_SAVE, {
+        cat,
+        options,
+      });
     } catch (error) {
       if (error instanceof StorageError) {
         throw error;
@@ -266,6 +286,12 @@ export class StorageManager {
 
           // Set collection reference
           cat._setCollectionName(collection.id);
+
+          // Trigger afterLoad hook
+          await this.hooks._trigger(LifecycleHook.AFTER_LOAD, {
+            cat,
+            catId,
+          });
 
           return cat;
         }
@@ -362,6 +388,9 @@ export class StorageManager {
   async deleteCat(catId: string): Promise<void> {
     this._ensureInitialized();
 
+    // Trigger beforeDelete hook
+    await this.hooks._trigger(LifecycleHook.BEFORE_DELETE, { catId });
+
     // Find which collection contains the cat
     const collections = await this.listCollections();
 
@@ -398,6 +427,11 @@ export class StorageManager {
               itemId: catId,
             });
           }
+
+          // Trigger afterDelete hook
+          await this.hooks._trigger(LifecycleHook.AFTER_DELETE, {
+            catId,
+          });
 
           return;
         }

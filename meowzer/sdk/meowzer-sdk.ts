@@ -1,5 +1,12 @@
 import { CatManager } from "./managers/cat-manager.js";
 import { StorageManager } from "./managers/storage-manager.js";
+import { HookManager } from "./managers/hook-manager.js";
+import {
+  PluginManager,
+  type MeowzerPlugin,
+  type PluginInstallOptions,
+} from "./plugin.js";
+import { MeowzerUtils } from "./utils.js";
 import { ConfigManager, type MeowzerConfig } from "./config.js";
 import { InvalidStateError } from "./errors.js";
 
@@ -37,6 +44,21 @@ export class Meowzer {
   public readonly storage: StorageManager;
 
   /**
+   * Lifecycle hooks
+   */
+  public readonly hooks: HookManager;
+
+  /**
+   * Plugin manager
+   */
+  public readonly plugins: PluginManager;
+
+  /**
+   * Utility functions
+   */
+  public readonly utils = MeowzerUtils;
+
+  /**
    * Configuration management
    * @internal - Users should pass config to constructor
    */
@@ -51,8 +73,20 @@ export class Meowzer {
    */
   constructor(config?: Partial<MeowzerConfig>) {
     this._config = new ConfigManager(config);
-    this.cats = new CatManager(this._config);
-    this.storage = new StorageManager(this.cats, this._config);
+    this.hooks = new HookManager();
+    this.cats = new CatManager(this._config, this.hooks);
+    this.storage = new StorageManager(
+      this.cats,
+      this._config,
+      this.hooks
+    );
+    this.plugins = new PluginManager({
+      meowzer: this,
+      hooks: this.hooks,
+      cats: this.cats,
+      storage: this.storage,
+      config: this._config,
+    });
   }
 
   /**
@@ -145,5 +179,27 @@ export class Meowzer {
    */
   getConfig(): MeowzerConfig {
     return this._config.get();
+  }
+
+  /**
+   * Install a plugin
+   *
+   * Convenience method for meowzer.plugins.install()
+   *
+   * @param plugin - Plugin to install
+   * @param options - Installation options
+   *
+   * @example
+   * ```ts
+   * meowzer.use(analyticsPlugin, {
+   *   config: { apiKey: 'xxx' }
+   * });
+   * ```
+   */
+  async use(
+    plugin: MeowzerPlugin,
+    options?: PluginInstallOptions
+  ): Promise<void> {
+    await this.plugins.install(plugin, options);
   }
 }
