@@ -1316,15 +1316,11 @@ Or with custom components:
 
 - [ ] Component API documentation
 - [ ] Interactive Storybook
-- [ ] Usage examples for all frameworks
-- [ ] CDN setup and deployment
-- [ ] Video tutorials
 
 ### Phase 7: Polish & Release (1 week)
 
 - [ ] Performance optimization
 - [ ] Accessibility audit (WCAG AA compliance)
-- [ ] Cross-browser testing
 - [ ] Bundle size optimization
 - [ ] v1.0.0 release
 

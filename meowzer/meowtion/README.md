@@ -369,10 +369,6 @@ Injects required CSS animations into the document. Called automatically by Cat c
 
 Internal class managing GSAP animations. Typically not used directly.
 
-#### `MeowtionContainer`
-
-Web component for declarative cat rendering (experimental).
-
 ## Animation System
 
 ### State Machine

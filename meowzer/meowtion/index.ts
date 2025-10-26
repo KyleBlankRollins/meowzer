@@ -8,7 +8,6 @@ export {
   injectBaseStyles,
   CatAnimationManager,
 } from "./animations/index.js";
-export { MeowtionContainer } from "./moewtion-container/meowtion-container.js";
 
 import type {
   ProtoCat,

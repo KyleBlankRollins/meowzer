@@ -20,3 +20,7 @@ export { CollectionPicker } from "./collection-picker/collection-picker.js";
 export { CatThumbnail } from "./cat-thumbnail/cat-thumbnail.js";
 export { CatExporter } from "./cat-exporter/cat-exporter.js";
 export { CatImporter } from "./cat-importer/cat-importer.js";
+
+// Phase 5: Drop-in Solutions
+export { MbCatOverlay } from "./mb-cat-overlay/mb-cat-overlay.js";
+export { MbCatPlayground } from "./mb-cat-playground/mb-cat-playground.js";
