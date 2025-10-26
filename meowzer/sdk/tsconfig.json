@@ -3,7 +3,15 @@
   "compilerOptions": {
     "outDir": "./dist",
     "rootDir": "..",
-    "composite": true
+    "composite": true,
+    "experimentalDecorators": true,
+    "useDefineForClassFields": false,
+    "noEmit": false,
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "allowImportingTsExtensions": false,
+    "verbatimModuleSyntax": false
   },
   "include": [
     "./**/*.ts",
@@ -20,7 +28,6 @@
     "__tests__",
     "../**/__tests__",
     "vitest.config.ts",
-    "../**/vitest.config.ts",
-    "../meowtion/moewtion-container/**"
+    "../**/vitest.config.ts"
   ]
 }

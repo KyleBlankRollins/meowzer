@@ -3,12 +3,12 @@
   "version": "1.0.0",
   "description": "High-level API wrapper for creating, managing, and persisting autonomous cat instances",
   "type": "module",
-  "main": "./meowzer.js",
-  "types": "./meowzer.d.ts",
+  "main": "./dist/sdk/index.js",
+  "types": "./dist/sdk/index.d.ts",
   "exports": {
     ".": {
-      "import": "./meowzer.js",
-      "types": "./meowzer.d.ts"
+      "import": "./dist/sdk/index.js",
+      "types": "./dist/sdk/index.d.ts"
     }
   },
   "scripts": {
@@ -17,7 +17,8 @@
     "typecheck": "tsc --noEmit",
     "docs": "typedoc",
     "docs:watch": "typedoc --watch",
-    "docs:json": "typedoc --json ./docs/documentation.json"
+    "docs:json": "typedoc --json ./docs/documentation.json",
+    "prepublishOnly": "npm run build"
   },
   "keywords": [
     "cat",
