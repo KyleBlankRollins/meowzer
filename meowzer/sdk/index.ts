@@ -77,13 +77,6 @@ export {
   type InstalledPlugin,
 } from "./plugin.js";
 
-// Builders and type helpers
-export {
-  CatBuilder,
-  type WithMetadata,
-  type TypedCreateCatOptions,
-} from "./builder.js";
-
 // Utilities
 export { MeowzerUtils } from "./utils.js";
 

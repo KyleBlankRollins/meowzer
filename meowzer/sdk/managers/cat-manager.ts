@@ -11,7 +11,6 @@ import type { CatMetadata } from "../types.js";
 import type { ConfigManager } from "../config.js";
 import type { HookManager } from "./hook-manager.js";
 import { LifecycleHook } from "./hook-manager.js";
-import { CatBuilder } from "../builder.js";
 import { generateId } from "../../meowkit/utils.js";
 
 /**
@@ -114,15 +113,15 @@ export class CatManager {
     }
 
     // Create Meowtion Cat for animation
-    const mewtionCat = new Cat(protoCat);
+    const meowtionCat = new Cat(protoCat);
 
     // Create MeowBrain for AI behavior
-    const brain = new Brain(mewtionCat);
+    const brain = new Brain(meowtionCat);
 
     // Create MeowzerCat wrapper
     const cat = new MeowzerCat({
       id,
-      cat: mewtionCat,
+      cat: meowtionCat,
       brain,
       seed,
       name: options.name,
@@ -140,23 +139,6 @@ export class CatManager {
     });
 
     return cat;
-  }
-
-  /**
-   * Create a fluent builder for cat creation
-   *
-   * @example
-   * ```ts
-   * const builder = catManager.builder()
-   *   .name("Whiskers")
-   *   .appearance({ color: "orange", pattern: "tabby" })
-   *   .tags("playful", "friendly");
-   *
-   * const cat = await this.create(builder.build());
-   * ```
-   */
-  builder(): CatBuilder {
-    return new CatBuilder();
   }
 
   /**

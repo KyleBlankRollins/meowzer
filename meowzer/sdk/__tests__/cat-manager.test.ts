@@ -251,35 +251,4 @@ describe("CatManager", () => {
       expect(meowzer.cats.getAll()).toHaveLength(0);
     });
   });
-
-  describe("Cat Builder", () => {
-    it("should create cat using builder", async () => {
-      const cat = await meowzer.cats
-        .builder()
-        .name("Fluffy")
-        .description("A fluffy white cat")
-        .metadata({
-          tags: ["indoor", "playful"],
-          adoptionDate: "2024-01-15",
-        })
-        .build();
-
-      expect(cat.name).toBe("Fluffy");
-      expect(cat.description).toBe("A fluffy white cat");
-      expect(cat.metadata?.tags).toContain("indoor");
-      expect(cat.metadata?.tags).toContain("playful");
-      expect(cat.metadata?.adoptionDate).toBe("2024-01-15");
-    });
-
-    it("should create cat from seed using builder", async () => {
-      const seed = "solid-000000-FFFF00-l-long-v1";
-      const cat = await meowzer.cats
-        .builder()
-        .name("Generated")
-        .fromSeed(seed)
-        .build();
-
-      expect(cat.seed).toBe(seed);
-    });
-  });
 });
