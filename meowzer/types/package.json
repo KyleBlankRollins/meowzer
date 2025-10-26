@@ -1,0 +1,45 @@
+{
+  "name": "@meowzer/types",
+  "version": "1.0.0",
+  "description": "Shared TypeScript type definitions for all Meowzer packages",
+  "type": "module",
+  "main": "./index.js",
+  "types": "./index.ts",
+  "exports": {
+    ".": {
+      "types": "./index.ts",
+      "import": "./index.js"
+    },
+    "./primitives": {
+      "types": "./primitives.ts",
+      "import": "./primitives.js"
+    },
+    "./cat/*": {
+      "types": "./cat/*.ts",
+      "import": "./cat/*.js"
+    },
+    "./sdk/*": {
+      "types": "./sdk/*.ts",
+      "import": "./sdk/*.js"
+    },
+    "./storage/*": {
+      "types": "./storage/*.ts",
+      "import": "./storage/*.js"
+    }
+  },
+  "files": [
+    "index.ts",
+    "primitives.ts",
+    "cat/",
+    "sdk/",
+    "storage/",
+    "README.md"
+  ],
+  "keywords": [
+    "typescript",
+    "types",
+    "meowzer"
+  ],
+  "author": "Meowzer Team",
+  "license": "MIT"
+}

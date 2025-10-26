@@ -1,8 +1,11 @@
 /**
- * Personality presets and configurations
+ * Personality presets and configuration
  */
 
-import type { Personality, PersonalityPreset } from "../types.js";
+import type {
+  Personality,
+  PersonalityPreset,
+} from "../types/index.js";
 
 export const PERSONALITY_PRESETS: Record<
   PersonalityPreset,

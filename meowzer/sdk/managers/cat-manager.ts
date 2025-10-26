@@ -7,7 +7,7 @@ import {
 import { Brain } from "../../meowbrain/index.js";
 import { Cat } from "../../meowtion/cat.js";
 import { InvalidSettingsError } from "../errors.js";
-import type { CatMetadata } from "../types.js";
+import type { CatMetadata } from "../../types/index.js";
 import type { ConfigManager } from "../config.js";
 import type { HookManager } from "./hook-manager.js";
 import { LifecycleHook } from "./hook-manager.js";

@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
 import { animateCat, CatAnimator } from "../index.js";
-import type { ProtoCat } from "../../types.js";
+import type { ProtoCat } from "../../types/index.js";
 
 // Mock ProtoCat for testing
 function createMockProtoCat(): ProtoCat {

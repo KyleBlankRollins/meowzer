@@ -11,59 +11,18 @@ import type { Cat } from "../meowtion/cat.js";
 import type { Brain } from "../meowbrain/brain.js";
 import type {
   Position,
+  Boundaries,
   CatStateType,
   Personality,
   PersonalityPreset,
   Environment,
-} from "../types.js";
+  CatMetadata,
+  CatJSON,
+  SaveOptions,
+  MeowzerCatConfig,
+} from "../types/index.js";
 import { EventEmitter } from "../utilities/event-emitter.js";
-import type { Boundaries } from "../types.js";
 import type { MeowzerEventType, EventHandler } from "./types.js";
-
-/**
- * Extensible metadata for cats
- */
-export interface CatMetadata {
-  createdAt: Date;
-  updatedAt: Date;
-  [key: string]: unknown;
-}
-
-/**
- * Options for saving a cat
- */
-export interface SaveOptions {
-  collection?: string;
-  metadata?: Record<string, unknown>;
-}
-
-/**
- * Configuration for creating a MeowzerCat
- */
-export interface MeowzerCatConfig {
-  id: string;
-  seed: string;
-  cat: Cat;
-  brain: Brain;
-  name?: string;
-  description?: string;
-  metadata?: Record<string, unknown>;
-}
-
-/**
- * JSON representation of a cat (for serialization)
- */
-export interface CatJSON {
-  id: string;
-  seed: string;
-  name?: string;
-  description?: string;
-  position: Position;
-  state: CatStateType;
-  personality: Personality;
-  isActive: boolean;
-  metadata: CatMetadata;
-}
 
 /**
  * Enhanced MeowzerCat with full CRUD operations

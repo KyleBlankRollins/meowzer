@@ -17,7 +17,7 @@ export {
 
 // Wrapper for deserializeCat that provides buildCatFromSeed
 import { buildCatFromSeed } from "./builder.js";
-import type { ProtoCat } from "../types.js";
+import type { ProtoCat } from "../types/index.js";
 
 export function deserializeCat(json: string): ProtoCat {
   const minimal = JSON.parse(json);
@@ -41,7 +41,7 @@ export {
   randomColor,
 } from "./utils.js";
 
-// Re-export types from shared types file
+// Re-export types from shared types package
 export type {
   CatSettings,
   ProtoCat,
@@ -50,9 +50,8 @@ export type {
   SpriteData,
   SVGElements,
   ViewBox,
-  MetadataInfo,
   ValidationResult,
   CatPattern,
   CatSize,
   FurLength,
-} from "../types.js";
+} from "../types/index.js";

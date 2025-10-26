@@ -12,7 +12,7 @@ import type {
   CatStateType,
   PhysicsOptions,
   PathOptions,
-} from "../types.js";
+} from "../types/index.js";
 import { isValidTransition } from "./state-machine.js";
 import {
   injectBaseStyles,

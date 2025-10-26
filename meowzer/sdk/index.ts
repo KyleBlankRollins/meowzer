@@ -29,7 +29,6 @@ export { Meowzer } from "./meowzer-sdk.js";
 export { MeowzerCat } from "./meowzer-cat.js";
 export { MeowzerEvent } from "./types.js";
 export type {
-  CatMetadata,
   SaveOptions,
   MeowzerEventType,
   EventHandler,
@@ -95,12 +94,27 @@ export {
   type ErrorCodeType,
 } from "./errors.js";
 
-// Re-export key types from underlying libraries
+// Re-export key types from shared types package
 export type {
+  // Primitives
+  Position,
+  Velocity,
+  Boundaries,
+  // Cat appearance
   CatSettings,
   CatPattern,
   CatSize,
   FurLength,
-} from "../types.js";
-export type { BehaviorType } from "../meowbrain/behaviors.js";
-export type { Boundaries, Position, Velocity } from "../types.js";
+  ProtoCat,
+  // Cat behavior
+  Personality,
+  PersonalityPreset,
+  BehaviorType,
+  Environment,
+  // Cat animation
+  CatStateType,
+  AnimationOptions,
+  // Cat metadata
+  CatMetadata,
+  CatJSON,
+} from "../types/index.js";

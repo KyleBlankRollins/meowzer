@@ -1,8 +1,8 @@
 /**
- * State machine for cat animation states
+ * Simple state machine for cat animation states
  */
 
-import type { CatStateType } from "../types.js";
+import type { CatStateType } from "../types/index.js";
 
 export const VALID_TRANSITIONS: Record<CatStateType, CatStateType[]> =
   {

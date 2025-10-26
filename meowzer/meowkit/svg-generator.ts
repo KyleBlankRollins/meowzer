@@ -7,7 +7,7 @@ import type {
   DimensionData,
   SpriteData,
   SVGElements,
-} from "../types.js";
+} from "../types/index.js";
 import { generateElementId } from "./utils.js";
 
 /**

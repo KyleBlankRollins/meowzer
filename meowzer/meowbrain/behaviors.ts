@@ -1,9 +1,9 @@
 /**
- * Behavior implementations for autonomous cat actions
+ * Behavior implementations for cat AI
  */
 
 import type { Cat } from "../meowtion/cat.js";
-import type { Position, Boundaries } from "../types.js";
+import type { Position, Boundaries } from "../types/index.js";
 
 export type BehaviorType =
   | "wandering"

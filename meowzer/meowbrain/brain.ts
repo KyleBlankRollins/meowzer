@@ -9,7 +9,7 @@ import type {
   Memory,
   Environment,
   BrainState,
-} from "../types.js";
+} from "../types/index.js";
 import { resolvePersonality } from "./personality.js";
 import type { BehaviorType } from "./behaviors.js";
 import {

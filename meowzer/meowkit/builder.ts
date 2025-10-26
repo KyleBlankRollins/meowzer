@@ -11,7 +11,7 @@ import type {
   CatSize,
   CatPattern,
   FurLength,
-} from "../types.js";
+} from "../types/index.js";
 import { generateCatSVG } from "./svg-generator.js";
 import { generateId, darkenColor, lightenColor } from "./utils.js";
 import { normalizeColor } from "./color-utils.js";

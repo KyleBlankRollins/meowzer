@@ -8,7 +8,7 @@ import type {
   CatPattern,
   CatSize,
   FurLength,
-} from "../types.js";
+} from "../types/index.js";
 import { isValidColor } from "./color-utils.js";
 
 /**

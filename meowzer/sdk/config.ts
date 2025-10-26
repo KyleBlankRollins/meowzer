@@ -2,7 +2,7 @@
  * Configuration system for Meowzer SDK
  */
 
-import type { Boundaries } from "../types.js";
+import type { Boundaries } from "../types/index.js";
 
 /**
  * Storage configuration options

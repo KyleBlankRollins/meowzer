@@ -7,7 +7,7 @@ import type {
   Personality,
   PersonalityPreset,
   Environment,
-} from "../types.js";
+} from "../types/index.js";
 import { Brain, type BrainOptions } from "./brain.js";
 
 export class BrainBuilder {

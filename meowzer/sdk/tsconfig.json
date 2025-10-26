@@ -7,7 +7,7 @@
   },
   "include": [
     "./**/*.ts",
-    "../types.ts",
+    "../types/**/*.ts",
     "../meowkit/**/*.ts",
     "../meowtion/**/*.ts",
     "../meowbrain/**/*.ts",

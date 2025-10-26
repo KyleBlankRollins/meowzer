@@ -6,7 +6,7 @@ import {
   getPersonalityPresets,
 } from "../index.js";
 import { Cat } from "../../meowtion/cat.js";
-import type { ProtoCat } from "../../types.js";
+import type { ProtoCat } from "../../types/index.js";
 
 // Mock ProtoCat for testing
 function createMockProtoCat(): ProtoCat {

@@ -8,7 +8,7 @@ import type {
   Memory,
   Environment,
   Position,
-} from "../types.js";
+} from "../types/index.js";
 import type { BehaviorType } from "./behaviors.js";
 
 export interface BehaviorWeights {

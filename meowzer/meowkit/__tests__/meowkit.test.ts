@@ -9,7 +9,7 @@ import {
   deserializeCat,
   CatBuilder,
 } from "../meowkit.js";
-import type { CatSettings } from "../../types.js";
+import type { CatSettings } from "../../types/index.js";
 
 describe("Meowkit", () => {
   const validSettings: CatSettings = {

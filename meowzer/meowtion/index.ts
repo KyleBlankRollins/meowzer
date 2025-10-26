@@ -16,7 +16,7 @@ import type {
   Position,
   Boundaries,
   PhysicsOptions,
-} from "../types.js";
+} from "../types/index.js";
 import { Cat } from "./cat.js";
 
 export interface AnimationOptions {
