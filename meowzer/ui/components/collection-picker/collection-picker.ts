@@ -134,10 +134,7 @@ export class CollectionPicker extends LitElement {
           No collections found.
           ${this.showCreateButton
             ? html`
-                <quiet-button
-                  variant="text"
-                  @click=${this.handleCreateClick}
-                >
+                <quiet-button @click=${this.handleCreateClick}>
                   Create your first collection
                 </quiet-button>
               `
@@ -168,10 +165,7 @@ export class CollectionPicker extends LitElement {
 
         ${this.showCreateButton
           ? html`
-              <quiet-button
-                variant="outlined"
-                @click=${this.handleCreateClick}
-              >
+              <quiet-button @click=${this.handleCreateClick}>
                 <quiet-icon name="plus"></quiet-icon>
                 New
               </quiet-button>

@@ -73,6 +73,18 @@ export class MbCatPlayground extends LitElement {
   private error?: Error;
 
   /**
+   * Whether the cat creator dialog is open
+   */
+  @state()
+  private creatorDialogOpen = false;
+
+  /**
+   * Whether the statistics dialog is open
+   */
+  @state()
+  private statsDialogOpen = false;
+
+  /**
    * Reactive controller for cats
    */
   private catsController = new CatsController(this);
@@ -260,83 +272,103 @@ export class MbCatPlayground extends LitElement {
   private renderControls() {
     return html`
       <div class="controls-area">
-        <!-- Quick Actions -->
+        <!-- Toolbar with Quick Actions -->
         <div class="controls-section">
-          <h3>Quick Actions</h3>
-          <div class="quick-actions">
-            <quiet-button @click=${this.createRandomCat}>
-              <quiet-icon name="plus-circle"></quiet-icon>
-              Create Random Cat
+          <quiet-toolbar>
+            <quiet-button
+              @click=${this.createRandomCat}
+              title="Create Random Cat"
+            >
+              <quiet-icon name="plus"></quiet-icon>
+            </quiet-button>
+
+            <quiet-button
+              @click=${() => (this.creatorDialogOpen = true)}
+              title="Open Cat Creator"
+            >
+              <quiet-icon name="edit"></quiet-icon>
             </quiet-button>
 
             <quiet-button
               variant="neutral"
               @click=${this.pauseAll}
               ?disabled=${this.cats.length === 0}
+              title="Pause All Cats"
             >
-              <quiet-icon name="pause"></quiet-icon>
-              Pause All
+              <quiet-icon name="player-pause"></quiet-icon>
             </quiet-button>
 
             <quiet-button
               variant="neutral"
               @click=${this.resumeAll}
               ?disabled=${this.cats.length === 0}
+              title="Resume All Cats"
             >
-              <quiet-icon name="play"></quiet-icon>
-              Resume All
+              <quiet-icon name="player-play"></quiet-icon>
+            </quiet-button>
+
+            <quiet-button
+              variant="neutral"
+              @click=${() => (this.statsDialogOpen = true)}
+              title="View Statistics"
+            >
+              <quiet-icon name="chart-bar"></quiet-icon>
             </quiet-button>
 
             <quiet-button
               variant="destructive"
               @click=${this.destroyAll}
               ?disabled=${this.cats.length === 0}
+              title="Destroy All Cats"
             >
-              <quiet-icon name="trash-2"></quiet-icon>
-              Destroy All
+              <quiet-icon name="trash"></quiet-icon>
             </quiet-button>
-          </div>
+          </quiet-toolbar>
         </div>
 
-        <!-- Statistics -->
-        ${this.showStats
-          ? html`
-              <div class="controls-section">
-                <h3>Statistics</h3>
-                <div class="stats-grid">
-                  <div class="stat-item">
-                    <div class="stat-label">Total Cats</div>
-                    <div class="stat-value">${this.cats.length}</div>
-                  </div>
-                  <div class="stat-item">
-                    <div class="stat-label">Active</div>
-                    <div class="stat-value">${this.activeCount}</div>
-                  </div>
-                  <div class="stat-item">
-                    <div class="stat-label">Paused</div>
-                    <div class="stat-value">${this.pausedCount}</div>
-                  </div>
-                  <div class="stat-item">
-                    <div class="stat-label">Frame Rate</div>
-                    <div class="stat-value">60 fps</div>
-                  </div>
-                </div>
-              </div>
-            `
-          : null}
-
-        <!-- Cat Creator -->
-        <div class="controls-section">
-          <h3>Create Cat</h3>
-          <cat-creator></cat-creator>
-        </div>
-
-        <!-- Cat Manager -->
+        <!-- Cat Manager (always visible) -->
         <div class="controls-section">
           <h3>Manage Cats</h3>
           <cat-manager></cat-manager>
         </div>
       </div>
+
+      <!-- Cat Creator Dialog -->
+      <quiet-dialog
+        .open=${this.creatorDialogOpen}
+        @quiet-request-close=${() => (this.creatorDialogOpen = false)}
+        light-dismiss
+      >
+        <div slot="header">Create Cat</div>
+        <cat-creator></cat-creator>
+      </quiet-dialog>
+
+      <!-- Statistics Dialog -->
+      <quiet-dialog
+        .open=${this.statsDialogOpen}
+        @quiet-request-close=${() => (this.statsDialogOpen = false)}
+        light-dismiss
+      >
+        <div slot="header">Statistics</div>
+        <div class="stats-grid">
+          <div class="stat-item">
+            <div class="stat-label">Total Cats</div>
+            <div class="stat-value">${this.cats.length}</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-label">Active</div>
+            <div class="stat-value">${this.activeCount}</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-label">Paused</div>
+            <div class="stat-value">${this.pausedCount}</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-label">Frame Rate</div>
+            <div class="stat-value">60 fps</div>
+          </div>
+        </div>
+      </quiet-dialog>
     `;
   }
 }

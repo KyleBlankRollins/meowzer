@@ -211,7 +211,7 @@ export class CatExporter extends LitElement {
   render() {
     if (!this.meowzer) {
       return html`
-        <quiet-callout variant="error">
+        <quiet-callout variant="destructive">
           Meowzer not initialized
         </quiet-callout>
       `;
@@ -227,15 +227,19 @@ export class CatExporter extends LitElement {
 
         <div class="mode-selector">
           <quiet-button
-            variant=${this.mode === "active" ? "filled" : "outlined"}
+            appearance=${this.mode === "active"
+              ? "normal"
+              : "outline"}
+            variant="primary"
             @click=${() => this.handleModeChange("active")}
           >
             Active Cats
           </quiet-button>
           <quiet-button
-            variant=${this.mode === "collection"
-              ? "filled"
-              : "outlined"}
+            appearance=${this.mode === "collection"
+              ? "normal"
+              : "outline"}
+            variant="primary"
             @click=${() => this.handleModeChange("collection")}
           >
             Collection
@@ -251,15 +255,13 @@ export class CatExporter extends LitElement {
                   <span>Select cats to export:</span>
                   <div style="display: flex; gap: 0.5rem;">
                     <quiet-button
-                      variant="text"
-                      size="small"
+                      size="sm"
                       @click=${this.handleSelectAll}
                     >
                       Select All
                     </quiet-button>
                     <quiet-button
-                      variant="text"
-                      size="small"
+                      size="sm"
                       @click=${this.handleDeselectAll}
                     >
                       Deselect All
@@ -323,7 +325,7 @@ export class CatExporter extends LitElement {
 
         <div class="export-actions">
           <quiet-button
-            variant="filled"
+            variant="primary"
             @click=${this.handleExport}
             ?disabled=${!canExport || this.exporting}
           >

@@ -215,7 +215,7 @@ export class CatManager extends LitElement {
   render() {
     if (!this.meowzer) {
       return html`
-        <quiet-callout variant="warning">
+        <quiet-callout variant="destructive">
           <strong>No Meowzer SDK</strong>
           <p>
             Please wrap this component in a
@@ -246,7 +246,7 @@ export class CatManager extends LitElement {
           <div class="manager-controls">
             <quiet-text-field
               placeholder="Search cats..."
-              size="small"
+              size="sm"
               @quiet-input=${this.handleSearchInput}
             >
               <quiet-icon
@@ -257,7 +257,7 @@ export class CatManager extends LitElement {
             </quiet-text-field>
 
             <quiet-select
-              size="small"
+              size="sm"
               .value=${this.sortBy}
               @quiet-change=${this.handleSortChange}
             >
@@ -270,7 +270,7 @@ export class CatManager extends LitElement {
               appearance=${this.view === "grid"
                 ? "normal"
                 : "outline"}
-              size="small"
+              size="sm"
               @click=${() => this.handleViewChange("grid")}
             >
               <quiet-icon
@@ -283,7 +283,7 @@ export class CatManager extends LitElement {
               appearance=${this.view === "list"
                 ? "normal"
                 : "outline"}
-              size="small"
+              size="sm"
               @click=${() => this.handleViewChange("list")}
             >
               <quiet-icon family="outline" name="list"></quiet-icon>
@@ -298,25 +298,25 @@ export class CatManager extends LitElement {
                   ${this.selectedCatIds.size} selected
                 </span>
                 <quiet-button
-                  size="small"
+                  size="sm"
                   @click=${this.handleDeselectAll}
                 >
                   Deselect All
                 </quiet-button>
                 <quiet-button
-                  size="small"
+                  size="sm"
                   @click=${this.handlePauseSelected}
                 >
                   Pause
                 </quiet-button>
                 <quiet-button
-                  size="small"
+                  size="sm"
                   @click=${this.handleResumeSelected}
                 >
                   Resume
                 </quiet-button>
                 <quiet-button
-                  size="small"
+                  size="sm"
                   variant="destructive"
                   @click=${this.handleDestroySelected}
                 >

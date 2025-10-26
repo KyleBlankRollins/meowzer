@@ -21,6 +21,14 @@ import "@quietui/quiet/components/icon/icon.js";
 import "@quietui/quiet/components/select/select.js";
 import "@quietui/quiet/components/spinner/spinner.js";
 import "@quietui/quiet/components/badge/badge.js";
+import "@quietui/quiet/components/toolbar/toolbar.js";
+import "@quietui/quiet/components/dialog/dialog.js";
+import "@quietui/quiet/components/tooltip/tooltip.js";
+import "@quietui/quiet/components/callout/callout.js";
+import "@quietui/quiet/components/checkbox/checkbox.js";
+import "@quietui/quiet/components/text-field/text-field.js";
+import "@quietui/quiet/components/empty-state/empty-state.js";
+import "@quietui/quiet/components/expander/expander.js";
 
 // Set Quiet UI library path
 import { setLibraryPath } from "@quietui/quiet";

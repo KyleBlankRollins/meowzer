@@ -245,14 +245,10 @@ export class CatGallery extends LitElement {
         </div>
 
         <div slot="footer">
-          <quiet-button
-            variant="text"
-            @click=${this.handleCreateDialogCancel}
-          >
+          <quiet-button @click=${this.handleCreateDialogCancel}>
             Cancel
           </quiet-button>
           <quiet-button
-            variant="filled"
             @click=${this.handleCreateDialogConfirm}
             ?disabled=${!this.newCollectionName.trim()}
           >
@@ -284,7 +280,7 @@ export class CatGallery extends LitElement {
 
         ${this.error
           ? html`
-              <quiet-callout variant="error">
+              <quiet-callout variant="destructive">
                 <strong>Error:</strong> ${this.error}
               </quiet-callout>
             `

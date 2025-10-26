@@ -146,15 +146,15 @@ export class CatThumbnail extends LitElement {
           : ""}
 
         <div class="thumbnail-actions">
-          <quiet-button variant="filled" @click=${this.handleLoad}>
+          <quiet-button variant="primary" @click=${this.handleLoad}>
             Load
           </quiet-button>
 
           ${this.showDelete
             ? html`
                 <quiet-button
-                  variant="outlined"
-                  color="destructive"
+                  appearance="outline"
+                  variant="destructive"
                   @click=${this.handleDelete}
                 >
                   Delete

@@ -75,15 +75,16 @@ export class CatControls extends LitElement {
     return html`
       <div class="controls ${size}">
         <quiet-button
-          variant="outlined"
+          appearance="outline"
+          variant="neutral"
           @click=${this.handlePauseResume}
         >
           ${cat.isActive ? "Pause" : "Resume"}
         </quiet-button>
 
         <quiet-button
-          variant="outlined"
-          color="destructive"
+          appearance="outline"
+          variant="destructive"
           @click=${this.handleDestroy}
         >
           Destroy

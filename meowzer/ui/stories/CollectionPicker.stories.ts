@@ -193,8 +193,10 @@ export const InForm: Story = {
           <div
             style="display: flex; gap: 0.5rem; justify-content: flex-end;"
           >
-            <quiet-button variant="outlined">Cancel</quiet-button>
-            <quiet-button variant="filled">Save Cat</quiet-button>
+            <quiet-button appearance="outline" variant="neutral"
+              >Cancel</quiet-button
+            >
+            <quiet-button variant="primary">Save Cat</quiet-button>
           </div>
         </div>
       </div>

@@ -275,7 +275,7 @@ export class CatImporter extends LitElement {
   render() {
     if (!this.meowzer) {
       return html`
-        <quiet-callout variant="error">
+        <quiet-callout variant="destructive">
           Meowzer not initialized
         </quiet-callout>
       `;
@@ -314,11 +314,7 @@ export class CatImporter extends LitElement {
               <div class="preview-container">
                 <div class="preview-header">
                   <span class="preview-title">Import Preview</span>
-                  <quiet-button
-                    variant="text"
-                    size="small"
-                    @click=${this.handleCancel}
-                  >
+                  <quiet-button size="sm" @click=${this.handleCancel}>
                     Cancel
                   </quiet-button>
                 </div>
@@ -392,7 +388,6 @@ export class CatImporter extends LitElement {
 
               <div class="import-actions">
                 <quiet-button
-                  variant="filled"
                   @click=${this.handleImport}
                   ?disabled=${this.importing}
                 >

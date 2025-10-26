@@ -111,7 +111,7 @@ export class CatPersonalityPicker extends LitElement {
         <quiet-expander>
           <span slot="summary">Advanced: Custom Traits</span>
           <div class="expander-content">
-            <quiet-callout variant="info">
+            <quiet-callout variant="primary">
               <p>
                 Adjust individual personality traits for fine-tuned
                 behavior.

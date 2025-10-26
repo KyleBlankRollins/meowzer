@@ -84,7 +84,7 @@ export const WithInstructions: Story = {
       <div
         style="max-width: 600px; padding: 1.5rem; border: 1px solid #e5e7eb; border-radius: 0.5rem;"
       >
-        <quiet-callout variant="info">
+        <quiet-callout variant="primary">
           <p>
             Import cats from a JSON file exported by the Cat Exporter.
             You can drag and drop the file or click to browse.

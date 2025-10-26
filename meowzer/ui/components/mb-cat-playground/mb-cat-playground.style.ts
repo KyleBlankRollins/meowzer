@@ -61,10 +61,23 @@ export const catPlaygroundStyles = css`
     color: var(--text-primary);
   }
 
+  /* Toolbar styling */
+  quiet-toolbar {
+    width: 100%;
+    justify-content: flex-start;
+    gap: 0.5rem;
+  }
+
+  quiet-toolbar quiet-button {
+    flex-shrink: 0;
+  }
+
+  /* Dialog content styling */
   .stats-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 0.75rem;
+    padding: 1rem;
   }
 
   .stat-item {
@@ -85,12 +98,6 @@ export const catPlaygroundStyles = css`
     color: var(--text-primary);
   }
 
-  .quick-actions {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-
   /* Responsive */
   @media (max-width: 768px) {
     .playground-container {
@@ -99,7 +106,7 @@ export const catPlaygroundStyles = css`
     }
 
     .stats-grid {
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(2, 1fr);
     }
   }
 `;

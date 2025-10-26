@@ -164,7 +164,7 @@ export class CatCreator extends LitElement {
   render() {
     if (!this.meowzer) {
       return html`
-        <quiet-callout variant="warning">
+        <quiet-callout variant="destructive">
           <strong>No Meowzer SDK</strong>
           <p>
             Please wrap this component in a

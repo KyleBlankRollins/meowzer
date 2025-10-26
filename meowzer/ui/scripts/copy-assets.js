@@ -28,11 +28,39 @@ const assets = [
   },
 ];
 
-// Only copy the search icon we actually use
+// Only copy the icons we actually use
 const icons = [
   {
     src: "node_modules/@quietui/quiet/dist/assets/icons/outline/search.svg",
     dest: "dist/assets/icons/outline/search.svg",
+  },
+  {
+    src: "node_modules/@quietui/quiet/dist/assets/icons/outline/cat.svg",
+    dest: "dist/assets/icons/outline/cat.svg",
+  },
+  {
+    src: "node_modules/@quietui/quiet/dist/assets/icons/outline/plus.svg",
+    dest: "dist/assets/icons/outline/plus.svg",
+  },
+  {
+    src: "node_modules/@quietui/quiet/dist/assets/icons/outline/edit.svg",
+    dest: "dist/assets/icons/outline/edit.svg",
+  },
+  {
+    src: "node_modules/@quietui/quiet/dist/assets/icons/outline/player-pause.svg",
+    dest: "dist/assets/icons/outline/player-pause.svg",
+  },
+  {
+    src: "node_modules/@quietui/quiet/dist/assets/icons/outline/player-play.svg",
+    dest: "dist/assets/icons/outline/player-play.svg",
+  },
+  {
+    src: "node_modules/@quietui/quiet/dist/assets/icons/outline/chart-bar.svg",
+    dest: "dist/assets/icons/outline/chart-bar.svg",
+  },
+  {
+    src: "node_modules/@quietui/quiet/dist/assets/icons/outline/trash.svg",
+    dest: "dist/assets/icons/outline/trash.svg",
   },
 ];
 
