@@ -8,7 +8,6 @@ import type {
   PersonalityPreset,
   Environment,
 } from "../cat/behavior.js";
-import type { CatMetadata } from "../cat/metadata.js";
 
 /**
  * Options for creating a cat

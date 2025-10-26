@@ -8,7 +8,7 @@ import type {
   Velocity,
   Boundaries,
   PhysicsOptions,
-} from "../../types.js";
+} from "../../types/index.js";
 import type { EventEmitter } from "../../utilities/event-emitter.js";
 
 export interface PhysicsState {

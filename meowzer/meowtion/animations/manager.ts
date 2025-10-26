@@ -3,8 +3,9 @@
  * Handles GSAP timeline creation and state-based animation switching
  */
 
+// @ts-ignore - gsap is used for type annotations (gsap.core.Tween, gsap.core.Timeline)
 import gsap from "gsap";
-import type { CatStateType } from "../../types.js";
+import type { CatStateType } from "../../types/index.js";
 import type { AnimationElements } from "./types.js";
 import { animateIdle } from "./states/idle.js";
 import { animateWalking } from "./states/walking.js";

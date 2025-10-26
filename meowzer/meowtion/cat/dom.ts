@@ -3,7 +3,7 @@
  * Handles DOM element creation and manipulation
  */
 
-import type { ProtoCat, Position } from "../../types.js";
+import type { ProtoCat, Position } from "../../types/index.js";
 
 /**
  * CatDOM class

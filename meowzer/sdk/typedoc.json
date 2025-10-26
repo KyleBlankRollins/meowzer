@@ -1,0 +1,111 @@
+{
+  "$schema": "https://typedoc.org/schema.json",
+  "entryPoints": [
+    "./index.ts"
+  ],
+  "entryPointStrategy": "resolve",
+  "out": "./docs",
+  "name": "Meowzer SDK",
+  "includeVersion": true,
+  "readme": "none",
+  "tsconfig": "./tsconfig.typedoc.json",
+  "exclude": [
+    "**/__tests__/**",
+    "**/node_modules/**",
+    "**/*.test.ts",
+    "**/vitest.config.ts",
+    "../meowtion/moewtion-container/**"
+  ],
+  "excludePrivate": true,
+  "excludeProtected": false,
+  "excludeInternal": false,
+  "categorizeByGroup": true,
+  "defaultCategory": "Other",
+  "categoryOrder": [
+    "Main SDK",
+    "Managers",
+    "Cat",
+    "Types",
+    "Configuration",
+    "Plugins",
+    "Utilities",
+    "Errors",
+    "*"
+  ],
+  "sort": [
+    "source-order",
+    "required-first",
+    "kind"
+  ],
+  "kindSortOrder": [
+    "Project",
+    "Module",
+    "Namespace",
+    "Enum",
+    "EnumMember",
+    "Class",
+    "Interface",
+    "TypeAlias",
+    "Constructor",
+    "Property",
+    "Variable",
+    "Function",
+    "Accessor",
+    "Method",
+    "Parameter",
+    "TypeParameter",
+    "TypeLiteral",
+    "CallSignature",
+    "ConstructorSignature",
+    "IndexSignature",
+    "GetSignature",
+    "SetSignature"
+  ],
+  "navigation": {
+    "includeCategories": true,
+    "includeGroups": true,
+    "includeFolders": true
+  },
+  "visibilityFilters": {
+    "protected": true,
+    "private": false,
+    "inherited": true,
+    "external": false
+  },
+  "searchInComments": true,
+  "searchInDocuments": true,
+  "emit": "docs",
+  "json": "./docs/documentation.json",
+  "pretty": true,
+  "lightHighlightTheme": "light-plus",
+  "darkHighlightTheme": "dark-plus",
+  "excludeExternals": true,
+  "excludeNotDocumented": false,
+  "validation": {
+    "notExported": true,
+    "invalidLink": true,
+    "notDocumented": false
+  },
+  "commentStyle": "jsdoc",
+  "blockTags": [
+    "@default",
+    "@defaultValue",
+    "@deprecated",
+    "@example",
+    "@experimental",
+    "@internal",
+    "@packageDocumentation",
+    "@param",
+    "@privateRemarks",
+    "@public",
+    "@readonly",
+    "@remarks",
+    "@returns",
+    "@see",
+    "@throws",
+    "@typeParam"
+  ],
+  "githubPages": false,
+  "hideGenerator": false,
+  "cacheBust": true
+}

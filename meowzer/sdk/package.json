@@ -14,7 +14,10 @@
   "scripts": {
     "test": "vitest",
     "build": "tsc",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "docs": "typedoc",
+    "docs:watch": "typedoc --watch",
+    "docs:json": "typedoc --json ./docs/documentation.json"
   },
   "keywords": [
     "cat",

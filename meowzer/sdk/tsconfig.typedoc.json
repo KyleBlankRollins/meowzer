@@ -1,9 +1,9 @@
 {
-  "extends": "../../tsconfig.json",
+  "extends": "./tsconfig.json",
   "compilerOptions": {
-    "outDir": "./dist",
-    "rootDir": "..",
-    "composite": true
+    "skipLibCheck": true,
+    "experimentalDecorators": true,
+    "useDefineForClassFields": false
   },
   "include": [
     "./**/*.ts",
@@ -17,10 +17,10 @@
   "exclude": [
     "node_modules",
     "dist",
+    "docs",
     "__tests__",
     "../**/__tests__",
     "vitest.config.ts",
-    "../**/vitest.config.ts",
-    "../meowtion/moewtion-container/**"
+    "../**/vitest.config.ts"
   ]
 }

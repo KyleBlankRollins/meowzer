@@ -9,7 +9,7 @@ import type {
   Boundaries,
   PathOptions,
   CatStateType,
-} from "../../types.js";
+} from "../../types/index.js";
 import type { CatAnimationManager } from "../animations/index.js";
 import type { EventEmitter } from "../../utilities/event-emitter.js";
 
