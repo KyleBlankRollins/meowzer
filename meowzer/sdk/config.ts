@@ -108,11 +108,14 @@ export function mergeConfig(
 /**
  * Configuration manager class
  */
+/**
+ * ConfigManager handles SDK configuration with deep merging
+ */
 export class ConfigManager {
   private config: MeowzerConfig;
 
-  constructor(initialConfig?: PartialMeowzerConfig) {
-    this.config = mergeConfig(initialConfig);
+  constructor(userConfig: PartialMeowzerConfig = {}) {
+    this.config = mergeConfig(userConfig);
   }
 
   /**
@@ -123,22 +126,24 @@ export class ConfigManager {
   }
 
   /**
-   * Update entire configuration
+   * Set new config values (deep merge with existing)
    */
-  set(updates: Partial<MeowzerConfig>): void {
-    this.config = {
-      container: updates.container ?? this.config.container,
-      boundaries: updates.boundaries ?? this.config.boundaries,
+  set(userConfig: PartialMeowzerConfig): void {
+    // Merge new config with current config as base
+    const merged = {
+      container: userConfig.container ?? this.config.container,
+      boundaries: userConfig.boundaries ?? this.config.boundaries,
       storage: {
         ...this.config.storage,
-        ...updates.storage,
+        ...userConfig.storage,
       },
       behavior: {
         ...this.config.behavior,
-        ...updates.behavior,
+        ...userConfig.behavior,
       },
-      debug: updates.debug ?? this.config.debug,
+      debug: userConfig.debug ?? this.config.debug,
     };
+    this.config = merged;
   }
 
   /**

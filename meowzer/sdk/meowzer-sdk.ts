@@ -7,7 +7,11 @@ import {
   type PluginInstallOptions,
 } from "./plugin.js";
 import { MeowzerUtils } from "./utils.js";
-import { ConfigManager, type MeowzerConfig } from "./config.js";
+import {
+  ConfigManager,
+  type MeowzerConfig,
+  type PartialMeowzerConfig,
+} from "./config.js";
 import { InvalidStateError } from "./errors.js";
 
 /**
@@ -71,7 +75,7 @@ export class Meowzer {
    *
    * @param config - Optional configuration for storage, behavior, etc.
    */
-  constructor(config?: Partial<MeowzerConfig>) {
+  constructor(config?: PartialMeowzerConfig) {
     this._config = new ConfigManager(config);
     this.hooks = new HookManager();
     this.cats = new CatManager(this._config, this.hooks);
@@ -138,7 +142,7 @@ export class Meowzer {
     }
 
     // Destroy all cats
-    this.cats.destroyAll();
+    await this.cats.destroyAll();
 
     // Close storage connection if enabled
     if (this._config.get().storage.enabled) {
@@ -164,7 +168,7 @@ export class Meowzer {
    * });
    * ```
    */
-  configure(config: Partial<MeowzerConfig>): void {
+  configure(config: PartialMeowzerConfig): void {
     this._config.set(config);
   }
 

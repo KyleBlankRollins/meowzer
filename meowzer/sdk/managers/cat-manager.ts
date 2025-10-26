@@ -6,7 +6,7 @@ import {
 } from "../../meowkit/index.js";
 import { Brain } from "../../meowbrain/index.js";
 import { Cat } from "../../meowtion/cat.js";
-import { NotFoundError, InvalidSettingsError } from "../errors.js";
+import { InvalidSettingsError } from "../errors.js";
 import type { CatMetadata } from "../types.js";
 import type { ConfigManager } from "../config.js";
 import type { HookManager } from "./hook-manager.js";
@@ -88,9 +88,17 @@ export class CatManager {
       // Generate random cat
       const randomSettings: CatSettings = {
         color:
-          "#" + Math.floor(Math.random() * 16777215).toString(16),
+          "#" +
+          Math.floor(Math.random() * 16777215)
+            .toString(16)
+            .padStart(6, "0")
+            .toUpperCase(),
         eyeColor:
-          "#" + Math.floor(Math.random() * 16777215).toString(16),
+          "#" +
+          Math.floor(Math.random() * 16777215)
+            .toString(16)
+            .padStart(6, "0")
+            .toUpperCase(),
         pattern: ["solid", "tabby", "calico", "tuxedo", "spotted"][
           Math.floor(Math.random() * 5)
         ] as any,
@@ -177,22 +185,18 @@ export class CatManager {
   /**
    * Get a cat by ID
    *
-   * @throws {NotFoundError} If cat doesn't exist
+   * Returns undefined if cat doesn't exist
    *
    * @example
    * ```ts
    * const cat = catManager.get("cat-123");
+   * if (cat) {
+   *   console.log(cat.name);
+   * }
    * ```
    */
-  get(id: string): MeowzerCat {
-    const cat = this.cats.get(id);
-    if (!cat) {
-      throw new NotFoundError(`Cat with id "${id}" not found`, {
-        resourceType: "cat",
-        resourceId: id,
-      });
-    }
-    return cat;
+  get(id: string): MeowzerCat | undefined {
+    return this.cats.get(id);
   }
 
   /**
@@ -297,22 +301,35 @@ export class CatManager {
   }
 
   /**
-   * Destroy a cat and clean up all resources
+   * Destroy a cat by ID
    *
    * This removes the cat from memory and stops all animations/AI processing.
    * Note: This does NOT delete from storage. Use storage.deleteCat() for that.
    *
-   * @throws {NotFoundError} If cat doesn't exist
-   *
    * @example
    * ```ts
-   * catManager.destroy("cat-123");
+   * await catManager.destroy("cat-123");
    * ```
    */
-  destroy(id: string): void {
-    const cat = this.get(id); // Throws if not found
+  async destroy(id: string): Promise<void> {
+    const cat = this.get(id);
+    if (!cat) {
+      return; // Cat doesn't exist, nothing to do
+    }
+
+    // Trigger beforeDelete hook
+    await this.hooks._trigger(LifecycleHook.BEFORE_DELETE, {
+      catId: id,
+      cat,
+    });
+
     cat.destroy();
     this.cats.delete(id);
+
+    // Trigger afterDelete hook
+    await this.hooks._trigger(LifecycleHook.AFTER_DELETE, {
+      catId: id,
+    });
   }
 
   /**
@@ -320,12 +337,12 @@ export class CatManager {
    *
    * @example
    * ```ts
-   * catManager.destroyMany(["cat-1", "cat-2", "cat-3"]);
+   * await catManager.destroyMany(["cat-1", "cat-2", "cat-3"]);
    * ```
    */
-  destroyMany(ids: string[]): void {
+  async destroyMany(ids: string[]): Promise<void> {
     for (const id of ids) {
-      this.destroy(id);
+      await this.destroy(id);
     }
   }
 
@@ -334,14 +351,14 @@ export class CatManager {
    *
    * @example
    * ```ts
-   * catManager.destroyAll();
+   * await catManager.destroyAll();
    * ```
    */
-  destroyAll(): void {
-    for (const cat of this.cats.values()) {
-      cat.destroy();
+  async destroyAll(): Promise<void> {
+    const ids = Array.from(this.cats.keys());
+    for (const id of ids) {
+      await this.destroy(id);
     }
-    this.cats.clear();
   }
 
   /**
