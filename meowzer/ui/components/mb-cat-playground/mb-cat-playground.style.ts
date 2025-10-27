@@ -73,6 +73,18 @@ export const catPlaygroundStyles = css`
   }
 
   /* Dialog content styling */
+  quiet-dialog {
+    --width: 800px;
+  }
+
+  quiet-dialog::part(panel) {
+    max-width: 90vw;
+  }
+
+  quiet-dialog::part(body) {
+    padding: 1.5rem;
+  }
+
   .stats-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);

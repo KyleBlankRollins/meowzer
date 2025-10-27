@@ -27,7 +27,6 @@ export {
 // Components (Phase 2: Creation Components)
 export {
   CatCreator,
-  CatAppearanceForm,
   CatPersonalityPicker,
   CatPreview,
 } from "./components/index.js";

@@ -1,6 +1,6 @@
 import { generateId as meowkitGenerateId } from "../meowkit/utils.js";
 import { buildCat, buildCatFromSeed } from "../meowkit/index.js";
-import type { CatSettings } from "../meowkit/index.js";
+import type { CatSettings, ProtoCat } from "../meowkit/index.js";
 
 /**
  * Utility functions for working with cats and seeds
@@ -17,6 +17,49 @@ export class MeowzerUtils {
    */
   static generateId(): string {
     return meowkitGenerateId();
+  }
+
+  /**
+   * Build a preview cat from settings without creating a MeowzerCat instance
+   *
+   * This is useful for previewing cat appearance before creation.
+   * Returns a ProtoCat with SVG data that can be rendered directly.
+   *
+   * @param settings - Cat appearance settings
+   * @returns ProtoCat with sprite data and metadata
+   *
+   * @example
+   * ```ts
+   * const preview = MeowzerUtils.buildPreview({
+   *   color: "orange",
+   *   pattern: "tabby",
+   *   size: "medium",
+   *   furLength: "short",
+   *   eyeColor: "green"
+   * });
+   *
+   * // Render the SVG
+   * element.innerHTML = preview.spriteData.svg;
+   * ```
+   */
+  static buildPreview(settings: CatSettings): ProtoCat {
+    return buildCat(settings);
+  }
+
+  /**
+   * Build a preview cat from a seed string
+   *
+   * @param seed - Seed string to build from
+   * @returns ProtoCat with sprite data and metadata
+   *
+   * @example
+   * ```ts
+   * const preview = MeowzerUtils.buildPreviewFromSeed("abc123");
+   * element.innerHTML = preview.spriteData.svg;
+   * ```
+   */
+  static buildPreviewFromSeed(seed: string): ProtoCat {
+    return buildCatFromSeed(seed);
   }
 
   /**

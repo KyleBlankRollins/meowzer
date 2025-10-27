@@ -11,8 +11,8 @@
       "types": "./dist/index.d.ts"
     },
     "./setup": {
-      "import": "./dist/setup.js",
-      "types": "./dist/setup.d.ts"
+      "import": "./dist/scripts/setup.js",
+      "types": "./dist/scripts/setup.d.ts"
     },
     "./providers": {
       "import": "./dist/providers/index.js",
@@ -25,8 +25,9 @@
   },
   "scripts": {
     "dev": "tsc --watch",
-    "build": "tsc && npm run copy-assets",
-    "copy-assets": "node scripts/copy-assets.js",
+    "clean": "rm -rf dist",
+    "build": "npm run clean && tsc && npm run copy-assets",
+    "copy-assets": "node dist/scripts/copy-assets.js",
     "test": "vitest",
     "typecheck": "tsc --noEmit",
     "docs": "typedoc",

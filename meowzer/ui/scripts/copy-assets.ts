@@ -16,6 +16,9 @@ import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
+// Get the package root (go up from dist/scripts/ to package root)
+const packageRoot = join(__dirname, "..", "..");
+
 // Define assets to copy
 const assets = [
   {
@@ -72,8 +75,8 @@ let errorCount = 0;
 // Copy theme files
 [...assets, ...icons].forEach(({ src, dest }) => {
   try {
-    const srcPath = join(__dirname, "..", src);
-    const destPath = join(__dirname, "..", dest);
+    const srcPath = join(packageRoot, src);
+    const destPath = join(packageRoot, dest);
 
     // Check if source exists
     if (!existsSync(srcPath)) {
@@ -90,7 +93,9 @@ let errorCount = 0;
     console.log(`✓ Copied: ${dest}`);
     copiedCount++;
   } catch (error) {
-    console.error(`✗ Error copying ${src}:`, error.message);
+    const errorMessage =
+      error instanceof Error ? error.message : String(error);
+    console.error(`✗ Error copying ${src}:`, errorMessage);
     errorCount++;
   }
 });

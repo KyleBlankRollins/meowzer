@@ -27,8 +27,15 @@ import "@quietui/quiet/components/tooltip/tooltip.js";
 import "@quietui/quiet/components/callout/callout.js";
 import "@quietui/quiet/components/checkbox/checkbox.js";
 import "@quietui/quiet/components/text-field/text-field.js";
+import "@quietui/quiet/components/text-area/text-area.js";
 import "@quietui/quiet/components/empty-state/empty-state.js";
 import "@quietui/quiet/components/expander/expander.js";
+import "@quietui/quiet/components/color-picker/color-picker.js";
+import "@quietui/quiet/components/popover/popover.js";
+import "@quietui/quiet/components/divider/divider.js";
+
+// Import Meowzer UI components
+import "../components/cat-color-picker/cat-color-picker.js";
 
 // Set Quiet UI library path
 import { setLibraryPath } from "@quietui/quiet";

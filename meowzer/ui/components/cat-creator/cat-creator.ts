@@ -4,6 +4,12 @@
  * Orchestrates the cat creation flow with appearance customization,
  * personality selection, and live preview.
  *
+ * Uses composition pattern with:
+ * - cat-preview (enhanced with ProtoCat support)
+ * - cat-personality-picker
+ * - appearance-section (internal partial)
+ * - basic-info-section (internal partial)
+ *
  * @example
  * ```html
  * <meowzer-provider>
@@ -16,112 +22,185 @@ import { LitElement, html, css } from "lit";
 import { customElement, state } from "lit/decorators.js";
 import { consume } from "@lit/context";
 import { meowzerContext } from "../../contexts/meowzer-context.js";
-import type { Meowzer, CatSettings, Personality } from "meowzer";
+import type {
+  Meowzer,
+  CatSettings,
+  PersonalityPreset,
+} from "meowzer";
+
+// Import child components
+import "../cat-preview/cat-preview.js";
+import "../cat-personality-picker/cat-personality-picker.js";
+import "./partials/appearance-section.js";
+import "./partials/basic-info-section.js";
+
+// Import shared utilities
+import { validateCatForm } from "../../shared/validation/cat-validation.js";
 
 @customElement("cat-creator")
 export class CatCreator extends LitElement {
   static styles = css`
     :host {
       display: block;
-      max-width: 1200px;
-      margin: 0 auto;
     }
 
-    .creator-container {
+    .cat-creator {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 2rem;
-      padding: 1rem;
-    }
-
-    .creator-form {
-      display: flex;
-      flex-direction: column;
-      gap: 1.5rem;
-    }
-
-    .creator-preview {
-      position: sticky;
-      top: 1rem;
-      height: fit-content;
-    }
-
-    .creator-actions {
-      display: flex;
       gap: 1rem;
-      justify-content: flex-end;
-      margin-top: 1rem;
+    }
+
+    .message {
+      margin-bottom: 1rem;
+    }
+
+    .creator-layout {
+      display: grid;
+      gap: 2rem;
+      grid-template-columns: 1fr 2fr;
     }
 
     @media (max-width: 768px) {
-      .creator-container {
+      .creator-layout {
         grid-template-columns: 1fr;
       }
+    }
 
-      .creator-preview {
-        position: static;
-      }
+    /* Preview Panel */
+    .preview-panel {
+      position: sticky;
+      top: 1rem;
+      align-self: start;
+    }
+
+    /* Settings Panel */
+    .creator-form {
+      display: grid;
+      gap: 1.5rem;
+    }
+
+    .form-section {
+      display: grid;
+      gap: 1rem;
+    }
+
+    .form-section h4 {
+      margin: 0;
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--quiet-neutral-text-loud);
+      border-bottom: 1px solid var(--quiet-neutral-stroke-soft);
+      padding-bottom: 0.5rem;
+    }
+
+    /* Form Actions */
+    .form-actions {
+      display: flex;
+      gap: 1rem;
+      justify-content: flex-end;
+      padding-top: 1rem;
+      border-top: 1px solid var(--quiet-neutral-stroke-soft);
     }
   `;
 
-  @consume({ context: meowzerContext })
+  @consume({ context: meowzerContext, subscribe: true })
+  @state()
   meowzer?: Meowzer;
 
   @state() private catName = "";
   @state() private catDescription = "";
-  @state() private settings: Partial<CatSettings> = {
+  @state() private settings: CatSettings = {
     color: "#FF6B35",
     eyeColor: "#4ECDC4",
     pattern: "solid",
     size: "medium",
     furLength: "short",
   };
-  @state() private personality: Partial<Personality> = {};
+  @state() private selectedPersonality: PersonalityPreset =
+    "balanced";
+  @state() private makeRoaming = true;
   @state() private creating = false;
+  @state() private message = "";
 
-  private handleNameChange(e: Event) {
-    const input = e.target as HTMLInputElement;
-    this.catName = input.value;
+  /**
+   * Handle basic info changes from basic-info-section
+   */
+  private handleBasicInfoChange(e: CustomEvent) {
+    this.catName = e.detail.name;
+    this.catDescription = e.detail.description;
   }
 
-  private handleDescriptionChange(e: Event) {
-    const textarea = e.target as HTMLTextAreaElement;
-    this.catDescription = textarea.value;
+  /**
+   * Handle appearance changes from appearance-section
+   */
+  private handleAppearanceChange(e: CustomEvent) {
+    this.settings = e.detail;
   }
 
-  private handleSettingsChange(newSettings: Partial<CatSettings>) {
-    this.settings = { ...this.settings, ...newSettings };
+  /**
+   * Handle size changes
+   */
+  private handleSizeChange(e: CustomEvent) {
+    this.settings = {
+      ...this.settings,
+      size: (e.target as any).value as CatSettings["size"],
+    };
   }
 
-  private handlePersonalityChange(
-    newPersonality: Partial<Personality>
-  ) {
-    this.personality = { ...this.personality, ...newPersonality };
+  /**
+   * Handle personality changes from cat-personality-picker
+   */
+  private handlePersonalityChange(e: CustomEvent) {
+    if (e.detail.preset) {
+      this.selectedPersonality = e.detail.preset;
+    }
   }
 
+  /**
+   * Handle roaming checkbox change
+   */
+  private handleRoamingChange(e: CustomEvent) {
+    this.makeRoaming = (e.target as any).checked;
+  }
+
+  /**
+   * Create the cat
+   */
   private async handleCreate() {
     if (!this.meowzer) {
-      console.error("Meowzer SDK not available");
+      this.message = "Meowzer SDK not available";
+      return;
+    }
+
+    // Validate form
+    const validation = validateCatForm({
+      name: this.catName,
+      description: this.catDescription,
+    });
+
+    if (!validation.valid) {
+      this.message = validation.errors.join(", ");
       return;
     }
 
     this.creating = true;
+    this.message = "";
 
     try {
       const cat = await this.meowzer.cats.create({
         name: this.catName || undefined,
         description: this.catDescription || undefined,
-        settings: this.settings as CatSettings,
+        settings: this.settings,
       });
 
-      // Apply personality if configured
-      if (Object.keys(this.personality).length > 0) {
-        cat.setPersonality(this.personality as Personality);
-      }
+      // Set personality
+      cat.setPersonality(this.selectedPersonality);
 
-      // Cat is automatically placed in DOM and started by the SDK
-      // Resume to ensure it's active
-      cat.resume();
+      // Spawn roaming cat if requested
+      if (this.makeRoaming) {
+        cat.element.style.position = "fixed";
+        document.body.appendChild(cat.element);
+        cat.resume();
+      }
 
       // Dispatch success event
       this.dispatchEvent(
@@ -132,10 +211,14 @@ export class CatCreator extends LitElement {
         })
       );
 
+      // Show success message
+      this.message = `Created ${this.catName}! 🎉`;
+
       // Reset form
       this.reset();
     } catch (error) {
       console.error("Failed to create cat:", error);
+      this.message = `Error creating cat: ${error}`;
       this.dispatchEvent(
         new CustomEvent("cat-creation-error", {
           detail: { error },
@@ -148,6 +231,9 @@ export class CatCreator extends LitElement {
     }
   }
 
+  /**
+   * Reset the form
+   */
   private reset() {
     this.catName = "";
     this.catDescription = "";
@@ -158,7 +244,9 @@ export class CatCreator extends LitElement {
       size: "medium",
       furLength: "short",
     };
-    this.personality = {};
+    this.selectedPersonality = "balanced";
+    this.makeRoaming = true;
+    this.message = "";
   }
 
   render() {
@@ -175,53 +263,101 @@ export class CatCreator extends LitElement {
     }
 
     return html`
-      <div class="creator-container">
-        <div class="creator-form">
-          <quiet-text-field
-            label="Cat Name"
-            placeholder="Enter a name for your cat"
-            .value=${this.catName}
-            @quiet-input=${this.handleNameChange}
-          >
-          </quiet-text-field>
+      <div class="cat-creator">
+        ${this.message
+          ? html`<quiet-callout variant="primary" class="message">
+              ${this.message}
+            </quiet-callout>`
+          : ""}
 
-          <quiet-text-area
-            label="Description"
-            placeholder="Describe your cat (optional)"
-            rows="3"
-            .value=${this.catDescription}
-            @quiet-input=${this.handleDescriptionChange}
-          >
-          </quiet-text-area>
-
-          <cat-appearance-form
-            .settings=${this.settings}
-            @settings-change=${(e: CustomEvent) =>
-              this.handleSettingsChange(e.detail)}
-          ></cat-appearance-form>
-
-          <cat-personality-picker
-            .personality=${this.personality}
-            @personality-change=${(e: CustomEvent) =>
-              this.handlePersonalityChange(e.detail)}
-          ></cat-personality-picker>
-
-          <div class="creator-actions">
-            <quiet-button @click=${this.reset} appearance="outline">
-              Reset
-            </quiet-button>
-            <quiet-button
-              @click=${this.handleCreate}
-              variant="primary"
-              ?disabled=${this.creating}
-            >
-              ${this.creating ? "Creating..." : "Create Cat"}
-            </quiet-button>
+        <div class="creator-layout">
+          <!-- Preview Panel -->
+          <div class="preview-panel">
+            <quiet-card>
+              <h3 slot="header">Preview</h3>
+              <cat-preview
+                .settings=${this.settings}
+                autoBuild
+              ></cat-preview>
+            </quiet-card>
           </div>
-        </div>
 
-        <div class="creator-preview">
-          <cat-preview .settings=${this.settings}></cat-preview>
+          <!-- Settings Panel -->
+          <div class="settings-panel">
+            <quiet-card>
+              <h3 slot="header">Cat Creator</h3>
+
+              <div class="creator-form">
+                <!-- Basic Info -->
+                <basic-info-section
+                  .name=${this.catName}
+                  .description=${this.catDescription}
+                  @basic-info-change=${this.handleBasicInfoChange}
+                ></basic-info-section>
+
+                <quiet-divider></quiet-divider>
+
+                <!-- Appearance -->
+                <appearance-section
+                  .settings=${this.settings}
+                  @appearance-change=${this.handleAppearanceChange}
+                ></appearance-section>
+
+                <quiet-divider></quiet-divider>
+
+                <!-- Size -->
+                <div class="form-section">
+                  <h4>Size</h4>
+                  <quiet-select
+                    label="Body Size"
+                    .value=${this.settings.size}
+                    @quiet-change=${this.handleSizeChange}
+                  >
+                    <option value="small">Small</option>
+                    <option value="medium">Medium</option>
+                    <option value="large">Large</option>
+                  </quiet-select>
+                </div>
+
+                <quiet-divider></quiet-divider>
+
+                <!-- Personality -->
+                <cat-personality-picker
+                  @personality-change=${this.handlePersonalityChange}
+                ></cat-personality-picker>
+
+                <quiet-divider></quiet-divider>
+
+                <!-- Behavior Options -->
+                <div class="form-section">
+                  <h4>Behavior Options</h4>
+                  <quiet-checkbox
+                    .checked=${this.makeRoaming}
+                    @quiet-change=${this.handleRoamingChange}
+                  >
+                    Make cat roam the viewport
+                  </quiet-checkbox>
+                </div>
+
+                <!-- Actions -->
+                <div class="form-actions">
+                  <quiet-button
+                    @click=${this.reset}
+                    appearance="outline"
+                  >
+                    Reset
+                  </quiet-button>
+                  <quiet-button
+                    @click=${this.handleCreate}
+                    variant="primary"
+                    ?disabled=${this.creating || !this.catName.trim()}
+                  >
+                    ${this.creating ? "Creating..." : "Create Cat"}
+                  </quiet-button>
+                </div>
+              </div>
+            </quiet-card>
+          </div>
         </div>
       </div>
     `;
