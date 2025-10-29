@@ -24,11 +24,6 @@ export class CatPreview extends LitElement {
       padding: 2rem;
       background: var(--quiet-neutral-background-softest, #f9fafb);
       min-height: 300px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 1rem;
     }
 
     /* ProtoCat rendering styles */
@@ -36,7 +31,6 @@ export class CatPreview extends LitElement {
       display: flex;
       justify-content: center;
       align-items: center;
-      padding: 2rem;
       background: var(--quiet-neutral-fill-softer);
       border-radius: var(--quiet-radius-md);
       min-height: 200px;

@@ -23,7 +23,7 @@ export const mbCatCreatorStyles = css`
   .creator-layout {
     display: grid;
     gap: 2rem;
-    grid-template-columns: 1fr 2fr;
+    grid-template-columns: 1fr 1fr;
   }
 
   @media (max-width: 768px) {

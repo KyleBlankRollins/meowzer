@@ -2,7 +2,7 @@
  * AppearanceSection - Internal partial for cat appearance customization
  *
  * Not exported from package - internal to cat-creator only.
- * Handles color pickers, pattern, and fur length selection.
+ * Handles color pickers, pattern, fur length, and size selection.
  *
  * @fires appearance-change - Emitted when any appearance setting changes
  */
@@ -38,6 +38,12 @@ export class AppearanceSection extends LitElement {
       grid-template-columns: 1fr 1fr;
       gap: 1rem;
     }
+
+    @media (max-width: 600px) {
+      .appearance-grid {
+        grid-template-columns: 1fr;
+      }
+    }
   `;
 
   @property({ type: Object }) settings!: CatSettings;
@@ -59,6 +65,12 @@ export class AppearanceSection extends LitElement {
   private handleFurLengthChange(e: CustomEvent) {
     this.emitChange({
       furLength: (e.target as any).value as CatSettings["furLength"],
+    });
+  }
+
+  private handleSizeChange(e: CustomEvent) {
+    this.emitChange({
+      size: (e.target as any).value as CatSettings["size"],
     });
   }
 
@@ -110,6 +122,16 @@ export class AppearanceSection extends LitElement {
             <option value="short">Short</option>
             <option value="medium">Medium</option>
             <option value="long">Long</option>
+          </quiet-select>
+
+          <quiet-select
+            label="Body Size"
+            .value=${this.settings.size}
+            @quiet-change=${this.handleSizeChange}
+          >
+            <option value="small">Small</option>
+            <option value="medium">Medium</option>
+            <option value="large">Large</option>
           </quiet-select>
         </div>
       </div>

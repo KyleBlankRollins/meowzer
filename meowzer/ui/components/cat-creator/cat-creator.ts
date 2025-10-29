@@ -62,13 +62,16 @@ export class CatCreator extends LitElement {
     @media (max-width: 768px) {
       .creator-layout {
         grid-template-columns: 1fr;
+        grid-template-rows: auto 1fr;
+      }
+
+      .preview-panel {
+        order: -1; /* Ensure preview appears first on mobile */
       }
     }
 
     /* Preview Panel */
     .preview-panel {
-      position: sticky;
-      top: 1rem;
       align-self: start;
     }
 
@@ -100,6 +103,59 @@ export class CatCreator extends LitElement {
       padding-top: 1rem;
       border-top: 1px solid var(--quiet-neutral-stroke-soft);
     }
+
+    /* Step Indicator */
+    .step-indicator {
+      display: flex;
+      gap: 0.5rem;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .step-dot {
+      width: 0.75rem;
+      height: 0.75rem;
+      border-radius: 50%;
+      background: var(--quiet-neutral-stroke-soft);
+      transition: all 0.2s ease;
+    }
+
+    .step-dot.active {
+      background: var(--quiet-primary-fill-loud);
+      transform: scale(1.2);
+    }
+
+    .step-dot.completed {
+      background: var(--quiet-primary-fill-mid);
+    }
+
+    /* Wizard navigation */
+    .wizard-navigation {
+      display: flex;
+      gap: 1rem;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--quiet-neutral-stroke-soft);
+      margin-top: 1.5rem;
+    }
+
+    .wizard-navigation .nav-group {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    /* Step errors */
+    .step-errors {
+      margin-bottom: 1rem;
+    }
+
+    /* Reset button under preview */
+    .preview-actions {
+      display: flex;
+      justify-content: center;
+      margin-top: 1rem;
+    }
   `;
 
   @consume({ context: meowzerContext, subscribe: true })
@@ -120,6 +176,66 @@ export class CatCreator extends LitElement {
   @state() private makeRoaming = true;
   @state() private creating = false;
   @state() private message = "";
+  @state() private currentStep = 1;
+  @state() private stepErrors: string[] = [];
+
+  /**
+   * Validate the current step
+   */
+  private validateCurrentStep(): boolean {
+    this.stepErrors = [];
+
+    switch (this.currentStep) {
+      case 1: // Basic Info
+        if (!this.catName.trim()) {
+          this.stepErrors.push("Name is required");
+        }
+        const nameValidation = validateCatForm({
+          name: this.catName,
+          description: this.catDescription,
+        });
+        if (!nameValidation.valid) {
+          this.stepErrors.push(...nameValidation.errors);
+        }
+        break;
+
+      case 2: // Appearance & Size
+        // Settings are always valid due to defaults
+        break;
+
+      case 3: // Personality
+        if (!this.selectedPersonality) {
+          this.stepErrors.push("Please select a personality");
+        }
+        break;
+
+      case 4: // Behavior
+        // Behavior options are optional
+        break;
+    }
+
+    return this.stepErrors.length === 0;
+  }
+
+  /**
+   * Navigate to next step
+   */
+  private nextStep() {
+    if (this.validateCurrentStep() && this.currentStep < 4) {
+      this.currentStep++;
+      this.stepErrors = [];
+    }
+  }
+
+  /**
+   * Navigate to previous step
+   */
+  private previousStep() {
+    if (this.currentStep > 1) {
+      this.currentStep--;
+      this.stepErrors = [];
+    }
+  }
 
   /**
    * Handle basic info changes from basic-info-section
@@ -134,16 +250,6 @@ export class CatCreator extends LitElement {
    */
   private handleAppearanceChange(e: CustomEvent) {
     this.settings = e.detail;
-  }
-
-  /**
-   * Handle size changes
-   */
-  private handleSizeChange(e: CustomEvent) {
-    this.settings = {
-      ...this.settings,
-      size: (e.target as any).value as CatSettings["size"],
-    };
   }
 
   /**
@@ -211,10 +317,7 @@ export class CatCreator extends LitElement {
         })
       );
 
-      // Show success message
-      this.message = `Created ${this.catName}! 🎉`;
-
-      // Reset form
+      // Reset form (this will close the dialog via parent component)
       this.reset();
     } catch (error) {
       console.error("Failed to create cat:", error);
@@ -247,6 +350,80 @@ export class CatCreator extends LitElement {
     this.selectedPersonality = "balanced";
     this.makeRoaming = true;
     this.message = "";
+    this.currentStep = 1;
+    this.stepErrors = [];
+  }
+
+  /**
+   * Render step indicator dots
+   */
+  private renderStepIndicator() {
+    const steps = [1, 2, 3, 4];
+
+    return html`
+      <div class="step-indicator">
+        ${steps.map((step) => {
+          const isActive = step === this.currentStep;
+          const isCompleted = step < this.currentStep;
+          const classes = isActive
+            ? "active"
+            : isCompleted
+            ? "completed"
+            : "";
+
+          return html` <div class="step-dot ${classes}"></div> `;
+        })}
+      </div>
+    `;
+  }
+
+  /**
+   * Render wizard navigation buttons
+   */
+  private renderWizardNavigation() {
+    const isLastStep = this.currentStep === 4;
+    const isFirstStep = this.currentStep === 1;
+
+    return html`
+      <div class="wizard-navigation">
+        <div class="nav-group">
+          ${!isFirstStep
+            ? html`
+                <quiet-button
+                  @click=${this.previousStep}
+                  appearance="outline"
+                >
+                  Previous
+                </quiet-button>
+              `
+            : html`<span></span>`}
+        </div>
+
+        <!-- Step Indicator in the middle -->
+        ${this.renderStepIndicator()}
+
+        <div class="nav-group">
+          ${!isLastStep
+            ? html`
+                <quiet-button
+                  @click=${this.nextStep}
+                  variant="primary"
+                >
+                  Next
+                </quiet-button>
+              `
+            : html`
+                <quiet-button
+                  @click=${this.handleCreate}
+                  variant="primary"
+                  ?disabled=${this.creating}
+                >
+                  ${this.creating ? "Creating..." : "Create Cat"}
+                </quiet-button>
+              `}
+        </div>
+      </div>
+    `;
   }
 
   render() {
@@ -273,90 +450,93 @@ export class CatCreator extends LitElement {
         <div class="creator-layout">
           <!-- Preview Panel -->
           <div class="preview-panel">
-            <quiet-card>
-              <h3 slot="header">Preview</h3>
-              <cat-preview
-                .settings=${this.settings}
-                autoBuild
-              ></cat-preview>
-            </quiet-card>
+            <cat-preview
+              .settings=${this.settings}
+              autoBuild
+            ></cat-preview>
+            <div class="preview-actions">
+              <quiet-button
+                @click=${this.reset}
+                appearance="outline"
+                size="sm"
+              >
+                Reset
+              </quiet-button>
+            </div>
           </div>
 
-          <!-- Settings Panel -->
+          <!-- Wizard Panel -->
           <div class="settings-panel">
-            <quiet-card>
-              <h3 slot="header">Cat Creator</h3>
-
-              <div class="creator-form">
-                <!-- Basic Info -->
-                <basic-info-section
-                  .name=${this.catName}
-                  .description=${this.catDescription}
-                  @basic-info-change=${this.handleBasicInfoChange}
-                ></basic-info-section>
-
-                <quiet-divider></quiet-divider>
-
-                <!-- Appearance -->
-                <appearance-section
-                  .settings=${this.settings}
-                  @appearance-change=${this.handleAppearanceChange}
-                ></appearance-section>
-
-                <quiet-divider></quiet-divider>
-
-                <!-- Size -->
-                <div class="form-section">
-                  <h4>Size</h4>
-                  <quiet-select
-                    label="Body Size"
-                    .value=${this.settings.size}
-                    @quiet-change=${this.handleSizeChange}
+            <!-- Step Errors -->
+            ${this.stepErrors.length > 0
+              ? html`
+                  <quiet-callout
+                    variant="destructive"
+                    class="step-errors"
                   >
-                    <option value="small">Small</option>
-                    <option value="medium">Medium</option>
-                    <option value="large">Large</option>
-                  </quiet-select>
-                </div>
+                    <strong>Please fix the following:</strong>
+                    <ul
+                      style="margin: 0.5rem 0 0 0; padding-left: 1.5rem;"
+                    >
+                      ${this.stepErrors.map(
+                        (error) => html`<li>${error}</li>`
+                      )}
+                    </ul>
+                  </quiet-callout>
+                `
+              : ""}
 
-                <quiet-divider></quiet-divider>
+            <div class="creator-form">
+              <!-- Step 1: Basic Info -->
+              ${this.currentStep === 1
+                ? html`
+                    <basic-info-section
+                      .name=${this.catName}
+                      .description=${this.catDescription}
+                      @basic-info-change=${this.handleBasicInfoChange}
+                    ></basic-info-section>
+                  `
+                : ""}
 
-                <!-- Personality -->
-                <cat-personality-picker
-                  @personality-change=${this.handlePersonalityChange}
-                ></cat-personality-picker>
+              <!-- Step 2: Appearance & Size -->
+              ${this.currentStep === 2
+                ? html`
+                    <appearance-section
+                      .settings=${this.settings}
+                      @appearance-change=${this
+                        .handleAppearanceChange}
+                    ></appearance-section>
+                  `
+                : ""}
 
-                <quiet-divider></quiet-divider>
+              <!-- Step 3: Personality -->
+              ${this.currentStep === 3
+                ? html`
+                    <cat-personality-picker
+                      @personality-change=${this
+                        .handlePersonalityChange}
+                    ></cat-personality-picker>
+                  `
+                : ""}
 
-                <!-- Behavior Options -->
-                <div class="form-section">
-                  <h4>Behavior Options</h4>
-                  <quiet-checkbox
-                    .checked=${this.makeRoaming}
-                    @quiet-change=${this.handleRoamingChange}
-                  >
-                    Make cat roam the viewport
-                  </quiet-checkbox>
-                </div>
+              <!-- Step 4: Behavior Options -->
+              ${this.currentStep === 4
+                ? html`
+                    <div class="form-section">
+                      <h4>Behavior Options</h4>
+                      <quiet-checkbox
+                        .checked=${this.makeRoaming}
+                        @quiet-change=${this.handleRoamingChange}
+                      >
+                        Make cat roam the viewport
+                      </quiet-checkbox>
+                    </div>
+                  `
+                : ""}
+            </div>
 
-                <!-- Actions -->
-                <div class="form-actions">
-                  <quiet-button
-                    @click=${this.reset}
-                    appearance="outline"
-                  >
-                    Reset
-                  </quiet-button>
-                  <quiet-button
-                    @click=${this.handleCreate}
-                    variant="primary"
-                    ?disabled=${this.creating || !this.catName.trim()}
-                  >
-                    ${this.creating ? "Creating..." : "Create Cat"}
-                  </quiet-button>
-                </div>
-              </div>
-            </quiet-card>
+            <!-- Wizard Navigation -->
+            ${this.renderWizardNavigation()}
           </div>
         </div>
       </div>

@@ -351,8 +351,6 @@ export class CatCreator extends LitElement {
                   }
                 )}
 
-                <quiet-divider></quiet-divider>
-
                 <!-- Appearance -->
                 ${renderAppearanceSection(this.settings, {
                   onColorChange: this.handleColorChange,
@@ -361,15 +359,11 @@ export class CatCreator extends LitElement {
                   onFurLengthChange: this.handleFurLengthChange,
                 })}
 
-                <quiet-divider></quiet-divider>
-
                 <!-- Size -->
                 ${renderSizeSection(
                   this.settings.size,
                   this.handleSizeChange
                 )}
-
-                <quiet-divider></quiet-divider>
 
                 <!-- Behavior -->
                 ${renderBehaviorSection(

@@ -11,33 +11,12 @@
 
 ## Meowzer UI
 
-- Fix: search list doesn't work. Currently always returns 0 results.
-- Fix: make list of cats scrollable and fixed height.
-
-### Cat creator
-
-- Fix: Color pickers don't close reliably on outside clicks
-- Fix: After creating a cat, close the cat creator UI
-- Feat: add random name generator
+- Fix: displayed cat names are "unknown cat"
+- Fix: database interactions seem to be broken
+- Fix: pause/resuem in toolbar doesn't work
+- Fix: statistics modal is only static content
+- Fix: background empty state shown all the time, even after adding cats
 
 ## Meowkit
 
 - Feat: add different SVG templates for different fur lengths
-
-## Meowbase
-
-- Feat: Figure out how to create poper tests for Meowbase now that it's using IndexedDB.
-
-## Docs
-
-### Credits page
-
-- Need to update to reflect changes in tech used
-
-### Massive rework
-
-- Need to create a large amount of new documentation to reflect current state of Meowzer
-
-## Misc
-
-- Move `cat-names.json` out of `meta/` to somewhere more reasonable.

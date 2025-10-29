@@ -1,5 +1,10 @@
 import { LitElement, html } from "lit";
-import { customElement, property, state } from "lit/decorators.js";
+import {
+  customElement,
+  property,
+  query,
+  state,
+} from "lit/decorators.js";
 import { provide } from "@lit/context";
 import { catPlaygroundStyles } from "./mb-cat-playground.style.js";
 import { meowzerContext } from "../../contexts/meowzer-context.js";
@@ -73,16 +78,16 @@ export class MbCatPlayground extends LitElement {
   private error?: Error;
 
   /**
-   * Whether the cat creator dialog is open
+   * Reference to the creator dialog element
    */
-  @state()
-  private creatorDialogOpen = false;
+  @query("#creator-dialog")
+  private creatorDialog?: HTMLElement & { open: boolean };
 
   /**
-   * Whether the statistics dialog is open
+   * Reference to the stats dialog element
    */
-  @state()
-  private statsDialogOpen = false;
+  @query("#stats-dialog")
+  private statsDialog?: HTMLElement & { open: boolean };
 
   /**
    * Reactive controller for cats
@@ -191,6 +196,42 @@ export class MbCatPlayground extends LitElement {
     return this.cats.filter((cat) => cat.isActive).length;
   }
 
+  /**
+   * Open the creator dialog
+   */
+  private openCreatorDialog() {
+    if (this.creatorDialog) {
+      this.creatorDialog.open = true;
+    }
+  }
+
+  /**
+   * Close the creator dialog
+   */
+  private closeCreatorDialog() {
+    if (this.creatorDialog) {
+      this.creatorDialog.open = false;
+    }
+  }
+
+  /**
+   * Open the stats dialog
+   */
+  private openStatsDialog() {
+    if (this.statsDialog) {
+      this.statsDialog.open = true;
+    }
+  }
+
+  /**
+   * Close the stats dialog
+   */
+  private closeStatsDialog() {
+    if (this.statsDialog) {
+      this.statsDialog.open = false;
+    }
+  }
+
   render() {
     if (this.error) {
       return html`
@@ -283,7 +324,7 @@ export class MbCatPlayground extends LitElement {
             </quiet-button>
 
             <quiet-button
-              @click=${() => (this.creatorDialogOpen = true)}
+              @click=${this.openCreatorDialog}
               title="Open Cat Creator"
             >
               <quiet-icon name="edit"></quiet-icon>
@@ -309,7 +350,7 @@ export class MbCatPlayground extends LitElement {
 
             <quiet-button
               variant="neutral"
-              @click=${() => (this.statsDialogOpen = true)}
+              @click=${this.openStatsDialog}
               title="View Statistics"
             >
               <quiet-icon name="chart-bar"></quiet-icon>
@@ -335,18 +376,20 @@ export class MbCatPlayground extends LitElement {
 
       <!-- Cat Creator Dialog -->
       <quiet-dialog
-        .open=${this.creatorDialogOpen}
-        @quiet-request-close=${() => (this.creatorDialogOpen = false)}
+        id="creator-dialog"
+        @quiet-request-close=${this.closeCreatorDialog}
         light-dismiss
       >
         <div slot="header">Create Cat</div>
-        <cat-creator></cat-creator>
+        <cat-creator
+          @cat-created=${this.closeCreatorDialog}
+        ></cat-creator>
       </quiet-dialog>
 
       <!-- Statistics Dialog -->
       <quiet-dialog
-        .open=${this.statsDialogOpen}
-        @quiet-request-close=${() => (this.statsDialogOpen = false)}
+        id="stats-dialog"
+        @quiet-request-close=${this.closeStatsDialog}
         light-dismiss
       >
         <div slot="header">Statistics</div>
