@@ -112,6 +112,11 @@ export class CatManager {
       seed = protoCat.seed;
     }
 
+    // Add name to protoCat so it appears in the DOM
+    if (options.name) {
+      protoCat.name = options.name;
+    }
+
     // Create Meowtion Cat for animation
     const meowtionCat = new Cat(protoCat);
 

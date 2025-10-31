@@ -127,6 +127,49 @@ export class CatCard extends LitElement {
   @property({ type: Boolean }) selected = false;
   @property({ type: Boolean, reflect: true }) selectable = false;
 
+  // Track when cat changes to set up listeners
+  private _currentCat?: MeowzerCat;
+
+  connectedCallback() {
+    super.connectedCallback();
+    this.setupCatListeners();
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    this.cleanupCatListeners();
+  }
+
+  updated(changedProperties: Map<string, any>) {
+    if (changedProperties.has("cat")) {
+      this.cleanupCatListeners();
+      this.setupCatListeners();
+    }
+  }
+
+  private setupCatListeners() {
+    if (this.cat) {
+      this._currentCat = this.cat;
+      // Listen to cat events for reactive updates
+      this.cat.on("stateChange", this.handleCatUpdate);
+      this.cat.on("pause", this.handleCatUpdate);
+      this.cat.on("resume", this.handleCatUpdate);
+    }
+  }
+
+  private cleanupCatListeners() {
+    if (this._currentCat) {
+      this._currentCat.off("stateChange", this.handleCatUpdate);
+      this._currentCat.off("pause", this.handleCatUpdate);
+      this._currentCat.off("resume", this.handleCatUpdate);
+      this._currentCat = undefined;
+    }
+  }
+
+  private handleCatUpdate = () => {
+    this.requestUpdate();
+  };
+
   private handleCheckboxChange(e: Event) {
     const checkbox = e.target as HTMLInputElement;
     this.dispatchEvent(

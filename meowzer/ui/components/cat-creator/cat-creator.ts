@@ -301,6 +301,17 @@ export class CatCreator extends LitElement {
       // Set personality
       cat.setPersonality(this.selectedPersonality);
 
+      // Save cat to storage
+      if (this.meowzer.storage.isInitialized()) {
+        console.log("Saving cat to storage:", cat.name, cat.id);
+        await this.meowzer.storage.saveCat(cat);
+        console.log("Cat saved successfully");
+      } else {
+        console.warn(
+          "Storage not initialized, cat will not be persisted"
+        );
+      }
+
       // Spawn roaming cat if requested
       if (this.makeRoaming) {
         cat.element.style.position = "fixed";

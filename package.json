@@ -12,7 +12,10 @@
     "test:ui": "npm run test:ui --workspace=meowbase",
     "test:coverage": "npm run test:coverage --workspace=meowbase",
     "dev:docs": "npm run dev --workspace=docs",
-    "build:docs": "npm run build --workspace=docs"
+    "build:docs": "npm run build --workspace=docs",
+    "build": "npm run build:sdk && npm run build:ui",
+    "build:sdk": "cd meowzer/sdk && npm run build",
+    "build:ui": "cd meowzer/ui && npm run build"
   },
   "devDependencies": {},
   "description": "Monorepo containing Meowbase library and documentation website"

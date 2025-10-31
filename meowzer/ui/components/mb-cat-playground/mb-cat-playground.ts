@@ -126,6 +126,12 @@ export class MbCatPlayground extends LitElement {
       await this.meowzer.init();
       this.initialized = true;
 
+      // Reinitialize the cats controller now that meowzer is available
+      this.catsController.hostConnected();
+
+      // Load existing cats from storage
+      await this.loadExistingCats();
+
       this.dispatchEvent(
         new CustomEvent("playground-ready", {
           detail: { meowzer: this.meowzer },
@@ -139,14 +145,71 @@ export class MbCatPlayground extends LitElement {
   }
 
   /**
+   * Load existing cats from IndexedDB and spawn them
+   */
+  private async loadExistingCats() {
+    if (!this.meowzer || !this.meowzer.storage.isInitialized()) {
+      console.log("Storage not initialized, skipping cat loading");
+      return;
+    }
+
+    try {
+      console.log("Loading existing cats from storage...");
+
+      // Get the default collection name from config
+      const defaultCollection =
+        this.meowzer.getConfig().storage.defaultCollection;
+
+      // Load all cats from the default collection
+      const savedCats = await this.meowzer.storage.loadCollection(
+        defaultCollection
+      );
+
+      console.log(`Found ${savedCats.length} saved cats`);
+
+      // Spawn each cat and make them roam
+      for (const cat of savedCats) {
+        cat.element.style.position = "fixed";
+        document.body.appendChild(cat.element);
+        cat.resume();
+        console.log(`Spawned cat: ${cat.name} (${cat.id})`);
+      }
+
+      if (savedCats.length > 0) {
+        this.requestUpdate();
+      }
+    } catch (err) {
+      // Collection might not exist yet, which is fine
+      if (err instanceof Error && err.message.includes("not found")) {
+        console.log("No saved cats collection found yet");
+      } else {
+        console.error("Failed to load existing cats:", err);
+      }
+    }
+  }
+
+  /**
    * Create a random cat
    */
   private async createRandomCat() {
     if (!this.meowzer) return;
 
     try {
-      const cat = await this.meowzer.cats.create();
-      // Cat is automatically started by SDK
+      // Generate a random name
+      const name = this.meowzer.utils.randomName();
+
+      // Create cat with random name
+      const cat = await this.meowzer.cats.create({ name });
+
+      // Save to storage
+      if (this.meowzer.storage.isInitialized()) {
+        await this.meowzer.storage.saveCat(cat);
+        console.log(`Random cat "${name}" created and saved`);
+      }
+
+      // Spawn the cat to roam
+      cat.element.style.position = "fixed";
+      document.body.appendChild(cat.element);
       cat.resume();
     } catch (err) {
       console.error("Failed to create cat:", err);
@@ -286,23 +349,7 @@ export class MbCatPlayground extends LitElement {
                 </p>
               </div>
             `
-          : html`
-              <div style="text-align: center;">
-                <p style="font-size: 3rem; margin: 0;">🐱</p>
-                <p
-                  style="font-size: 1.5rem; font-weight: 600; margin: 0.5rem 0 0 0;"
-                >
-                  ${this.cats.length}
-                  ${this.cats.length === 1 ? "Cat" : "Cats"}
-                </p>
-                <p
-                  style="font-size: 0.875rem; color: var(--quiet-neutral-text-mid);"
-                >
-                  ${this.activeCount} active, ${this.pausedCount}
-                  paused
-                </p>
-              </div>
-            `}
+          : html``}
       </div>
     `;
   }

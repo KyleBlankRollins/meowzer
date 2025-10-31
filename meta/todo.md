@@ -11,11 +11,7 @@
 
 ## Meowzer UI
 
-- Fix: displayed cat names are "unknown cat"
-- Fix: database interactions seem to be broken
-- Fix: pause/resuem in toolbar doesn't work
 - Fix: statistics modal is only static content
-- Fix: background empty state shown all the time, even after adding cats
 
 ## Meowkit
 
