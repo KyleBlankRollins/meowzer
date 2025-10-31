@@ -93,6 +93,10 @@ export class CatManager extends LitElement {
       margin-right: auto;
     }
 
+    .empty-state-icon {
+      font-size: 3rem;
+    }
+
     @media (max-width: 640px) {
       .cats-grid {
         grid-template-columns: 1fr;
@@ -332,7 +336,7 @@ export class CatManager extends LitElement {
                   slot="icon"
                   family="outline"
                   name="cat"
-                  style="font-size: 3rem;"
+                  class="empty-state-icon"
                 ></quiet-icon>
                 <span slot="header">
                   ${totalCats === 0 ? "No cats yet" : "No cats found"}

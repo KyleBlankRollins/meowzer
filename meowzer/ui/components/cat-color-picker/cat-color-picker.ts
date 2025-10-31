@@ -60,16 +60,16 @@ export class CatColorPicker extends LitElement {
 
   render() {
     return html`
-      <div class="color-picker">
+      <div
+        class="color-picker"
+        style="--color-value: ${this.internalValue}"
+      >
         ${this.label
           ? html`<label class="label">${this.label}</label>`
           : ""}
 
         <quiet-button id=${this.buttonId} variant="neutral">
-          <span
-            class="color-preview"
-            style="background-color: ${this.internalValue}"
-          ></span>
+          <span class="color-preview"></span>
           <span class="color-value">${this.internalValue}</span>
         </quiet-button>
 

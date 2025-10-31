@@ -187,4 +187,19 @@ export const catOverlayStyles = css`
   .overlay-panel {
     animation: slideIn 0.3s ease-out;
   }
+
+  .error-message {
+    padding: 1rem;
+    color: var(--quiet-destructive-text);
+  }
+
+  .loading-container {
+    padding: 1rem;
+    text-align: center;
+  }
+
+  .loading-text {
+    margin-top: 1rem;
+    color: var(--quiet-neutral-text-mid);
+  }
 `;

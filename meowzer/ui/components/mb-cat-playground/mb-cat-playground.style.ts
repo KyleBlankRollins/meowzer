@@ -40,6 +40,14 @@ export const catPlaygroundStyles = css`
     margin-bottom: 1rem;
   }
 
+  .preview-empty p {
+    margin: 0.5rem 0;
+  }
+
+  .preview-empty .help-text {
+    font-size: 0.875rem;
+  }
+
   .controls-area {
     display: flex;
     flex-direction: column;
@@ -108,6 +116,22 @@ export const catPlaygroundStyles = css`
     font-size: 1.25rem;
     font-weight: 600;
     color: var(--text-primary);
+  }
+
+  /* Error and loading states */
+  .error-message {
+    padding: 1rem;
+    color: var(--quiet-destructive-text);
+  }
+
+  .loading-container {
+    text-align: center;
+    padding: 2rem;
+  }
+
+  .loading-text {
+    margin-top: 1rem;
+    color: var(--quiet-neutral-text-mid);
   }
 
   /* Responsive */

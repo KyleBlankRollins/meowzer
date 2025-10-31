@@ -80,6 +80,17 @@ export class CatExporter extends LitElement {
       white-space: pre-wrap;
       word-break: break-all;
     }
+
+    .export-options-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .export-options-actions {
+      display: flex;
+      gap: 0.5rem;
+    }
   `;
 
   @consume({ context: meowzerContext, subscribe: true })
@@ -249,11 +260,9 @@ export class CatExporter extends LitElement {
         ${this.mode === "active"
           ? html`
               <div class="export-options">
-                <div
-                  style="display: flex; justify-content: space-between; align-items: center;"
-                >
+                <div class="export-options-header">
                   <span>Select cats to export:</span>
-                  <div style="display: flex; gap: 0.5rem;">
+                  <div class="export-options-actions">
                     <quiet-button
                       size="sm"
                       @click=${this.handleSelectAll}

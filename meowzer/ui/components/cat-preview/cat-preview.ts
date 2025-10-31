@@ -104,6 +104,7 @@ export class CatPreview extends LitElement {
       border-radius: 50%;
       position: relative;
       overflow: hidden;
+      background-color: var(--preview-fur-color, #ff6b35);
     }
 
     .cat-pattern {
@@ -113,6 +114,7 @@ export class CatPreview extends LitElement {
       width: 100%;
       height: 100%;
       opacity: 0.3;
+      background: var(--preview-pattern, none);
     }
 
     .cat-eyes {
@@ -122,6 +124,7 @@ export class CatPreview extends LitElement {
       transform: translate(-50%, -50%);
       display: flex;
       gap: 1.5rem;
+      color: var(--preview-eye-color, #4ecdc4);
     }
 
     .eye {
@@ -138,6 +141,7 @@ export class CatPreview extends LitElement {
       transform: translateX(-50%);
       display: flex;
       gap: 3rem;
+      color: var(--preview-fur-color, #ff6b35);
     }
 
     .ear {
@@ -341,19 +345,19 @@ export class CatPreview extends LitElement {
     const furLength = this.settings.furLength || "short";
 
     return html`
-      <div class="preview-container">
+      <div
+        class="preview-container"
+        style="--preview-fur-color: ${furColor}; --preview-eye-color: ${eyeColor}; --preview-pattern: ${this.getPatternStyles()}"
+      >
         <div class="preview-cat">
-          <div class="cat-ears" style="color: ${furColor}">
+          <div class="cat-ears">
             <div class="ear"></div>
             <div class="ear"></div>
           </div>
-          <div class="cat-body" style="background-color: ${furColor}">
-            <div
-              class="cat-pattern"
-              style="background: ${this.getPatternStyles()}"
-            ></div>
+          <div class="cat-body">
+            <div class="cat-pattern"></div>
           </div>
-          <div class="cat-eyes" style="color: ${eyeColor}">
+          <div class="cat-eyes">
             <div class="eye"></div>
             <div class="eye"></div>
           </div>

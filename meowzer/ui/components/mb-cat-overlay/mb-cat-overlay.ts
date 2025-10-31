@@ -208,9 +208,7 @@ export class MbCatOverlay extends LitElement {
       return html`
         <div class="overlay-panel ${this.position}">
           <quiet-card>
-            <div
-              style="padding: 1rem; color: var(--quiet-destructive-text);"
-            >
+            <div class="error-message">
               <strong>Meowzer Error:</strong> ${this.error.message}
             </div>
           </quiet-card>
@@ -222,13 +220,9 @@ export class MbCatOverlay extends LitElement {
     if (!this.initialized) {
       return html`
         <div class="overlay-panel ${this.position}">
-          <div style="padding: 1rem; text-align: center;">
+          <div class="loading-container">
             <quiet-spinner></quiet-spinner>
-            <p
-              style="margin-top: 1rem; color: var(--quiet-neutral-text-mid);"
-            >
-              Initializing Meowzer...
-            </p>
+            <p class="loading-text">Initializing Meowzer...</p>
           </div>
         </div>
       `;

@@ -33,6 +33,7 @@ export const colorPickerStyles = css`
     border-radius: var(--quiet-radius-sm);
     border: 1px solid var(--quiet-neutral-stroke-mid);
     flex-shrink: 0;
+    background-color: var(--color-value, #000000);
   }
 
   .color-value {

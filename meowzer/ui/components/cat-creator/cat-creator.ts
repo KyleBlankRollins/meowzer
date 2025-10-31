@@ -150,6 +150,11 @@ export class CatCreator extends LitElement {
       margin-bottom: 1rem;
     }
 
+    .step-errors ul {
+      margin: 0.5rem 0 0 0;
+      padding-left: 1.5rem;
+    }
+
     /* Reset button under preview */
     .preview-actions {
       display: flex;
@@ -486,9 +491,7 @@ export class CatCreator extends LitElement {
                     class="step-errors"
                   >
                     <strong>Please fix the following:</strong>
-                    <ul
-                      style="margin: 0.5rem 0 0 0; padding-left: 1.5rem;"
-                    >
+                    <ul>
                       ${this.stepErrors.map(
                         (error) => html`<li>${error}</li>`
                       )}

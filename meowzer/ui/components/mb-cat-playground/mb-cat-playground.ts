@@ -300,9 +300,7 @@ export class MbCatPlayground extends LitElement {
       return html`
         <div class="playground-container">
           <quiet-card>
-            <div
-              style="padding: 1rem; color: var(--quiet-destructive-text);"
-            >
+            <div class="error-message">
               <strong>Playground Error:</strong> ${this.error.message}
             </div>
           </quiet-card>
@@ -313,13 +311,9 @@ export class MbCatPlayground extends LitElement {
     if (!this.initialized) {
       return html`
         <div class="playground-container">
-          <div style="text-align: center; padding: 2rem;">
+          <div class="loading-container">
             <quiet-spinner></quiet-spinner>
-            <p
-              style="margin-top: 1rem; color: var(--quiet-neutral-text-mid);"
-            >
-              Initializing playground...
-            </p>
+            <p class="loading-text">Initializing playground...</p>
           </div>
         </div>
       `;
@@ -344,7 +338,7 @@ export class MbCatPlayground extends LitElement {
               <div class="preview-empty">
                 <quiet-icon name="cat"></quiet-icon>
                 <p>No cats yet!</p>
-                <p style="font-size: 0.875rem;">
+                <p class="help-text">
                   Click "Create Random Cat" to get started
                 </p>
               </div>
