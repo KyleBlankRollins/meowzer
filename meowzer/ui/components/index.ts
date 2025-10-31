@@ -13,6 +13,7 @@ export { CatManager } from "./cat-manager/cat-manager.js";
 export { CatCard } from "./cat-card/cat-card.js";
 export { CatControls } from "./cat-controls/cat-controls.js";
 export { CatListItem } from "./cat-list-item/cat-list-item.js";
+export { CatStatistics } from "./cat-statistics/cat-statistics.js";
 
 // Phase 4: Gallery & Storage Components
 export { CatGallery } from "./cat-gallery/cat-gallery.js";

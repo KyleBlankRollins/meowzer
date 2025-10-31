@@ -246,20 +246,6 @@ export class MbCatPlayground extends LitElement {
   }
 
   /**
-   * Get count of paused cats
-   */
-  private get pausedCount(): number {
-    return this.cats.filter((cat) => !cat.isActive).length;
-  }
-
-  /**
-   * Get count of active cats
-   */
-  private get activeCount(): number {
-    return this.cats.filter((cat) => cat.isActive).length;
-  }
-
-  /**
    * Open the creator dialog
    */
   private openCreatorDialog() {
@@ -434,24 +420,7 @@ export class MbCatPlayground extends LitElement {
         light-dismiss
       >
         <div slot="header">Statistics</div>
-        <div class="stats-grid">
-          <div class="stat-item">
-            <div class="stat-label">Total Cats</div>
-            <div class="stat-value">${this.cats.length}</div>
-          </div>
-          <div class="stat-item">
-            <div class="stat-label">Active</div>
-            <div class="stat-value">${this.activeCount}</div>
-          </div>
-          <div class="stat-item">
-            <div class="stat-label">Paused</div>
-            <div class="stat-value">${this.pausedCount}</div>
-          </div>
-          <div class="stat-item">
-            <div class="stat-label">Frame Rate</div>
-            <div class="stat-value">60 fps</div>
-          </div>
-        </div>
+        <cat-statistics></cat-statistics>
       </quiet-dialog>
     `;
   }

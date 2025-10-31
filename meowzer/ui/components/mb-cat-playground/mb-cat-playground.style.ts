@@ -93,31 +93,6 @@ export const catPlaygroundStyles = css`
     padding: 1.5rem;
   }
 
-  .stats-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 0.75rem;
-    padding: 1rem;
-  }
-
-  .stat-item {
-    padding: 0.75rem;
-    background: var(--surface-secondary);
-    border-radius: 0.375rem;
-  }
-
-  .stat-label {
-    font-size: 0.75rem;
-    color: var(--text-secondary);
-    margin-bottom: 0.25rem;
-  }
-
-  .stat-value {
-    font-size: 1.25rem;
-    font-weight: 600;
-    color: var(--text-primary);
-  }
-
   /* Error and loading states */
   .error-message {
     padding: 1rem;
@@ -139,10 +114,6 @@ export const catPlaygroundStyles = css`
     .playground-container {
       grid-template-columns: 1fr;
       grid-template-rows: 400px 1fr;
-    }
-
-    .stats-grid {
-      grid-template-columns: repeat(2, 1fr);
     }
   }
 `;

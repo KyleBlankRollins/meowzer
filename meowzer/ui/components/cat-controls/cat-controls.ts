@@ -42,6 +42,49 @@ export class CatControls extends LitElement {
   @property({ type: Object }) cat!: MeowzerCat;
   @property({ type: String }) size: ControlSize = "medium";
 
+  private _currentCat?: MeowzerCat;
+
+  connectedCallback() {
+    super.connectedCallback();
+    this.setupCatListeners();
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    this.cleanupCatListeners();
+  }
+
+  updated(changedProperties: Map<string, any>) {
+    super.updated(changedProperties);
+
+    if (changedProperties.has("cat")) {
+      this.cleanupCatListeners();
+      this.setupCatListeners();
+    }
+  }
+
+  private setupCatListeners() {
+    if (this.cat) {
+      this._currentCat = this.cat;
+      this.cat.on("stateChange", this.handleCatUpdate);
+      this.cat.on("pause", this.handleCatUpdate);
+      this.cat.on("resume", this.handleCatUpdate);
+    }
+  }
+
+  private cleanupCatListeners() {
+    if (this._currentCat) {
+      this._currentCat.off("stateChange", this.handleCatUpdate);
+      this._currentCat.off("pause", this.handleCatUpdate);
+      this._currentCat.off("resume", this.handleCatUpdate);
+      this._currentCat = undefined;
+    }
+  }
+
+  private handleCatUpdate = () => {
+    this.requestUpdate();
+  };
+
   private handlePauseResume() {
     if (this.cat.isActive) {
       this.dispatchEvent(
