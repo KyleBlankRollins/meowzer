@@ -67,13 +67,68 @@ const icons = [
   },
 ];
 
+// Interaction SVGs for cat interactions feature
+const interactions = [
+  // Food
+  {
+    src: "assets/interactions/food/basic-default.svg",
+    dest: "dist/assets/interactions/food/basic-default.svg",
+  },
+  {
+    src: "assets/interactions/food/basic-active.svg",
+    dest: "dist/assets/interactions/food/basic-active.svg",
+  },
+  {
+    src: "assets/interactions/food/fancy-default.svg",
+    dest: "dist/assets/interactions/food/fancy-default.svg",
+  },
+  {
+    src: "assets/interactions/food/fancy-active.svg",
+    dest: "dist/assets/interactions/food/fancy-active.svg",
+  },
+  // Water
+  {
+    src: "assets/interactions/water/default.svg",
+    dest: "dist/assets/interactions/water/default.svg",
+  },
+  {
+    src: "assets/interactions/water/active.svg",
+    dest: "dist/assets/interactions/water/active.svg",
+  },
+  // Toys
+  {
+    src: "assets/interactions/toys/laser-pointer-default.svg",
+    dest: "dist/assets/interactions/toys/laser-pointer-default.svg",
+  },
+  {
+    src: "assets/interactions/toys/laser-pointer-active.svg",
+    dest: "dist/assets/interactions/toys/laser-pointer-active.svg",
+  },
+  {
+    src: "assets/interactions/toys/rc-car-default.svg",
+    dest: "dist/assets/interactions/toys/rc-car-default.svg",
+  },
+  {
+    src: "assets/interactions/toys/rc-car-active.svg",
+    dest: "dist/assets/interactions/toys/rc-car-active.svg",
+  },
+  {
+    src: "assets/interactions/toys/yarn-default.svg",
+    dest: "dist/assets/interactions/toys/yarn-default.svg",
+  },
+  {
+    src: "assets/interactions/toys/yarn-active.svg",
+    dest: "dist/assets/interactions/toys/yarn-active.svg",
+  },
+];
+
 console.log("📦 Copying Quiet UI assets...\n");
 
 let copiedCount = 0;
 let errorCount = 0;
 
 // Copy theme files
-[...assets, ...icons].forEach(({ src, dest }) => {
+[...assets, ...icons, ...interactions].forEach(({ src, dest }) => {
   try {
     const srcPath = join(packageRoot, src);
     const destPath = join(packageRoot, dest);
