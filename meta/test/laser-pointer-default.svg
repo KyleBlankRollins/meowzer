@@ -1,0 +1,34 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none"
+  xmlns="http://www.w3.org/2000/svg">
+  <!-- Laser pointer pen body -->
+  <defs>
+    <linearGradient id="penGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#4A4A4A;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#696969;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#4A4A4A;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+
+  <!-- Main pen body -->
+  <rect x="8" y="28" width="40" height="8" rx="4" fill="url(#penGradient)"/>
+
+  <!-- Tip section (darker) -->
+  <rect x="48" y="30" width="8" height="4" fill="#2C2C2C"/>
+  <polygon points="56,30 60,32 56,34" fill="#1A1A1A"/>
+
+  <!-- Button -->
+  <rect x="12" y="30" width="4" height="4" rx="1" fill="#DC143C"/>
+
+  <!-- Grip texture -->
+  <line x1="20" y1="28" x2="20" y2="36" stroke="#3A3A3A" stroke-width="0.5"/>
+  <line x1="23" y1="28" x2="23" y2="36" stroke="#3A3A3A" stroke-width="0.5"/>
+  <line x1="26" y1="28" x2="26" y2="36" stroke="#3A3A3A" stroke-width="0.5"/>
+  <line x1="29" y1="28" x2="29" y2="36" stroke="#3A3A3A" stroke-width="0.5"/>
+
+  <!-- Brand label area -->
+  <rect x="32" y="30" width="12" height="4" rx="0.5" fill="#8B0000"/>
+  <text x="38" y="33.5" font-family="Arial" font-size="2" fill="#FFFFFF" text-anchor="middle">LASER</text>
+
+  <!-- Clip -->
+  <path d="M 14 28 Q 14 24 16 24 L 18 24 L 18 28" fill="none" stroke="#696969" stroke-width="1"/>
+</svg>

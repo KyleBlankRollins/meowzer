@@ -1,0 +1,23 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none"
+  xmlns="http://www.w3.org/2000/svg">
+  <!-- Water droplet -->
+  <defs>
+    <linearGradient id="waterGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#87CEEB;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#4682B4;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+
+  <!-- Main droplet shape -->
+  <path d="M 32 12 Q 42 26 42 36 Q 42 46 32 46 Q 22 46 22 36 Q 22 26 32 12 Z" fill="url(#waterGradient)"/>
+
+  <!-- Highlight shine -->
+  <ellipse cx="28" cy="24" rx="4" ry="6" fill="#FFFFFF" opacity="0.5"/>
+  <ellipse cx="30" cy="30" rx="2" ry="3" fill="#FFFFFF" opacity="0.3"/>
+
+  <!-- Secondary small highlight -->
+  <circle cx="36" cy="32" r="2" fill="#FFFFFF" opacity="0.4"/>
+
+  <!-- Shadow/depth at bottom -->
+  <ellipse cx="32" cy="42" rx="8" ry="3" fill="#000000" opacity="0.1"/>
+</svg>

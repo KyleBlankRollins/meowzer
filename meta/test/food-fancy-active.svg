@@ -1,0 +1,28 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none"
+  xmlns="http://www.w3.org/2000/svg">
+  <!-- Bowl -->
+  <ellipse cx="32" cy="48" rx="20" ry="6" fill="#D3D3D3"/>
+  <path d="M 12 48 Q 12 38 32 38 Q 52 38 52 48" fill="#E8E8E8"/>
+  <path d="M 12 48 L 16 44 Q 16 38 32 38 Q 48 38 48 44 L 52 48" fill="#F5F5F5"/>
+
+  <!-- Bowl rim highlight -->
+  <path d="M 12 48 Q 12 46 32 46 Q 52 46 52 48" fill="#FFFFFF" opacity="0.3"/>
+
+  <!-- Wet food texture - chunky and glossy -->
+  <ellipse cx="32" cy="42" rx="16" ry="6" fill="#8B4726"/>
+
+  <!-- Chunks and texture -->
+  <ellipse cx="26" cy="41" rx="4" ry="3" fill="#A0522D"/>
+  <ellipse cx="38" cy="41" rx="4" ry="3" fill="#CD853F"/>
+  <ellipse cx="32" cy="43" rx="5" ry="3" fill="#8B4513"/>
+  <ellipse cx="28" cy="40" rx="3" ry="2" fill="#D2691E"/>
+  <ellipse cx="36" cy="40" rx="3" ry="2" fill="#B8860B"/>
+
+  <!-- Gravy/sauce sheen -->
+  <ellipse cx="30" cy="40" rx="8" ry="3" fill="#FFFFFF" opacity="0.2"/>
+  <ellipse cx="35" cy="41" rx="6" ry="2" fill="#FFFFFF" opacity="0.15"/>
+
+  <!-- Glossy highlights -->
+  <ellipse cx="28" cy="39" rx="2" ry="1" fill="#FFFFFF" opacity="0.4"/>
+  <ellipse cx="36" cy="39" rx="2" ry="1" fill="#FFFFFF" opacity="0.4"/>
+</svg>

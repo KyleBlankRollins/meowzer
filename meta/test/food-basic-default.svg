@@ -1,0 +1,24 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none"
+  xmlns="http://www.w3.org/2000/svg">
+  <!-- Kibble bag -->
+  <rect x="16" y="12" width="32" height="40" rx="2" fill="#8B4513"/>
+  <rect x="16" y="12" width="32" height="8" fill="#A0522D"/>
+
+  <!-- Bag fold at top -->
+  <path d="M 20 12 L 20 8 L 24 12 Z" fill="#654321"/>
+  <path d="M 44 12 L 44 8 L 40 12 Z" fill="#654321"/>
+
+  <!-- Label area -->
+  <rect x="20" y="22" width="24" height="20" rx="2" fill="#F5DEB3"/>
+
+  <!-- Kibble pieces on label -->
+  <circle cx="26" cy="28" r="2" fill="#8B4513"/>
+  <circle cx="32" cy="30" r="2" fill="#A0522D"/>
+  <circle cx="38" cy="28" r="2" fill="#8B4513"/>
+  <circle cx="29" cy="34" r="2" fill="#654321"/>
+  <circle cx="35" cy="36" r="2" fill="#A0522D"/>
+
+  <!-- Brand text suggestion lines -->
+  <rect x="22" y="44" width="20" height="2" rx="1" fill="#8B4513" opacity="0.5"/>
+  <rect x="22" y="48" width="16" height="2" rx="1" fill="#8B4513" opacity="0.5"/>
+</svg>

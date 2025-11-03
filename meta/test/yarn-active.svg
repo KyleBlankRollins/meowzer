@@ -1,0 +1,35 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none"
+  xmlns="http://www.w3.org/2000/svg">
+  <!-- Unraveled yarn strand -->
+  <defs>
+    <linearGradient id="yarnStrandGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#FF69B4;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#FF1493;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#C71585;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+
+  <!-- Main strand path (playful curved line) -->
+  <path d="M 8 32 Q 16 20 24 28 Q 32 36 40 28 Q 48 20 56 32" fill="none" stroke="url(#yarnStrandGradient)" stroke-width="4" stroke-linecap="round"/>
+
+  <!-- Shadow under strand -->
+  <path d="M 8 34 Q 16 22 24 30 Q 32 38 40 30 Q 48 22 56 34" fill="none" stroke="#000000" stroke-width="4" stroke-linecap="round" opacity="0.1"/>
+
+  <!-- Strand loops and twists for texture -->
+  <path d="M 12 32 Q 14 28 16 32" fill="none" stroke="#C71585" stroke-width="2"/>
+  <path d="M 28 28 Q 30 24 32 28" fill="none" stroke="#C71585" stroke-width="2"/>
+  <path d="M 44 28 Q 46 24 48 28" fill="none" stroke="#C71585" stroke-width="2"/>
+
+  <!-- Small loose fibers -->
+  <line x1="20" y1="26" x2="22" y2="22" stroke="#FF1493" stroke-width="1" opacity="0.6"/>
+  <line x1="36" y1="34" x2="38" y2="38" stroke="#FF1493" stroke-width="1" opacity="0.6"/>
+  <line x1="52" y1="30" x2="54" y2="26" stroke="#FF1493" stroke-width="1" opacity="0.6"/>
+
+  <!-- Knots/tangles along the strand -->
+  <circle cx="24" cy="28" r="2" fill="#FF1493"/>
+  <circle cx="40" cy="28" r="2" fill="#FF1493"/>
+
+  <!-- Highlights on strand -->
+  <path d="M 10 31 Q 18 19 26 27" fill="none" stroke="#FFFFFF" stroke-width="1.5" stroke-linecap="round" opacity="0.4"/>
+  <path d="M 34 35 Q 42 27 50 31" fill="none" stroke="#FFFFFF" stroke-width="1.5" stroke-linecap="round" opacity="0.4"/>
+</svg>

@@ -1,0 +1,21 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none"
+  xmlns="http://www.w3.org/2000/svg">
+  <!-- Bowl -->
+  <ellipse cx="32" cy="48" rx="20" ry="6" fill="#D3D3D3"/>
+  <path d="M 12 48 Q 12 38 32 38 Q 52 38 52 48" fill="#E8E8E8"/>
+  <path d="M 12 48 L 16 44 Q 16 38 32 38 Q 48 38 48 44 L 52 48" fill="#F5F5F5"/>
+
+  <!-- Bowl rim highlight -->
+  <path d="M 12 48 Q 12 46 32 46 Q 52 46 52 48" fill="#FFFFFF" opacity="0.3"/>
+
+  <!-- Kibble pieces in bowl -->
+  <ellipse cx="24" cy="42" rx="2.5" ry="2" fill="#8B4513"/>
+  <ellipse cx="30" cy="40" rx="2.5" ry="2" fill="#A0522D"/>
+  <ellipse cx="36" cy="41" rx="2.5" ry="2" fill="#654321"/>
+  <ellipse cx="28" cy="44" rx="2.5" ry="2" fill="#8B4513"/>
+  <ellipse cx="34" cy="43" rx="2.5" ry="2" fill="#A0522D"/>
+  <ellipse cx="40" cy="42" rx="2.5" ry="2" fill="#654321"/>
+  <ellipse cx="32" cy="45" rx="2.5" ry="2" fill="#8B4513"/>
+  <ellipse cx="38" cy="44" rx="2.5" ry="2" fill="#A0522D"/>
+  <ellipse cx="26" cy="43" rx="2.5" ry="2" fill="#654321"/>
+</svg>

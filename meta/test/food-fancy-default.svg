@@ -1,0 +1,27 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none"
+  xmlns="http://www.w3.org/2000/svg">
+  <!-- Tuna can body -->
+  <ellipse cx="32" cy="38" rx="18" ry="5" fill="#C0C0C0"/>
+  <rect x="14" y="22" width="36" height="16" fill="#D3D3D3"/>
+  <ellipse cx="32" cy="22" rx="18" ry="5" fill="#E8E8E8"/>
+
+  <!-- Can ridges -->
+  <line x1="14" y1="26" x2="50" y2="26" stroke="#A9A9A9" stroke-width="0.5"/>
+  <line x1="14" y1="30" x2="50" y2="30" stroke="#A9A9A9" stroke-width="0.5"/>
+  <line x1="14" y1="34" x2="50" y2="34" stroke="#A9A9A9" stroke-width="0.5"/>
+
+  <!-- Label -->
+  <rect x="18" y="24" width="28" height="12" rx="1" fill="#FFD700"/>
+
+  <!-- Fish icon on label -->
+  <path d="M 28 30 L 32 28 L 36 30 L 34 32 L 32 31 L 30 32 Z" fill="#FF6347"/>
+  <circle cx="33" cy="29" r="0.5" fill="#000000"/>
+
+  <!-- Decorative waves -->
+  <path d="M 20 32 Q 24 31 28 32" stroke="#FFA500" stroke-width="1" fill="none"/>
+  <path d="M 36 32 Q 40 31 44 32" stroke="#FFA500" stroke-width="1" fill="none"/>
+
+  <!-- Pull tab -->
+  <ellipse cx="32" cy="22" rx="4" ry="2" fill="#B8B8B8"/>
+  <rect x="30" y="18" width="4" height="4" rx="1" fill="#A9A9A9"/>
+</svg>
