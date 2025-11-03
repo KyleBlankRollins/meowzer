@@ -10,17 +10,65 @@ export const baseStyles = css`
     pointer-events: auto;
     user-select: none;
     will-change: transform;
+    cursor: pointer;
   }
 
   .meowtion-cat svg {
     display: block;
   }
 
-  .meowtion-cat-name {
+  /* Menu button */
+  .meowtion-cat-menu {
     position: absolute;
-    bottom: -24px;
+    top: 4px;
+    right: 4px;
+    width: 24px;
+    height: 24px;
+    border: none;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.9);
+    color: #333;
+    font-size: 16px;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.2s ease, background 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+    pointer-events: auto;
+  }
+
+  .meowtion-cat:hover .meowtion-cat-menu {
+    opacity: 1;
+  }
+
+  .meowtion-cat-menu:hover {
+    background: rgba(255, 255, 255, 1);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  }
+
+  .meowtion-cat-menu:active {
+    transform: scale(0.95);
+  }
+
+  /* Info container */
+  .meowtion-cat-info {
+    position: absolute;
+    bottom: -48px;
     left: 50%;
     transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    pointer-events: none;
+  }
+
+  /* Name label */
+  .meowtion-cat-name {
     font-family: system-ui, -apple-system, sans-serif;
     font-size: 12px;
     font-weight: 600;
@@ -29,8 +77,35 @@ export const baseStyles = css`
     padding: 2px 8px;
     border-radius: 10px;
     white-space: nowrap;
-    pointer-events: none;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+
+  /* State label */
+  .meowtion-cat-state {
+    font-family: system-ui, -apple-system, sans-serif;
+    font-size: 10px;
+    font-weight: 500;
+    color: #666;
+    background: rgba(255, 255, 255, 0.85);
+    padding: 1px 6px;
+    border-radius: 8px;
+    white-space: nowrap;
+  }
+
+  /* Held state visual feedback (placeholder for future) */
+  .meowtion-cat.held {
+    opacity: 0.8;
+    filter: brightness(1.1);
+    z-index: 1000;
+  }
+
+  /* Paused state */
+  .meowtion-cat[data-paused="true"] {
+    opacity: 0.6;
+  }
+
+  .meowtion-cat[data-paused="true"] .meowtion-cat-state {
+    color: #f59e0b;
   }
 `;
 

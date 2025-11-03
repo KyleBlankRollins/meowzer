@@ -90,6 +90,27 @@ export class MbCatPlayground extends LitElement {
   private statsDialog?: HTMLElement & { open: boolean };
 
   /**
+   * Context menu state
+   */
+  @state()
+  private contextMenuVisible = false;
+
+  @state()
+  private contextMenuPosition = { x: 0, y: 0 };
+
+  @state()
+  private selectedCat: any = null; // MeowzerCat type
+
+  /**
+   * Rename dialog state
+   */
+  @state()
+  private showRenameDialog = false;
+
+  @state()
+  private newName = "";
+
+  /**
    * Reactive controller for cats
    */
   private catsController = new CatsController(this);
@@ -171,6 +192,7 @@ export class MbCatPlayground extends LitElement {
       for (const cat of savedCats) {
         cat.element.style.position = "fixed";
         document.body.appendChild(cat.element);
+        this.setupCatEventListeners(cat);
         cat.resume();
         console.log(`Spawned cat: ${cat.name} (${cat.id})`);
       }
@@ -189,60 +211,14 @@ export class MbCatPlayground extends LitElement {
   }
 
   /**
-   * Create a random cat
+   * Setup event listeners for a cat
    */
-  private async createRandomCat() {
-    if (!this.meowzer) return;
-
-    try {
-      // Generate a random name
-      const name = this.meowzer.utils.randomName();
-
-      // Create cat with random name
-      const cat = await this.meowzer.cats.create({ name });
-
-      // Save to storage
-      if (this.meowzer.storage.isInitialized()) {
-        await this.meowzer.storage.saveCat(cat);
-        console.log(`Random cat "${name}" created and saved`);
-      }
-
-      // Spawn the cat to roam
-      cat.element.style.position = "fixed";
-      document.body.appendChild(cat.element);
-      cat.resume();
-    } catch (err) {
-      console.error("Failed to create cat:", err);
-    }
-  }
-
-  /**
-   * Pause all cats
-   */
-  private pauseAll() {
-    this.cats.forEach((cat) => cat.pause());
-    this.requestUpdate();
-  }
-
-  /**
-   * Resume all cats
-   */
-  private resumeAll() {
-    this.cats.forEach((cat) => cat.resume());
-    this.requestUpdate();
-  }
-
-  /**
-   * Destroy all cats
-   */
-  private async destroyAll() {
-    if (!this.meowzer) return;
-
-    try {
-      await this.meowzer.cats.destroyAll();
-    } catch (err) {
-      console.error("Failed to remove cats:", err);
-    }
+  private setupCatEventListeners(cat: any) {
+    cat.on("menuClick", (event: any) => {
+      this.selectedCat = cat;
+      this.contextMenuPosition = event.position;
+      this.contextMenuVisible = true;
+    });
   }
 
   /**
@@ -281,6 +257,102 @@ export class MbCatPlayground extends LitElement {
     }
   }
 
+  /**
+   * Handle context menu selections
+   */
+  private handleMenuSelect(e: CustomEvent) {
+    const item = e.detail.item as HTMLElement;
+    const action = item.getAttribute("value");
+
+    if (!this.selectedCat) return;
+
+    switch (action) {
+      case "pause":
+        this.selectedCat.pause();
+        this.contextMenuVisible = false;
+        break;
+      case "resume":
+        this.selectedCat.resume();
+        this.contextMenuVisible = false;
+        break;
+      case "remove":
+        this.handleRemove();
+        break;
+      case "rename":
+        this.handleRename();
+        break;
+      case "pickup":
+      case "pet":
+      case "outfit":
+        this.handlePlaceholder(action);
+        this.contextMenuVisible = false;
+        break;
+    }
+  }
+
+  /**
+   * Handle remove action
+   */
+  private async handleRemove() {
+    if (!this.selectedCat) return;
+
+    const confirmed = confirm(
+      `Remove ${this.selectedCat.name || "this cat"}?`
+    );
+    if (confirmed) {
+      await this.selectedCat.delete();
+      this.contextMenuVisible = false;
+      this.selectedCat = null;
+    }
+  }
+
+  /**
+   * Handle rename action
+   */
+  private handleRename() {
+    if (!this.selectedCat) return;
+
+    this.newName = this.selectedCat.name || "";
+    this.showRenameDialog = true;
+    this.contextMenuVisible = false;
+  }
+
+  /**
+   * Submit rename
+   */
+  private handleRenameSubmit() {
+    if (!this.selectedCat) return;
+
+    if (this.newName.trim()) {
+      this.selectedCat.setName(this.newName.trim());
+      this.showRenameDialog = false;
+      this.selectedCat = null;
+    }
+  }
+
+  /**
+   * Cancel rename
+   */
+  private handleRenameCancel() {
+    this.showRenameDialog = false;
+    this.newName = "";
+    this.selectedCat = null;
+  }
+
+  /**
+   * Handle placeholder actions
+   */
+  private handlePlaceholder(feature: string) {
+    const messages: Record<string, string> = {
+      pickup:
+        "Pick-up feature coming soon!\n\nThis will let you drag cats around the screen.",
+      pet: "Pet feature coming soon!\n\nThis will show an affectionate animation.",
+      outfit:
+        "Outfit feature coming soon!\n\nThis will let you dress up your cat.",
+    };
+    alert(messages[feature]);
+  }
+
   render() {
     if (this.error) {
       return html`
@@ -307,121 +379,191 @@ export class MbCatPlayground extends LitElement {
 
     return html`
       <div class="playground-container">
-        ${this.showPreview ? this.renderPreview() : null}
-        ${this.renderControls()}
-      </div>
-    `;
-  }
+        <!-- Global Action Buttons (lower-right corner) -->
+        <div class="global-actions">
+          <quiet-button
+            variant="primary"
+            size="lg"
+            @click=${this.openCreatorDialog}
+            title="Create New Cat"
+          >
+            <quiet-icon family="outline" name="plus"></quiet-icon>
+          </quiet-button>
 
-  /**
-   * Render preview area
-   */
-  private renderPreview() {
-    return html`
-      <div class="preview-area">
-        ${this.cats.length === 0
+          <quiet-button
+            variant="neutral"
+            size="lg"
+            @click=${this.openStatsDialog}
+            title="View Statistics"
+          >
+            <quiet-icon
+              family="outline"
+              name="chart-bar"
+            ></quiet-icon>
+          </quiet-button>
+        </div>
+
+        <!-- Context Menu (positioned absolutely at click location) -->
+        ${this.contextMenuVisible && this.selectedCat
           ? html`
-              <div class="preview-empty">
-                <quiet-icon name="cat"></quiet-icon>
-                <p>No cats yet!</p>
-                <p class="help-text">
-                  Click "Create Random Cat" to get started
-                </p>
-              </div>
+              <quiet-dropdown
+                ?open=${this.contextMenuVisible}
+                @quiet-select=${this.handleMenuSelect}
+                @quiet-request-close=${() => {
+                  this.contextMenuVisible = false;
+                }}
+                style="position: fixed; left: ${this
+                  .contextMenuPosition.x}px; top: ${this
+                  .contextMenuPosition.y}px;"
+              >
+                <!-- Implemented actions -->
+                <quiet-dropdown-item
+                  value=${this.selectedCat.isActive
+                    ? "pause"
+                    : "resume"}
+                >
+                  <quiet-icon
+                    slot="icon"
+                    family="outline"
+                    name=${this.selectedCat.isActive
+                      ? "player-pause"
+                      : "player-play"}
+                  ></quiet-icon>
+                  ${this.selectedCat.isActive ? "Pause" : "Resume"}
+                </quiet-dropdown-item>
+
+                <quiet-dropdown-item
+                  value="remove"
+                  variant="destructive"
+                >
+                  <quiet-icon
+                    slot="icon"
+                    family="outline"
+                    name="trash"
+                  ></quiet-icon>
+                  Remove
+                </quiet-dropdown-item>
+
+                <quiet-dropdown-item value="rename">
+                  <quiet-icon
+                    slot="icon"
+                    family="outline"
+                    name="edit"
+                  ></quiet-icon>
+                  Rename
+                </quiet-dropdown-item>
+
+                <quiet-divider></quiet-divider>
+
+                <!-- Placeholder actions (disabled with "Soon" badge) -->
+                <quiet-dropdown-item value="pickup" disabled>
+                  <quiet-icon
+                    slot="icon"
+                    family="outline"
+                    name="hand"
+                  ></quiet-icon>
+                  Pick Up
+                  <quiet-badge
+                    slot="details"
+                    variant="primary"
+                    appearance="outline"
+                    >Soon</quiet-badge
+                  >
+                </quiet-dropdown-item>
+
+                <quiet-dropdown-item value="pet" disabled>
+                  <quiet-icon
+                    slot="icon"
+                    family="outline"
+                    name="heart"
+                  ></quiet-icon>
+                  Pet
+                  <quiet-badge
+                    slot="details"
+                    variant="primary"
+                    appearance="outline"
+                    >Soon</quiet-badge
+                  >
+                </quiet-dropdown-item>
+
+                <quiet-dropdown-item value="outfit" disabled>
+                  <quiet-icon
+                    slot="icon"
+                    family="outline"
+                    name="shirt"
+                  ></quiet-icon>
+                  Change Outfit
+                  <quiet-badge
+                    slot="details"
+                    variant="primary"
+                    appearance="outline"
+                    >Soon</quiet-badge
+                  >
+                </quiet-dropdown-item>
+              </quiet-dropdown>
             `
-          : html``}
+          : ""}
+
+        <!-- Rename Dialog -->
+        ${this.showRenameDialog
+          ? html`
+              <quiet-dialog
+                ?open=${this.showRenameDialog}
+                @quiet-request-close=${this.handleRenameCancel}
+              >
+                <div slot="header">Rename Cat</div>
+
+                <quiet-text-field
+                  label="Cat Name"
+                  .value=${this.newName}
+                  @quiet-input=${(e: CustomEvent) =>
+                    (this.newName = e.detail.value)}
+                  @keydown=${(e: KeyboardEvent) => {
+                    if (e.key === "Enter") this.handleRenameSubmit();
+                  }}
+                ></quiet-text-field>
+
+                <div slot="footer">
+                  <quiet-button
+                    appearance="outline"
+                    @click=${this.handleRenameCancel}
+                  >
+                    Cancel
+                  </quiet-button>
+                  <quiet-button
+                    variant="primary"
+                    @click=${this.handleRenameSubmit}
+                    ?disabled=${!this.newName.trim()}
+                  >
+                    Rename
+                  </quiet-button>
+                </div>
+              </quiet-dialog>
+            `
+          : ""}
+
+        <!-- Cat Creator Dialog -->
+        <quiet-dialog
+          id="creator-dialog"
+          @quiet-request-close=${this.closeCreatorDialog}
+          light-dismiss
+        >
+          <div slot="header">Create Cat</div>
+          <cat-creator
+            @cat-created=${this.closeCreatorDialog}
+          ></cat-creator>
+        </quiet-dialog>
+
+        <!-- Statistics Dialog -->
+        <quiet-dialog
+          id="stats-dialog"
+          @quiet-request-close=${this.closeStatsDialog}
+          light-dismiss
+        >
+          <div slot="header">Statistics</div>
+          <cat-statistics></cat-statistics>
+        </quiet-dialog>
       </div>
-    `;
-  }
-
-  /**
-   * Render controls area
-   */
-  private renderControls() {
-    return html`
-      <div class="controls-area">
-        <!-- Toolbar with Quick Actions -->
-        <div class="controls-section">
-          <quiet-toolbar>
-            <quiet-button
-              @click=${this.createRandomCat}
-              title="Create Random Cat"
-            >
-              <quiet-icon name="plus"></quiet-icon>
-            </quiet-button>
-
-            <quiet-button
-              @click=${this.openCreatorDialog}
-              title="Open Cat Creator"
-            >
-              <quiet-icon name="edit"></quiet-icon>
-            </quiet-button>
-
-            <quiet-button
-              variant="neutral"
-              @click=${this.pauseAll}
-              ?disabled=${this.cats.length === 0}
-              title="Pause All Cats"
-            >
-              <quiet-icon name="player-pause"></quiet-icon>
-            </quiet-button>
-
-            <quiet-button
-              variant="neutral"
-              @click=${this.resumeAll}
-              ?disabled=${this.cats.length === 0}
-              title="Resume All Cats"
-            >
-              <quiet-icon name="player-play"></quiet-icon>
-            </quiet-button>
-
-            <quiet-button
-              variant="neutral"
-              @click=${this.openStatsDialog}
-              title="View Statistics"
-            >
-              <quiet-icon name="chart-bar"></quiet-icon>
-            </quiet-button>
-
-            <quiet-button
-              variant="destructive"
-              @click=${this.destroyAll}
-              ?disabled=${this.cats.length === 0}
-              title="Remove All Cats"
-            >
-              <quiet-icon name="trash"></quiet-icon>
-            </quiet-button>
-          </quiet-toolbar>
-        </div>
-
-        <!-- Cat Manager (always visible) -->
-        <div class="controls-section">
-          <h3>Manage Cats</h3>
-          <cat-manager></cat-manager>
-        </div>
-      </div>
-
-      <!-- Cat Creator Dialog -->
-      <quiet-dialog
-        id="creator-dialog"
-        @quiet-request-close=${this.closeCreatorDialog}
-        light-dismiss
-      >
-        <div slot="header">Create Cat</div>
-        <cat-creator
-          @cat-created=${this.closeCreatorDialog}
-        ></cat-creator>
-      </quiet-dialog>
-
-      <!-- Statistics Dialog -->
-      <quiet-dialog
-        id="stats-dialog"
-        @quiet-request-close=${this.closeStatsDialog}
-        light-dismiss
-      >
-        <div slot="header">Statistics</div>
-        <cat-statistics></cat-statistics>
-      </quiet-dialog>
     `;
   }
 }

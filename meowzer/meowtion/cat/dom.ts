@@ -37,11 +37,30 @@ export class CatDOM {
     div.setAttribute("data-paused", "false");
     div.innerHTML = protoCat.spriteData.svg;
 
-    // Add name label below the cat
+    // Add menu button (top-right corner)
+    const menuButton = document.createElement("button");
+    menuButton.className = "meowtion-cat-menu";
+    menuButton.innerHTML = "⋮";
+    menuButton.setAttribute("aria-label", "Cat menu");
+    div.appendChild(menuButton);
+
+    // Add info container
+    const infoContainer = document.createElement("div");
+    infoContainer.className = "meowtion-cat-info";
+
+    // Add name label
     const nameLabel = document.createElement("div");
     nameLabel.className = "meowtion-cat-name";
     nameLabel.textContent = protoCat.name || "Unknown Cat";
-    div.appendChild(nameLabel);
+    infoContainer.appendChild(nameLabel);
+
+    // Add state label
+    const stateLabel = document.createElement("div");
+    stateLabel.className = "meowtion-cat-state";
+    stateLabel.textContent = "Idle";
+    infoContainer.appendChild(stateLabel);
+
+    div.appendChild(infoContainer);
 
     // Set initial position
     div.style.left = `${this.position.x}px`;
@@ -101,5 +120,36 @@ export class CatDOM {
    */
   getSVG(): SVGSVGElement | null {
     return this.element.querySelector("svg");
+  }
+
+  /**
+   * Update the state text display
+   */
+  updateStateText(text: string): void {
+    const stateLabel = this.element.querySelector(
+      ".meowtion-cat-state"
+    );
+    if (stateLabel) {
+      stateLabel.textContent = text;
+    }
+  }
+
+  /**
+   * Update the cat name display
+   */
+  updateNameText(name: string): void {
+    const nameLabel = this.element.querySelector(
+      ".meowtion-cat-name"
+    );
+    if (nameLabel) {
+      nameLabel.textContent = name;
+    }
+  }
+
+  /**
+   * Get the menu button element
+   */
+  getMenuButton(): HTMLButtonElement | null {
+    return this.element.querySelector(".meowtion-cat-menu");
   }
 }

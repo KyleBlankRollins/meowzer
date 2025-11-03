@@ -24,12 +24,12 @@
 
 ## UI
 
-- Make `cats-grid` a scrollable virtual list
-- Make `cats-list` a scrollable virtual list
-- Fix `cat-list-item` layout
+- Left click opens cat actions menu
+- When actions menu is open, pause cat
+  - Remove pause/resume, as it won't be needed
+- Right click picks up/drops cat
 - Make cat starting positions randomized
-- On cat click, show list of actions related to cat
-  - One action should be picking up and dropping the cat
+- Popover should disappear after action selection
 
 ## Meowbrain
 

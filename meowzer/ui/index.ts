@@ -32,12 +32,7 @@ export {
 } from "./components/index.js";
 
 // Components (Phase 3: Management Components)
-export {
-  CatManager,
-  CatCard,
-  CatControls,
-  CatListItem,
-} from "./components/index.js";
+// Note: Phase 3 components removed in UI refactor
 
 // Components (Phase 4: Gallery & Storage Components)
 export {

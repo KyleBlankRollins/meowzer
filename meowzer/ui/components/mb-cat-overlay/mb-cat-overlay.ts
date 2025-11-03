@@ -11,7 +11,7 @@ import { Meowzer } from "meowzer";
  * This is the killer feature - a single component that includes:
  * - Built-in MeowzerProvider
  * - Built-in cat boundary (fullscreen)
- * - Tabbed UI (Create/Manage/Gallery)
+ * - Tabbed UI (Create/Gallery)
  * - Minimize/maximize functionality
  * - Positioning options
  *
@@ -70,7 +70,7 @@ export class MbCatOverlay extends LitElement {
    * Initial tab to show
    */
   @property({ type: String })
-  initialTab: "create" | "manage" | "gallery" = "create";
+  initialTab: "create" | "gallery" = "create";
 
   /**
    * Current minimized state
@@ -82,7 +82,7 @@ export class MbCatOverlay extends LitElement {
    * Current active tab
    */
   @state()
-  private activeTab: "create" | "manage" | "gallery" = "create";
+  private activeTab: "create" | "gallery" = "create";
 
   /**
    * Meowzer instance provided to children
@@ -194,7 +194,7 @@ export class MbCatOverlay extends LitElement {
   /**
    * Switch to a different tab
    */
-  private switchTab(tab: "create" | "manage" | "gallery") {
+  private switchTab(tab: "create" | "gallery") {
     this.activeTab = tab;
   }
 
@@ -292,14 +292,6 @@ export class MbCatOverlay extends LitElement {
             Create
           </button>
           <button
-            class="tab-button ${this.activeTab === "manage"
-              ? "active"
-              : ""}"
-            @click=${() => this.switchTab("manage")}
-          >
-            Manage
-          </button>
-          <button
             class="tab-button ${this.activeTab === "gallery"
               ? "active"
               : ""}"
@@ -317,14 +309,6 @@ export class MbCatOverlay extends LitElement {
               : ""}"
           >
             <cat-creator></cat-creator>
-          </div>
-
-          <div
-            class="tab-panel ${this.activeTab === "manage"
-              ? "active"
-              : ""}"
-          >
-            <cat-manager></cat-manager>
           </div>
 
           <div

@@ -70,6 +70,9 @@ export class MeowzerCat {
 
     // Forward events from cat and brain
     this._setupEventForwarding();
+
+    // Setup menu button click handler
+    this._setupMenuButton();
   }
 
   // ============================================================================
@@ -118,6 +121,7 @@ export class MeowzerCat {
 
   setName(name: string): void {
     this._name = name;
+    this._cat._internalCat.dom?.updateNameText(name);
     this._updateTimestamp();
   }
 
@@ -179,6 +183,73 @@ export class MeowzerCat {
     // Emit destroy event before clearing handlers
     this._emit("destroy", { id: this.id });
     this.events.clear();
+  }
+
+  // ============================================================================
+  // INTERACTION METHODS (Placeholders for future features)
+  // ============================================================================
+
+  /**
+   * Pick up the cat (follows cursor)
+   * @future Not yet implemented
+   */
+  pickUp(): void {
+    console.warn("pickUp() not yet implemented");
+    // TODO: Implement in future SDK update
+    // this._isHeld = true;
+    // this._cat.startFollowingCursor();
+    // this._emit("pickUp", { id: this.id });
+  }
+
+  /**
+   * Drop the cat at current or specified position
+   * @future Not yet implemented
+   */
+  drop(_position?: Position): void {
+    console.warn("drop() not yet implemented");
+    // TODO: Implement in future SDK update
+    // this._isHeld = false;
+    // this._cat.stopFollowingCursor();
+    // if (position) this._cat.setPosition(position.x, position.y);
+    // this._emit("drop", { id: this.id, position });
+  }
+
+  /**
+   * Check if cat is being held
+   * @future Not yet implemented
+   */
+  get isBeingHeld(): boolean {
+    return false; // TODO: Implement in future SDK update
+  }
+
+  /**
+   * Pet the cat (shows affection)
+   * @future Not yet implemented
+   */
+  async pet(): Promise<void> {
+    console.warn("pet() not yet implemented");
+    // TODO: Implement in future SDK update
+    // await this._brain.handlePet();
+    // this._cat.setState("purring");
+    // this._emit("pet", { id: this.id });
+  }
+
+  /**
+   * Change cat's outfit
+   * @future Not yet implemented
+   */
+  setOutfit(_outfit: any): void {
+    console.warn("setOutfit() not yet implemented");
+    // TODO: Implement in future SDK update
+  }
+
+  /**
+   * Remove cat's outfit
+   * @future Not yet implemented
+   */
+  removeOutfit(): void {
+    console.warn("removeOutfit() not yet implemented");
+    // TODO: Implement in future SDK update
   }
 
   // ============================================================================
@@ -273,6 +344,29 @@ export class MeowzerCat {
   // ============================================================================
   // INTERNAL HELPERS
   // ============================================================================
+
+  /**
+   * Setup menu button click handler
+   * @internal
+   */
+  private _setupMenuButton(): void {
+    const menuButton = this._cat._internalCat.dom?.getMenuButton();
+    if (menuButton) {
+      menuButton.addEventListener("click", this._handleMenuClick);
+    }
+  }
+
+  /**
+   * Handle menu button click
+   * @internal
+   */
+  private _handleMenuClick = (e: MouseEvent): void => {
+    e.stopPropagation();
+    this._emit("menuClick", {
+      id: this.id,
+      position: { x: e.clientX, y: e.clientY },
+    });
+  };
 
   private _setupEventForwarding(): void {
     // Forward Cat state changes

@@ -30,6 +30,12 @@ export const MeowzerEvent = {
   PAUSE: "pause",
   RESUME: "resume",
   DESTROY: "destroy",
+  MENU_CLICK: "menuClick",
+  // Placeholders for future features:
+  PICK_UP: "pickUp",
+  DROP: "drop",
+  PET: "pet",
+  OUTFIT_CHANGE: "outfitChange",
 } as const;
 
 /**

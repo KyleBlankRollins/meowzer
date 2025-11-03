@@ -181,6 +181,29 @@ export class Cat {
     return !this._paused && !this._destroyed;
   }
 
+  /** @internal */
+  get _internalCat(): { dom: CatDOM } {
+    return { dom: this.dom };
+  }
+
+  /**
+   * Get human-readable state text
+   */
+  getStateText(): string {
+    const stateTextMap: Record<CatStateType, string> = {
+      idle: "Idle",
+      walking: "Walking...",
+      running: "Running...",
+      sitting: "Sitting",
+      sleeping: "Sleeping...",
+      playing: "Playing...",
+    };
+
+    return this._paused
+      ? "Paused"
+      : stateTextMap[this._state.type] || this._state.type;
+  }
+
   // State management
   setState(newState: CatStateType): void {
     if (this._destroyed) return;
@@ -203,6 +226,7 @@ export class Cat {
 
     // Update DOM
     this.dom.updateState(newState);
+    this.dom.updateStateText(this.getStateText());
 
     // Update GSAP animations
     this._animationManager?.startStateAnimations(newState);
@@ -285,6 +309,7 @@ export class Cat {
     if (this._destroyed) return;
     this._paused = true;
     this.dom.updatePaused(true);
+    this.dom.updateStateText("Paused");
     this._animationManager?.pause();
   }
 
@@ -292,6 +317,7 @@ export class Cat {
     if (this._destroyed) return;
     this._paused = false;
     this.dom.updatePaused(false);
+    this.dom.updateStateText(this.getStateText());
     this._animationManager?.resume();
   }
 
