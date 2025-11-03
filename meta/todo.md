@@ -21,12 +21,9 @@
 ## Meowkit
 
 - Feat: add different SVG templates for different fur lengths
+- Feat: add different SVG templates for hats
 
 ## UI
 
-- Right click picks up/drops cat
-- Make cat starting positions randomized
-
-## Meowbrain
-
-- When cats are running, they must actually change their position.
+- Feat: Right click picks up/drops cat
+- Feat: Add UI for changing hats

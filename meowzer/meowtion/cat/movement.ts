@@ -4,6 +4,7 @@
  */
 
 import gsap from "gsap";
+import { MotionPathPlugin } from "gsap/MotionPathPlugin";
 import type {
   Position,
   Boundaries,
@@ -12,6 +13,9 @@ import type {
 } from "../../types/index.js";
 import type { CatAnimationManager } from "../animations/index.js";
 import type { EventEmitter } from "../../utilities/event-emitter.js";
+
+// Register GSAP plugins
+gsap.registerPlugin(MotionPathPlugin);
 
 export interface MovementAnimation {
   startX: number;

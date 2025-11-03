@@ -182,13 +182,27 @@ export class MbCatPlayground extends LitElement {
 
       console.log(`Found ${savedCats.length} saved cats`);
 
-      // Spawn each cat and make them roam
+      // Spawn each cat with randomized positions to avoid overlap
       for (const cat of savedCats) {
+        // Randomize starting position within viewport
+        const randomX = Math.random() * (window.innerWidth - 150); // Leave room for cat width
+        const randomY = Math.random() * (window.innerHeight - 200); // Leave room for cat height
+
+        // Set position on the internal Meowtion Cat instance
+        // This ensures the AI behavior uses the correct starting position
+        (cat as any)._cat.setPosition(randomX, randomY);
+
+        // Set element positioning
         cat.element.style.position = "fixed";
+
         document.body.appendChild(cat.element);
         this.setupCatEventListeners(cat);
         cat.resume();
-        console.log(`Spawned cat: ${cat.name} (${cat.id})`);
+        console.log(
+          `Spawned cat: ${cat.name} at (${Math.round(
+            randomX
+          )}, ${Math.round(randomY)}) (${cat.id})`
+        );
       }
 
       if (savedCats.length > 0) {
