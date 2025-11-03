@@ -14,6 +14,7 @@
 
 import { LitElement, html, css } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
+import { when } from "lit/directives/when.js";
 import { consume } from "@lit/context";
 import { meowzerContext } from "../../contexts/meowzer-context.js";
 import { CatsController } from "../../controllers/reactive-controllers.js";
@@ -116,6 +117,10 @@ export class CatManager extends LitElement {
   @state() private searchQuery = "";
   @state() private selectedCatIds = new Set<string>();
 
+  private get hasSelection(): boolean {
+    return this.selectedCatIds.size > 0;
+  }
+
   private handleViewChange(view: ViewMode) {
     this.view = view;
   }
@@ -216,6 +221,162 @@ export class CatManager extends LitElement {
     return cats;
   }
 
+  private renderEmptyState() {
+    const totalCats = this.catsController.cats.length;
+    const isFirstTime = totalCats === 0;
+
+    return html`
+      <quiet-empty-state>
+        <quiet-icon
+          slot="icon"
+          family="outline"
+          name="cat"
+          class="empty-state-icon"
+        ></quiet-icon>
+        <span slot="header">
+          ${isFirstTime ? "No cats yet" : "No cats found"}
+        </span>
+        <span slot="description">
+          ${isFirstTime
+            ? "Create your first cat to get started!"
+            : "Try adjusting your search query."}
+        </span>
+      </quiet-empty-state>
+    `;
+  }
+
+  private renderCatCard(cat: MeowzerCat) {
+    return html`
+      <cat-card
+        .cat=${cat}
+        .selected=${this.selectedCatIds.has(cat.id)}
+        ?selectable=${this.showBulkActions}
+        @cat-select=${(e: CustomEvent) =>
+          this.handleCatSelect(cat.id, e.detail.selected)}
+      ></cat-card>
+    `;
+  }
+
+  private renderCatListItem(cat: MeowzerCat) {
+    return html`
+      <cat-list-item
+        .cat=${cat}
+        .selected=${this.selectedCatIds.has(cat.id)}
+        ?selectable=${this.showBulkActions}
+        @cat-select=${(e: CustomEvent) =>
+          this.handleCatSelect(cat.id, e.detail.selected)}
+      ></cat-list-item>
+    `;
+  }
+
+  private renderCatsContent(cats: MeowzerCat[]) {
+    if (cats.length === 0) {
+      return this.renderEmptyState();
+    }
+
+    const containerClass =
+      this.view === "grid" ? "cats-grid" : "cats-list";
+    const renderCat =
+      this.view === "grid"
+        ? (cat: MeowzerCat) => this.renderCatCard(cat)
+        : (cat: MeowzerCat) => this.renderCatListItem(cat);
+
+    return html`
+      <div class=${containerClass}>${cats.map(renderCat)}</div>
+    `;
+  }
+
+  private renderHeader() {
+    const totalCats = this.catsController.cats.length;
+    const activeCats = this.catsController.cats.filter(
+      (c) => c.isActive
+    ).length;
+    const filteredCats = this.getFilteredAndSortedCats();
+
+    return html`
+      <div class="manager-header">
+        <div>
+          <h2 class="manager-title">Cats</h2>
+          <div class="manager-stats">
+            ${totalCats} total • ${activeCats} active
+            ${this.searchQuery
+              ? ` • ${filteredCats.length} filtered`
+              : ""}
+          </div>
+        </div>
+
+        <div class="manager-controls">
+          <quiet-text-field
+            placeholder="Search cats..."
+            size="sm"
+            @quiet-input=${this.handleSearchInput}
+          >
+            <quiet-icon
+              slot="start"
+              family="outline"
+              name="search"
+            ></quiet-icon>
+          </quiet-text-field>
+
+          <quiet-select
+            size="sm"
+            .value=${this.sortBy}
+            @quiet-change=${this.handleSortChange}
+          >
+            <option value="created">Sort by Created</option>
+            <option value="name">Sort by Name</option>
+            <option value="state">Sort by State</option>
+          </quiet-select>
+
+          <quiet-button
+            appearance=${this.view === "grid" ? "normal" : "outline"}
+            size="sm"
+            @click=${() => this.handleViewChange("grid")}
+          >
+            <quiet-icon
+              family="outline"
+              name="grid-dots"
+            ></quiet-icon>
+          </quiet-button>
+
+          <quiet-button
+            appearance=${this.view === "list" ? "normal" : "outline"}
+            size="sm"
+            @click=${() => this.handleViewChange("list")}
+          >
+            <quiet-icon family="outline" name="list"></quiet-icon>
+          </quiet-button>
+        </div>
+      </div>
+    `;
+  }
+
+  private renderBulkActions() {
+    return html`
+      <div class="bulk-actions">
+        <span class="bulk-actions-label">
+          ${this.selectedCatIds.size} selected
+        </span>
+        <quiet-button size="sm" @click=${this.handleDeselectAll}>
+          Deselect All
+        </quiet-button>
+        <quiet-button size="sm" @click=${this.handlePauseSelected}>
+          Pause
+        </quiet-button>
+        <quiet-button size="sm" @click=${this.handleResumeSelected}>
+          Resume
+        </quiet-button>
+        <quiet-button
+          size="sm"
+          variant="destructive"
+          @click=${this.handleDestroySelected}
+        >
+          Remove
+        </quiet-button>
+      </div>
+    `;
+  }
+
   render() {
     if (!this.meowzer) {
       return html`
@@ -230,159 +391,12 @@ export class CatManager extends LitElement {
     }
 
     const cats = this.getFilteredAndSortedCats();
-    const totalCats = this.catsController.cats.length;
-    const activeCats = this.catsController.cats.filter(
-      (c) => c.isActive
-    ).length;
-    const hasSelection = this.selectedCatIds.size > 0;
 
     return html`
       <div class="manager-container">
-        <div class="manager-header">
-          <div>
-            <h2 class="manager-title">Cats</h2>
-            <div class="manager-stats">
-              ${totalCats} total • ${activeCats} active
-              ${this.searchQuery ? ` • ${cats.length} filtered` : ""}
-            </div>
-          </div>
-
-          <div class="manager-controls">
-            <quiet-text-field
-              placeholder="Search cats..."
-              size="sm"
-              @quiet-input=${this.handleSearchInput}
-            >
-              <quiet-icon
-                slot="start"
-                family="outline"
-                name="search"
-              ></quiet-icon>
-            </quiet-text-field>
-
-            <quiet-select
-              size="sm"
-              .value=${this.sortBy}
-              @quiet-change=${this.handleSortChange}
-            >
-              <option value="created">Sort by Created</option>
-              <option value="name">Sort by Name</option>
-              <option value="state">Sort by State</option>
-            </quiet-select>
-
-            <quiet-button
-              appearance=${this.view === "grid"
-                ? "normal"
-                : "outline"}
-              size="sm"
-              @click=${() => this.handleViewChange("grid")}
-            >
-              <quiet-icon
-                family="outline"
-                name="grid-dots"
-              ></quiet-icon>
-            </quiet-button>
-
-            <quiet-button
-              appearance=${this.view === "list"
-                ? "normal"
-                : "outline"}
-              size="sm"
-              @click=${() => this.handleViewChange("list")}
-            >
-              <quiet-icon family="outline" name="list"></quiet-icon>
-            </quiet-button>
-          </div>
-        </div>
-
-        ${hasSelection
-          ? html`
-              <div class="bulk-actions">
-                <span class="bulk-actions-label">
-                  ${this.selectedCatIds.size} selected
-                </span>
-                <quiet-button
-                  size="sm"
-                  @click=${this.handleDeselectAll}
-                >
-                  Deselect All
-                </quiet-button>
-                <quiet-button
-                  size="sm"
-                  @click=${this.handlePauseSelected}
-                >
-                  Pause
-                </quiet-button>
-                <quiet-button
-                  size="sm"
-                  @click=${this.handleResumeSelected}
-                >
-                  Resume
-                </quiet-button>
-                <quiet-button
-                  size="sm"
-                  variant="destructive"
-                  @click=${this.handleDestroySelected}
-                >
-                  Remove
-                </quiet-button>
-              </div>
-            `
-          : ""}
-        ${cats.length === 0
-          ? html`
-              <quiet-empty-state>
-                <quiet-icon
-                  slot="icon"
-                  family="outline"
-                  name="cat"
-                  class="empty-state-icon"
-                ></quiet-icon>
-                <span slot="header">
-                  ${totalCats === 0 ? "No cats yet" : "No cats found"}
-                </span>
-                <span slot="description">
-                  ${totalCats === 0
-                    ? "Create your first cat to get started!"
-                    : "Try adjusting your search query."}
-                </span>
-              </quiet-empty-state>
-            `
-          : html`
-              <div
-                class=${this.view === "grid"
-                  ? "cats-grid"
-                  : "cats-list"}
-              >
-                ${cats.map((cat) =>
-                  this.view === "grid"
-                    ? html`
-                        <cat-card
-                          .cat=${cat}
-                          .selected=${this.selectedCatIds.has(cat.id)}
-                          ?selectable=${this.showBulkActions}
-                          @cat-select=${(e: CustomEvent) =>
-                            this.handleCatSelect(
-                              cat.id,
-                              e.detail.selected
-                            )}
-                        ></cat-card>
-                      `
-                    : html`
-                        <cat-list-item
-                          .cat=${cat}
-                          .selected=${this.selectedCatIds.has(cat.id)}
-                          ?selectable=${this.showBulkActions}
-                          @cat-select=${(e: CustomEvent) =>
-                            this.handleCatSelect(
-                              cat.id,
-                              e.detail.selected
-                            )}
-                        ></cat-list-item>
-                      `
-                )}
-              </div>
-            `}
+        ${this.renderHeader()}
+        ${when(this.hasSelection, () => this.renderBulkActions())}
+        ${this.renderCatsContent(cats)}
       </div>
     `;
   }

@@ -15,6 +15,13 @@
 
 ## UI
 
-- Make `cats-grid` scrollable
-- Make `cats-list` scrollable
+- Make `cats-grid` a scrollable virtual list
+- Make `cats-list` a scrollable virtual list
 - Fix `cat-list-item` layout
+- Make cat starting positions randomized
+- On cat click, show list of actions related to cat
+  - One action should be picking up and dropping the cat
+
+## Meowbrain
+
+-
