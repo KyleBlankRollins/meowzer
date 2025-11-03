@@ -93,12 +93,6 @@ export class MbCatPlayground extends LitElement {
    * Context menu state
    */
   @state()
-  private contextMenuVisible = false;
-
-  @state()
-  private contextMenuPosition = { x: 0, y: 0 };
-
-  @state()
   private selectedCat: any = null; // MeowzerCat type
 
   /**
@@ -214,13 +208,170 @@ export class MbCatPlayground extends LitElement {
    * Setup event listeners for a cat
    */
   private setupCatEventListeners(cat: any) {
-    cat.on("menuClick", (event: any) => {
+    cat.on("menuClick", () => {
+      // Auto-pause cat when menu opens
+      if (cat.isActive) {
+        cat.pause();
+      }
+
+      // Add menu-open class to cat element
+      cat.element.classList.add("menu-open");
+
       this.selectedCat = cat;
-      this.contextMenuPosition = event.position;
-      this.contextMenuVisible = true;
+
+      // Inject menu into cat element
+      this.injectMenuIntoCat(cat);
     });
   }
 
+  /**
+   * Inject the context menu directly into the cat's DOM element
+   */
+  private injectMenuIntoCat(cat: any) {
+    // Remove any existing menu
+    const existingMenu = cat.element.querySelector(
+      ".cat-context-menu"
+    );
+    if (existingMenu) {
+      existingMenu.remove();
+    }
+
+    // Create menu container (no positioning - just a child element)
+    const menuContainer = document.createElement("div");
+    menuContainer.className = "cat-context-menu";
+
+    // Create and configure the dropdown
+    const dropdown = document.createElement("quiet-dropdown") as any;
+    dropdown.open = true;
+
+    // Create hidden trigger
+    const trigger = document.createElement("button");
+    // trigger.style.display = "none";
+    trigger.setAttribute("slot", "trigger");
+    dropdown.appendChild(trigger);
+
+    // Add menu items
+    this.addMenuItem(
+      dropdown,
+      "remove",
+      "Remove",
+      "trash",
+      "destructive"
+    );
+    this.addMenuItem(dropdown, "rename", "Rename", "edit");
+
+    // Add divider
+    const divider = document.createElement("quiet-divider");
+    dropdown.appendChild(divider);
+
+    // Add disabled items with "Soon" badge
+    this.addMenuItem(
+      dropdown,
+      "pickup",
+      "Pick Up",
+      "hand",
+      undefined,
+      true
+    );
+    this.addMenuItem(
+      dropdown,
+      "pet",
+      "Pet",
+      "heart",
+      undefined,
+      true
+    );
+    this.addMenuItem(
+      dropdown,
+      "outfit",
+      "Change Outfit",
+      "shirt",
+      undefined,
+      true
+    );
+
+    // Handle menu selection
+    dropdown.addEventListener("quiet-select", (e: CustomEvent) => {
+      this.handleMenuAction(e.detail.value, cat);
+    });
+
+    // Handle menu close
+    dropdown.addEventListener("quiet-close", () => {
+      this.closeContextMenu();
+    });
+
+    menuContainer.appendChild(dropdown);
+
+    // Append to the info container instead of the cat element
+    const infoContainer = cat.element.querySelector(
+      ".meowtion-cat-info"
+    );
+    if (infoContainer) {
+      infoContainer.appendChild(menuContainer);
+    } else {
+      // Fallback if info container doesn't exist
+      cat.element.appendChild(menuContainer);
+    }
+  }
+
+  /**
+   * Helper to add a menu item
+   */
+  private addMenuItem(
+    dropdown: HTMLElement,
+    value: string,
+    label: string,
+    icon: string,
+    variant?: string,
+    disabled: boolean = false
+  ) {
+    const item = document.createElement("quiet-dropdown-item") as any;
+    item.value = value;
+    if (variant) item.variant = variant;
+    if (disabled) item.disabled = true;
+
+    // Add icon
+    const iconEl = document.createElement("quiet-icon") as any;
+    iconEl.family = "outline";
+    iconEl.name = icon;
+    iconEl.setAttribute("slot", "icon");
+    item.appendChild(iconEl);
+
+    // Add label text
+    item.appendChild(document.createTextNode(label));
+
+    // Add "Soon" badge for disabled items
+    if (disabled) {
+      const badge = document.createElement("quiet-badge") as any;
+      badge.variant = "primary";
+      badge.appearance = "outline";
+      badge.setAttribute("slot", "details");
+      badge.textContent = "Soon";
+      item.appendChild(badge);
+    }
+
+    dropdown.appendChild(item);
+  }
+
+  /**
+   * Handle menu action selection
+   */
+  private handleMenuAction(action: string, cat: any) {
+    this.selectedCat = cat;
+
+    switch (action) {
+      case "remove":
+        this.handleRemove();
+        break;
+      case "rename":
+        this.handleRename();
+        break;
+    }
+  }
+
+  /**
+   * Calculate menu position that stays within viewport
+   */
   /**
    * Open the creator dialog
    */
@@ -258,38 +409,33 @@ export class MbCatPlayground extends LitElement {
   }
 
   /**
+   * Close context menu and resume cat
+   */
+  private closeContextMenu = () => {
+    if (this.selectedCat) {
+      // Remove menu from DOM
+      const existingMenu = this.selectedCat.element.querySelector(
+        ".cat-context-menu"
+      );
+      if (existingMenu) {
+        existingMenu.remove();
+      }
+
+      // Remove menu-open class
+      this.selectedCat.element.classList.remove("menu-open");
+
+      // Auto-resume cat if it was paused by the menu
+      if (!this.selectedCat.isActive) {
+        this.selectedCat.resume();
+      }
+    }
+
+    this.selectedCat = null;
+  };
+
+  /**
    * Handle context menu selections
    */
-  private handleMenuSelect(e: CustomEvent) {
-    const item = e.detail.item as HTMLElement;
-    const action = item.getAttribute("value");
-
-    if (!this.selectedCat) return;
-
-    switch (action) {
-      case "pause":
-        this.selectedCat.pause();
-        this.contextMenuVisible = false;
-        break;
-      case "resume":
-        this.selectedCat.resume();
-        this.contextMenuVisible = false;
-        break;
-      case "remove":
-        this.handleRemove();
-        break;
-      case "rename":
-        this.handleRename();
-        break;
-      case "pickup":
-      case "pet":
-      case "outfit":
-        this.handlePlaceholder(action);
-        this.contextMenuVisible = false;
-        break;
-    }
-  }
-
   /**
    * Handle remove action
    */
@@ -300,9 +446,22 @@ export class MbCatPlayground extends LitElement {
       `Remove ${this.selectedCat.name || "this cat"}?`
     );
     if (confirmed) {
+      // Don't resume if we're deleting
+      this.selectedCat.element.classList.remove("menu-open");
+
+      // Remove menu from DOM
+      const existingMenu = this.selectedCat.element.querySelector(
+        ".cat-context-menu"
+      );
+      if (existingMenu) {
+        existingMenu.remove();
+      }
+
       await this.selectedCat.delete();
-      this.contextMenuVisible = false;
       this.selectedCat = null;
+    } else {
+      // If cancelled, close menu normally (which will resume)
+      this.closeContextMenu();
     }
   }
 
@@ -314,7 +473,7 @@ export class MbCatPlayground extends LitElement {
 
     this.newName = this.selectedCat.name || "";
     this.showRenameDialog = true;
-    this.contextMenuVisible = false;
+    this.closeContextMenu();
   }
 
   /**
@@ -342,17 +501,6 @@ export class MbCatPlayground extends LitElement {
   /**
    * Handle placeholder actions
    */
-  private handlePlaceholder(feature: string) {
-    const messages: Record<string, string> = {
-      pickup:
-        "Pick-up feature coming soon!\n\nThis will let you drag cats around the screen.",
-      pet: "Pet feature coming soon!\n\nThis will show an affectionate animation.",
-      outfit:
-        "Outfit feature coming soon!\n\nThis will let you dress up your cat.",
-    };
-    alert(messages[feature]);
-  }
-
   render() {
     if (this.error) {
       return html`
@@ -403,106 +551,7 @@ export class MbCatPlayground extends LitElement {
           </quiet-button>
         </div>
 
-        <!-- Context Menu (positioned absolutely at click location) -->
-        ${this.contextMenuVisible && this.selectedCat
-          ? html`
-              <quiet-dropdown
-                ?open=${this.contextMenuVisible}
-                @quiet-select=${this.handleMenuSelect}
-                @quiet-request-close=${() => {
-                  this.contextMenuVisible = false;
-                }}
-                style="position: fixed; left: ${this
-                  .contextMenuPosition.x}px; top: ${this
-                  .contextMenuPosition.y}px;"
-              >
-                <!-- Implemented actions -->
-                <quiet-dropdown-item
-                  value=${this.selectedCat.isActive
-                    ? "pause"
-                    : "resume"}
-                >
-                  <quiet-icon
-                    slot="icon"
-                    family="outline"
-                    name=${this.selectedCat.isActive
-                      ? "player-pause"
-                      : "player-play"}
-                  ></quiet-icon>
-                  ${this.selectedCat.isActive ? "Pause" : "Resume"}
-                </quiet-dropdown-item>
-
-                <quiet-dropdown-item
-                  value="remove"
-                  variant="destructive"
-                >
-                  <quiet-icon
-                    slot="icon"
-                    family="outline"
-                    name="trash"
-                  ></quiet-icon>
-                  Remove
-                </quiet-dropdown-item>
-
-                <quiet-dropdown-item value="rename">
-                  <quiet-icon
-                    slot="icon"
-                    family="outline"
-                    name="edit"
-                  ></quiet-icon>
-                  Rename
-                </quiet-dropdown-item>
-
-                <quiet-divider></quiet-divider>
-
-                <!-- Placeholder actions (disabled with "Soon" badge) -->
-                <quiet-dropdown-item value="pickup" disabled>
-                  <quiet-icon
-                    slot="icon"
-                    family="outline"
-                    name="hand"
-                  ></quiet-icon>
-                  Pick Up
-                  <quiet-badge
-                    slot="details"
-                    variant="primary"
-                    appearance="outline"
-                    >Soon</quiet-badge
-                  >
-                </quiet-dropdown-item>
-
-                <quiet-dropdown-item value="pet" disabled>
-                  <quiet-icon
-                    slot="icon"
-                    family="outline"
-                    name="heart"
-                  ></quiet-icon>
-                  Pet
-                  <quiet-badge
-                    slot="details"
-                    variant="primary"
-                    appearance="outline"
-                    >Soon</quiet-badge
-                  >
-                </quiet-dropdown-item>
-
-                <quiet-dropdown-item value="outfit" disabled>
-                  <quiet-icon
-                    slot="icon"
-                    family="outline"
-                    name="shirt"
-                  ></quiet-icon>
-                  Change Outfit
-                  <quiet-badge
-                    slot="details"
-                    variant="primary"
-                    appearance="outline"
-                    >Soon</quiet-badge
-                  >
-                </quiet-dropdown-item>
-              </quiet-dropdown>
-            `
-          : ""}
+        <!-- Context Menu is now injected directly into cat DOM -->
 
         <!-- Rename Dialog -->
         ${this.showRenameDialog

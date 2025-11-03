@@ -11,53 +11,24 @@ export const baseStyles = css`
     user-select: none;
     will-change: transform;
     cursor: pointer;
+    transition: background-color 0.2s ease;
+    border-radius: 8px;
+    padding: 4px;
+  }
+
+  .meowtion-cat:hover,
+  .meowtion-cat.menu-open {
+    background-color: rgba(0, 0, 0, 0.05);
   }
 
   .meowtion-cat svg {
     display: block;
   }
 
-  /* Menu button */
-  .meowtion-cat-menu {
-    position: absolute;
-    top: 4px;
-    right: 4px;
-    width: 24px;
-    height: 24px;
-    border: none;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.9);
-    color: #333;
-    font-size: 16px;
-    line-height: 1;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0;
-    transition: opacity 0.2s ease, background 0.2s ease;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    z-index: 10;
-    pointer-events: auto;
-  }
-
-  .meowtion-cat:hover .meowtion-cat-menu {
-    opacity: 1;
-  }
-
-  .meowtion-cat-menu:hover {
-    background: rgba(255, 255, 255, 1);
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-  }
-
-  .meowtion-cat-menu:active {
-    transform: scale(0.95);
-  }
-
   /* Info container */
   .meowtion-cat-info {
     position: absolute;
-    bottom: -48px;
+    bottom: -7px;
     left: 50%;
     transform: translateX(-50%);
     display: flex;
@@ -106,6 +77,12 @@ export const baseStyles = css`
 
   .meowtion-cat[data-paused="true"] .meowtion-cat-state {
     color: #f59e0b;
+  }
+
+  /* Context menu - no positioning, just a child element */
+  .cat-context-menu {
+    z-index: 1000;
+    pointer-events: auto;
   }
 `;
 

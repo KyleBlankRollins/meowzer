@@ -33,6 +33,8 @@ import "@quietui/quiet/components/expander/expander.js";
 import "@quietui/quiet/components/color-picker/color-picker.js";
 import "@quietui/quiet/components/popover/popover.js";
 import "@quietui/quiet/components/divider/divider.js";
+import "@quietui/quiet/components/dropdown/dropdown.js";
+import "@quietui/quiet/components/dropdown-item/dropdown-item.js";
 
 // Import Meowzer UI components
 import "../components/cat-color-picker/cat-color-picker.js";

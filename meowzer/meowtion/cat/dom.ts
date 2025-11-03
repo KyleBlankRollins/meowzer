@@ -37,13 +37,6 @@ export class CatDOM {
     div.setAttribute("data-paused", "false");
     div.innerHTML = protoCat.spriteData.svg;
 
-    // Add menu button (top-right corner)
-    const menuButton = document.createElement("button");
-    menuButton.className = "meowtion-cat-menu";
-    menuButton.innerHTML = "⋮";
-    menuButton.setAttribute("aria-label", "Cat menu");
-    div.appendChild(menuButton);
-
     // Add info container
     const infoContainer = document.createElement("div");
     infoContainer.className = "meowtion-cat-info";
@@ -144,12 +137,5 @@ export class CatDOM {
     if (nameLabel) {
       nameLabel.textContent = name;
     }
-  }
-
-  /**
-   * Get the menu button element
-   */
-  getMenuButton(): HTMLButtonElement | null {
-    return this.element.querySelector(".meowtion-cat-menu");
   }
 }

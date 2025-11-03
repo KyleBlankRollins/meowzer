@@ -24,13 +24,9 @@
 
 ## UI
 
-- Left click opens cat actions menu
-- When actions menu is open, pause cat
-  - Remove pause/resume, as it won't be needed
 - Right click picks up/drops cat
 - Make cat starting positions randomized
-- Popover should disappear after action selection
 
 ## Meowbrain
 
--
+- When cats are running, they must actually change their position.

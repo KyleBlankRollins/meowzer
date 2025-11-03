@@ -346,25 +346,40 @@ export class MeowzerCat {
   // ============================================================================
 
   /**
-   * Setup menu button click handler
+   * Setup cat container click handler
    * @internal
    */
   private _setupMenuButton(): void {
-    const menuButton = this._cat._internalCat.dom?.getMenuButton();
-    if (menuButton) {
-      menuButton.addEventListener("click", this._handleMenuClick);
+    const catElement = this._cat._internalCat.dom?.getElement();
+    if (catElement) {
+      catElement.addEventListener("click", this._handleMenuClick);
     }
   }
 
   /**
-   * Handle menu button click
+   * Handle cat click to open menu
    * @internal
    */
   private _handleMenuClick = (e: MouseEvent): void => {
     e.stopPropagation();
+
+    // Get the cat element's bounding box for positioning
+    const catElement = this._cat._internalCat.dom?.getElement();
+    const rect = catElement?.getBoundingClientRect();
+
     this._emit("menuClick", {
       id: this.id,
       position: { x: e.clientX, y: e.clientY },
+      catRect: rect
+        ? {
+            top: rect.top,
+            left: rect.left,
+            right: rect.right,
+            bottom: rect.bottom,
+            width: rect.width,
+            height: rect.height,
+          }
+        : undefined,
     });
   };
 
