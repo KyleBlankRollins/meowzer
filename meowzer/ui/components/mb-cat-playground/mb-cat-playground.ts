@@ -241,7 +241,7 @@ export class MbCatPlayground extends LitElement {
     try {
       await this.meowzer.cats.destroyAll();
     } catch (err) {
-      console.error("Failed to destroy cats:", err);
+      console.error("Failed to remove cats:", err);
     }
   }
 
@@ -387,7 +387,7 @@ export class MbCatPlayground extends LitElement {
               variant="destructive"
               @click=${this.destroyAll}
               ?disabled=${this.cats.length === 0}
-              title="Destroy All Cats"
+              title="Remove All Cats"
             >
               <quiet-icon name="trash"></quiet-icon>
             </quiet-button>

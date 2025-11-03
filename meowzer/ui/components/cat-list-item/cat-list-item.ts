@@ -51,10 +51,6 @@ export class CatListItem extends LitElement {
       min-width: 0;
     }
 
-    .name-description {
-      min-width: 0;
-    }
-
     .name {
       font-weight: 600;
       font-size: 0.875rem;
@@ -147,7 +143,7 @@ export class CatListItem extends LitElement {
 
   private async handleDestroy() {
     const confirmed = confirm(
-      `Destroy ${this.cat.name || "this cat"}?`
+      `Remove ${this.cat.name || "this cat"}?`
     );
     if (confirmed) {
       await this.cat.delete();
@@ -184,8 +180,10 @@ export class CatListItem extends LitElement {
             `
           : ""}
 
+        <cat-avatar seed=${cat.seed} size="small"></cat-avatar>
+
         <div class="info">
-          <div class="name-description">
+          <div>
             <p class="name">${cat.name || "Unnamed Cat"}</p>
             ${cat.description
               ? html` <p class="description">${cat.description}</p> `

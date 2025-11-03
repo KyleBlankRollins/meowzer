@@ -281,7 +281,7 @@ export class StorageManager {
           const cat = await this.catManager.create({
             seed: meowbaseCat.image,
             name: meowbaseCat.name,
-            // description: meowbaseCat.description, // TODO: Add when MeowzerCat supports it
+            description: meowbaseCat.description,
           });
 
           // Set collection reference
@@ -359,6 +359,7 @@ export class StorageManager {
         const cat = await this.catManager.create({
           seed: meowbaseCat.image,
           name: meowbaseCat.name,
+          description: meowbaseCat.description,
         });
 
         cat._setCollectionName(collectionName);

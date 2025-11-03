@@ -130,7 +130,7 @@ export class CatControls extends LitElement {
           variant="destructive"
           @click=${this.handleDestroy}
         >
-          Destroy
+          Remove
         </quiet-button>
       </div>
     `;

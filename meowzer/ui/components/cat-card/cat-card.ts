@@ -39,9 +39,8 @@ export class CatCard extends LitElement {
 
     .card-header {
       display: flex;
-      justify-content: space-between;
-      align-items: start;
-      gap: 0.5rem;
+      gap: 1rem;
+      align-items: center;
       margin-bottom: 0.75rem;
     }
 
@@ -51,6 +50,7 @@ export class CatCard extends LitElement {
       color: var(--quiet-neutral-foreground, #111827);
       margin: 0;
       word-break: break-word;
+      flex: 1;
     }
 
     .card-description {
@@ -191,7 +191,7 @@ export class CatCard extends LitElement {
 
   private async handleDestroy() {
     const confirmed = confirm(
-      `Destroy ${this.cat.name || "this cat"}?`
+      `Remove ${this.cat.name || "this cat"}?`
     );
     if (confirmed) {
       await this.cat.delete();
@@ -229,6 +229,7 @@ export class CatCard extends LitElement {
           : ""}
 
         <div class="card-header">
+          <cat-avatar seed=${cat.seed} size="medium"></cat-avatar>
           <h3 class="card-title">${cat.name || "Unnamed Cat"}</h3>
         </div>
 

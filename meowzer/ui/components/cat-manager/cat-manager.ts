@@ -174,7 +174,7 @@ export class CatManager extends LitElement {
     if (!this.meowzer) return;
 
     const confirmed = confirm(
-      `Are you sure you want to destroy ${this.selectedCatIds.size} cat(s)?`
+      `Are you sure you want to remove ${this.selectedCatIds.size} cat(s)?`
     );
 
     if (confirmed) {
@@ -324,7 +324,7 @@ export class CatManager extends LitElement {
                   variant="destructive"
                   @click=${this.handleDestroySelected}
                 >
-                  Destroy
+                  Remove
                 </quiet-button>
               </div>
             `

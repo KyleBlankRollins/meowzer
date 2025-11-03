@@ -14,6 +14,7 @@ export { CatCard } from "./cat-card/cat-card.js";
 export { CatControls } from "./cat-controls/cat-controls.js";
 export { CatListItem } from "./cat-list-item/cat-list-item.js";
 export { CatStatistics } from "./cat-statistics/cat-statistics.js";
+export { CatAvatar } from "./cat-avatar/cat-avatar.js";
 
 // Phase 4: Gallery & Storage Components
 export { CatGallery } from "./cat-gallery/cat-gallery.js";
