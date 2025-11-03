@@ -76,3 +76,9 @@ All components must be imported in `docs/source/main.ts` to be available globall
 
 - Component composition: https://lit.dev/docs/composition/component-composition/
 - Context: https://lit.dev/docs/data/context/
+
+## Backwards compatibility
+
+We NEVER care about backwards compatibility. This is a greenfield project with 0 users. When implementing refactors or planning work, DO NOT spend any time thinking about backwards compatibility.
+
+DO NOT deprecate features, APIs, or UI. We want to REMOVE any code related to older iterations.

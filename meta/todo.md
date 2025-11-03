@@ -1,3 +1,12 @@
+## General features
+
+- Feed/water cats
+- Play with cats
+  - Laser pointer
+  - rc car
+  - string/yarn
+- Cats can play with UI elements. Knock letters around, etc.
+
 ## Cat animations
 
 - Implement SVG morphing effects (requires MorphSVG plugin)
