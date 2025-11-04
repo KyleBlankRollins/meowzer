@@ -138,6 +138,11 @@ export class StorageManager {
   ): Promise<void> {
     this._ensureInitialized();
 
+    // Skip save if cat hasn't changed (dirty flag optimization)
+    if (!cat._needsSave) {
+      return;
+    }
+
     // Trigger beforeSave hook
     await this.hooks._trigger(LifecycleHook.BEFORE_SAVE, {
       cat,
@@ -203,6 +208,9 @@ export class StorageManager {
       // Update cat's internal collection reference
       cat._setCollectionName(collectionName);
 
+      // Mark cat as clean (just saved)
+      cat._markClean();
+
       // Trigger afterSave hook
       await this.hooks._trigger(LifecycleHook.AFTER_SAVE, {
         cat,
@@ -241,6 +249,7 @@ export class StorageManager {
 
   /**
    * Save all cats currently managed by CatManager
+   * Only saves cats with unsaved changes (dirty flag optimization)
    *
    * @example
    * ```ts
@@ -249,7 +258,14 @@ export class StorageManager {
    */
   async saveAll(options?: SaveCatOptions): Promise<void> {
     const cats = this.catManager.getAll();
-    await this.saveMany(cats, options);
+    // Only save dirty cats
+    const dirtyCats = cats.filter((cat) => cat._needsSave);
+
+    if (dirtyCats.length === 0) {
+      return; // Early exit if nothing to save
+    }
+
+    await this.saveMany(dirtyCats, options);
   }
 
   /**
@@ -286,6 +302,9 @@ export class StorageManager {
 
           // Set collection reference
           cat._setCollectionName(collection.id);
+
+          // Mark as clean since it's just loaded from storage
+          cat._markClean();
 
           // Trigger afterLoad hook
           await this.hooks._trigger(LifecycleHook.AFTER_LOAD, {
@@ -363,6 +382,8 @@ export class StorageManager {
         });
 
         cat._setCollectionName(collectionName);
+        // Mark as clean since it's just loaded from storage
+        cat._markClean();
         cats.push(cat);
       }
 

@@ -48,6 +48,9 @@ export class MeowzerCat {
   /** @internal */
   _collectionName?: string;
 
+  // Dirty flag for optimized persistence
+  private _isDirty: boolean = false;
+
   constructor(config: MeowzerCatConfig) {
     this.id = config.id;
     this.seed = config.seed;
@@ -73,6 +76,9 @@ export class MeowzerCat {
 
     // Setup menu button click handler
     this._setupMenuButton();
+
+    // New cats are dirty by default (need initial save)
+    this._isDirty = true;
   }
 
   // ============================================================================
@@ -120,14 +126,18 @@ export class MeowzerCat {
   // ============================================================================
 
   setName(name: string): void {
-    this._name = name;
-    this._cat._internalCat.dom?.updateNameText(name);
-    this._updateTimestamp();
+    if (this._name !== name) {
+      this._name = name;
+      this._cat._internalCat.dom?.updateNameText(name);
+      this._markDirty();
+    }
   }
 
   setDescription(description: string): void {
-    this._description = description;
-    this._updateTimestamp();
+    if (this._description !== description) {
+      this._description = description;
+      this._markDirty();
+    }
   }
 
   setPersonality(personality: Personality | PersonalityPreset): void {
@@ -136,12 +146,12 @@ export class MeowzerCat {
     } else {
       this._brain.setPersonality(personality);
     }
-    this._updateTimestamp();
+    this._markDirty();
   }
 
   setEnvironment(environment: Environment): void {
     this._brain.setEnvironment(environment);
-    this._updateTimestamp();
+    this._markDirty();
   }
 
   updateMetadata(metadata: Record<string, unknown>): void {
@@ -149,7 +159,7 @@ export class MeowzerCat {
       ...this._metadata,
       ...metadata,
     };
-    this._updateTimestamp();
+    this._markDirty();
   }
 
   // ============================================================================
@@ -405,6 +415,15 @@ export class MeowzerCat {
     this._metadata.updatedAt = new Date();
   }
 
+  /**
+   * Mark cat as dirty (needs to be saved)
+   * @internal
+   */
+  private _markDirty(): void {
+    this._isDirty = true;
+    this._updateTimestamp();
+  }
+
   // ============================================================================
   // INTERNAL ACCESSORS (for SDK internals)
   // ============================================================================
@@ -427,6 +446,22 @@ export class MeowzerCat {
   /** @internal */
   _getInternalMetadata(): CatMetadata {
     return this._metadata;
+  }
+
+  /**
+   * Check if cat has unsaved changes
+   * @internal
+   */
+  get _needsSave(): boolean {
+    return this._isDirty;
+  }
+
+  /**
+   * Mark cat as clean (just saved)
+   * @internal
+   */
+  _markClean(): void {
+    this._isDirty = false;
   }
 
   /**
