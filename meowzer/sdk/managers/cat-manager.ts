@@ -12,6 +12,7 @@ import type { ConfigManager } from "../config.js";
 import type { HookManager } from "./hook-manager.js";
 import { LifecycleHook } from "./hook-manager.js";
 import { generateId } from "../../meowkit/utils.js";
+import { SpatialGrid } from "./spatial-grid.js";
 
 /**
  * Options for creating a new cat
@@ -44,10 +45,20 @@ export interface FindCatsOptions {
 export class CatManager {
   private cats = new Map<string, MeowzerCat>();
   private hooks: HookManager;
+  private spatialGrid: SpatialGrid;
 
   constructor(_config: ConfigManager, hooks: HookManager) {
     // Config will be used in future for default behaviors and boundaries
     this.hooks = hooks;
+    this.spatialGrid = new SpatialGrid({ cellSize: 150 });
+  }
+
+  /**
+   * Get the spatial grid for interaction detection
+   * @internal Used by InteractionManager
+   */
+  _getSpatialGrid(): SpatialGrid {
+    return this.spatialGrid;
   }
 
   /**
@@ -136,6 +147,15 @@ export class CatManager {
 
     // Register in memory
     this.cats.set(cat.id, cat);
+
+    // Add to spatial grid for proximity detection
+    this.spatialGrid.addCat(cat);
+
+    // Listen for cat movement to update spatial grid
+    // Use internal cat's moveEnd event for accurate position updates
+    cat._internalCat.on("moveEnd", () => {
+      this.spatialGrid.updateCat(cat);
+    });
 
     // Trigger afterCreate hook
     await this.hooks._trigger(LifecycleHook.AFTER_CREATE, {
@@ -309,6 +329,9 @@ export class CatManager {
       catId: id,
       cat,
     });
+
+    // Remove from spatial grid
+    this.spatialGrid.removeCat(cat);
 
     cat.destroy();
     this.cats.delete(id);
