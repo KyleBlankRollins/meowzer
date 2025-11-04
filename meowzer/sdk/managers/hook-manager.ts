@@ -20,6 +20,10 @@ export const LifecycleHook = {
   AFTER_NEED_PLACE: "afterNeedPlace",
   BEFORE_NEED_REMOVE: "beforeNeedRemove",
   AFTER_NEED_REMOVE: "afterNeedRemove",
+  BEFORE_YARN_PLACE: "beforeYarnPlace",
+  AFTER_YARN_PLACE: "afterYarnPlace",
+  BEFORE_YARN_REMOVE: "beforeYarnRemove",
+  AFTER_YARN_REMOVE: "afterYarnRemove",
   BEFORE_INTERACTION_START: "beforeInteractionStart",
   AFTER_INTERACTION_START: "afterInteractionStart",
   BEFORE_INTERACTION_END: "beforeInteractionEnd",
@@ -139,6 +143,28 @@ export interface InteractionHookContext extends HookContext {
 }
 
 /**
+ * Context for yarn placement hooks
+ */
+export interface YarnPlaceHookContext extends HookContext {
+  hook:
+    | typeof LifecycleHook.BEFORE_YARN_PLACE
+    | typeof LifecycleHook.AFTER_YARN_PLACE;
+  yarnId?: string; // Only available in afterYarnPlace
+  position: { x: number; y: number };
+  options?: Record<string, unknown>;
+}
+
+/**
+ * Context for yarn removal hooks
+ */
+export interface YarnRemoveHookContext extends HookContext {
+  hook:
+    | typeof LifecycleHook.BEFORE_YARN_REMOVE
+    | typeof LifecycleHook.AFTER_YARN_REMOVE;
+  yarnId: string;
+}
+
+/**
  * Union of all hook context types
  */
 export type AnyHookContext =
@@ -149,6 +175,8 @@ export type AnyHookContext =
   | DestroyHookContext
   | NeedPlaceHookContext
   | NeedRemoveHookContext
+  | YarnPlaceHookContext
+  | YarnRemoveHookContext
   | InteractionHookContext;
 
 /**

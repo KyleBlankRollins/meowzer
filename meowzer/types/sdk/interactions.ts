@@ -156,6 +156,90 @@ export interface LaserResponseEvent {
 }
 
 // ============================================================================
+// YARN TYPES
+// ============================================================================
+
+/**
+ * State of a yarn ball
+ */
+export type YarnState = "idle" | "dragging" | "rolling";
+
+/**
+ * Options for placing yarn
+ */
+export interface YarnOptions {
+  /** How long the yarn remains before auto-removal (ms). Default: unlimited */
+  duration?: number;
+  /** Physics friction coefficient (default: 0.95) */
+  friction?: number;
+}
+
+/**
+ * Event emitted when yarn is placed
+ */
+export interface YarnPlacedEvent {
+  /** Unique ID for this yarn instance */
+  id: string;
+  /** Position where yarn was placed */
+  position: Position;
+  /** Timestamp when placed */
+  timestamp: number;
+}
+
+/**
+ * Event emitted when yarn is moved
+ */
+export interface YarnMovedEvent {
+  /** Yarn instance ID */
+  id: string;
+  /** Current position */
+  position: Position;
+  /** Current state */
+  state: YarnState;
+  /** Current velocity */
+  velocity?: { x: number; y: number };
+  /** Timestamp */
+  timestamp: number;
+}
+
+/**
+ * Event emitted when yarn is removed
+ */
+export interface YarnRemovedEvent {
+  /** ID of removed yarn */
+  id: string;
+  /** Timestamp when removed */
+  timestamp: number;
+}
+
+/**
+ * Types of cat responses to yarn
+ */
+export type YarnResponseType =
+  | "noticed"
+  | "batting"
+  | "pouncing"
+  | "carrying"
+  | "playing"
+  | "ignoring";
+
+/**
+ * Event emitted when a cat responds to yarn
+ */
+export interface YarnResponseEvent {
+  /** ID of the cat responding */
+  catId: string;
+  /** ID of the yarn */
+  yarnId: string;
+  /** Type of response */
+  responseType: YarnResponseType;
+  /** Duration of interaction (optional) */
+  duration?: number;
+  /** Timestamp of response */
+  timestamp: number;
+}
+
+// ============================================================================
 // INTERACTION CONFIGURATION
 // ============================================================================
 

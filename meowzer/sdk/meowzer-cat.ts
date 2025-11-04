@@ -300,6 +300,106 @@ export class MeowzerCat {
   }
 
   /**
+   * Make cat play with yarn
+   *
+   * Cat evaluates interest in yarn, then may approach and bat/chase it.
+   *
+   * @param yarnId - ID of the yarn to play with
+   *
+   * @example
+   * ```ts
+   * const yarn = await meowzer.interactions.placeYarn({ x: 500, y: 300 });
+   * await cat.playWithYarn(yarn.id);
+   * ```
+   */
+  async playWithYarn(yarnId: string): Promise<void> {
+    const interactionManager = this._getInteractionManager();
+    const yarn = interactionManager.getYarn(yarnId);
+
+    if (!yarn || !yarn.isActive) return;
+
+    // Evaluate interest (higher for moving yarn)
+    let interest = this._brain.evaluateInterest({
+      type: "yarn",
+      position: yarn.position,
+      state: yarn.state,
+    });
+
+    // Boost interest if yarn is moving
+    if (yarn.state === "rolling" || yarn.state === "dragging") {
+      interest *= 1.5;
+    }
+
+    if (interest > 0.5) {
+      const personality = this._brain.personality;
+      const delay = personality.independence * 1000; // 0-1 seconds
+
+      if (delay > 0) {
+        await new Promise((resolve) => setTimeout(resolve, delay));
+      }
+
+      // Verify yarn is still active
+      if (!yarn.isActive) return;
+
+      // Trigger lifecycle hook
+      const hookManager = this._getHookManager();
+      await hookManager._trigger("beforeInteractionStart", {
+        catId: this.id,
+        interactionId: yarnId,
+        interactionType: "yarn",
+      });
+
+      // Mark cat as playing with yarn
+      yarn._addPlayingCat(this.id);
+
+      // Approach the yarn
+      await this._brain._approachTarget(yarn.position);
+
+      // Verify yarn is still there
+      if (!yarn.isActive) {
+        yarn._removePlayingCat(this.id);
+        return;
+      }
+
+      // Play session: batting and chasing
+      const playDuration = personality.energy * 10000; // 0-10 seconds
+      const startTime = Date.now();
+
+      while (Date.now() - startTime < playDuration && yarn.isActive) {
+        // Bat at yarn
+        await this._brain._batAtYarn();
+
+        // Apply force to yarn
+        const force = {
+          x: (Math.random() - 0.5) * 200,
+          y: (Math.random() - 0.5) * 200,
+        };
+        yarn.applyForce(force);
+
+        // If yarn is now rolling, chase it
+        if (yarn.state === "rolling") {
+          await this._brain._approachTarget(yarn.position);
+        }
+
+        // Short pause between interactions
+        await new Promise((resolve) =>
+          setTimeout(resolve, 500 + Math.random() * 1000)
+        );
+      }
+
+      // Done playing
+      yarn._removePlayingCat(this.id);
+
+      // Trigger lifecycle hook
+      await hookManager._trigger("afterInteractionEnd", {
+        catId: this.id,
+        interactionId: yarnId,
+        interactionType: "yarn",
+      });
+    }
+  }
+
+  /**
    * Pick up the cat (follows cursor)
    * @future Not yet implemented
    */

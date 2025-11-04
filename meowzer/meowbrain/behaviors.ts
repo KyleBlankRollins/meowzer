@@ -12,7 +12,9 @@ export type BehaviorType =
   | "observing"
   | "exploring"
   | "approaching"
-  | "consuming";
+  | "consuming"
+  | "chasing"
+  | "batting";
 
 /**
  * Random number within range
@@ -382,6 +384,59 @@ export async function consuming(
 }
 
 /**
+ * Chasing behavior - cat follows a moving target at high speed
+ */
+export async function chasing(
+  cat: Cat,
+  target: Position,
+  duration: number,
+  options?: { speed?: number }
+): Promise<void> {
+  // Ensure cat is in running state
+  cat.setState("running");
+
+  const speed = options?.speed ?? randomRange(150, 250); // Faster than approaching
+  const dist = distance(cat.position, target);
+  const moveTime = Math.min((dist / speed) * 1000, duration);
+
+  console.log("Chasing behavior:", {
+    catId: cat.id,
+    from: cat.position,
+    target,
+    distance: dist,
+    moveTime,
+    speed,
+  });
+
+  try {
+    await cat.moveTo(target.x, target.y, moveTime);
+  } catch (error) {
+    // Movement was cancelled or cat was destroyed
+    console.log("Chasing cancelled:", error);
+  }
+}
+
+/**
+ * Batting behavior - cat swipes at an object
+ */
+export async function batting(
+  cat: Cat,
+  duration: number
+): Promise<void> {
+  cat.stop();
+  cat.setState("sitting");
+
+  console.log("Batting behavior:", {
+    catId: cat.id,
+    position: cat.position,
+    duration,
+  });
+
+  // Quick swipe animation (would be handled by animation system)
+  await new Promise((resolve) => setTimeout(resolve, duration));
+}
+
+/**
  * Get behavior duration based on personality and type
  */
 export function getBehaviorDuration(
@@ -407,6 +462,12 @@ export function getBehaviorDuration(
     case "consuming":
       // Eating/drinking takes time
       return randomRange(3000, 6000);
+    case "chasing":
+      // Short bursts of high-speed chasing
+      return randomRange(1000, 3000);
+    case "batting":
+      // Quick swipes
+      return randomRange(500, 1000);
     default:
       return 5000;
   }

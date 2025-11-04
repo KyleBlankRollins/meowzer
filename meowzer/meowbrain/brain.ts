@@ -21,6 +21,8 @@ import {
   exploring,
   approaching,
   consuming,
+  chasing,
+  batting,
   getBehaviorDuration,
 } from "./behaviors.js";
 import {
@@ -123,8 +125,11 @@ export class Brain {
     // Listen to cat events
     this.cat.on("boundaryHit", this._handleBoundaryHit.bind(this));
 
-    // Listen for need placement events (hybrid detection: broadcast)
+    // Listen for need placement events (existing from Phase 1)
     this._setupNeedListener();
+
+    // Listen for yarn events
+    this._setupYarnListener();
   }
 
   // Public getters
@@ -201,11 +206,12 @@ export class Brain {
       const interactions = (globalThis as any)[globalKey];
       if (interactions) {
         interactions.off("needPlaced", this._handleNeedPlaced);
+        interactions.off("yarnPlaced", this._handleYarnPlaced);
+        interactions.off("yarnMoved", this._handleYarnMoved);
       }
     } catch {
-      // Ignore - interactions may not be available
+      // Ignore
     }
-
     this._destroyed = true;
     this.events.clear();
   }
@@ -283,7 +289,7 @@ export class Brain {
       this._environment
     );
 
-    // Check for nearby needs (hybrid detection: polling)
+    // Check for nearby needs (existing from Phase 1)
     const nearbyNeeds = this._checkNearbyNeeds();
     if (nearbyNeeds.length > 0) {
       // Evaluate interest in nearest need
@@ -293,6 +299,22 @@ export class Brain {
       if (interest > 0.5) {
         // Boost approaching behavior weight
         weights.approaching += interest * 2;
+      }
+    }
+
+    // Check for nearby yarns
+    const nearbyYarns = this._checkNearbyYarns();
+    if (nearbyYarns.length > 0) {
+      const nearest = nearbyYarns[0];
+      const interest = this.evaluateInterest(nearest);
+
+      if (interest > 0.5) {
+        // Moving yarn triggers chasing, idle yarn triggers approaching
+        if (nearest.state === "rolling") {
+          weights.chasing += interest * 2.5;
+        } else {
+          weights.approaching += interest * 1.5;
+        }
       }
     }
 
@@ -391,6 +413,16 @@ export class Brain {
             "Consuming behavior should be triggered by interaction system"
           );
           break;
+        case "chasing":
+          // Chasing requires external target management
+          console.warn(
+            "Chasing behavior requires external target management"
+          );
+          break;
+        case "batting":
+          // Batting will be triggered by yarn interaction
+          this._behaviorPromise = batting(this.cat, duration);
+          break;
       }
 
       await this._behaviorPromise;
@@ -463,6 +495,135 @@ export class Brain {
   }
 
   /**
+   * Check for nearby yarns (polling)
+   * @internal
+   */
+  private _checkNearbyYarns(): Array<{
+    type: string;
+    position: Position;
+    id: string;
+    state: string;
+  }> {
+    try {
+      const globalKey = Symbol.for("meowzer.interactions");
+      const interactions = (globalThis as any)[globalKey];
+
+      if (!interactions) return [];
+
+      const yarns = interactions.getYarnsNearPosition(
+        this.cat.position
+      );
+      return yarns.map((yarn: any) => ({
+        type: "yarn",
+        position: yarn.position,
+        id: yarn.id,
+        state: yarn.state,
+      }));
+    } catch {
+      return [];
+    }
+  }
+
+  /**
+   * Setup listener for yarn placement (broadcast)
+   * @internal
+   */
+  private _setupYarnListener(): void {
+    try {
+      const globalKey = Symbol.for("meowzer.interactions");
+      const interactions = (globalThis as any)[globalKey];
+
+      if (interactions) {
+        interactions.on(
+          "yarnPlaced",
+          this._handleYarnPlaced.bind(this)
+        );
+        interactions.on(
+          "yarnMoved",
+          this._handleYarnMoved.bind(this)
+        );
+      }
+    } catch {
+      // Interactions not available
+    }
+  }
+
+  /**
+   * Handle yarn placed event
+   * @internal
+   */
+  private _handleYarnPlaced = (event: {
+    id: string;
+    position: Position;
+  }): void => {
+    if (!this._running || this._destroyed) return;
+
+    const dist = Math.hypot(
+      event.position.x - this.cat.position.x,
+      event.position.y - this.cat.position.y
+    );
+
+    const detectionRange = 150;
+
+    if (dist <= detectionRange) {
+      const interest = this.evaluateInterest({
+        type: "yarn",
+        position: event.position,
+      });
+
+      if (interest > 0.6 && this._personality.curiosity > 0.5) {
+        this._emit("reactionTriggered", {
+          type: "yarnDetected",
+          yarnId: event.id,
+          interest,
+        });
+      }
+    }
+  };
+
+  /**
+   * Handle yarn movement (important for chasing)
+   * @internal
+   */
+  private _handleYarnMoved = (event: {
+    id: string;
+    position: Position;
+    state: string;
+    velocity?: { x: number; y: number };
+  }): void => {
+    if (!this._running || this._destroyed) return;
+
+    // Only react to rolling yarn (moving target)
+    if (event.state !== "rolling") return;
+
+    const dist = Math.hypot(
+      event.position.x - this.cat.position.x,
+      event.position.y - this.cat.position.y
+    );
+
+    const detectionRange = 200; // Larger for moving objects
+
+    if (dist <= detectionRange) {
+      const interest = this.evaluateInterest({
+        type: "yarn",
+        position: event.position,
+        state: event.state,
+      });
+
+      // Moving yarn is more interesting
+      const adjustedInterest = interest * 1.3;
+
+      if (adjustedInterest > 0.7 && this._personality.energy > 0.4) {
+        this._emit("reactionTriggered", {
+          type: "yarnMoving",
+          yarnId: event.id,
+          interest: adjustedInterest,
+        });
+      }
+    }
+  };
+
+  /**
    * Handle need placed event (immediate reaction for nearby needs)
    * @internal
    */
@@ -500,51 +661,76 @@ export class Brain {
   };
 
   /**
-   * Evaluate whether cat is interested in a need
+   * Evaluate whether cat is interested in a need or yarn
    *
-   * Takes into account personality, current state, and need type.
+   * Takes into account personality, current state, and target type.
    * Returns a number 0-1 representing interest level.
    *
-   * @param need - The need object with type and position
+   * @param target - The target object with type, position, and optional state
    * @returns Interest level (0-1), where values > 0.5 indicate interest
    */
-  evaluateInterest(need: {
+  evaluateInterest(target: {
     type: string;
     position: Position;
+    state?: string;
   }): number {
     if (this._destroyed) return 0;
 
     // Start with base interest from personality traits
     let interest = 0;
 
-    // Different need types have different base appeal
-    if (need.type === "food:basic") {
+    // Different target types have different base appeal
+    if (target.type === "food:basic") {
       // Basic food: Appeals to lower energy cats
       interest = 0.5 + (1 - this._personality.energy) * 0.3;
       // Independent cats are less interested
       interest *= 1 - this._personality.independence * 0.3;
-    } else if (need.type === "food:fancy") {
+    } else if (target.type === "food:fancy") {
       // Fancy food: More universally appealing
       interest = 0.7 + this._personality.curiosity * 0.2;
       // Curious cats love fancy food
       interest *= 1 + this._personality.curiosity * 0.3;
-    } else if (need.type === "water") {
-      // Water: Moderate appeal, increases after activity
-      interest = 0.4;
-      // More appealing after active behaviors
+    } else if (target.type === "water") {
+      // Water: Base interest for water
+      interest = 0.3;
+
+      // Higher interest after activity (playing, exploring)
       if (
         this._state.currentBehavior === "playing" ||
         this._state.currentBehavior === "exploring"
       ) {
         interest += 0.3;
       }
+
+      // Motivation-based adjustment (rest need increases water interest)
+      interest += (1 - this._state.motivation.rest) * 0.2;
+
+      // Personality adjustment
+      interest *= 1 - this._personality.independence * 0.2;
+    } else if (target.type === "yarn") {
+      // Yarn: Base interest
+      let interest = 0.5 + this._personality.curiosity * 0.3;
+
+      // Moving yarn is more interesting
+      if (target.state === "rolling" || target.state === "dragging") {
+        interest *= 1.5;
+      }
+
+      // Playful cats more interested
+      interest += this._personality.energy * 0.2;
+
+      // Reduce for independence
+      interest *= 1 - this._personality.independence * 0.3;
+
+      // Clamp to 0-1
+      return Math.max(0, Math.min(1, interest));
     }
 
     // Current state affects interest
     switch (this._state.currentBehavior) {
       case "resting":
         // Very low interest when resting unless it's fancy food
-        interest *= need.type === "food:fancy" ? 0.5 : 0.2;
+        interest *= target.type === "food:fancy" ? 0.5 : 0.2;
         break;
       case "consuming":
         // Already eating, no interest in more food
@@ -564,8 +750,8 @@ export class Brain {
 
     // Distance affects interest (farther = less interested)
     const dist = Math.hypot(
-      need.position.x - this.cat.position.x,
-      need.position.y - this.cat.position.y
+      target.position.x - this.cat.position.x,
+      target.position.y - this.cat.position.y
     );
     const distanceFactor = Math.max(0, 1 - dist / 500); // Loses interest beyond 500px
     interest *= 0.7 + distanceFactor * 0.3;
@@ -621,6 +807,61 @@ export class Brain {
 
     try {
       this._behaviorPromise = consuming(this.cat, consumeDuration);
+      await this._behaviorPromise;
+    } catch (error) {
+      // Behavior was interrupted
+    } finally {
+      this._behaviorPromise = null;
+    }
+  }
+
+  /**
+   * Trigger batting behavior
+   * Used by yarn interaction system
+   *
+   * @internal
+   */
+  async _batAtYarn(duration?: number): Promise<void> {
+    if (this._destroyed) return;
+
+    const batDuration =
+      duration ??
+      getBehaviorDuration("batting", this._personality.energy);
+
+    try {
+      this._behaviorPromise = batting(this.cat, batDuration);
+      await this._behaviorPromise;
+    } catch (error) {
+      // Behavior was interrupted
+    } finally {
+      this._behaviorPromise = null;
+    }
+  }
+
+  /**
+   * Trigger chasing behavior toward a moving target
+   * Used by yarn interaction system
+   *
+   * @internal
+   */
+  async _chaseTarget(
+    target: Position,
+    options?: { speed?: number }
+  ): Promise<void> {
+    if (this._destroyed) return;
+
+    const duration = getBehaviorDuration(
+      "chasing",
+      this._personality.energy
+    );
+
+    try {
+      this._behaviorPromise = chasing(
+        this.cat,
+        target,
+        duration,
+        options
+      );
       await this._behaviorPromise;
     } catch (error) {
       // Behavior was interrupted

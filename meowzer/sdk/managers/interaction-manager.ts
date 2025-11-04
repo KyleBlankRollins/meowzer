@@ -18,6 +18,8 @@ import type {
   NeedResponseType,
 } from "../../types/index.js";
 import { Need } from "../interactions/need.js";
+import { Yarn } from "../interactions/yarn.js";
+import type { YarnOptions } from "../interactions/yarn.js";
 import { EventEmitter } from "../../utilities/event-emitter.js";
 import type { EventHandler } from "../../utilities/event-emitter.js";
 
@@ -27,15 +29,20 @@ import type { EventHandler } from "../../utilities/event-emitter.js";
 export type InteractionEventType =
   | "needPlaced"
   | "needRemoved"
-  | "needResponse";
+  | "needResponse"
+  | "yarnPlaced"
+  | "yarnRemoved"
+  | "yarnMoved";
 
 /**
  * Manages interactive elements (food, water, toys) and cat responses
  */
 export class InteractionManager {
   private needs: Map<string, Need>;
+  private yarns: Map<string, Yarn>;
   private events: EventEmitter<InteractionEventType>;
-  private nextId: number = 0;
+  private nextNeedId: number = 0;
+  private nextYarnId: number = 0;
   private hooks: HookManager;
   // @ts-expect-error - Will be used for cat proximity queries in future phases
   private cats: CatManager;
@@ -50,6 +57,7 @@ export class InteractionManager {
     this.cats = cats;
     this.config = config;
     this.needs = new Map();
+    this.yarns = new Map();
     this.events = new EventEmitter<InteractionEventType>();
   }
 
@@ -74,7 +82,7 @@ export class InteractionManager {
       options,
     });
 
-    const id = `need-${this.nextId++}-${Date.now()}`;
+    const id = `need-${this.nextNeedId++}-${Date.now()}`;
 
     // Create need instance
     const need = new Need(id, type, position, {
@@ -225,6 +233,115 @@ export class InteractionManager {
   }
 
   /**
+   * Place yarn in the environment
+   *
+   * @example
+   * ```ts
+   * const yarn = await meowzer.interactions.placeYarn({ x: 500, y: 300 });
+   * console.log(`Placed yarn at (${yarn.position.x}, ${yarn.position.y})`);
+   * ```
+   */
+  async placeYarn(
+    position?: Position,
+    options?: YarnOptions
+  ): Promise<Yarn> {
+    // Trigger before hook
+    await this.hooks._trigger("beforeYarnPlace", {
+      position,
+      options,
+    });
+
+    // Use provided position or random
+    const yarnPosition = position || {
+      x: Math.random() * (window.innerWidth - 100),
+      y: Math.random() * (window.innerHeight - 100),
+    };
+
+    const id = `yarn-${this.nextYarnId++}-${Date.now()}`;
+    const yarn = new Yarn(id, yarnPosition, options);
+
+    this.yarns.set(id, yarn);
+
+    // Setup removal callback
+    yarn.on("removed", () => {
+      this.yarns.delete(id);
+    });
+
+    // Emit event
+    this.events.emit("yarnPlaced", {
+      id: yarn.id,
+      position: yarn.position,
+      timestamp: yarn.timestamp,
+    });
+
+    // Trigger after hook
+    await this.hooks._trigger("afterYarnPlace", {
+      yarnId: id,
+      position: yarnPosition,
+      options,
+    });
+
+    return yarn;
+  }
+
+  /**
+   * Remove yarn from environment
+   */
+  async removeYarn(yarnId: string): Promise<void> {
+    const yarn = this.yarns.get(yarnId);
+    if (!yarn) return;
+
+    // Trigger before hook
+    await this.hooks._trigger("beforeYarnRemove", {
+      yarnId,
+    });
+
+    yarn.remove();
+    this.yarns.delete(yarnId);
+
+    // Emit event
+    this.events.emit("yarnRemoved", {
+      id: yarnId,
+      timestamp: Date.now(),
+    });
+
+    // Trigger after hook
+    await this.hooks._trigger("afterYarnRemove", {
+      yarnId,
+    });
+  }
+
+  /**
+   * Get yarn by ID
+   */
+  getYarn(yarnId: string): Yarn | undefined {
+    return this.yarns.get(yarnId);
+  }
+
+  /**
+   * Get all yarns
+   */
+  getAllYarns(): Yarn[] {
+    return Array.from(this.yarns.values());
+  }
+
+  /**
+   * Get yarns near a position
+   */
+  getYarnsNearPosition(position: Position, range?: number): Yarn[] {
+    const detectionRange =
+      range ?? this.config.get().interactions.detectionRanges.yarn;
+
+    return Array.from(this.yarns.values()).filter((yarn) => {
+      const dist = Math.hypot(
+        yarn.position.x - position.x,
+        yarn.position.y - position.y
+      );
+      return dist <= detectionRange && yarn.isActive;
+    });
+  }
+
+  /**
    * Clear all needs
    * @internal
    */
@@ -234,6 +351,12 @@ export class InteractionManager {
       need.remove();
     }
     this.needs.clear();
+
+    // Remove all yarns
+    for (const yarn of this.yarns.values()) {
+      yarn.remove();
+    }
+    this.yarns.clear();
 
     // Clear event handlers
     this.events.clear();
