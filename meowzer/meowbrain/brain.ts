@@ -9,6 +9,7 @@ import type {
   Memory,
   Environment,
   BrainState,
+  Position,
 } from "../types/index.js";
 import { resolvePersonality } from "./personality.js";
 import type { BehaviorType } from "./behaviors.js";
@@ -18,6 +19,8 @@ import {
   playing,
   observing,
   exploring,
+  approaching,
+  consuming,
   getBehaviorDuration,
 } from "./behaviors.js";
 import {
@@ -119,6 +122,9 @@ export class Brain {
 
     // Listen to cat events
     this.cat.on("boundaryHit", this._handleBoundaryHit.bind(this));
+
+    // Listen for need placement events (hybrid detection: broadcast)
+    this._setupNeedListener();
   }
 
   // Public getters
@@ -188,6 +194,18 @@ export class Brain {
     if (this._destroyed) return;
 
     this.stop();
+
+    // Clean up need listener
+    try {
+      const globalKey = Symbol.for("meowzer.interactions");
+      const interactions = (globalThis as any)[globalKey];
+      if (interactions) {
+        interactions.off("needPlaced", this._handleNeedPlaced);
+      }
+    } catch {
+      // Ignore - interactions may not be available
+    }
+
     this._destroyed = true;
     this.events.clear();
   }
@@ -264,6 +282,19 @@ export class Brain {
       this._memory,
       this._environment
     );
+
+    // Check for nearby needs (hybrid detection: polling)
+    const nearbyNeeds = this._checkNearbyNeeds();
+    if (nearbyNeeds.length > 0) {
+      // Evaluate interest in nearest need
+      const nearest = nearbyNeeds[0];
+      const interest = this.evaluateInterest(nearest);
+
+      if (interest > 0.5) {
+        // Boost approaching behavior weight
+        weights.approaching += interest * 2;
+      }
+    }
 
     // Choose a behavior
     let chosenBehavior = chooseBehavior(weights);
@@ -347,6 +378,19 @@ export class Brain {
             this._memory.visitedPositions
           );
           break;
+        case "approaching":
+          // Approaching requires a target, which should be set elsewhere
+          // For now, skip if no target is available
+          console.warn(
+            "Approaching behavior requires external target management"
+          );
+          break;
+        case "consuming":
+          // Consuming will be triggered by interaction system
+          console.warn(
+            "Consuming behavior should be triggered by interaction system"
+          );
+          break;
       }
 
       await this._behaviorPromise;
@@ -368,5 +412,220 @@ export class Brain {
       type: "boundaryHit",
       count: this._boundaryHitCount,
     });
+  }
+
+  /**
+   * Check for nearby needs (hybrid detection: polling)
+   * @internal
+   */
+  private _checkNearbyNeeds(): Array<{
+    type: string;
+    position: Position;
+    id: string;
+  }> {
+    try {
+      const globalKey = Symbol.for("meowzer.interactions");
+      const interactions = (globalThis as any)[globalKey];
+
+      if (!interactions) return [];
+
+      const needs = interactions.getNeedsNearPosition(
+        this.cat.position
+      );
+      return needs.map((need: any) => ({
+        type: need.type,
+        position: need.position,
+        id: need.id,
+      }));
+    } catch {
+      return [];
+    }
+  }
+
+  /**
+   * Setup listener for need placement events (hybrid detection: broadcast)
+   * @internal
+   */
+  private _setupNeedListener(): void {
+    try {
+      const globalKey = Symbol.for("meowzer.interactions");
+      const interactions = (globalThis as any)[globalKey];
+
+      if (interactions) {
+        interactions.on(
+          "needPlaced",
+          this._handleNeedPlaced.bind(this)
+        );
+      }
+    } catch {
+      // Interactions not available - this is okay
+    }
+  }
+
+  /**
+   * Handle need placed event (immediate reaction for nearby needs)
+   * @internal
+   */
+  private _handleNeedPlaced = (event: {
+    id: string;
+    type: string;
+    position: Position;
+  }): void => {
+    if (!this._running || this._destroyed) return;
+
+    // Check if need is nearby
+    const dist = Math.hypot(
+      event.position.x - this.cat.position.x,
+      event.position.y - this.cat.position.y
+    );
+
+    const detectionRange = 150; // From default config
+
+    if (dist <= detectionRange) {
+      // Evaluate immediate interest
+      const interest = this.evaluateInterest({
+        type: event.type,
+        position: event.position,
+      });
+
+      // If very interested and not too independent, react immediately
+      if (interest > 0.7 && this._personality.independence < 0.5) {
+        this._emit("reactionTriggered", {
+          type: "needDetected",
+          needId: event.id,
+          interest,
+        });
+      }
+    }
+  };
+
+  /**
+   * Evaluate whether cat is interested in a need
+   *
+   * Takes into account personality, current state, and need type.
+   * Returns a number 0-1 representing interest level.
+   *
+   * @param need - The need object with type and position
+   * @returns Interest level (0-1), where values > 0.5 indicate interest
+   */
+  evaluateInterest(need: {
+    type: string;
+    position: Position;
+  }): number {
+    if (this._destroyed) return 0;
+
+    // Start with base interest from personality traits
+    let interest = 0;
+
+    // Different need types have different base appeal
+    if (need.type === "food:basic") {
+      // Basic food: Appeals to lower energy cats
+      interest = 0.5 + (1 - this._personality.energy) * 0.3;
+      // Independent cats are less interested
+      interest *= 1 - this._personality.independence * 0.3;
+    } else if (need.type === "food:fancy") {
+      // Fancy food: More universally appealing
+      interest = 0.7 + this._personality.curiosity * 0.2;
+      // Curious cats love fancy food
+      interest *= 1 + this._personality.curiosity * 0.3;
+    } else if (need.type === "water") {
+      // Water: Moderate appeal, increases after activity
+      interest = 0.4;
+      // More appealing after active behaviors
+      if (
+        this._state.currentBehavior === "playing" ||
+        this._state.currentBehavior === "exploring"
+      ) {
+        interest += 0.3;
+      }
+    }
+
+    // Current state affects interest
+    switch (this._state.currentBehavior) {
+      case "resting":
+        // Very low interest when resting unless it's fancy food
+        interest *= need.type === "food:fancy" ? 0.5 : 0.2;
+        break;
+      case "consuming":
+        // Already eating, no interest in more food
+        return 0;
+      case "playing":
+        // Moderate interest, may finish playing first
+        interest *= 0.6;
+        break;
+      case "approaching":
+        // Already approaching something, lower interest
+        interest *= 0.3;
+        break;
+    }
+
+    // Rest motivation increases food interest
+    interest += this._state.motivation.rest * 0.2;
+
+    // Distance affects interest (farther = less interested)
+    const dist = Math.hypot(
+      need.position.x - this.cat.position.x,
+      need.position.y - this.cat.position.y
+    );
+    const distanceFactor = Math.max(0, 1 - dist / 500); // Loses interest beyond 500px
+    interest *= 0.7 + distanceFactor * 0.3;
+
+    // Clamp to 0-1
+    return Math.min(1, Math.max(0, interest));
+  }
+
+  /**
+   * Trigger approaching behavior toward a target
+   * Used by interaction system
+   *
+   * @internal
+   */
+  async _approachTarget(
+    target: Position,
+    options?: { speed?: number }
+  ): Promise<void> {
+    if (this._destroyed) return;
+
+    const duration = getBehaviorDuration(
+      "approaching",
+      this._personality.energy
+    );
+
+    try {
+      this._behaviorPromise = approaching(
+        this.cat,
+        target,
+        duration,
+        options
+      );
+      await this._behaviorPromise;
+    } catch (error) {
+      // Behavior was interrupted
+    } finally {
+      this._behaviorPromise = null;
+    }
+  }
+
+  /**
+   * Trigger consuming behavior
+   * Used by interaction system
+   *
+   * @internal
+   */
+  async _consumeNeed(duration?: number): Promise<void> {
+    if (this._destroyed) return;
+
+    const consumeDuration =
+      duration ??
+      getBehaviorDuration("consuming", this._personality.energy);
+
+    try {
+      this._behaviorPromise = consuming(this.cat, consumeDuration);
+      await this._behaviorPromise;
+    } catch (error) {
+      // Behavior was interrupted
+    } finally {
+      this._behaviorPromise = null;
+    }
   }
 }

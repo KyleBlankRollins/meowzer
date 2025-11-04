@@ -2,6 +2,7 @@ import type { Meowzer } from "./meowzer-sdk.js";
 import type { HookManager } from "./managers/hook-manager.js";
 import type { CatManager } from "./managers/cat-manager.js";
 import type { StorageManager } from "./managers/storage-manager.js";
+import type { InteractionManager } from "./managers/interaction-manager.js";
 import type { ConfigManager } from "./config.js";
 
 /**
@@ -27,6 +28,11 @@ export interface PluginContext {
    * Storage manager
    */
   storage: StorageManager;
+
+  /**
+   * Interaction manager
+   */
+  interactions: InteractionManager;
 
   /**
    * Configuration manager

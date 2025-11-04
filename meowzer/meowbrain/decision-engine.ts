@@ -17,6 +17,8 @@ export interface BehaviorWeights {
   playing: number;
   observing: number;
   exploring: number;
+  approaching: number;
+  consuming: number;
 }
 
 /**
@@ -34,6 +36,8 @@ export function calculateBehaviorWeights(
     playing: 0,
     observing: 0,
     exploring: 0,
+    approaching: 0,
+    consuming: 0,
   };
 
   // Base weights from personality
@@ -178,6 +182,22 @@ export function updateMotivations(
       );
       updated.exploration += 0.02 * deltaTime; // Observing makes curious
       break;
+    case "approaching":
+      // Approaching is active but not very tiring
+      updated.stimulation = Math.max(
+        0,
+        updated.stimulation - 0.05 * deltaTime
+      );
+      updated.rest += 0.01 * deltaTime;
+      break;
+    case "consuming":
+      // Consuming satisfies needs and provides rest
+      updated.rest = Math.max(0, updated.rest - 0.15 * deltaTime);
+      updated.stimulation = Math.max(
+        0,
+        updated.stimulation - 0.1 * deltaTime
+      );
+      break;
   }
 
   // Clamp all motivations to 0-1
@@ -230,16 +250,30 @@ export function isValidBehaviorTransition(
   from: BehaviorType,
   to: BehaviorType
 ): boolean {
+  // After consuming, must rest
+  if (from === "consuming" && to !== "resting") return false;
+
   // Any behavior can transition to resting
   if (to === "resting") return true;
 
+  // Approaching and consuming can interrupt most behaviors (need-driven)
+  if (to === "approaching" || to === "consuming") return true;
+
   // Define valid transitions
   const validTransitions: Record<BehaviorType, BehaviorType[]> = {
-    wandering: ["exploring", "playing", "observing", "resting"],
-    resting: ["wandering", "exploring", "observing"],
-    playing: ["wandering", "resting"],
-    observing: ["wandering", "exploring", "resting"],
-    exploring: ["wandering", "observing", "resting"],
+    wandering: [
+      "exploring",
+      "playing",
+      "observing",
+      "resting",
+      "approaching",
+    ],
+    resting: ["wandering", "exploring", "observing", "approaching"],
+    playing: ["wandering", "resting", "approaching"],
+    observing: ["wandering", "exploring", "resting", "approaching"],
+    exploring: ["wandering", "observing", "resting", "approaching"],
+    approaching: ["consuming", "observing", "resting"],
+    consuming: ["resting"],
   };
 
   return validTransitions[from]?.includes(to) ?? false;

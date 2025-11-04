@@ -34,7 +34,9 @@ export type BehaviorType =
   | "resting"
   | "playing"
   | "observing"
-  | "exploring";
+  | "exploring"
+  | "approaching"
+  | "consuming";
 
 /**
  * Current motivations/needs (0-1 range)
@@ -123,4 +125,6 @@ export interface BehaviorWeights {
   playing: number;
   observing: number;
   exploring: number;
+  approaching: number;
+  consuming: number;
 }

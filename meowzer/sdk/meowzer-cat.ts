@@ -196,8 +196,108 @@ export class MeowzerCat {
   }
 
   // ============================================================================
-  // INTERACTION METHODS (Placeholders for future features)
+  // INTERACTION METHODS
   // ============================================================================
+
+  /**
+   * Respond to a placed need (food/water)
+   *
+   * Evaluates cat's interest based on personality, then approaches and consumes if interested.
+   *
+   * @param needId - ID of the need to respond to
+   *
+   * @example
+   * ```ts
+   * const need = await meowzer.interactions.placeNeed("food:fancy", { x: 500, y: 300 });
+   * await cat.respondToNeed(need.id);
+   * ```
+   */
+  async respondToNeed(needId: string): Promise<void> {
+    const interactionManager = this._getInteractionManager();
+    const need = interactionManager.getNeed(needId);
+
+    if (!need || !need.isActive()) return;
+
+    // Evaluate interest
+    const interest = this._brain.evaluateInterest(need);
+
+    if (interest > 0.5) {
+      // Personality-based delay (more independent cats take longer to respond)
+      const personality = this._brain.personality;
+      const delay = personality.independence * 2000; // 0-2 seconds
+
+      if (delay > 0) {
+        await new Promise((resolve) => setTimeout(resolve, delay));
+      }
+
+      // Verify need is still active after delay
+      if (!need.isActive()) return;
+
+      // Trigger lifecycle hook
+      const hookManager = this._getHookManager();
+      await hookManager._trigger("beforeInteractionStart", {
+        catId: this.id,
+        interactionId: needId,
+        interactionType: "need",
+      });
+
+      // Register initial interest
+      interactionManager._registerCatResponse(
+        this.id,
+        needId,
+        "interested"
+      );
+
+      // Approach the need
+      interactionManager._registerCatResponse(
+        this.id,
+        needId,
+        "approaching"
+      );
+      await this._brain._approachTarget(need.position);
+
+      // Verify need is still active after approach
+      if (!need.isActive()) {
+        interactionManager._registerCatResponse(
+          this.id,
+          needId,
+          "interrupted"
+        );
+        return;
+      }
+
+      // Consume the need
+      interactionManager._registerCatResponse(
+        this.id,
+        needId,
+        "consuming"
+      );
+      need._addConsumingCat(this.id);
+      await this._brain._consumeNeed();
+
+      // Mark as satisfied
+      need._removeConsumingCat(this.id);
+      interactionManager._registerCatResponse(
+        this.id,
+        needId,
+        "satisfied"
+      );
+
+      // Trigger lifecycle hook
+      await hookManager._trigger("afterInteractionEnd", {
+        catId: this.id,
+        interactionId: needId,
+        interactionType: "need",
+      });
+    } else {
+      // Not interested
+      interactionManager._registerCatResponse(
+        this.id,
+        needId,
+        "ignoring"
+      );
+    }
+  }
 
   /**
    * Pick up the cat (follows cursor)
@@ -482,5 +582,41 @@ export class MeowzerCat {
     }
 
     return storage;
+  }
+
+  /**
+   * Get InteractionManager instance from global registry
+   * @internal
+   * @throws {Error} If interactions manager not found
+   */
+  private _getInteractionManager(): any {
+    const globalKey = Symbol.for("meowzer.interactions");
+    const interactions = (globalThis as any)[globalKey];
+
+    if (!interactions) {
+      throw new Error(
+        "Interactions not initialized. Call meowzer.init() first."
+      );
+    }
+
+    return interactions;
+  }
+
+  /**
+   * Get HookManager instance from global registry
+   * @internal
+   * @throws {Error} If hooks manager not found
+   */
+  private _getHookManager(): any {
+    const globalKey = Symbol.for("meowzer.hooks");
+    const hooks = (globalThis as any)[globalKey];
+
+    if (!hooks) {
+      throw new Error(
+        "Hooks not initialized. Call meowzer.init() first."
+      );
+    }
+
+    return hooks;
   }
 }

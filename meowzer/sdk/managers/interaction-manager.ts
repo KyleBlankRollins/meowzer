@@ -6,70 +6,20 @@
  * - Water
  * - Laser pointer
  * - Other interactive elements
- *
- * Uses SpatialGrid for efficient proximity detection
  */
 
-import { SpatialGrid } from "./spatial-grid.js";
-import type { MeowzerCat } from "../meowzer-cat.js";
-import type { Position } from "../../types/index.js";
+import type { HookManager } from "./hook-manager.js";
+import type { CatManager } from "./cat-manager.js";
+import type { ConfigManager } from "../config.js";
+import type {
+  Position,
+  NeedTypeIdentifier,
+  PlaceNeedOptions,
+  NeedResponseType,
+} from "../../types/index.js";
+import { Need } from "../interactions/need.js";
 import { EventEmitter } from "../../utilities/event-emitter.js";
-
-/**
- * Need types for food and water
- */
-export type NeedType = "food:basic" | "food:fancy" | "water";
-
-/**
- * Cat response types to needs
- */
-export type NeedResponseType =
-  | "interested"
-  | "approaching"
-  | "consuming"
-  | "ignoring"
-  | "satisfied";
-
-/**
- * Options for placing a need
- */
-export interface PlaceNeedOptions {
-  duration?: number; // Auto-remove after duration (ms), unlimited if not set
-  detectionRadius?: number; // How far cats can detect this need (default: 150)
-}
-
-/**
- * Need instance in the environment
- */
-export interface Need {
-  id: string;
-  type: NeedType;
-  position: Position;
-  timestamp: number;
-  duration?: number;
-  detectionRadius: number;
-  respondingCats: Set<string>; // Cat IDs currently responding
-}
-
-/**
- * Event data for need placement
- */
-export interface NeedPlacedEvent {
-  id: string;
-  type: NeedType;
-  position: Position;
-  timestamp: number;
-}
-
-/**
- * Event data for cat responding to need
- */
-export interface NeedResponseEvent {
-  catId: string;
-  needId: string;
-  responseType: NeedResponseType;
-  timestamp: number;
-}
+import type { EventHandler } from "../../utilities/event-emitter.js";
 
 /**
  * Interaction event types
@@ -83,17 +33,24 @@ export type InteractionEventType =
  * Manages interactive elements (food, water, toys) and cat responses
  */
 export class InteractionManager {
-  private spatialGrid: SpatialGrid;
   private needs: Map<string, Need>;
   private events: EventEmitter<InteractionEventType>;
-  private autoRemoveTimers: Map<string, number>;
   private nextId: number = 0;
+  private hooks: HookManager;
+  // @ts-expect-error - Will be used for cat proximity queries in future phases
+  private cats: CatManager;
+  private config: ConfigManager;
 
-  constructor(spatialGrid: SpatialGrid) {
-    this.spatialGrid = spatialGrid;
+  constructor(
+    hooks: HookManager,
+    cats: CatManager,
+    config: ConfigManager
+  ) {
+    this.hooks = hooks;
+    this.cats = cats;
+    this.config = config;
     this.needs = new Map();
     this.events = new EventEmitter<InteractionEventType>();
-    this.autoRemoveTimers = new Map();
   }
 
   /**
@@ -101,49 +58,49 @@ export class InteractionManager {
    *
    * @example
    * ```ts
-   * const food = interactionManager.placeNeed("food:fancy", { x: 500, y: 300 });
+   * const food = await meowzer.interactions.placeNeed("food:fancy", { x: 500, y: 300 });
    * console.log(`Placed ${food.type} at (${food.position.x}, ${food.position.y})`);
    * ```
    */
-  placeNeed(
-    type: NeedType,
+  async placeNeed(
+    type: NeedTypeIdentifier,
     position: Position,
-    options: PlaceNeedOptions = {}
-  ): Need {
-    const id = `need-${this.nextId++}`;
-    const timestamp = Date.now();
-    const detectionRadius = options.detectionRadius ?? 150;
-
-    const need: Need = {
-      id,
+    options?: PlaceNeedOptions
+  ): Promise<Need> {
+    // Trigger before hook
+    await this.hooks._trigger("beforeNeedPlace", {
       type,
       position,
-      timestamp,
-      duration: options.duration,
-      detectionRadius,
-      respondingCats: new Set(),
-    };
+      options,
+    });
+
+    const id = `need-${this.nextId++}-${Date.now()}`;
+
+    // Create need instance
+    const need = new Need(id, type, position, {
+      duration: options?.duration,
+      onRemove: () => {
+        this.needs.delete(id);
+      },
+    });
 
     this.needs.set(id, need);
 
-    // Setup auto-removal if duration specified
-    if (options.duration) {
-      const timer = window.setTimeout(() => {
-        this.removeNeed(id);
-      }, options.duration);
-      this.autoRemoveTimers.set(id, timer);
-    }
+    // Trigger after hook
+    await this.hooks._trigger("afterNeedPlace", {
+      needId: id,
+      type,
+      position,
+      options,
+    });
 
     // Emit event
     this.events.emit("needPlaced", {
       id,
       type,
       position,
-      timestamp,
+      timestamp: need.timestamp,
     });
-
-    // Notify nearby cats
-    this._notifyNearbyCats(need);
 
     return need;
   }
@@ -151,23 +108,23 @@ export class InteractionManager {
   /**
    * Remove a need from the environment
    */
-  removeNeed(needId: string): boolean {
+  async removeNeed(needId: string): Promise<boolean> {
     const need = this.needs.get(needId);
     if (!need) return false;
 
-    // Clear auto-remove timer if exists
-    const timer = this.autoRemoveTimers.get(needId);
-    if (timer) {
-      window.clearTimeout(timer);
-      this.autoRemoveTimers.delete(needId);
-    }
+    // Trigger before hook
+    await this.hooks._trigger("beforeNeedRemove", { needId });
 
+    // Remove need
+    need.remove();
     this.needs.delete(needId);
 
+    // Trigger after hook
+    await this.hooks._trigger("afterNeedRemove", { needId });
+
+    // Emit event
     this.events.emit("needRemoved", {
       id: needId,
-      type: need.type,
-      position: need.position,
       timestamp: Date.now(),
     } as any);
 
@@ -191,7 +148,7 @@ export class InteractionManager {
   /**
    * Get needs by type
    */
-  getNeedsByType(type: NeedType): Need[] {
+  getNeedsByType(type: NeedTypeIdentifier): Need[] {
     return Array.from(this.needs.values()).filter(
       (n) => n.type === type
     );
@@ -216,18 +173,14 @@ export class InteractionManager {
     const need = this.needs.get(needId);
     if (!need) return;
 
-    // Track cat as responding
-    if (
-      responseType === "interested" ||
-      responseType === "approaching" ||
-      responseType === "consuming"
-    ) {
-      need.respondingCats.add(catId);
+    // Track cat as consuming
+    if (responseType === "consuming") {
+      need._addConsumingCat(catId);
     } else if (
       responseType === "satisfied" ||
       responseType === "ignoring"
     ) {
-      need.respondingCats.delete(catId);
+      need._removeConsumingCat(catId);
     }
 
     // Emit response event
@@ -240,85 +193,50 @@ export class InteractionManager {
   }
 
   /**
-   * Find cats near a specific need
+   * Get needs near a position
    */
-  findCatsNearNeed(needId: string): MeowzerCat[] {
-    const need = this.needs.get(needId);
-    if (!need) return [];
+  getNeedsNearPosition(position: Position, radius?: number): Need[] {
+    const detectionRadius =
+      radius ?? this.config.get().interactions.detectionRanges.need;
 
-    return this.spatialGrid.findCatsInRadius(
-      need.position,
-      need.detectionRadius
-    );
-  }
-
-  /**
-   * Find needs near a specific position
-   */
-  findNeedsNearPosition(position: Position, radius: number): Need[] {
     return Array.from(this.needs.values()).filter((need) => {
-      const dx = need.position.x - position.x;
-      const dy = need.position.y - position.y;
-      const distSq = dx * dx + dy * dy;
-      return distSq <= radius * radius;
+      if (!need.isActive()) return false;
+
+      const dist = Math.hypot(
+        need.position.x - position.x,
+        need.position.y - position.y
+      );
+      return dist <= detectionRadius;
     });
   }
 
   /**
-   * Subscribe to interaction events
+   * Listen to interaction events
    */
-  on(
-    event: InteractionEventType,
-    handler: (data: any) => void
-  ): void {
+  on(event: InteractionEventType, handler: EventHandler): void {
     this.events.on(event, handler);
   }
 
   /**
-   * Unsubscribe from interaction events
+   * Stop listening to interaction events
    */
-  off(
-    event: InteractionEventType,
-    handler: (data: any) => void
-  ): void {
+  off(event: InteractionEventType, handler: EventHandler): void {
     this.events.off(event, handler);
   }
 
   /**
-   * Clear all needs and timers
+   * Clear all needs
+   * @internal
    */
-  clear(): void {
-    // Clear all timers
-    this.autoRemoveTimers.forEach((timer) =>
-      window.clearTimeout(timer)
-    );
-    this.autoRemoveTimers.clear();
-
+  async _cleanup(): Promise<void> {
+    // Remove all needs
+    for (const need of this.needs.values()) {
+      need.remove();
+    }
     this.needs.clear();
-  }
 
-  /**
-   * Notify nearby cats about a newly placed need
-   * Uses spatial grid for efficient proximity detection
-   * @private
-   */
-  private _notifyNearbyCats(need: Need): void {
-    const nearbyCats = this.spatialGrid.findCatsInRadius(
-      need.position,
-      need.detectionRadius
-    );
-
-    // Cats will evaluate the need based on their personality/state
-    // This is handled by MeowzerCat.respondToNeed() which will be
-    // implemented in Phase 3 when full interaction logic is added
-    nearbyCats.forEach((cat) => {
-      // For now, just emit that cats are aware
-      // Full implementation will call: cat.respondToNeed(need.id)
-      console.log(
-        `Cat ${cat.id} is aware of ${need.type} at`,
-        need.position
-      );
-    });
+    // Clear event handlers
+    this.events.clear();
   }
 
   /**
@@ -327,20 +245,22 @@ export class InteractionManager {
   getDebugInfo(): {
     activeNeeds: number;
     needsByType: Record<string, number>;
-    totalRespondingCats: number;
+    totalConsumingCats: number;
   } {
     const needsByType: Record<string, number> = {};
-    let totalRespondingCats = 0;
+    let totalConsumingCats = 0;
 
     this.needs.forEach((need) => {
-      needsByType[need.type] = (needsByType[need.type] || 0) + 1;
-      totalRespondingCats += need.respondingCats.size;
+      if (need.isActive()) {
+        needsByType[need.type] = (needsByType[need.type] || 0) + 1;
+        totalConsumingCats += need.getConsumingCats().length;
+      }
     });
 
     return {
       activeNeeds: this.needs.size,
       needsByType,
-      totalRespondingCats,
+      totalConsumingCats,
     };
   }
 }

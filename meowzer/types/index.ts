@@ -104,3 +104,25 @@ export type {
   SaveManyOptions,
   CollectionOptions,
 } from "./storage/collections.js";
+
+// ============================================================================
+// INTERACTIONS - Cat interaction system
+// ============================================================================
+export type {
+  NeedTypeIdentifier,
+  PlaceNeedOptions,
+  NeedData,
+  NeedPlacedEvent,
+  NeedRemovedEvent,
+  NeedResponseType,
+  NeedResponseEvent,
+  LaserPattern,
+  LaserPatternOptions,
+  LaserMovedEvent,
+  LaserResponseType,
+  LaserResponseEvent,
+  DetectionRanges,
+  ResponseRates,
+  InteractionConfig,
+  InteractionEvent,
+} from "./sdk/interactions.js";

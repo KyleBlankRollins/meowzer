@@ -29,6 +29,27 @@ export interface BehaviorConfig {
 }
 
 /**
+ * Interaction configuration options
+ */
+export interface InteractionConfig {
+  /** Whether interactions are enabled */
+  enabled: boolean;
+  /** Detection ranges for different interaction types (px) */
+  detectionRanges: {
+    need: number;
+    laser: number;
+    rcCar: number;
+    yarn: number;
+  };
+  /** Base response rates for needs (0-1) */
+  responseRates: {
+    basicFood: number;
+    fancyFood: number;
+    water: number;
+  };
+}
+
+/**
  * Complete Meowzer SDK configuration
  */
 export interface MeowzerConfig {
@@ -40,6 +61,8 @@ export interface MeowzerConfig {
   storage: StorageConfig;
   /** Behavior configuration */
   behavior: BehaviorConfig;
+  /** Interaction configuration */
+  interactions: InteractionConfig;
   /** Enable debug logging */
   debug: boolean;
 }
@@ -52,6 +75,10 @@ export type PartialMeowzerConfig = {
   boundaries?: Boundaries;
   storage?: Partial<StorageConfig>;
   behavior?: Partial<BehaviorConfig>;
+  interactions?: Partial<InteractionConfig> & {
+    detectionRanges?: Partial<InteractionConfig["detectionRanges"]>;
+    responseRates?: Partial<InteractionConfig["responseRates"]>;
+  };
   debug?: boolean;
 };
 
@@ -77,6 +104,20 @@ export const DEFAULT_CONFIG: MeowzerConfig = {
     pauseOnPageHide: true,
     cleanupOnUnload: true,
   },
+  interactions: {
+    enabled: true,
+    detectionRanges: {
+      need: 150,
+      laser: 200,
+      rcCar: 250,
+      yarn: 150,
+    },
+    responseRates: {
+      basicFood: 0.7,
+      fancyFood: 0.9,
+      water: 0.5,
+    },
+  },
   debug: false,
 };
 
@@ -100,6 +141,19 @@ export function mergeConfig(
     behavior: {
       ...DEFAULT_CONFIG.behavior,
       ...userConfig.behavior,
+    },
+    interactions: {
+      enabled:
+        userConfig.interactions?.enabled ??
+        DEFAULT_CONFIG.interactions.enabled,
+      detectionRanges: {
+        ...DEFAULT_CONFIG.interactions.detectionRanges,
+        ...userConfig.interactions?.detectionRanges,
+      },
+      responseRates: {
+        ...DEFAULT_CONFIG.interactions.responseRates,
+        ...userConfig.interactions?.responseRates,
+      },
     },
     debug: userConfig.debug ?? DEFAULT_CONFIG.debug,
   };
@@ -140,6 +194,19 @@ export class ConfigManager {
       behavior: {
         ...this.config.behavior,
         ...userConfig.behavior,
+      },
+      interactions: {
+        enabled:
+          userConfig.interactions?.enabled ??
+          this.config.interactions.enabled,
+        detectionRanges: {
+          ...this.config.interactions.detectionRanges,
+          ...userConfig.interactions?.detectionRanges,
+        },
+        responseRates: {
+          ...this.config.interactions.responseRates,
+          ...userConfig.interactions?.responseRates,
+        },
       },
       debug: userConfig.debug ?? this.config.debug,
     };

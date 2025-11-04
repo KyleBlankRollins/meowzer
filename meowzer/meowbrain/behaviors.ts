@@ -10,7 +10,9 @@ export type BehaviorType =
   | "resting"
   | "playing"
   | "observing"
-  | "exploring";
+  | "exploring"
+  | "approaching"
+  | "consuming";
 
 /**
  * Random number within range
@@ -326,6 +328,60 @@ export async function exploring(
 }
 
 /**
+ * Approaching behavior - cat moves toward a target (food, toy, etc.)
+ */
+export async function approaching(
+  cat: Cat,
+  target: Position,
+  duration: number,
+  options?: { speed?: number }
+): Promise<void> {
+  // Ensure cat is in idle state first
+  if (cat.state.type !== "idle") {
+    cat.setState("idle");
+    await new Promise((resolve) => setTimeout(resolve, 300));
+  }
+
+  const dist = distance(cat.position, target);
+  const speed = options?.speed ?? randomRange(80, 150);
+  const moveTime = Math.min((dist / speed) * 1000, duration);
+
+  console.log("Approaching behavior:", {
+    catId: cat.id,
+    from: cat.position,
+    target,
+    distance: dist,
+    moveTime,
+  });
+
+  try {
+    await cat.moveTo(target.x, target.y, moveTime);
+  } catch (error) {
+    // Movement was cancelled or cat was destroyed
+    console.log("Approaching cancelled:", error);
+  }
+}
+
+/**
+ * Consuming behavior - cat eats/drinks at location
+ */
+export async function consuming(
+  cat: Cat,
+  duration: number
+): Promise<void> {
+  cat.stop();
+  cat.setState("sitting");
+
+  console.log("Consuming behavior:", {
+    catId: cat.id,
+    position: cat.position,
+    duration,
+  });
+
+  await new Promise((resolve) => setTimeout(resolve, duration));
+}
+
+/**
  * Get behavior duration based on personality and type
  */
 export function getBehaviorDuration(
@@ -345,6 +401,12 @@ export function getBehaviorDuration(
       return randomRange(3000, 7000);
     case "exploring":
       return randomRange(5000, 12000);
+    case "approaching":
+      // Quick approach
+      return randomRange(2000, 4000);
+    case "consuming":
+      // Eating/drinking takes time
+      return randomRange(3000, 6000);
     default:
       return 5000;
   }

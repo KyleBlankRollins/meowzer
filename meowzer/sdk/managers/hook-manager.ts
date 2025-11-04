@@ -15,6 +15,15 @@ export const LifecycleHook = {
   AFTER_DELETE: "afterDelete",
   BEFORE_DESTROY: "beforeDestroy",
   AFTER_DESTROY: "afterDestroy",
+  // Interaction hooks
+  BEFORE_NEED_PLACE: "beforeNeedPlace",
+  AFTER_NEED_PLACE: "afterNeedPlace",
+  BEFORE_NEED_REMOVE: "beforeNeedRemove",
+  AFTER_NEED_REMOVE: "afterNeedRemove",
+  BEFORE_INTERACTION_START: "beforeInteractionStart",
+  AFTER_INTERACTION_START: "afterInteractionStart",
+  BEFORE_INTERACTION_END: "beforeInteractionEnd",
+  AFTER_INTERACTION_END: "afterInteractionEnd",
 } as const;
 
 export type LifecycleHookType =
@@ -93,6 +102,43 @@ export interface DestroyHookContext extends HookContext {
 }
 
 /**
+ * Context for need placement hooks
+ */
+export interface NeedPlaceHookContext extends HookContext {
+  hook:
+    | typeof LifecycleHook.BEFORE_NEED_PLACE
+    | typeof LifecycleHook.AFTER_NEED_PLACE;
+  needId?: string; // Only available in afterNeedPlace
+  type: string;
+  position: { x: number; y: number };
+  options?: Record<string, unknown>;
+}
+
+/**
+ * Context for need removal hooks
+ */
+export interface NeedRemoveHookContext extends HookContext {
+  hook:
+    | typeof LifecycleHook.BEFORE_NEED_REMOVE
+    | typeof LifecycleHook.AFTER_NEED_REMOVE;
+  needId: string;
+}
+
+/**
+ * Context for interaction start/end hooks
+ */
+export interface InteractionHookContext extends HookContext {
+  hook:
+    | typeof LifecycleHook.BEFORE_INTERACTION_START
+    | typeof LifecycleHook.AFTER_INTERACTION_START
+    | typeof LifecycleHook.BEFORE_INTERACTION_END
+    | typeof LifecycleHook.AFTER_INTERACTION_END;
+  catId: string;
+  interactionId: string;
+  interactionType: "need" | "laser" | "rcCar" | "yarn";
+}
+
+/**
  * Union of all hook context types
  */
 export type AnyHookContext =
@@ -100,7 +146,10 @@ export type AnyHookContext =
   | SaveHookContext
   | LoadHookContext
   | DeleteHookContext
-  | DestroyHookContext;
+  | DestroyHookContext
+  | NeedPlaceHookContext
+  | NeedRemoveHookContext
+  | InteractionHookContext;
 
 /**
  * Hook handler function
