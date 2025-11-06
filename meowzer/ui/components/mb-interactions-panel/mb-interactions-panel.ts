@@ -12,14 +12,8 @@ import { customElement, state } from "lit/decorators.js";
 import { consume } from "@lit/context";
 import { meowzerContext } from "../../contexts/meowzer-context.js";
 import { interactionsPanelStyles } from "./mb-interactions-panel.style.js";
+import { CursorController } from "../../controllers/cursor-controller.js";
 import type { Meowzer, LaserPointer } from "meowzer";
-
-type PlacementMode =
-  | "food:basic"
-  | "food:fancy"
-  | "water"
-  | "yarn"
-  | null;
 
 @customElement("mb-interactions-panel")
 export class MbInteractionsPanel extends LitElement {
@@ -30,17 +24,19 @@ export class MbInteractionsPanel extends LitElement {
   meowzer?: Meowzer;
 
   @state()
-  private placementMode: PlacementMode = null;
-
-  @state()
   private laserPointer?: LaserPointer;
 
-  @state()
-  private clickListener?: (e: MouseEvent) => void;
   private mouseMoveListener?: (e: MouseEvent) => void;
+
+  /**
+   * Cursor controller for managing placement cursors
+   */
+  private cursor = new CursorController(this);
 
   connectedCallback() {
     super.connectedCallback();
+    // Preload cursor assets
+    this.cursor.preloadAssets();
   }
 
   disconnectedCallback() {
@@ -49,11 +45,8 @@ export class MbInteractionsPanel extends LitElement {
   }
 
   private cleanup() {
-    // Remove event listeners
-    if (this.clickListener) {
-      document.removeEventListener("click", this.clickListener);
-      this.clickListener = undefined;
-    }
+    // Cursor controller handles its own cleanup
+    // Just clean up laser-specific listeners
     if (this.mouseMoveListener) {
       document.removeEventListener(
         "mousemove",
@@ -67,95 +60,32 @@ export class MbInteractionsPanel extends LitElement {
       this.laserPointer.destroy();
       this.laserPointer = undefined;
     }
-
-    // Reset cursor
-    document.body.style.cursor = "";
   }
 
-  private getYarnCursorDataURL(): string {
-    // Create a simplified yarn SVG for cursor (32x32 for better cursor size)
-    const svg = `<svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="yarnGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#FF69B4;stop-opacity:1" /><stop offset="50%" style="stop-color:#FF1493;stop-opacity:1" /><stop offset="100%" style="stop-color:#C71585;stop-opacity:1" /></linearGradient></defs><circle cx="16" cy="16" r="9" fill="url(#yarnGrad)"/><path d="M 10 13 Q 13 12 16 13 Q 19 14 22 13" fill="none" stroke="#FF1493" stroke-width="1" opacity="0.8"/><path d="M 9 16 Q 12 15 16 16 Q 20 17 23 16" fill="none" stroke="#FF1493" stroke-width="1" opacity="0.8"/><path d="M 10 19 Q 13 18 16 19 Q 19 20 22 19" fill="none" stroke="#FF1493" stroke-width="1" opacity="0.8"/><circle cx="16" cy="16" r="7" fill="none" stroke="#FF69B4" stroke-width="0.8" opacity="0.5"/><circle cx="13" cy="13" r="2" fill="#FFFFFF" opacity="0.3"/></svg>`;
+  private async handlePlacement(
+    mode: "food:basic" | "food:fancy" | "water" | "yarn"
+  ) {
+    if (!this.meowzer) return;
 
-    // Encode SVG to data URL (use base64 for better browser compatibility)
-    const base64 = btoa(svg);
-    return `data:image/svg+xml;base64,${base64}`;
-  }
-
-  private startPlacementMode(mode: PlacementMode) {
-    // Cancel any existing mode
-    this.cancelMode();
-
-    this.placementMode = mode;
-
-    // Set cursor based on placement mode
-    if (mode === "yarn") {
-      // Use yarn SVG as cursor
-      const yarnCursor = this.getYarnCursorDataURL();
-      const cursorStyle = `url('${yarnCursor}') 16 16, pointer`;
-      document.body.style.cursor = cursorStyle;
-      console.log(
-        "[InteractionsPanel] Set yarn cursor:",
-        cursorStyle.substring(0, 100) + "..."
-      );
-    } else {
-      document.body.style.cursor = "crosshair";
-    }
-
-    // Setup click listener for placement
-    this.clickListener = (e: MouseEvent) => {
-      // Ignore clicks on the dialog/panel itself
-      const target = e.target as HTMLElement;
-      if (
-        target.closest("mb-interactions-panel") ||
-        target.closest("quiet-dialog")
-      ) {
-        return;
-      }
-
-      this.placeInteraction(e.clientX, e.clientY);
-    };
-
-    // Add listener on next tick to avoid capturing the button click
-    setTimeout(() => {
-      document.addEventListener("click", this.clickListener!);
-    }, 0);
-  }
-
-  private async placeInteraction(x: number, y: number) {
-    if (!this.meowzer || !this.placementMode) return;
-
-    const position = { x, y };
-
-    try {
-      switch (this.placementMode) {
-        case "food:basic":
-          await this.meowzer.interactions.placeNeed(
-            "food:basic",
-            position
-          );
-          break;
-        case "food:fancy":
-          await this.meowzer.interactions.placeNeed(
-            "food:fancy",
-            position
-          );
-          break;
-        case "water":
-          await this.meowzer.interactions.placeNeed(
-            "water",
-            position
-          );
-          break;
-        case "yarn":
-          await this.meowzer.interactions.placeYarn(position);
-          break;
-      }
-
-      // Exit placement mode after placing
-      this.cancelMode();
-    } catch (error) {
-      console.error("Failed to place interaction:", error);
-    }
+    await this.cursor.activate({
+      mode,
+      excludeSelector: "mb-interactions-panel, quiet-dialog",
+      onPlace: async (position) => {
+        switch (mode) {
+          case "food:basic":
+          case "food:fancy":
+          case "water":
+            await this.meowzer!.interactions.placeNeed(
+              mode,
+              position
+            );
+            break;
+          case "yarn":
+            await this.meowzer!.interactions.placeYarn(position);
+            break;
+        }
+      },
+    });
   }
 
   private startLaserMode() {
@@ -167,7 +97,7 @@ export class MbInteractionsPanel extends LitElement {
     }
 
     // Cancel any placement mode
-    this.cancelMode();
+    this.cursor.cancel();
 
     // Setup mouse tracking for laser
     this.mouseMoveListener = (e: MouseEvent) => {
@@ -200,48 +130,40 @@ export class MbInteractionsPanel extends LitElement {
     this.requestUpdate();
   }
 
-  private cancelMode() {
-    if (this.clickListener) {
-      document.removeEventListener("click", this.clickListener);
-      this.clickListener = undefined;
-    }
-
-    this.placementMode = null;
-    document.body.style.cursor = "";
-  }
-
   private renderNeedsSection() {
     return html`
       <div class="section">
         <h3 class="section-title">🍽️ Needs</h3>
         <div class="items-grid">
           <button
-            class="interaction-button ${this.placementMode ===
-            "food:basic"
+            class="interaction-button ${this.cursor.isActive(
+              "food:basic"
+            )
               ? "active"
               : ""}"
-            @click=${() => this.startPlacementMode("food:basic")}
+            @click=${() => this.handlePlacement("food:basic")}
           >
             <div class="button-icon">🥫</div>
             <div class="button-label">Basic Food</div>
           </button>
 
           <button
-            class="interaction-button ${this.placementMode ===
-            "food:fancy"
+            class="interaction-button ${this.cursor.isActive(
+              "food:fancy"
+            )
               ? "active"
               : ""}"
-            @click=${() => this.startPlacementMode("food:fancy")}
+            @click=${() => this.handlePlacement("food:fancy")}
           >
             <div class="button-icon">🍖</div>
             <div class="button-label">Fancy Food</div>
           </button>
 
           <button
-            class="interaction-button ${this.placementMode === "water"
+            class="interaction-button ${this.cursor.isActive("water")
               ? "active"
               : ""}"
-            @click=${() => this.startPlacementMode("water")}
+            @click=${() => this.handlePlacement("water")}
           >
             <div class="button-icon">💧</div>
             <div class="button-label">Water</div>
@@ -272,10 +194,10 @@ export class MbInteractionsPanel extends LitElement {
           </button>
 
           <button
-            class="interaction-button ${this.placementMode === "yarn"
+            class="interaction-button ${this.cursor.isActive("yarn")
               ? "active"
               : ""}"
-            @click=${() => this.startPlacementMode("yarn")}
+            @click=${() => this.handlePlacement("yarn")}
           >
             <div class="button-icon">🧶</div>
             <div class="button-label">Yarn Ball</div>
@@ -285,24 +207,10 @@ export class MbInteractionsPanel extends LitElement {
     `;
   }
 
-  private renderPhase3Preview() {
-    return html`
-      <div class="section">
-        <h3 class="section-title">🚗 Phase 3 (Coming Soon)</h3>
-        <div class="items-grid">
-          <button class="interaction-button disabled">
-            <div class="button-icon">🏎️</div>
-            <div class="button-label">RC Car</div>
-            <div class="button-badge">Soon</div>
-          </button>
-        </div>
-      </div>
-    `;
-  }
-
   private renderModeNotice() {
-    if (this.placementMode) {
-      const labels = {
+    const currentMode = this.cursor.getMode();
+    if (currentMode && currentMode !== "laser") {
+      const labels: Record<string, string> = {
         "food:basic": "basic food",
         "food:fancy": "fancy food",
         water: "water",
@@ -314,13 +222,16 @@ export class MbInteractionsPanel extends LitElement {
           <div class="mode-notice-icon">📍</div>
           <div class="mode-notice-content">
             <div class="mode-notice-title">
-              Placement Mode: ${labels[this.placementMode]}
+              Placement Mode: ${labels[currentMode]}
             </div>
             <div>Click anywhere on the playground to place.</div>
           </div>
         </div>
         <div class="mode-actions">
-          <quiet-button variant="neutral" @click=${this.cancelMode}>
+          <quiet-button
+            variant="neutral"
+            @click=${() => this.cursor.cancel()}
+          >
             Cancel
           </quiet-button>
         </div>
@@ -343,7 +254,7 @@ export class MbInteractionsPanel extends LitElement {
     return html`
       <div class="panel-content">
         ${this.renderModeNotice()} ${this.renderNeedsSection()}
-        ${this.renderToysSection()} ${this.renderPhase3Preview()}
+        ${this.renderToysSection()}
       </div>
     `;
   }

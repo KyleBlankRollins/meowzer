@@ -22,6 +22,11 @@ export {
   CatsController,
   CatController,
   StorageController,
+  CursorController,
+} from "./controllers/index.js";
+export type {
+  PlacementMode,
+  PlacementOptions,
 } from "./controllers/index.js";
 
 // Components (Phase 2: Creation Components)
