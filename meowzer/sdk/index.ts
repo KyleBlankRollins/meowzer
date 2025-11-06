@@ -66,6 +66,19 @@ export {
   type DeleteHookContext,
   type DestroyHookContext,
 } from "./managers/hook-manager.js";
+export { InteractionManager } from "./managers/interaction-manager.js";
+
+// Interactions
+export {
+  Yarn,
+  type YarnState,
+  type YarnEvent,
+  type YarnOptions,
+} from "./interactions/yarn.js";
+export {
+  LaserPointer,
+  type LaserEvent,
+} from "./interactions/laser-pointer.js";
 
 // Plugins
 export {

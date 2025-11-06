@@ -90,6 +90,12 @@ export class MbCatPlayground extends LitElement {
   private statsDialog?: HTMLElement & { open: boolean };
 
   /**
+   * Current active laser pointer
+   */
+  @state()
+  private activeLaser?: any;
+
+  /**
    * Context menu state
    */
   @state()
@@ -169,8 +175,6 @@ export class MbCatPlayground extends LitElement {
     }
 
     try {
-      console.log("Loading existing cats from storage...");
-
       // Get the default collection name from config
       const defaultCollection =
         this.meowzer.getConfig().storage.defaultCollection;
@@ -179,8 +183,6 @@ export class MbCatPlayground extends LitElement {
       const savedCats = await this.meowzer.storage.loadCollection(
         defaultCollection
       );
-
-      console.log(`Found ${savedCats.length} saved cats`);
 
       // Spawn each cat with randomized positions to avoid overlap
       for (const cat of savedCats) {
@@ -198,11 +200,6 @@ export class MbCatPlayground extends LitElement {
         document.body.appendChild(cat.element);
         this.setupCatEventListeners(cat);
         cat.resume();
-        console.log(
-          `Spawned cat: ${cat.name} at (${Math.round(
-            randomX
-          )}, ${Math.round(randomY)}) (${cat.id})`
-        );
       }
 
       if (savedCats.length > 0) {
@@ -423,6 +420,13 @@ export class MbCatPlayground extends LitElement {
   }
 
   /**
+   * Handle laser activation from toolbar
+   */
+  private handleLaserActivated = (e: CustomEvent) => {
+    this.activeLaser = e.detail.laserPointer;
+  };
+
+  /**
    * Close context menu and resume cat
    */
   private closeContextMenu = () => {
@@ -541,29 +545,12 @@ export class MbCatPlayground extends LitElement {
 
     return html`
       <div class="playground-container">
-        <!-- Global Action Buttons (lower-right corner) -->
-        <div class="global-actions">
-          <quiet-button
-            variant="primary"
-            size="lg"
-            @click=${this.openCreatorDialog}
-            title="Create New Cat"
-          >
-            <quiet-icon family="outline" name="plus"></quiet-icon>
-          </quiet-button>
-
-          <quiet-button
-            variant="neutral"
-            size="lg"
-            @click=${this.openStatsDialog}
-            title="View Statistics"
-          >
-            <quiet-icon
-              family="outline"
-              name="chart-bar"
-            ></quiet-icon>
-          </quiet-button>
-        </div>
+        <!-- Vertical Toolbar -->
+        <mb-playground-toolbar
+          @create-cat=${this.openCreatorDialog}
+          @view-stats=${this.openStatsDialog}
+          @laser-activated=${this.handleLaserActivated}
+        ></mb-playground-toolbar>
 
         <!-- Context Menu is now injected directly into cat DOM -->
 
@@ -626,6 +613,9 @@ export class MbCatPlayground extends LitElement {
           <div slot="header">Statistics</div>
           <cat-statistics></cat-statistics>
         </quiet-dialog>
+
+        <!-- Laser Visual -->
+        <mb-laser-visual .laser=${this.activeLaser}></mb-laser-visual>
       </div>
     `;
   }

@@ -400,6 +400,55 @@ export class MeowzerCat {
   }
 
   /**
+   * Chase laser pointer
+   *
+   * Makes the cat chase a specific position (like a laser pointer dot).
+   * Cats will automatically react to laser pointer movements through
+   * brain detection, but this method can be called manually.
+   *
+   * @param position - Target position to chase
+   *
+   * @example
+   * ```ts
+   * await cat.chaseLaser({ x: 500, y: 300 });
+   * ```
+   */
+  async chaseLaser(position: {
+    x: number;
+    y: number;
+  }): Promise<void> {
+    // Evaluate interest
+    const interest = this._brain.evaluateInterest({
+      type: "laser",
+      position,
+    });
+
+    if (interest > 0.5) {
+      const personality = this._brain.personality;
+
+      // Trigger lifecycle hook
+      const hookManager = this._getHookManager();
+      await hookManager._trigger("beforeInteractionStart", {
+        catId: this.id,
+        interactionId: "laser",
+        interactionType: "laser",
+      });
+
+      // Chase the laser position
+      await this._brain._chaseTarget(position, {
+        speed: 200 + personality.energy * 100,
+      });
+
+      // Trigger lifecycle hook
+      await hookManager._trigger("afterInteractionEnd", {
+        catId: this.id,
+        interactionId: "laser",
+        interactionType: "laser",
+      });
+    }
+  }
+
+  /**
    * Pick up the cat (follows cursor)
    * @future Not yet implemented
    */

@@ -53,7 +53,7 @@ export class CatsController implements ReactiveController {
       // Subscribe to lifecycle hooks for cat creation/deletion
       const afterCreateId = this.meowzer.hooks.on(
         "afterCreate",
-        (ctx) => {
+        (ctx: any) => {
           if (ctx.cat) {
             this.cats = [...this.cats, ctx.cat];
             this.host.requestUpdate();

@@ -13,22 +13,6 @@ export const catPlaygroundStyles = css`
     background: var(--surface);
   }
 
-  /* Global action buttons */
-  .global-actions {
-    position: fixed;
-    bottom: 2rem;
-    right: 2rem;
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    z-index: 1000;
-  }
-
-  .global-actions quiet-button {
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
-      0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  }
-
   .preview-area {
     position: relative;
     background: var(--surface-secondary);

@@ -130,6 +130,9 @@ export class Brain {
 
     // Listen for yarn events
     this._setupYarnListener();
+
+    // Listen for laser pointer events
+    this._setupLaserListener();
   }
 
   // Public getters
@@ -171,13 +174,6 @@ export class Brain {
     this._running = true;
     this._lastUpdateTime = Date.now();
 
-    console.log("Brain started:", {
-      catId: this.cat.id,
-      personality: this._personality,
-      currentBehavior: this._state.currentBehavior,
-      decisionInterval: this._decisionInterval,
-    });
-
     this._scheduleNextDecision();
   }
 
@@ -208,6 +204,15 @@ export class Brain {
         interactions.off("needPlaced", this._handleNeedPlaced);
         interactions.off("yarnPlaced", this._handleYarnPlaced);
         interactions.off("yarnMoved", this._handleYarnMoved);
+        interactions.off("laserMoved", this._handleLaserMoved);
+        interactions.off(
+          "laserActivated",
+          this._handleLaserActivated
+        );
+        interactions.off(
+          "laserDeactivated",
+          this._handleLaserDeactivated
+        );
       }
     } catch {
       // Ignore
@@ -266,8 +271,6 @@ export class Brain {
 
   private async _makeDecision(): Promise<void> {
     if (!this._running || this._destroyed) return;
-
-    console.log("Making decision for cat:", this.cat.id);
 
     // Update motivations based on time passed
     const now = Date.now();
@@ -342,8 +345,6 @@ export class Brain {
     const oldBehavior = this._state.currentBehavior;
     this._state.currentBehavior = chosenBehavior;
     this._state.lastDecisionTime = now;
-
-    console.log("New cat behavior: ", this._state.currentBehavior);
 
     if (oldBehavior !== chosenBehavior) {
       this._emit("behaviorChange", {
@@ -624,6 +625,109 @@ export class Brain {
   };
 
   /**
+   * Setup laser pointer event listener
+   * @internal
+   */
+  private _setupLaserListener(): void {
+    try {
+      const globalKey = Symbol.for("meowzer.interactions");
+      const interactions = (globalThis as any)[globalKey];
+
+      if (interactions) {
+        interactions.on(
+          "laserActivated",
+          this._handleLaserActivated.bind(this)
+        );
+        interactions.on(
+          "laserMoved",
+          this._handleLaserMoved.bind(this)
+        );
+        interactions.on(
+          "laserDeactivated",
+          this._handleLaserDeactivated.bind(this)
+        );
+      }
+    } catch {
+      // Interactions not available
+    }
+  }
+
+  /**
+   * Handle laser pointer activation
+   * @internal
+   */
+  private _handleLaserActivated = (event: {
+    id: string;
+    position: Position;
+  }): void => {
+    if (!this._running || this._destroyed) return;
+
+    // Cats are very interested in laser pointers
+    const interest = this.evaluateInterest({
+      type: "laser",
+      position: event.position,
+    });
+
+    if (interest > 0.5 && this._personality.curiosity > 0.3) {
+      this._emit("reactionTriggered", {
+        type: "laserDetected",
+        laserId: event.id,
+        interest,
+      });
+    }
+  };
+
+  /**
+   * Handle laser pointer movement
+   * @internal
+   */
+  private _handleLaserMoved = (event: {
+    id: string;
+    position: Position;
+    velocity?: { x: number; y: number };
+  }): void => {
+    if (!this._running || this._destroyed) return;
+
+    // Cats are attracted to moving laser dots
+    const dist = Math.hypot(
+      event.position.x - this.cat.position.x,
+      event.position.y - this.cat.position.y
+    );
+
+    const detectionRange = 300; // Large detection range for laser
+
+    if (dist <= detectionRange) {
+      const interest = this.evaluateInterest({
+        type: "laser",
+        position: event.position,
+      });
+
+      // Laser is highly interesting, especially when moving
+      const adjustedInterest = interest * 1.5;
+
+      if (adjustedInterest > 0.6 && this._personality.energy > 0.2) {
+        this._emit("reactionTriggered", {
+          type: "laserMoving",
+          laserId: event.id,
+          interest: adjustedInterest,
+        });
+      }
+    }
+  };
+
+  /**
+   * Handle laser pointer deactivation
+   * @internal
+   */
+  private _handleLaserDeactivated = (): void => {
+    // Laser turned off - cats might look confused
+    this._emit("reactionTriggered", {
+      type: "laserDeactivated",
+      interest: 0,
+    });
+  };
+
+  /**
    * Handle need placed event (immediate reaction for nearby needs)
    * @internal
    */
@@ -721,6 +825,18 @@ export class Brain {
 
       // Reduce for independence
       interest *= 1 - this._personality.independence * 0.3;
+
+      // Clamp to 0-1
+      return Math.max(0, Math.min(1, interest));
+    } else if (target.type === "laser") {
+      // Laser pointer: Highly interesting to most cats
+      let interest = 0.8 + this._personality.curiosity * 0.2;
+
+      // Energy level boosts interest
+      interest += this._personality.energy * 0.3;
+
+      // Even independent cats love lasers
+      interest *= 1 - this._personality.independence * 0.1;
 
       // Clamp to 0-1
       return Math.max(0, Math.min(1, interest));

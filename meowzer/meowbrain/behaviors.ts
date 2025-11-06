@@ -109,22 +109,6 @@ export async function wandering(
   // Vary curviness for more diversity
   const curviness = randomRange(1.0, 1.5);
 
-  console.log("Wandering behavior:", {
-    catId: cat.id,
-    from: cat.position,
-    waypoints,
-    distance: dist,
-    moveTime,
-    pathStyle:
-      pathStyle < 0.33
-        ? "sine"
-        : pathStyle < 0.66
-        ? "progressive"
-        : "random",
-    curviness,
-    boundaries,
-  });
-
   try {
     await cat.moveAlongPath(waypoints, moveTime, { curviness });
   } catch (error) {
@@ -348,14 +332,6 @@ export async function approaching(
   const speed = options?.speed ?? randomRange(80, 150);
   const moveTime = Math.min((dist / speed) * 1000, duration);
 
-  console.log("Approaching behavior:", {
-    catId: cat.id,
-    from: cat.position,
-    target,
-    distance: dist,
-    moveTime,
-  });
-
   try {
     await cat.moveTo(target.x, target.y, moveTime);
   } catch (error) {
@@ -373,12 +349,6 @@ export async function consuming(
 ): Promise<void> {
   cat.stop();
   cat.setState("sitting");
-
-  console.log("Consuming behavior:", {
-    catId: cat.id,
-    position: cat.position,
-    duration,
-  });
 
   await new Promise((resolve) => setTimeout(resolve, duration));
 }
@@ -399,15 +369,6 @@ export async function chasing(
   const dist = distance(cat.position, target);
   const moveTime = Math.min((dist / speed) * 1000, duration);
 
-  console.log("Chasing behavior:", {
-    catId: cat.id,
-    from: cat.position,
-    target,
-    distance: dist,
-    moveTime,
-    speed,
-  });
-
   try {
     await cat.moveTo(target.x, target.y, moveTime);
   } catch (error) {
@@ -425,12 +386,6 @@ export async function batting(
 ): Promise<void> {
   cat.stop();
   cat.setState("sitting");
-
-  console.log("Batting behavior:", {
-    catId: cat.id,
-    position: cat.position,
-    duration,
-  });
 
   // Quick swipe animation (would be handled by animation system)
   await new Promise((resolve) => setTimeout(resolve, duration));
