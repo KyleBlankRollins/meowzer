@@ -27,4 +27,5 @@ export { MbCatPlayground } from "./mb-cat-playground/mb-cat-playground.js";
 export { MbInteractionsPanel } from "./mb-interactions-panel/mb-interactions-panel.js";
 export { MbPlaygroundToolbar } from "./mb-playground-toolbar/mb-playground-toolbar.js";
 export { MbYarnVisual } from "./mb-yarn-visual/mb-yarn-visual.js";
+export { MbNeedVisual } from "./mb-need-visual/mb-need-visual.js";
 export { MbLaserVisual } from "./mb-laser-visual/mb-laser-visual.js";

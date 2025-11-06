@@ -69,6 +69,7 @@ export {
 export { InteractionManager } from "./managers/interaction-manager.js";
 
 // Interactions
+export { Need, type NeedEvent } from "./interactions/need.js";
 export {
   Yarn,
   type YarnState,

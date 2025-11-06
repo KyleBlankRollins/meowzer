@@ -102,6 +102,12 @@ export class MbCatPlayground extends LitElement {
   private activeYarns: Map<string, any> = new Map();
 
   /**
+   * Active needs (food/water) in the playground
+   */
+  @state()
+  private activeNeeds: Map<string, any> = new Map();
+
+  /**
    * Context menu state
    */
   @state()
@@ -158,6 +164,9 @@ export class MbCatPlayground extends LitElement {
 
       // Setup yarn event listeners
       this.setupYarnListeners();
+
+      // Setup need event listeners
+      this.setupNeedListeners();
 
       // Load existing cats from storage
       await this.loadExistingCats();
@@ -242,6 +251,28 @@ export class MbCatPlayground extends LitElement {
     // Listen for yarn removal
     this.meowzer.interactions.on("yarnRemoved", (event: any) => {
       this.activeYarns.delete(event.id);
+      this.requestUpdate();
+    });
+  }
+
+  /**
+   * Setup need event listeners
+   */
+  private setupNeedListeners() {
+    if (!this.meowzer) return;
+
+    // Listen for need placement
+    this.meowzer.interactions.on("needPlaced", (event: any) => {
+      const need = this.meowzer!.interactions.getNeed(event.id);
+      if (need) {
+        this.activeNeeds.set(event.id, need);
+        this.requestUpdate();
+      }
+    });
+
+    // Listen for need removal
+    this.meowzer.interactions.on("needRemoved", (event: any) => {
+      this.activeNeeds.delete(event.id);
       this.requestUpdate();
     });
   }
@@ -648,6 +679,17 @@ export class MbCatPlayground extends LitElement {
                 .yarnId=${yarn.id}
                 .interactive=${true}
               ></mb-yarn-visual>
+            `
+          )}
+
+          <!-- Need Visuals (Food & Water) -->
+          ${Array.from(this.activeNeeds.values()).map(
+            (need) => html`
+              <mb-need-visual
+                .needId=${need.id}
+                .type=${need.type}
+                .interactive=${false}
+              ></mb-need-visual>
             `
           )}
 

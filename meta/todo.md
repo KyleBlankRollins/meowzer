@@ -20,12 +20,12 @@
 
 ## Meowkit
 
-- Feat: add different SVG templates for different fur lengths
-- Feat: add different SVG templates for hats
+- feat: add different SVG templates for different fur lengths
+- feat: add different SVG templates for hats
 
 ## UI
 
-- Feat: Create pick up/drop feature that applies to all objects in the playground
-- Feat: Cursor manager that handles cursor state/visual changes
-- Chore: Remove all of the stupid fallback values for `var()` in component styles.
-- Feat: Add UI for changing hats
+- feat: Create pick up/drop feature that applies to all objects in the playground
+- feat: Cursor manager that handles cursor state/visual changes
+- chore: Remove all of the stupid fallback values for `var()` in component styles.
+- feat: Add UI for changing hats

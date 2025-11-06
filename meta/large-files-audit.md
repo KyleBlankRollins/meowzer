@@ -7,7 +7,7 @@ Files with more than 300 lines of code in the workspace.
 
 **Criteria:**
 
-- Excludes: node_modules, dist, dist-ssr, .vscode, .idea, meta directories
+- Excludes: docs, node_modules, dist, dist-ssr, .vscode, .idea, meta directories
 - Excludes: Markdown files
 - Threshold: > 300 lines
 
