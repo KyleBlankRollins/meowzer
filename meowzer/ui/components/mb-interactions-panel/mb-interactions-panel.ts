@@ -72,12 +72,34 @@ export class MbInteractionsPanel extends LitElement {
     document.body.style.cursor = "";
   }
 
+  private getYarnCursorDataURL(): string {
+    // Create a simplified yarn SVG for cursor (32x32 for better cursor size)
+    const svg = `<svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="yarnGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#FF69B4;stop-opacity:1" /><stop offset="50%" style="stop-color:#FF1493;stop-opacity:1" /><stop offset="100%" style="stop-color:#C71585;stop-opacity:1" /></linearGradient></defs><circle cx="16" cy="16" r="9" fill="url(#yarnGrad)"/><path d="M 10 13 Q 13 12 16 13 Q 19 14 22 13" fill="none" stroke="#FF1493" stroke-width="1" opacity="0.8"/><path d="M 9 16 Q 12 15 16 16 Q 20 17 23 16" fill="none" stroke="#FF1493" stroke-width="1" opacity="0.8"/><path d="M 10 19 Q 13 18 16 19 Q 19 20 22 19" fill="none" stroke="#FF1493" stroke-width="1" opacity="0.8"/><circle cx="16" cy="16" r="7" fill="none" stroke="#FF69B4" stroke-width="0.8" opacity="0.5"/><circle cx="13" cy="13" r="2" fill="#FFFFFF" opacity="0.3"/></svg>`;
+
+    // Encode SVG to data URL (use base64 for better browser compatibility)
+    const base64 = btoa(svg);
+    return `data:image/svg+xml;base64,${base64}`;
+  }
+
   private startPlacementMode(mode: PlacementMode) {
     // Cancel any existing mode
     this.cancelMode();
 
     this.placementMode = mode;
-    document.body.style.cursor = "crosshair";
+
+    // Set cursor based on placement mode
+    if (mode === "yarn") {
+      // Use yarn SVG as cursor
+      const yarnCursor = this.getYarnCursorDataURL();
+      const cursorStyle = `url('${yarnCursor}') 16 16, pointer`;
+      document.body.style.cursor = cursorStyle;
+      console.log(
+        "[InteractionsPanel] Set yarn cursor:",
+        cursorStyle.substring(0, 100) + "..."
+      );
+    } else {
+      document.body.style.cursor = "crosshair";
+    }
 
     // Setup click listener for placement
     this.clickListener = (e: MouseEvent) => {
@@ -93,7 +115,10 @@ export class MbInteractionsPanel extends LitElement {
       this.placeInteraction(e.clientX, e.clientY);
     };
 
-    document.addEventListener("click", this.clickListener);
+    // Add listener on next tick to avoid capturing the button click
+    setTimeout(() => {
+      document.addEventListener("click", this.clickListener!);
+    }, 0);
   }
 
   private async placeInteraction(x: number, y: number) {

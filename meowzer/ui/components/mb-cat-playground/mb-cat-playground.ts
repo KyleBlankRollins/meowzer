@@ -96,6 +96,12 @@ export class MbCatPlayground extends LitElement {
   private activeLaser?: any;
 
   /**
+   * Active yarn balls in the playground
+   */
+  @state()
+  private activeYarns: Map<string, any> = new Map();
+
+  /**
    * Context menu state
    */
   @state()
@@ -149,6 +155,9 @@ export class MbCatPlayground extends LitElement {
 
       // Reinitialize the cats controller now that meowzer is available
       this.catsController.hostConnected();
+
+      // Setup yarn event listeners
+      this.setupYarnListeners();
 
       // Load existing cats from storage
       await this.loadExistingCats();
@@ -213,6 +222,28 @@ export class MbCatPlayground extends LitElement {
         console.error("Failed to load existing cats:", err);
       }
     }
+  }
+
+  /**
+   * Setup yarn event listeners
+   */
+  private setupYarnListeners() {
+    if (!this.meowzer) return;
+
+    // Listen for yarn placement
+    this.meowzer.interactions.on("yarnPlaced", (event: any) => {
+      const yarn = this.meowzer!.interactions.getYarn(event.id);
+      if (yarn) {
+        this.activeYarns.set(event.id, yarn);
+        this.requestUpdate();
+      }
+    });
+
+    // Listen for yarn removal
+    this.meowzer.interactions.on("yarnRemoved", (event: any) => {
+      this.activeYarns.delete(event.id);
+      this.requestUpdate();
+    });
   }
 
   /**
@@ -613,6 +644,16 @@ export class MbCatPlayground extends LitElement {
           <div slot="header">Statistics</div>
           <cat-statistics></cat-statistics>
         </quiet-dialog>
+
+        <!-- Yarn Visuals -->
+        ${Array.from(this.activeYarns.values()).map(
+          (yarn) => html`
+            <mb-yarn-visual
+              .yarnId=${yarn.id}
+              .interactive=${true}
+            ></mb-yarn-visual>
+          `
+        )}
 
         <!-- Laser Visual -->
         <mb-laser-visual .laser=${this.activeLaser}></mb-laser-visual>

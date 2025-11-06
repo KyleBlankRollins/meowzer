@@ -276,6 +276,11 @@ export class InteractionManager {
     });
 
     // Emit event
+    console.log("[InteractionManager] Emitting yarnPlaced event:", {
+      id: yarn.id,
+      position: yarn.position,
+      timestamp: yarn.timestamp,
+    });
     this.events.emit("yarnPlaced", {
       id: yarn.id,
       position: yarn.position,

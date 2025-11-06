@@ -692,6 +692,13 @@ export class MeowzerCat {
         // Ignore errors
       }
     }
+
+    // Handle yarn reactions
+    if (data.type === "yarnDetected" || data.type === "yarnMoving") {
+      if (data.yarnId) {
+        await this.playWithYarn(data.yarnId);
+      }
+    }
   }
 
   private _updateTimestamp(): void {

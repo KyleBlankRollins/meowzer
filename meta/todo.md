@@ -25,5 +25,6 @@
 
 ## UI
 
-- Feat: Right click picks up/drops cat
+- Feat: Create pick up/drop feature that applies to all objects in the playground
 - Feat: Add UI for changing hats
+- Feat: Cursor manager that handles cursor state/visual changes

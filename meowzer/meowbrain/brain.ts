@@ -534,6 +534,11 @@ export class Brain {
       const globalKey = Symbol.for("meowzer.interactions");
       const interactions = (globalThis as any)[globalKey];
 
+      console.log(
+        "[Brain] Setting up yarn listener, interactions available:",
+        !!interactions
+      );
+
       if (interactions) {
         interactions.on(
           "yarnPlaced",
@@ -543,9 +548,10 @@ export class Brain {
           "yarnMoved",
           this._handleYarnMoved.bind(this)
         );
+        console.log("[Brain] Yarn event listeners registered");
       }
-    } catch {
-      // Interactions not available
+    } catch (error) {
+      console.error("[Brain] Error setting up yarn listener:", error);
     }
   }
 
@@ -557,7 +563,12 @@ export class Brain {
     id: string;
     position: Position;
   }): void => {
-    if (!this._running || this._destroyed) return;
+    console.log("[Brain] Yarn placed event received:", event);
+
+    if (!this._running || this._destroyed) {
+      console.log("[Brain] Not running or destroyed, ignoring yarn");
+      return;
+    }
 
     const dist = Math.hypot(
       event.position.x - this.cat.position.x,
@@ -566,18 +577,37 @@ export class Brain {
 
     const detectionRange = 150;
 
+    console.log(
+      "[Brain] Distance to yarn:",
+      dist,
+      "Detection range:",
+      detectionRange
+    );
+
     if (dist <= detectionRange) {
       const interest = this.evaluateInterest({
         type: "yarn",
         position: event.position,
       });
 
-      if (interest > 0.6 && this._personality.curiosity > 0.5) {
+      console.log(
+        "[Brain] Interest in yarn:",
+        interest,
+        "Curiosity:",
+        this._personality.curiosity
+      );
+
+      if (interest >= 0.5 && this._personality.curiosity >= 0.3) {
+        console.log("[Brain] Triggering yarn reaction!");
         this._emit("reactionTriggered", {
           type: "yarnDetected",
           yarnId: event.id,
           interest,
         });
+      } else {
+        console.log(
+          "[Brain] Thresholds not met - interest needs >= 0.5, curiosity needs >= 0.3"
+        );
       }
     }
   };
@@ -614,7 +644,10 @@ export class Brain {
       // Moving yarn is more interesting
       const adjustedInterest = interest * 1.3;
 
-      if (adjustedInterest > 0.7 && this._personality.energy > 0.4) {
+      if (
+        adjustedInterest >= 0.6 &&
+        this._personality.energy >= 0.3
+      ) {
         this._emit("reactionTriggered", {
           type: "yarnMoving",
           yarnId: event.id,
