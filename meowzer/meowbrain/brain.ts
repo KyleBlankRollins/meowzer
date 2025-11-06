@@ -204,13 +204,13 @@ export class Brain {
         interactions.off("needPlaced", this._handleNeedPlaced);
         interactions.off("yarnPlaced", this._handleYarnPlaced);
         interactions.off("yarnMoved", this._handleYarnMoved);
-        interactions.off("laserMoved", this._handleLaserMoved);
+        interactions.off("laser:moved", this._handleLaserMoved);
         interactions.off(
-          "laserActivated",
+          "laser:activated",
           this._handleLaserActivated
         );
         interactions.off(
-          "laserDeactivated",
+          "laser:deactivated",
           this._handleLaserDeactivated
         );
       }
@@ -634,21 +634,40 @@ export class Brain {
       const interactions = (globalThis as any)[globalKey];
 
       if (interactions) {
+        console.log(
+          `[Brain ${this.cat.id.slice(
+            0,
+            8
+          )}] Setting up laser listeners`
+        );
         interactions.on(
-          "laserActivated",
+          "laser:activated",
           this._handleLaserActivated.bind(this)
         );
         interactions.on(
-          "laserMoved",
+          "laser:moved",
           this._handleLaserMoved.bind(this)
         );
         interactions.on(
-          "laserDeactivated",
+          "laser:deactivated",
           this._handleLaserDeactivated.bind(this)
         );
+      } else {
+        console.warn(
+          `[Brain ${this.cat.id.slice(
+            0,
+            8
+          )}] Global interactions emitter not found during setup!`
+        );
       }
-    } catch {
-      // Interactions not available
+    } catch (error) {
+      console.error(
+        `[Brain ${this.cat.id.slice(
+          0,
+          8
+        )}] Error setting up laser listener:`,
+        error
+      );
     }
   }
 
@@ -705,13 +724,44 @@ export class Brain {
       // Laser is highly interesting, especially when moving
       const adjustedInterest = interest * 1.5;
 
+      console.log(
+        `[Brain ${this.cat.id.slice(
+          0,
+          8
+        )}] Laser detected - Distance: ${Math.round(
+          dist
+        )}px, Interest: ${interest.toFixed(
+          2
+        )}, Adjusted: ${adjustedInterest.toFixed(
+          2
+        )}, Energy: ${this._personality.energy.toFixed(2)}`
+      );
+
       if (adjustedInterest > 0.6 && this._personality.energy > 0.2) {
+        // Set visual indicator
+        this.cat.setLaserInterested(true);
+
+        console.log(
+          `[Brain ${this.cat.id.slice(
+            0,
+            8
+          )}] 🎯 REACTION TRIGGERED - Laser moving, interest: ${adjustedInterest.toFixed(
+            2
+          )}`
+        );
+
         this._emit("reactionTriggered", {
           type: "laserMoving",
           laserId: event.id,
           interest: adjustedInterest,
         });
+      } else {
+        // Not interested anymore
+        this.cat.setLaserInterested(false);
       }
+    } else {
+      // Out of range
+      this.cat.setLaserInterested(false);
     }
   };
 
@@ -720,6 +770,9 @@ export class Brain {
    * @internal
    */
   private _handleLaserDeactivated = (): void => {
+    // Clear visual indicator
+    this.cat.setLaserInterested(false);
+
     // Laser turned off - cats might look confused
     this._emit("reactionTriggered", {
       type: "laserDeactivated",

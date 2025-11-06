@@ -658,6 +658,40 @@ export class MeowzerCat {
         behavior: data.newBehavior,
       });
     });
+
+    // Listen to Brain reactions and respond
+    this._brain.on("reactionTriggered", (data) => {
+      this._handleBrainReaction(data);
+    });
+  }
+
+  /**
+   * Handle brain reaction events (laser detection, etc.)
+   * @internal
+   */
+  private async _handleBrainReaction(data: any): Promise<void> {
+    if (!this.isActive) return;
+
+    // Handle laser reactions
+    if (
+      data.type === "laserMoving" ||
+      data.type === "laserDetected"
+    ) {
+      // Get active laser position from global interactions
+      try {
+        const globalKey = Symbol.for("meowzer.interactions");
+        const interactions = (globalThis as any)[globalKey];
+
+        if (interactions && interactions.getActiveLaser) {
+          const laser = interactions.getActiveLaser();
+          if (laser && laser.isActive) {
+            await this.chaseLaser(laser.position);
+          }
+        }
+      } catch {
+        // Ignore errors
+      }
+    }
   }
 
   private _updateTimestamp(): void {

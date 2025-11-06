@@ -138,4 +138,15 @@ export class CatDOM {
       nameLabel.textContent = name;
     }
   }
+
+  /**
+   * Set laser-interested attribute (for visual feedback)
+   */
+  setLaserInterested(interested: boolean): void {
+    if (interested) {
+      this.element.setAttribute("data-laser-interested", "true");
+    } else {
+      this.element.removeAttribute("data-laser-interested");
+    }
+  }
 }

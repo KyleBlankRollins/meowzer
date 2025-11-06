@@ -79,6 +79,41 @@ export const baseStyles = css`
     color: #f59e0b;
   }
 
+  /* Laser-interested state */
+  .meowtion-cat[data-laser-interested="true"] {
+    animation: laserFocus 0.5s ease-in-out infinite;
+  }
+
+  .meowtion-cat[data-laser-interested="true"]::before {
+    content: "👀";
+    position: absolute;
+    top: -20px;
+    right: -10px;
+    font-size: 20px;
+    animation: focusFloat 1s ease-in-out infinite;
+    pointer-events: none;
+  }
+
+  @keyframes laserFocus {
+    0%,
+    100% {
+      filter: brightness(1);
+    }
+    50% {
+      filter: brightness(1.15);
+    }
+  }
+
+  @keyframes focusFloat {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-5px);
+    }
+  }
+
   /* Context menu - no positioning, just a child element */
   .cat-context-menu {
     z-index: 1000;

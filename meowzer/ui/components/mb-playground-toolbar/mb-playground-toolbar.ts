@@ -129,7 +129,12 @@ export class MbPlaygroundToolbar extends LitElement {
   }
 
   private startLaserMode() {
-    if (!this.meowzer) return;
+    if (!this.meowzer || !this.meowzer.isInitialized()) {
+      console.warn(
+        "[Toolbar] Meowzer not initialized yet, cannot start laser"
+      );
+      return;
+    }
 
     // Create laser pointer instance
     this.laserPointer = new LaserPointer("playground-laser");
@@ -161,6 +166,18 @@ export class MbPlaygroundToolbar extends LitElement {
     };
     this.laserPointer.turnOn(initialPosition);
 
+    // Store active laser in global interactions for Brain queries
+    try {
+      const globalKey = Symbol.for("meowzer.interactions");
+      const interactions = (globalThis as any)[globalKey];
+      if (interactions) {
+        interactions._activeLaser = this.laserPointer;
+        interactions.getActiveLaser = () => interactions._activeLaser;
+      }
+    } catch {
+      // Ignore
+    }
+
     // Emit laser-activated event to playground
     this.dispatchEvent(
       new CustomEvent("laser-activated", {
@@ -183,10 +200,18 @@ export class MbPlaygroundToolbar extends LitElement {
       const globalKey = Symbol.for("meowzer.interactions");
       const interactions = (globalThis as any)[globalKey];
       if (interactions && interactions.emit) {
+        console.log(
+          `[Toolbar] Emitting global event: ${eventType}`,
+          event
+        );
         interactions.emit(eventType, event);
+      } else {
+        console.warn(
+          `[Toolbar] Global interactions emitter not found!`
+        );
       }
-    } catch {
-      // Ignore if interactions not available
+    } catch (error) {
+      console.error(`[Toolbar] Error emitting laser event:`, error);
     }
   }
 
@@ -205,6 +230,17 @@ export class MbPlaygroundToolbar extends LitElement {
         position: this.laserPointer.position,
       });
 
+      // Clear active laser from global interactions
+      try {
+        const globalKey = Symbol.for("meowzer.interactions");
+        const interactions = (globalThis as any)[globalKey];
+        if (interactions) {
+          interactions._activeLaser = null;
+        }
+      } catch {
+        // Ignore
+      }
+
       this.laserPointer.turnOff();
       this.laserPointer = undefined;
     }
@@ -214,7 +250,6 @@ export class MbPlaygroundToolbar extends LitElement {
 
     this.requestUpdate();
   }
-
   private cancelMode() {
     if (this.clickListener) {
       document.removeEventListener("click", this.clickListener);

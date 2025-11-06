@@ -343,6 +343,14 @@ export class Cat {
     this.events.clear();
   }
 
+  /**
+   * Set visual indicator for laser interest
+   */
+  setLaserInterested(interested: boolean): void {
+    if (this._destroyed) return;
+    this.dom.setLaserInterested(interested);
+  }
+
   // Event system
   on(event: CatEvent, handler: EventHandler): void {
     this.events.on(event, handler);

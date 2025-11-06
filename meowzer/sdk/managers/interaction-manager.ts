@@ -221,15 +221,23 @@ export class InteractionManager {
   /**
    * Listen to interaction events
    */
-  on(event: InteractionEventType, handler: EventHandler): void {
-    this.events.on(event, handler);
+  on(event: string, handler: EventHandler): void {
+    this.events.on(event as any, handler);
   }
 
   /**
    * Stop listening to interaction events
    */
-  off(event: InteractionEventType, handler: EventHandler): void {
-    this.events.off(event, handler);
+  off(event: string, handler: EventHandler): void {
+    this.events.off(event as any, handler);
+  }
+
+  /**
+   * Emit interaction events (for external systems like laser pointer)
+   * @internal
+   */
+  emit(event: string, data: any): void {
+    this.events.emit(event as any, data);
   }
 
   /**
