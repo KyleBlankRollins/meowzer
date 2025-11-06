@@ -534,11 +534,6 @@ export class Brain {
       const globalKey = Symbol.for("meowzer.interactions");
       const interactions = (globalThis as any)[globalKey];
 
-      console.log(
-        "[Brain] Setting up yarn listener, interactions available:",
-        !!interactions
-      );
-
       if (interactions) {
         interactions.on(
           "yarnPlaced",
@@ -548,7 +543,6 @@ export class Brain {
           "yarnMoved",
           this._handleYarnMoved.bind(this)
         );
-        console.log("[Brain] Yarn event listeners registered");
       }
     } catch (error) {
       console.error("[Brain] Error setting up yarn listener:", error);
@@ -563,10 +557,7 @@ export class Brain {
     id: string;
     position: Position;
   }): void => {
-    console.log("[Brain] Yarn placed event received:", event);
-
     if (!this._running || this._destroyed) {
-      console.log("[Brain] Not running or destroyed, ignoring yarn");
       return;
     }
 
@@ -577,37 +568,18 @@ export class Brain {
 
     const detectionRange = 150;
 
-    console.log(
-      "[Brain] Distance to yarn:",
-      dist,
-      "Detection range:",
-      detectionRange
-    );
-
     if (dist <= detectionRange) {
       const interest = this.evaluateInterest({
         type: "yarn",
         position: event.position,
       });
 
-      console.log(
-        "[Brain] Interest in yarn:",
-        interest,
-        "Curiosity:",
-        this._personality.curiosity
-      );
-
       if (interest >= 0.5 && this._personality.curiosity >= 0.3) {
-        console.log("[Brain] Triggering yarn reaction!");
         this._emit("reactionTriggered", {
           type: "yarnDetected",
           yarnId: event.id,
           interest,
         });
-      } else {
-        console.log(
-          "[Brain] Thresholds not met - interest needs >= 0.5, curiosity needs >= 0.3"
-        );
       }
     }
   };
@@ -667,12 +639,6 @@ export class Brain {
       const interactions = (globalThis as any)[globalKey];
 
       if (interactions) {
-        console.log(
-          `[Brain ${this.cat.id.slice(
-            0,
-            8
-          )}] Setting up laser listeners`
-        );
         interactions.on(
           "laser:activated",
           this._handleLaserActivated.bind(this)
@@ -757,31 +723,9 @@ export class Brain {
       // Laser is highly interesting, especially when moving
       const adjustedInterest = interest * 1.5;
 
-      console.log(
-        `[Brain ${this.cat.id.slice(
-          0,
-          8
-        )}] Laser detected - Distance: ${Math.round(
-          dist
-        )}px, Interest: ${interest.toFixed(
-          2
-        )}, Adjusted: ${adjustedInterest.toFixed(
-          2
-        )}, Energy: ${this._personality.energy.toFixed(2)}`
-      );
-
       if (adjustedInterest > 0.6 && this._personality.energy > 0.2) {
         // Set visual indicator
         this.cat.setLaserInterested(true);
-
-        console.log(
-          `[Brain ${this.cat.id.slice(
-            0,
-            8
-          )}] 🎯 REACTION TRIGGERED - Laser moving, interest: ${adjustedInterest.toFixed(
-            2
-          )}`
-        );
 
         this._emit("reactionTriggered", {
           type: "laserMoving",

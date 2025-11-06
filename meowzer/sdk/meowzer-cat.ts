@@ -693,6 +693,13 @@ export class MeowzerCat {
       }
     }
 
+    // Handle need reactions
+    if (data.type === "needDetected") {
+      if (data.needId) {
+        await this.respondToNeed(data.needId);
+      }
+    }
+
     // Handle yarn reactions
     if (data.type === "yarnDetected" || data.type === "yarnMoving") {
       if (data.yarnId) {
