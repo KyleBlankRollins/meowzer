@@ -26,5 +26,6 @@
 ## UI
 
 - Feat: Create pick up/drop feature that applies to all objects in the playground
-- Feat: Add UI for changing hats
 - Feat: Cursor manager that handles cursor state/visual changes
+- Chore: Remove all of the stupid fallback values for `var()` in component styles.
+- Feat: Add UI for changing hats

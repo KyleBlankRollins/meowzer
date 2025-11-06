@@ -576,87 +576,95 @@ export class MbCatPlayground extends LitElement {
 
     return html`
       <div class="playground-container">
-        <!-- Vertical Toolbar -->
-        <mb-playground-toolbar
-          @create-cat=${this.openCreatorDialog}
-          @view-stats=${this.openStatsDialog}
-          @laser-activated=${this.handleLaserActivated}
-        ></mb-playground-toolbar>
+        <!-- Main playground area for cats and interactions -->
+        <div class="playground-main">
+          <!-- Context Menu is now injected directly into cat DOM -->
 
-        <!-- Context Menu is now injected directly into cat DOM -->
+          <!-- Rename Dialog -->
+          ${this.showRenameDialog
+            ? html`
+                <quiet-dialog
+                  ?open=${this.showRenameDialog}
+                  @quiet-request-close=${this.handleRenameCancel}
+                >
+                  <div slot="header">Rename Cat</div>
 
-        <!-- Rename Dialog -->
-        ${this.showRenameDialog
-          ? html`
-              <quiet-dialog
-                ?open=${this.showRenameDialog}
-                @quiet-request-close=${this.handleRenameCancel}
-              >
-                <div slot="header">Rename Cat</div>
+                  <quiet-text-field
+                    label="Cat Name"
+                    .value=${this.newName}
+                    @quiet-input=${(e: CustomEvent) =>
+                      (this.newName = e.detail.value)}
+                    @keydown=${(e: KeyboardEvent) => {
+                      if (e.key === "Enter")
+                        this.handleRenameSubmit();
+                    }}
+                  ></quiet-text-field>
 
-                <quiet-text-field
-                  label="Cat Name"
-                  .value=${this.newName}
-                  @quiet-input=${(e: CustomEvent) =>
-                    (this.newName = e.detail.value)}
-                  @keydown=${(e: KeyboardEvent) => {
-                    if (e.key === "Enter") this.handleRenameSubmit();
-                  }}
-                ></quiet-text-field>
+                  <div slot="footer">
+                    <quiet-button
+                      appearance="outline"
+                      @click=${this.handleRenameCancel}
+                    >
+                      Cancel
+                    </quiet-button>
+                    <quiet-button
+                      variant="primary"
+                      @click=${this.handleRenameSubmit}
+                      ?disabled=${!this.newName.trim()}
+                    >
+                      Rename
+                    </quiet-button>
+                  </div>
+                </quiet-dialog>
+              `
+            : ""}
 
-                <div slot="footer">
-                  <quiet-button
-                    appearance="outline"
-                    @click=${this.handleRenameCancel}
-                  >
-                    Cancel
-                  </quiet-button>
-                  <quiet-button
-                    variant="primary"
-                    @click=${this.handleRenameSubmit}
-                    ?disabled=${!this.newName.trim()}
-                  >
-                    Rename
-                  </quiet-button>
-                </div>
-              </quiet-dialog>
+          <!-- Cat Creator Dialog -->
+          <quiet-dialog
+            id="creator-dialog"
+            @quiet-request-close=${this.closeCreatorDialog}
+            light-dismiss
+          >
+            <div slot="header">Create Cat</div>
+            <cat-creator
+              @cat-created=${this.closeCreatorDialog}
+            ></cat-creator>
+          </quiet-dialog>
+
+          <!-- Statistics Dialog -->
+          <quiet-dialog
+            id="stats-dialog"
+            @quiet-request-close=${this.closeStatsDialog}
+            light-dismiss
+          >
+            <div slot="header">Statistics</div>
+            <cat-statistics></cat-statistics>
+          </quiet-dialog>
+
+          <!-- Yarn Visuals -->
+          ${Array.from(this.activeYarns.values()).map(
+            (yarn) => html`
+              <mb-yarn-visual
+                .yarnId=${yarn.id}
+                .interactive=${true}
+              ></mb-yarn-visual>
             `
-          : ""}
+          )}
 
-        <!-- Cat Creator Dialog -->
-        <quiet-dialog
-          id="creator-dialog"
-          @quiet-request-close=${this.closeCreatorDialog}
-          light-dismiss
-        >
-          <div slot="header">Create Cat</div>
-          <cat-creator
-            @cat-created=${this.closeCreatorDialog}
-          ></cat-creator>
-        </quiet-dialog>
+          <!-- Laser Visual -->
+          <mb-laser-visual
+            .laser=${this.activeLaser}
+          ></mb-laser-visual>
+        </div>
 
-        <!-- Statistics Dialog -->
-        <quiet-dialog
-          id="stats-dialog"
-          @quiet-request-close=${this.closeStatsDialog}
-          light-dismiss
-        >
-          <div slot="header">Statistics</div>
-          <cat-statistics></cat-statistics>
-        </quiet-dialog>
-
-        <!-- Yarn Visuals -->
-        ${Array.from(this.activeYarns.values()).map(
-          (yarn) => html`
-            <mb-yarn-visual
-              .yarnId=${yarn.id}
-              .interactive=${true}
-            ></mb-yarn-visual>
-          `
-        )}
-
-        <!-- Laser Visual -->
-        <mb-laser-visual .laser=${this.activeLaser}></mb-laser-visual>
+        <!-- Sidebar for toolbar -->
+        <div class="playground-sidebar">
+          <mb-playground-toolbar
+            @create-cat=${this.openCreatorDialog}
+            @view-stats=${this.openStatsDialog}
+            @laser-activated=${this.handleLaserActivated}
+          ></mb-playground-toolbar>
+        </div>
       </div>
     `;
   }

@@ -8,9 +8,26 @@ export const catPlaygroundStyles = css`
   }
 
   .playground-container {
-    position: relative;
+    display: flex;
     height: 100%;
     background: var(--surface);
+  }
+
+  .playground-main {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .playground-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem;
+    background: var(--quiet-neutral-background-softest, #f9fafb);
+    border-left: 1px solid var(--quiet-neutral-stroke-soft, #e0e0e0);
+    min-width: 80px;
+    max-width: 80px;
   }
 
   .preview-area {
