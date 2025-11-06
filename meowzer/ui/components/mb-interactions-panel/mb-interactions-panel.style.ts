@@ -121,6 +121,19 @@ export const interactionsPanelStyles = css`
     flex: 1;
   }
 
+  .mode-notice-content {
+    flex: 1;
+  }
+
+  .mode-notice-title {
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+  }
+
+  .uninitialized-message {
+    color: var(--quiet-neutral-text-soft);
+  }
+
   @media (max-width: 480px) {
     .items-grid {
       grid-template-columns: repeat(2, 1fr);

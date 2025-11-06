@@ -11,7 +11,7 @@
  * ```
  */
 
-import { LitElement, html }  from "lit";
+import { LitElement, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { MeowzerUtils } from "meowzer";
 import { catAvatarStyles } from "./cat-avatar.style.js";
@@ -55,8 +55,9 @@ export class CatAvatar extends LitElement {
 
     return html`
       <div
-        class="avatar-container ${this.size}"
-        style="${this.noBorder ? "border: none;" : ""}"
+        class="avatar-container ${this.size} ${this.noBorder
+          ? "no-border"
+          : ""}"
       >
         ${svg
           ? html`<div .innerHTML=${svg}></div>`

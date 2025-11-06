@@ -287,8 +287,8 @@ export class MbInteractionsPanel extends LitElement {
       return html`
         <div class="mode-notice">
           <div class="mode-notice-icon">📍</div>
-          <div style="flex: 1">
-            <div style="font-weight: 600; margin-bottom: 0.25rem">
+          <div class="mode-notice-content">
+            <div class="mode-notice-title">
               Placement Mode: ${labels[this.placementMode]}
             </div>
             <div>Click anywhere on the playground to place.</div>
@@ -310,9 +310,7 @@ export class MbInteractionsPanel extends LitElement {
     if (!this.meowzer) {
       return html`
         <div class="panel-content">
-          <p style="color: var(--quiet-neutral-text-soft)">
-            Meowzer not initialized
-          </p>
+          <p class="uninitialized-message">Meowzer not initialized</p>
         </div>
       `;
     }
