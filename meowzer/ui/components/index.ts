@@ -3,10 +3,10 @@
  */
 
 // Phase 2: Creation Components
-export { CatCreator } from "./cat-creator/index.js";
-export { CatPersonalityPicker } from "./cat-personality-picker/index.js";
-export { CatPreview } from "./cat-preview/index.js";
-export { CatColorPicker } from "./cat-color-picker/index.js";
+export { CatCreator } from "./cat-creator/cat-creator.js";
+export { CatPersonalityPicker } from "./cat-personality-picker/cat-personality-picker.js";
+export { CatPreview } from "./cat-preview/cat-preview.js";
+export { CatColorPicker } from "./cat-color-picker/cat-color-picker.js";
 
 // Phase 3: Management Components
 export { CatStatistics } from "./cat-statistics/cat-statistics.js";
@@ -24,7 +24,7 @@ export { MbCatOverlay } from "./mb-cat-overlay/mb-cat-overlay.js";
 export { MbCatPlayground } from "./mb-cat-playground/mb-cat-playground.js";
 
 // Phase 6: Interactions
-export { MbInteractionsPanel } from "./mb-interactions-panel/index.js";
-export { MbPlaygroundToolbar } from "./mb-playground-toolbar/index.js";
-export { MbYarnVisual } from "./mb-yarn-visual/index.js";
-export { MbLaserVisual } from "./mb-laser-visual/index.js";
+export { MbInteractionsPanel } from "./mb-interactions-panel/mb-interactions-panel.js";
+export { MbPlaygroundToolbar } from "./mb-playground-toolbar/mb-playground-toolbar.js";
+export { MbYarnVisual } from "./mb-yarn-visual/mb-yarn-visual.js";
+export { MbLaserVisual } from "./mb-laser-visual/mb-laser-visual.js";

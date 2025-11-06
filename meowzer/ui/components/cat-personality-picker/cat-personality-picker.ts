@@ -6,9 +6,10 @@
  * @fires personality-change - Emitted when personality changes, with detail containing updated personality
  */
 
-import { LitElement, html, css } from "lit";
+import { LitElement, html }  from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import type { Personality, PersonalityPreset } from "meowzer";
+import { catPersonalityPickerStyles } from "./cat-personality-picker.style.js";
 
 const PERSONALITY_PRESETS: Array<{
   name: string;
@@ -70,30 +71,7 @@ const PRESET_TRAIT_VALUES: Record<PersonalityPreset, Personality> = {
 
 @customElement("cat-personality-picker")
 export class CatPersonalityPicker extends LitElement {
-  static styles = css`
-    :host {
-      display: block;
-    }
-
-    .personality-section {
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-    }
-
-    .preset-buttons {
-      display: flex;
-      gap: 0.5rem;
-      flex-wrap: wrap;
-    }
-
-    .trait-sliders {
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-      margin-top: 1rem;
-    }
-  `;
+  static styles = [catPersonalityPickerStyles];
 
   @property({ type: Object }) personality: Partial<Personality> = {};
   @state() private selectedPreset: PersonalityPreset | null = null;
