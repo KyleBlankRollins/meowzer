@@ -1,10 +1,7 @@
 ## General features
 
-- Feed/water cats
 - Play with cats
-  - Laser pointer
   - rc car
-  - string/yarn
 - Cats can play with UI elements. Knock letters around, etc.
 
 ## Cat animations
@@ -26,6 +23,5 @@
 ## UI
 
 - feat: Create pick up/drop feature that applies to all objects in the playground
-- feat: Cursor manager that handles cursor state/visual changes
 - chore: Remove all of the stupid fallback values for `var()` in component styles.
 - feat: Add UI for changing hats
