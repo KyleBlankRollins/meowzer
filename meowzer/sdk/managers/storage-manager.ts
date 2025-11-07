@@ -180,11 +180,17 @@ export class StorageManager {
 
       // Check if cat already exists in collection to determine add vs update
       const isUpdate = cat._collectionName === collectionName;
-      
+
       // Add or update cat in collection
       const result = isUpdate
-        ? this.meowbase.updateCatInCollection(collectionName, meowbaseCat)
-        : this.meowbase.addCatToCollection(collectionName, meowbaseCat);
+        ? this.meowbase.updateCatInCollection(
+            collectionName,
+            meowbaseCat
+          )
+        : this.meowbase.addCatToCollection(
+            collectionName,
+            meowbaseCat
+          );
 
       if (!result.success) {
         throw new StorageError(result.message, {

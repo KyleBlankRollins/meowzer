@@ -6,12 +6,10 @@ import { describe, it, expect } from "vitest";
 import { CatCreator } from "../components/cat-creator/cat-creator.js";
 import { CatPersonalityPicker } from "../components/cat-personality-picker/cat-personality-picker.js";
 import { CatPreview } from "../components/cat-preview/cat-preview.js";
-import { CatGallery } from "../components/cat-gallery/cat-gallery.js";
 import { CollectionPicker } from "../components/collection-picker/collection-picker.js";
 import { CatThumbnail } from "../components/cat-thumbnail/cat-thumbnail.js";
 import { CatExporter } from "../components/cat-exporter/cat-exporter.js";
 import { CatImporter } from "../components/cat-importer/cat-importer.js";
-import { MbCatOverlay } from "../components/mb-cat-overlay/mb-cat-overlay.js";
 import { MbCatPlayground } from "../components/mb-cat-playground/mb-cat-playground.js";
 
 describe("CatCreator", () => {
@@ -66,19 +64,6 @@ describe("CatPreview", () => {
       "cat-preview"
     ) as CatPreview;
     expect(element).toHaveProperty("settings");
-  });
-});
-
-describe("CatGallery", () => {
-  it("should be a custom element", () => {
-    expect(customElements.get("cat-gallery")).toBe(CatGallery);
-  });
-
-  it("should create instance", () => {
-    const element = document.createElement(
-      "cat-gallery"
-    ) as CatGallery;
-    expect(element).toBeInstanceOf(CatGallery);
   });
 });
 
@@ -151,35 +136,6 @@ describe("CatImporter", () => {
 });
 
 // Phase 5: Drop-in Solutions
-
-describe("MbCatOverlay", () => {
-  it("should be a custom element", () => {
-    expect(customElements.get("mb-cat-overlay")).toBe(MbCatOverlay);
-  });
-
-  it("should create instance", () => {
-    const element = document.createElement(
-      "mb-cat-overlay"
-    ) as MbCatOverlay;
-    expect(element).toBeInstanceOf(MbCatOverlay);
-  });
-
-  it("should have position property", () => {
-    const element = document.createElement(
-      "mb-cat-overlay"
-    ) as MbCatOverlay;
-    expect(element).toHaveProperty("position");
-    expect(element.position).toBe("bottom-right");
-  });
-
-  it("should have autoInit property", () => {
-    const element = document.createElement(
-      "mb-cat-overlay"
-    ) as MbCatOverlay;
-    expect(element).toHaveProperty("autoInit");
-    expect(element.autoInit).toBe(true);
-  });
-});
 
 describe("MbCatPlayground", () => {
   it("should be a custom element", () => {

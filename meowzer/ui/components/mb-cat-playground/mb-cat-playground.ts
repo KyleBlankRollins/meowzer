@@ -590,15 +590,15 @@ export class MbCatPlayground extends LitElement {
     if (this.newName.trim()) {
       const cat = this.selectedCat;
       cat.setName(this.newName.trim());
-      
+
       // Save the cat to persist the name change
       await cat.save();
-      
+
       // Resume the cat if it was paused
       if (!cat.isActive) {
         cat.resume();
       }
-      
+
       this.showRenameDialog = false;
       this.newName = "";
       this.selectedCat = null;
@@ -614,7 +614,7 @@ export class MbCatPlayground extends LitElement {
     if (this.selectedCat && !this.selectedCat.isActive) {
       this.selectedCat.resume();
     }
-    
+
     this.showRenameDialog = false;
     this.newName = "";
     this.selectedCat = null;

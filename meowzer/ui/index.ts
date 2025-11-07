@@ -41,7 +41,6 @@ export {
 
 // Components (Phase 4: Gallery & Storage Components)
 export {
-  CatGallery,
   CollectionPicker,
   CatThumbnail,
   CatExporter,
@@ -50,7 +49,6 @@ export {
 
 // Components (Phase 5: Drop-in Solutions)
 export {
-  MbCatOverlay,
   MbCatPlayground,
   MbWardrobeDialog,
 } from "./components/index.js";
