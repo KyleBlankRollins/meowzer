@@ -8,7 +8,7 @@
  * @fires collection-created - Emitted when a new collection is created
  */
 
-import { LitElement, html }  from "lit";
+import { LitElement, html } from "lit";
 import { customElement, state } from "lit/decorators.js";
 import { consume } from "@lit/context";
 import { meowzerContext } from "../../contexts/meowzer-context.js";
@@ -169,7 +169,7 @@ export class CatGallery extends LitElement {
             label="Collection Name"
             .value=${this.newCollectionName}
             @quiet-input=${(e: CustomEvent) =>
-              (this.newCollectionName = e.detail.value)}
+              (this.newCollectionName = (e.target as any).value)}
             placeholder="Enter collection name"
           ></quiet-text-field>
         </div>

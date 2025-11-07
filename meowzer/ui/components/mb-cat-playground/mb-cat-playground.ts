@@ -577,19 +577,32 @@ export class MbCatPlayground extends LitElement {
 
     this.newName = this.selectedCat.name || "";
     this.showRenameDialog = true;
-    this.closeContextMenu();
+    // Don't call closeContextMenu() here - let the menu's quiet-close event handle it
+    // The keepSelectedCat flag is already set in the quiet-select handler
   }
 
   /**
    * Submit rename
    */
-  private handleRenameSubmit() {
+  private async handleRenameSubmit() {
     if (!this.selectedCat) return;
 
     if (this.newName.trim()) {
-      this.selectedCat.setName(this.newName.trim());
+      const cat = this.selectedCat;
+      cat.setName(this.newName.trim());
+      
+      // Save the cat to persist the name change
+      await cat.save();
+      
+      // Resume the cat if it was paused
+      if (!cat.isActive) {
+        cat.resume();
+      }
+      
       this.showRenameDialog = false;
+      this.newName = "";
       this.selectedCat = null;
+      this.requestUpdate();
     }
   }
 
@@ -597,6 +610,11 @@ export class MbCatPlayground extends LitElement {
    * Cancel rename
    */
   private handleRenameCancel() {
+    // Resume the cat if it was paused
+    if (this.selectedCat && !this.selectedCat.isActive) {
+      this.selectedCat.resume();
+    }
+    
     this.showRenameDialog = false;
     this.newName = "";
     this.selectedCat = null;
@@ -672,7 +690,7 @@ export class MbCatPlayground extends LitElement {
                     label="Cat Name"
                     .value=${this.newName}
                     @quiet-input=${(e: CustomEvent) =>
-                      (this.newName = e.detail.value)}
+                      (this.newName = (e.target as any).value)}
                     @keydown=${(e: KeyboardEvent) => {
                       if (e.key === "Enter")
                         this.handleRenameSubmit();

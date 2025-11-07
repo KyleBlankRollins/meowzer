@@ -178,14 +178,16 @@ export class StorageManager {
         ...options?.metadata,
       };
 
+      // Check if cat already exists in collection to determine add vs update
+      const isUpdate = cat._collectionName === collectionName;
+      
       // Add or update cat in collection
-      const addResult = this.meowbase.addCatToCollection(
-        collectionName,
-        meowbaseCat
-      );
+      const result = isUpdate
+        ? this.meowbase.updateCatInCollection(collectionName, meowbaseCat)
+        : this.meowbase.addCatToCollection(collectionName, meowbaseCat);
 
-      if (!addResult.success) {
-        throw new StorageError(addResult.message, {
+      if (!result.success) {
+        throw new StorageError(result.message, {
           operation: "write",
           storageType: "indexeddb",
           itemId: cat.id,
@@ -376,6 +378,7 @@ export class StorageManager {
 
       for (const meowbaseCat of meowbaseCats) {
         const cat = await this.catManager.create({
+          id: meowbaseCat.id,
           seed: meowbaseCat.image,
           name: meowbaseCat.name,
           description: meowbaseCat.description,

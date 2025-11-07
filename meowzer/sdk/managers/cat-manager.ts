@@ -18,6 +18,7 @@ import { SpatialGrid } from "./spatial-grid.js";
  * Options for creating a new cat
  */
 export interface CreateCatOptions {
+  id?: string;
   name?: string;
   description?: string;
   seed?: string;
@@ -79,8 +80,8 @@ export class CatManager {
       options,
     });
 
-    // Generate ID
-    const id = generateId();
+    // Use provided ID or generate a new one
+    const id = options.id || generateId();
 
     // Generate or use provided seed
     let seed: string;
