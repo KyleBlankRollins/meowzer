@@ -120,6 +120,11 @@ export type {
   CatSize,
   FurLength,
   ProtoCat,
+  HatType,
+  HatData,
+  HatAccessory,
+  BaseAccessory,
+  AccessorySettings,
   // Cat behavior
   Personality,
   PersonalityPreset,

@@ -49,7 +49,11 @@ export {
 } from "./components/index.js";
 
 // Components (Phase 5: Drop-in Solutions)
-export { MbCatOverlay, MbCatPlayground } from "./components/index.js";
+export {
+  MbCatOverlay,
+  MbCatPlayground,
+  MbWardrobeDialog,
+} from "./components/index.js";
 
 // Re-export Meowzer SDK types for convenience
 export type {

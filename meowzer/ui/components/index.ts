@@ -22,6 +22,7 @@ export { CatImporter } from "./cat-importer/cat-importer.js";
 // Phase 5: Drop-in Solutions
 export { MbCatOverlay } from "./mb-cat-overlay/mb-cat-overlay.js";
 export { MbCatPlayground } from "./mb-cat-playground/mb-cat-playground.js";
+export { MbWardrobeDialog } from "./mb-wardrobe-dialog/mb-wardrobe-dialog.js";
 
 // Phase 6: Interactions
 export { MbInteractionsPanel } from "./mb-interactions-panel/mb-interactions-panel.js";

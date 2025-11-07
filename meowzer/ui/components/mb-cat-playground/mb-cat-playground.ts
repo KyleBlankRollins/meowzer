@@ -119,6 +119,17 @@ export class MbCatPlayground extends LitElement {
   @state()
   private showRenameDialog = false;
 
+  /**
+   * Wardrobe dialog state
+   */
+  @state()
+  private showWardrobeDialog = false;
+
+  /**
+   * Flag to prevent clearing selectedCat when transitioning to another dialog
+   */
+  private keepSelectedCat = false;
+
   @state()
   private newName = "";
 
@@ -337,6 +348,13 @@ export class MbCatPlayground extends LitElement {
     const divider = document.createElement("quiet-divider");
     dropdown.appendChild(divider);
 
+    // Add hat menu item
+    this.addMenuItem(dropdown, "change-hat", "Change Hat", "shirt");
+
+    // Add divider before disabled items
+    const divider2 = document.createElement("quiet-divider");
+    dropdown.appendChild(divider2);
+
     // Add disabled items with "Soon" badge
     this.addMenuItem(
       dropdown,
@@ -354,24 +372,21 @@ export class MbCatPlayground extends LitElement {
       undefined,
       true
     );
-    this.addMenuItem(
-      dropdown,
-      "outfit",
-      "Change Outfit",
-      "shirt",
-      undefined,
-      true
-    );
 
     // Handle menu selection
     dropdown.addEventListener("quiet-select", (e: CustomEvent) => {
-      this.handleMenuAction(e.detail.value, cat);
+      const action = e.detail.item.value;
+
+      // Set flag for actions that open another dialog
+      if (action === "rename" || action === "change-hat") {
+        this.keepSelectedCat = true;
+      }
+
+      this.handleMenuAction(action, cat);
     });
 
     // Handle menu close
-    dropdown.addEventListener("quiet-close", () => {
-      this.closeContextMenu();
-    });
+    dropdown.addEventListener("quiet-close", this.closeContextMenu);
 
     menuContainer.appendChild(dropdown);
 
@@ -439,6 +454,9 @@ export class MbCatPlayground extends LitElement {
       case "rename":
         this.handleRename();
         break;
+      case "change-hat":
+        this.handleChangeHat();
+        break;
     }
   }
 
@@ -503,6 +521,12 @@ export class MbCatPlayground extends LitElement {
 
       // Remove menu-open class
       this.selectedCat.element.classList.remove("menu-open");
+
+      // Check if we should keep selectedCat (transitioning to another dialog)
+      if (this.keepSelectedCat) {
+        this.keepSelectedCat = false;
+        return; // Don't resume or clear selectedCat
+      }
 
       // Auto-resume cat if it was paused by the menu
       if (!this.selectedCat.isActive) {
@@ -579,6 +603,30 @@ export class MbCatPlayground extends LitElement {
   }
 
   /**
+   * Handle change hat action
+   */
+  private handleChangeHat() {
+    if (!this.selectedCat) return;
+
+    // Open wardrobe dialog (selectedCat will be cleared when dialog closes)
+    this.showWardrobeDialog = true;
+  }
+
+  /**
+   * Handle wardrobe dialog close
+   */
+  private handleWardrobeDialogClose() {
+    this.showWardrobeDialog = false;
+
+    // Resume cat if paused
+    if (this.selectedCat && !this.selectedCat.isActive) {
+      this.selectedCat.resume();
+    }
+
+    this.selectedCat = null;
+  }
+
+  /**
    * Handle placeholder actions
    */
   render() {
@@ -649,6 +697,13 @@ export class MbCatPlayground extends LitElement {
                 </quiet-dialog>
               `
             : ""}
+
+          <!-- Wardrobe Dialog -->
+          <mb-wardrobe-dialog
+            .cat=${this.selectedCat}
+            ?open=${this.showWardrobeDialog}
+            @dialog-close=${this.handleWardrobeDialogClose}
+          ></mb-wardrobe-dialog>
 
           <!-- Cat Creator Dialog -->
           <quiet-dialog

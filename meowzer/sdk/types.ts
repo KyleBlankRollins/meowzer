@@ -31,6 +31,9 @@ export const MeowzerEvent = {
   RESUME: "resume",
   DESTROY: "destroy",
   MENU_CLICK: "menuClick",
+  HAT_APPLIED: "hat-applied",
+  HAT_REMOVED: "hat-removed",
+  HAT_UPDATED: "hat-updated",
   // Placeholders for future features:
   PICK_UP: "pickUp",
   DROP: "drop",
