@@ -24,6 +24,7 @@ export type {
   CatPattern,
   CatSize,
   FurLength,
+  HatType,
   CatSettings,
   AppearanceData,
   DimensionData,
@@ -31,6 +32,10 @@ export type {
   SpriteData,
   ProtoCat,
   ValidationResult,
+  BaseAccessory,
+  HatAccessory,
+  HatData,
+  AccessorySettings,
 } from "./cat/appearance.js";
 
 // ============================================================================

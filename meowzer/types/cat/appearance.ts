@@ -23,6 +23,46 @@ export type CatSize = "small" | "medium" | "large";
 export type FurLength = "short" | "medium" | "long";
 
 /**
+ * Hat types available for cats
+ */
+export type HatType = "beanie" | "cowboy" | "baseball";
+
+/**
+ * Base accessory properties
+ */
+export interface BaseAccessory {
+  baseColor: string;
+  accentColor: string;
+}
+
+/**
+ * Hat accessory data
+ */
+export interface HatAccessory extends BaseAccessory {
+  type: HatType;
+}
+
+/**
+ * Data for a cat's hat
+ */
+export interface HatData {
+  type: HatType;
+  baseColor: string;
+  accentColor: string;
+}
+
+/**
+ * Accessory settings for cat customization
+ */
+export interface AccessorySettings {
+  hat?: {
+    type: HatType;
+    baseColor: string;
+    accentColor: string;
+  };
+}
+
+/**
  * Settings for creating a cat's appearance
  */
 export interface CatSettings {
@@ -43,6 +83,13 @@ export interface AppearanceData {
   furLength: FurLength;
   shadingColor: string;
   highlightColor: string;
+  accessories?: {
+    hat?: {
+      type: HatType;
+      baseColor: string;
+      accentColor: string;
+    };
+  };
 }
 
 /**
@@ -72,6 +119,7 @@ export interface SVGElements {
   tail: string;
   legs?: string[];
   pattern?: string[];
+  hat?: string;
 }
 
 /**

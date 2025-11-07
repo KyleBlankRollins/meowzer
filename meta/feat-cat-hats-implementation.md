@@ -33,11 +33,22 @@ This feature adds customizable hats to cats with three templates (beanie, cowboy
 
 **Acceptance Criteria:**
 
-- [ ] All hat-related types defined
-- [ ] `AppearanceData` includes optional `accessories` field
-- [ ] `SVGElements` includes optional `hat` field
-- [ ] Types compile without errors
-- [ ] Types are properly exported and accessible
+- [x] All hat-related types defined
+- [x] `AppearanceData` includes optional `accessories` field
+- [x] `SVGElements` includes optional `hat` field
+- [x] Types compile without errors
+- [x] Types are properly exported and accessible
+
+**Status:** ✅ COMPLETE
+
+**Implementation Notes:**
+
+- Added `HatType`, `HatData`, `HatAccessory`, `BaseAccessory`, and `AccessorySettings` types to `meowzer/types/cat/appearance.ts`
+- Updated `AppearanceData` interface with optional `accessories` field containing optional `hat` property
+- Updated `SVGElements` interface with optional `hat` field for animation reference
+- All new types exported from `meowzer/types/index.ts`
+- Verified compilation: Meowkit, SDK, and UI packages all build successfully
+- Type checking confirmed all types work correctly with existing codebase
 
 ---
 
