@@ -41,9 +41,10 @@ export const wardrobeDialogStyles = css`
     gap: var(--quiet-spacing-2);
   }
 
-  .hat-emoji {
-    font-size: 2rem;
-    line-height: 1;
+  .hat-preview-svg {
+    width: 48px;
+    height: 32px;
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1));
   }
 
   .hat-label {
@@ -55,6 +56,12 @@ export const wardrobeDialogStyles = css`
   .color-customization {
     display: flex;
     flex-direction: column;
+    gap: var(--quiet-spacing-3);
+  }
+
+  .color-pickers {
+    display: flex;
+    justify-content: center;
     gap: var(--quiet-spacing-3);
   }
 
@@ -82,9 +89,9 @@ export const wardrobeDialogStyles = css`
     gap: var(--quiet-spacing-4);
   }
 
-  .preview-emoji {
-    font-size: 4rem;
-    line-height: 1;
+  .preview-placeholder .hat-preview-svg {
+    width: 96px;
+    height: 64px;
     filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
   }
 

@@ -1,6 +1,14 @@
 import { generateId as meowkitGenerateId } from "../meowkit/utils.js";
-import { buildCat, buildCatFromSeed } from "../meowkit/index.js";
-import type { CatSettings, ProtoCat } from "../meowkit/index.js";
+import {
+  buildCat,
+  buildCatFromSeed,
+  generateHatSVG,
+} from "../meowkit/index.js";
+import type {
+  CatSettings,
+  ProtoCat,
+  HatType,
+} from "../meowkit/index.js";
 
 /**
  * Utility functions for working with cats and seeds
@@ -297,5 +305,43 @@ export class MeowzerUtils {
     const now = new Date();
     const diff = now.getTime() - createdAt.getTime();
     return Math.floor(diff / (1000 * 60 * 60 * 24));
+  }
+
+  /**
+   * Generate a standalone hat SVG for preview purposes
+   *
+   * Creates a small SVG showing just the hat with the specified colors.
+   * Useful for hat selection UI, previews, and thumbnails.
+   *
+   * @param type - Hat type ("beanie", "cowboy", "baseball")
+   * @param baseColor - Base color for the hat
+   * @param accentColor - Accent color for details
+   * @returns SVG string with proper viewBox for standalone display
+   *
+   * @example
+   * ```ts
+   * const hatSVG = MeowzerUtils.buildHatPreview("beanie", "#FF0000", "#FFFF00");
+   * element.innerHTML = hatSVG;
+   * ```
+   */
+  static buildHatPreview(
+    type: HatType,
+    baseColor: string,
+    accentColor: string
+  ): string {
+    const hatSVG = generateHatSVG(
+      type,
+      baseColor,
+      accentColor,
+      "preview"
+    );
+
+    // Wrap in a standalone SVG with viewBox centered on the hat
+    // Hat elements are positioned around x=56-76, y=12-24
+    return `
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="50 10 30 20" width="48" height="32">
+        ${hatSVG}
+      </svg>
+    `.trim();
   }
 }

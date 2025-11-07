@@ -3,6 +3,7 @@ import { customElement, property, state } from "lit/decorators.js";
 import { wardrobeDialogStyles } from "./mb-wardrobe-dialog.style.js";
 import type { HatType } from "meowzer";
 import type { MeowzerCat } from "meowzer";
+import { MeowzerUtils } from "meowzer";
 
 /**
  * Wardrobe Dialog Component
@@ -68,6 +69,18 @@ export class MbWardrobeDialog extends LitElement {
     { type: "cowboy", label: "Cowboy", emoji: "🤠" },
     { type: "baseball", label: "Baseball", emoji: "⚾" },
   ];
+
+  /**
+   * Generate a standalone SVG for a hat (for preview/selection)
+   * Creates a small centered hat icon
+   */
+  private generateHatPreviewSVG(
+    type: HatType,
+    baseColor: string,
+    accentColor: string
+  ): string {
+    return MeowzerUtils.buildHatPreview(type, baseColor, accentColor);
+  }
 
   /**
    * Initialize state when dialog opens
@@ -187,9 +200,15 @@ export class MbWardrobeDialog extends LitElement {
 
   /**
    * Handle dialog close event from Quiet UI
+   * Only close if the event is from the dialog itself, not from nested components
    */
-  private handleDialogClose() {
-    this.handleCancel();
+  private handleDialogClose(e: CustomEvent) {
+    // Check if the event target is the dialog element itself
+    // This prevents nested component close events (like popover) from closing the dialog
+    const target = e.target as HTMLElement;
+    if (target.tagName.toLowerCase() === "quiet-dialog") {
+      this.handleCancel();
+    }
   }
 
   /**
@@ -212,7 +231,13 @@ export class MbWardrobeDialog extends LitElement {
                 @click=${() => this.handleHatSelect(hat.type)}
               >
                 <div class="hat-button-content">
-                  <span class="hat-emoji">${hat.emoji}</span>
+                  <div
+                    .innerHTML=${this.generateHatPreviewSVG(
+                      hat.type,
+                      this.baseColor,
+                      this.accentColor
+                    )}
+                  ></div>
                   <span class="hat-label">${hat.label}</span>
                 </div>
               </quiet-button>
@@ -231,24 +256,25 @@ export class MbWardrobeDialog extends LitElement {
       <div class="color-customization">
         <label class="section-label">Customize Colors:</label>
 
-        <cat-color-picker
-          label="Base Color"
-          .value=${this.baseColor}
-          @color-change=${this.handleBaseColorChange}
-        ></cat-color-picker>
+        <div class="color-pickers">
+          <cat-color-picker
+            label="Base Color"
+            .value=${this.baseColor}
+            @color-change=${this.handleBaseColorChange}
+          ></cat-color-picker>
 
-        <cat-color-picker
-          label="Accent Color"
-          .value=${this.accentColor}
-          @color-change=${this.handleAccentColorChange}
-        ></cat-color-picker>
+          <cat-color-picker
+            label="Accent Color"
+            .value=${this.accentColor}
+            @color-change=${this.handleAccentColorChange}
+          ></cat-color-picker>
+        </div>
       </div>
     `;
   }
 
   /**
    * Render preview section
-   * Note: This is a placeholder. Real preview would require rendering the hat SVG
    */
   private renderPreview() {
     return html`
@@ -256,23 +282,13 @@ export class MbWardrobeDialog extends LitElement {
         <label class="section-label">Preview:</label>
         <div class="preview-area">
           <div class="preview-placeholder">
-            <span class="preview-emoji"
-              >${this.hatTypes.find(
-                (h) => h.type === this.selectedHatType
-              )?.emoji}</span
-            >
-            <div class="preview-colors">
-              <div
-                class="preview-color-swatch"
-                style="background-color: ${this.baseColor}"
-                title="Base: ${this.baseColor}"
-              ></div>
-              <div
-                class="preview-color-swatch"
-                style="background-color: ${this.accentColor}"
-                title="Accent: ${this.accentColor}"
-              ></div>
-            </div>
+            <div
+              .innerHTML=${this.generateHatPreviewSVG(
+                this.selectedHatType,
+                this.baseColor,
+                this.accentColor
+              )}
+            ></div>
           </div>
         </div>
       </div>
