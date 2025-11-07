@@ -29,26 +29,12 @@ export type {
   PlacementOptions,
 } from "./controllers/index.js";
 
-// Components (Phase 2: Creation Components)
+// UI components
 export {
   CatCreator,
   CatPersonalityPicker,
   CatPreview,
-} from "./components/index.js";
-
-// Components (Phase 3: Management Components)
-// Note: Phase 3 components removed in UI refactor
-
-// Components (Phase 4: Gallery & Storage Components)
-export {
-  CollectionPicker,
-  CatThumbnail,
-  CatExporter,
-  CatImporter,
-} from "./components/index.js";
-
-// Components (Phase 5: Drop-in Solutions)
-export {
+  CatStatistics,
   MbCatPlayground,
   MbWardrobeDialog,
 } from "./components/index.js";

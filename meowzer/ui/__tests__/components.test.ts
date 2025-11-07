@@ -6,10 +6,6 @@ import { describe, it, expect } from "vitest";
 import { CatCreator } from "../components/cat-creator/cat-creator.js";
 import { CatPersonalityPicker } from "../components/cat-personality-picker/cat-personality-picker.js";
 import { CatPreview } from "../components/cat-preview/cat-preview.js";
-import { CollectionPicker } from "../components/collection-picker/collection-picker.js";
-import { CatThumbnail } from "../components/cat-thumbnail/cat-thumbnail.js";
-import { CatExporter } from "../components/cat-exporter/cat-exporter.js";
-import { CatImporter } from "../components/cat-importer/cat-importer.js";
 import { MbCatPlayground } from "../components/mb-cat-playground/mb-cat-playground.js";
 
 describe("CatCreator", () => {
@@ -64,74 +60,6 @@ describe("CatPreview", () => {
       "cat-preview"
     ) as CatPreview;
     expect(element).toHaveProperty("settings");
-  });
-});
-
-describe("CollectionPicker", () => {
-  it("should be a custom element", () => {
-    expect(customElements.get("collection-picker")).toBe(
-      CollectionPicker
-    );
-  });
-
-  it("should create instance", () => {
-    const element = document.createElement(
-      "collection-picker"
-    ) as CollectionPicker;
-    expect(element).toBeInstanceOf(CollectionPicker);
-  });
-
-  it("should have selectedCollection property", () => {
-    const element = document.createElement(
-      "collection-picker"
-    ) as CollectionPicker;
-    expect(element).toHaveProperty("selectedCollection");
-  });
-});
-
-describe("CatThumbnail", () => {
-  it("should be a custom element", () => {
-    expect(customElements.get("cat-thumbnail")).toBe(CatThumbnail);
-  });
-
-  it("should create instance", () => {
-    const element = document.createElement(
-      "cat-thumbnail"
-    ) as CatThumbnail;
-    expect(element).toBeInstanceOf(CatThumbnail);
-  });
-
-  it("should have cat property", () => {
-    const element = document.createElement(
-      "cat-thumbnail"
-    ) as CatThumbnail;
-    expect(element).toHaveProperty("cat");
-  });
-});
-
-describe("CatExporter", () => {
-  it("should be a custom element", () => {
-    expect(customElements.get("cat-exporter")).toBe(CatExporter);
-  });
-
-  it("should create instance", () => {
-    const element = document.createElement(
-      "cat-exporter"
-    ) as CatExporter;
-    expect(element).toBeInstanceOf(CatExporter);
-  });
-});
-
-describe("CatImporter", () => {
-  it("should be a custom element", () => {
-    expect(customElements.get("cat-importer")).toBe(CatImporter);
-  });
-
-  it("should create instance", () => {
-    const element = document.createElement(
-      "cat-importer"
-    ) as CatImporter;
-    expect(element).toBeInstanceOf(CatImporter);
   });
 });
 

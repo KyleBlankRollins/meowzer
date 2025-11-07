@@ -15,15 +15,6 @@ npm install meowzer @meowzer/ui @quietui/quiet lit
 - `@quietui/quiet` ^1.3.0 - UI component library
 - `lit` ^3.0.0 - Web components framework
 
-## Status
-
-✅ **Phase 1 Complete** - Core Infrastructure  
-✅ **Phase 2 Complete** - Creation Components  
-✅ **Phase 3 Complete** - Management Components  
-✅ **Phase 4 Complete** - Gallery & Storage Components  
-✅ **Phase 5 Complete** - Drop-in Solutions  
-✅ **Phase 6 Complete** - Storybook Documentation
-
 ## Quick Start
 
 ### Option 1: CDN (Fastest)
@@ -66,35 +57,33 @@ npm install meowzer @meowzer/ui @quietui/quiet lit
 import "@quietui/quiet/themes/quiet.css";
 import "@quietui/quiet/themes/restyle.css";
 
-// Import components
+// Import all components
 import "@meowzer/ui";
 
 // Or import specific components
-import { MeowzerProvider, CatCreator, CatManager } from "@meowzer/ui";
+import {
+  MeowzerProvider,
+  MbCatPlayground,
+  CatCreator,
+  CatStatistics,
+} from "@meowzer/ui";
 ```
 
 ```html
 <meowzer-provider auto-init>
-  <cat-creator></cat-creator>
-  <cat-manager></cat-manager>
+  <mb-cat-playground></mb-cat-playground>
 </meowzer-provider>
 ```
 
 ## Features
 
+- **Drop-in playground**: Complete cat creation and interaction interface with `mb-cat-playground`
 - **Provider pattern**: Lit Context API for reactive state management
 - **Reactive controllers**: Auto-subscribe to SDK hooks and events
 - **Framework agnostic**: Works with React, Vue, Angular, Svelte, vanilla
 - **Customizable UI**: Built on Quiet UI for consistent design
 - **Boundary control**: Flexible cat movement areas (fullscreen, fixed, block)
-
-## Phase 1: Core Infrastructure ✅
-
-- [x] Package setup
-- [x] Context system (meowzerContext)
-- [x] MeowzerProvider component
-- [x] Reactive controllers (CatsController, CatController)
-- [x] TypeScript compilation working
+- **Modular components**: Use creation components independently or as part of playground
 
 ## Using Contexts and Controllers
 
@@ -162,13 +151,7 @@ render() {
 }
 ```
 
-## Phase 2: Creation Components ✅
-
-- [x] CatCreator - Main creation interface
-- [x] CatAppearanceForm - Color, pattern, size customization
-- [x] CatPersonalityPicker - Personality trait selection
-- [x] CatPreview - Live preview with updates
-- [x] Tests and TypeScript compilation
+## Creation Components
 
 ### Using Creation Components
 
@@ -200,91 +183,108 @@ creator.addEventListener("cat-created", (e) => {
 });
 ```
 
+## Management Components
+
+### Using Management Components
+
+The `<cat-statistics>` component displays real-time information about a cat's state, needs, and personality. It's integrated into `mb-cat-playground` but can also be used independently:
+
+```html
+<meowzer-provider>
+  <cat-statistics .cat="${myCat}"></cat-statistics>
+</meowzer-provider>
+```
+
+**Properties:**
+
+- `cat` - MeowzerCat instance to display stats for
+
+**Displays:**
+
+- Cat name and state (idle, walking, playing, etc.)
+- Needs levels (hunger, thirst, playfulness, affection)
+- Personality traits
+- Current activity information
+
+## Drop-in Solutions
+
+### Using the Playground
+
+```html
+<meowzer-provider>
+  <mb-cat-playground></mb-cat-playground>
+</meowzer-provider>
+```
+
+The `<mb-cat-playground>` component is the complete drop-in solution that includes:
+
+- **Cat creation interface** - Integrated `cat-creator` with live preview
+- **Cat management** - Context menu for pause/resume, rename, destroy, wardrobe
+- **Interactive playground** - Cats roam and interact with the environment
+- **Statistics panel** - Real-time cat stats with `cat-statistics`
+- **Interaction tools** - Yarn ball, laser pointer via toolbar
+- **Persistent storage** - Cats saved to IndexedDB automatically
+- **Wardrobe system** - Customize cat accessories and outfits
+
+**Properties:**
+
+- `showPreview` - Show/hide cat preview during creation (default: true)
+- `showStats` - Show/hide statistics panel (default: true)
+- `autoInit` - Auto-initialize Meowzer SDK (default: true)
+
+**Events:**
+
+- `cat-created` - When a new cat is created
+- `cat-destroyed` - When a cat is removed
+- `interaction-start` - When user starts interacting (yarn, laser)
+- `interaction-end` - When interaction completes
+
+## Available Components
+
+### Core Components
+
+- **MeowzerProvider** - Context provider for SDK instance
+- **MbCatPlayground** - Complete drop-in playground solution
+- **CatCreator** - Cat creation interface with form and preview
+- **CatStatistics** - Real-time cat stats and needs display
+
+### Supporting Components
+
+- **CatPreview** - Live cat visual preview during creation
+- **CatPersonalityPicker** - Personality trait selection UI
+- **CatColorPicker** - Color selection for cat appearance
+- **MbWardrobeDialog** - Accessory and outfit customization
+
+### Reactive Controllers
+
+- **CatsController** - Manages list of all cats
+- **CatController** - Manages single cat instance
+- **StorageController** - IndexedDB persistence
+- **CursorController** - Custom cursor management for interactions
+
 ## Architecture
 
 Inspired by Realm React's provider pattern, adapted for Web Components:
 
 ```
-<meowzer-provider>         ← Provides SDK instance via Lit Context
-  <cat-boundary>           ← Defines where cats can move
-    <cat-creator>          ← Creates new cats
-    <cat-manager>          ← Displays active cats
-  </cat-boundary>
+<meowzer-provider>              ← Provides SDK instance via Lit Context
+  <mb-cat-playground>           ← Drop-in solution with everything
+    <cat-creator>               ← Cat creation (internal)
+    <cat-statistics>            ← Cat stats display (internal)
+    <mb-wardrobe-dialog>        ← Accessory selection (internal)
+    <mb-playground-toolbar>     ← Interaction tools (internal)
+  </mb-cat-playground>
 </meowzer-provider>
 ```
 
-## Next Phase
+Or use components independently:
 
-**Phase 3: Management Components** ✅
-
-- [x] cat-manager - Display and manage all active cats
-- [x] cat-card - Individual cat card with controls
-- [x] cat-controls - Pause/resume/destroy controls
-- [x] cat-list-item - Compact list view item
-
-### Using Management Components
-
-```html
+```
 <meowzer-provider>
-  <!-- Full management interface -->
-  <cat-manager></cat-manager>
+  <cat-creator></cat-creator>
+  <cat-statistics .cat="${myCat}"></cat-statistics>
 </meowzer-provider>
 ```
-
-The `<cat-manager>` component provides a complete interface for managing cats with:
-
-- **View modes**: Toggle between grid and list views
-- **Search**: Filter cats by name, description, or ID
-- **Sort**: By name, created date, or state
-- **Bulk actions**: Select multiple cats to pause, resume, or destroy
-- **Individual controls**: Each cat has pause/resume and destroy buttons
-- **Empty state**: Helpful message when no cats exist
-
-**Properties:**
-
-- `viewMode` - 'grid' or 'list' (default: 'grid')
-- `sortBy` - 'name', 'created', or 'state' (default: 'name')
-
-**Individual Components:**
-
-```html
-<!-- Card for grid view -->
-<cat-card
-  .cat="${cat}"
-  ?selected="${isSelected}"
-  ?selectable="${true}"
-  @cat-select="${handleSelect}"
-></cat-card>
-
-<!-- Reusable controls -->
-<cat-controls
-  .cat="${cat}"
-  size="small"
-  @pause="${handlePause}"
-  @resume="${handleResume}"
-  @destroy="${handleDestroy}"
-></cat-controls>
-
-<!-- List item for list view -->
-<cat-list-item
-  .cat="${cat}"
-  ?selected="${isSelected}"
-  ?selectable="${true}"
-  @cat-select="${handleSelect}"
-></cat-list-item>
-```
-
-## Future Enhancements
-
-Potential next phases:
-
-- **Phase 4: Advanced Features** - Drag & drop, keyboard nav, pagination
-- **Phase 5: Integration** - Connect meowtion, meowkit, meowbrain visualization
-- **Phase 6: Polish** - Animations, loading states, accessibility
-
-## Documentation
-
-Full documentation coming soon. See [proposal](../../meta/meowzer-ui-proposal.md) for detailed design.
 
 ## License
 
