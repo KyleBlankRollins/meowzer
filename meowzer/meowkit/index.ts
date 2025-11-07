@@ -12,6 +12,7 @@ export { validateCatSettings as validateSettings } from "./validation.js";
 export {
   generateSeed,
   parseSeed,
+  parseHatFromSeed,
   serializeCat,
 } from "./serialization.js";
 
@@ -28,7 +29,15 @@ export function deserializeCat(json: string): ProtoCat {
 }
 
 // Re-export builder and main functions
-export { buildCat, buildCatFromSeed, CatBuilder } from "./builder.js";
+export {
+  buildCat,
+  buildCatFromSeed,
+  buildCatWithAccessories,
+  CatBuilder,
+} from "./builder.js";
+
+// Re-export accessory functions
+export { generateHatSVG, getHatElementId } from "./accessories.js";
 
 // Re-export color utilities
 export { isValidColor, normalizeColor } from "./color-utils.js";
@@ -54,4 +63,9 @@ export type {
   CatPattern,
   CatSize,
   FurLength,
+  HatType,
+  HatData,
+  HatAccessory,
+  BaseAccessory,
+  AccessorySettings,
 } from "../types/index.js";

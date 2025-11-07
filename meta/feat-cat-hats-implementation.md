@@ -102,13 +102,35 @@ This feature adds customizable hats to cats with three templates (beanie, cowboy
 
 **Acceptance Criteria:**
 
-- [ ] Three hat templates implemented with pixel-art style
-- [ ] Hats apply colors correctly to base and accent elements
-- [ ] Hats render on cats at correct position and scale
-- [ ] Hat element IDs added to SVGElements
-- [ ] Seeds include hat data when present
-- [ ] Seeds without hats parse correctly (backwards compatible)
-- [ ] Visual inspection: hats look good on small/medium/large cats
+- [x] Three hat templates implemented with pixel-art style
+- [x] Hats apply colors correctly to base and accent elements
+- [x] Hats render on cats at correct position and scale
+- [x] Hat element IDs added to SVGElements
+- [x] Seeds include hat data when present
+- [x] Seeds without hats parse correctly (backwards compatible)
+- [x] Visual inspection: hats look good on small/medium/large cats
+
+**Status:** ✅ COMPLETE
+
+**Implementation Notes:**
+
+- Created `meowzer/meowkit/accessories.ts` with three hat templates:
+  - `generateBeanieHat()` - Knit beanie with pom-pom
+  - `generateCowboyHat()` - Western hat with wide brim and band
+  - `generateBaseballCapHat()` - Modern cap with forward bill
+- Updated `svg-generator.ts` to integrate hat rendering after head, before pattern overlay
+- Updated `builder.ts`:
+  - Modified `createAppearanceData()` to accept optional accessories
+  - Added `buildCatWithAccessories()` function for creating cats with hats
+  - Updated `buildCatFromSeed()` to handle hat data in seeds
+- Updated `serialization.ts`:
+  - Extended `generateSeed()` to include hat data (format: pattern-color-eyeColor-size-furLength-hatType-hatBase-hatAccent-v1)
+  - Updated `parseSeed()` to handle both 6-part (no hat) and 9-part (with hat) seeds
+  - Added `parseHatFromSeed()` helper function
+  - Updated `serializeCat()` to include accessories in JSON
+- All functions exported from `meowzer/meowkit/index.ts`
+- Created visual test file `test-hats.html` for manual verification
+- All packages build successfully with no TypeScript errors
 
 ---
 

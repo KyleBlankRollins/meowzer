@@ -9,6 +9,7 @@ import type {
   SVGElements,
 } from "../types/index.js";
 import { generateElementId } from "./utils.js";
+import { generateHatSVG, getHatElementId } from "./accessories.js";
 
 /**
  * Generates complete SVG sprite data for a cat
@@ -48,7 +49,15 @@ export function generateCatSVG(
     ];
   }
 
-  const svg = buildSVGMarkup(appearance, dimensions, elements);
+  // Add hat element if cat has a hat
+  if (appearance.accessories?.hat) {
+    elements.hat = getHatElementId(
+      appearance.accessories.hat.type,
+      catId
+    );
+  }
+
+  const svg = buildSVGMarkup(appearance, dimensions, elements, catId);
 
   return {
     svg,
@@ -70,7 +79,8 @@ export function generateCatSVG(
 function buildSVGMarkup(
   appearance: AppearanceData,
   dimensions: DimensionData,
-  elements: SVGElements
+  elements: SVGElements,
+  catId: string
 ): string {
   const { color, eyeColor, shadingColor, pattern } = appearance;
   const { width, height } = dimensions;
@@ -174,11 +184,28 @@ function buildSVGMarkup(
     <line x1="76" y1="42" x2="88" y2="44" stroke="${shadingColor}" stroke-width="1" opacity="0.8"/>
   </g>
   
+  ${generateHatMarkup(appearance, catId)}
+  
   ${generatePatternOverlay(pattern, elements, color, shadingColor)}
 </svg>
   `.trim();
 
   return svgContent;
+}
+
+/**
+ * Generates hat markup if cat has a hat
+ */
+function generateHatMarkup(
+  appearance: AppearanceData,
+  catId: string
+): string {
+  if (!appearance.accessories?.hat) {
+    return "";
+  }
+
+  const { type, baseColor, accentColor } = appearance.accessories.hat;
+  return generateHatSVG(type, baseColor, accentColor, catId);
 }
 
 /**
