@@ -1,10 +1,12 @@
 /**
- * Enhanced MeowzerCat - High-level wrapper with full CRUD operations
+ * Enhanced MeowzerCat - Component-based cat entity
  *
- * This is the main object users interact with. It coordinates:
- * - Meowtion (Cat) for animation
- * - Meowbrain (Brain) for AI behavior
- * - Metadata for persistence and extensibility
+ * This is the main object users interact with. It composes specialized components:
+ * - CatLifecycle: pause/resume/destroy
+ * - CatPersistence: save/delete/dirty tracking
+ * - CatAccessories: hat management and sprite updates
+ * - CatInteractions: need/yarn/laser interactions
+ * - CatEvents: event aggregation and forwarding
  */
 
 import type { Cat } from "../meowtion/cat.js";
@@ -18,18 +20,23 @@ import type {
   Environment,
   CatMetadata,
   CatJSON,
-  SaveOptions,
   MeowzerCatConfig,
   HatType,
   HatData,
+  SaveOptions,
 } from "../types/index.js";
-import { EventEmitter } from "../utilities/event-emitter.js";
 import type { MeowzerEventType, EventHandler } from "./types.js";
-import { generateCatSVG } from "../meowkit/index.js";
-import { isValidColor } from "../meowkit/index.js";
+import {
+  CatLifecycle,
+  CatPersistence,
+  CatAccessories,
+  CatInteractions,
+  CatEvents,
+} from "./cat-modules/index.js";
+import type { CatManagers } from "./cat-modules/types.js";
 
 /**
- * Enhanced MeowzerCat with full CRUD operations
+ * Enhanced MeowzerCat with component-based architecture
  */
 export class MeowzerCat {
   // Identity
@@ -42,20 +49,18 @@ export class MeowzerCat {
   private _description?: string;
   private _metadata: CatMetadata;
 
-  // Internal components
+  // Internal components (for delegation)
   private _cat: Cat;
   private _brain: Brain;
-  private _isActive: boolean = false;
-  private events: EventEmitter<MeowzerEventType>;
 
-  // Storage reference (set by StorageManager when saved)
-  /** @internal */
-  _collectionName?: string;
+  // Public components (exposed for direct access)
+  readonly lifecycle: CatLifecycle;
+  readonly persistence: CatPersistence;
+  readonly accessories: CatAccessories;
+  readonly interactions: CatInteractions;
+  readonly events: CatEvents;
 
-  // Dirty flag for optimized persistence
-  private _isDirty: boolean = false;
-
-  constructor(config: MeowzerCatConfig) {
+  constructor(config: MeowzerCatConfig, managers: CatManagers) {
     this.id = config.id;
     this.seed = config.seed;
     this._cat = config.cat;
@@ -72,17 +77,61 @@ export class MeowzerCat {
       ...config.metadata,
     };
 
-    // Initialize event system
-    this.events = new EventEmitter<MeowzerEventType>();
+    // Initialize components with explicit dependencies
+    this.lifecycle = new CatLifecycle(this._cat, this._brain, this.id);
 
-    // Forward events from cat and brain
-    this._setupEventForwarding();
+    this.persistence = new CatPersistence(
+      this.id,
+      () => this, // Pass function to get current cat data
+      managers.storage
+    );
+
+    this.accessories = new CatAccessories(this._cat, this.id);
+
+    this.interactions = new CatInteractions(
+      this._cat,
+      this._brain,
+      this.id,
+      managers.interactions,
+      managers.hooks
+    );
+
+    this.events = new CatEvents(this._cat, this._brain, this.id);
+
+    // Setup component reactions
+    this.setupComponentReactions();
 
     // Setup menu button click handler
     this._setupMenuButton();
+  }
 
-    // New cats are dirty by default (need initial save)
-    this._isDirty = true;
+  /**
+   * Setup cross-component reactions (observer pattern)
+   */
+  private setupComponentReactions(): void {
+    // Auto-mark dirty when accessories change
+    this.accessories.on("hatApplied", () => this.persistence.markDirty());
+    this.accessories.on("hatRemoved", () => this.persistence.markDirty());
+    this.accessories.on("hatUpdated", () => this.persistence.markDirty());
+
+    // Sync lifecycle state with interactions
+    this.lifecycle.on("paused", () => this.interactions.setActive(false));
+    this.lifecycle.on("resumed", () => this.interactions.setActive(true));
+
+    // Forward component events to main event system
+    this.lifecycle.on("paused", (data) => this.events.emit("pause", data));
+    this.lifecycle.on("resumed", (data) => this.events.emit("resume", data));
+    this.lifecycle.on("destroyed", (data) => this.events.emit("destroy", data));
+
+    this.accessories.on("hatApplied", (data) =>
+      this.events.emit("hat-applied", data)
+    );
+    this.accessories.on("hatRemoved", (data) =>
+      this.events.emit("hat-removed", data)
+    );
+    this.accessories.on("hatUpdated", (data) =>
+      this.events.emit("hat-updated", data)
+    );
   }
 
   // ============================================================================
@@ -102,7 +151,7 @@ export class MeowzerCat {
   }
 
   get isActive(): boolean {
-    return this._isActive;
+    return this.lifecycle.isActive;
   }
 
   get name(): string | undefined {
@@ -133,14 +182,16 @@ export class MeowzerCat {
     if (this._name !== name) {
       this._name = name;
       this._cat._internalCat.dom?.updateNameText(name);
-      this._markDirty();
+      this.persistence.markDirty();
+      this._updateTimestamp();
     }
   }
 
   setDescription(description: string): void {
     if (this._description !== description) {
       this._description = description;
-      this._markDirty();
+      this.persistence.markDirty();
+      this._updateTimestamp();
     }
   }
 
@@ -150,12 +201,14 @@ export class MeowzerCat {
     } else {
       this._brain.setPersonality(personality);
     }
-    this._markDirty();
+    this.persistence.markDirty();
+    this._updateTimestamp();
   }
 
   setEnvironment(environment: Environment): void {
     this._brain.setEnvironment(environment);
-    this._markDirty();
+    this.persistence.markDirty();
+    this._updateTimestamp();
   }
 
   updateMetadata(metadata: Record<string, unknown>): void {
@@ -163,7 +216,8 @@ export class MeowzerCat {
       ...this._metadata,
       ...metadata,
     };
-    this._markDirty();
+    this.persistence.markDirty();
+    this._updateTimestamp();
   }
 
   // ============================================================================
