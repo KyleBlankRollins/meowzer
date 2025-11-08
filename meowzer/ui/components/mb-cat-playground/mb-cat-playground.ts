@@ -228,7 +228,7 @@ export class MbCatPlayground extends LitElement {
 
         document.body.appendChild(cat.element);
         this.setupCatEventListeners(cat);
-        cat.resume();
+        cat.lifecycle.resume();
       }
 
       if (savedCats.length > 0) {
@@ -295,7 +295,7 @@ export class MbCatPlayground extends LitElement {
     cat.on("menuClick", () => {
       // Auto-pause cat when menu opens
       if (cat.isActive) {
-        cat.pause();
+        cat.lifecycle.pause();
       }
 
       // Add menu-open class to cat element
@@ -530,7 +530,7 @@ export class MbCatPlayground extends LitElement {
 
       // Auto-resume cat if it was paused by the menu
       if (!this.selectedCat.isActive) {
-        this.selectedCat.resume();
+        this.selectedCat.lifecycle.resume();
       }
     }
 
@@ -561,7 +561,7 @@ export class MbCatPlayground extends LitElement {
         existingMenu.remove();
       }
 
-      await this.selectedCat.delete();
+      await this.selectedCat.persistence.delete();
       this.selectedCat = null;
     } else {
       // If cancelled, close menu normally (which will resume)
@@ -592,11 +592,11 @@ export class MbCatPlayground extends LitElement {
       cat.setName(this.newName.trim());
 
       // Save the cat to persist the name change
-      await cat.save();
+      await cat.persistence.save();
 
       // Resume the cat if it was paused
       if (!cat.isActive) {
-        cat.resume();
+        cat.lifecycle.resume();
       }
 
       this.showRenameDialog = false;
@@ -612,7 +612,7 @@ export class MbCatPlayground extends LitElement {
   private handleRenameCancel() {
     // Resume the cat if it was paused
     if (this.selectedCat && !this.selectedCat.isActive) {
-      this.selectedCat.resume();
+      this.selectedCat.lifecycle.resume();
     }
 
     this.showRenameDialog = false;
@@ -638,7 +638,7 @@ export class MbCatPlayground extends LitElement {
 
     // Resume cat if paused
     if (this.selectedCat && !this.selectedCat.isActive) {
-      this.selectedCat.resume();
+      this.selectedCat.lifecycle.resume();
     }
 
     this.selectedCat = null;

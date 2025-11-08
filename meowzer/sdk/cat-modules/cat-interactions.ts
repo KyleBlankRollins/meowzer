@@ -100,10 +100,18 @@ export class CatInteractions extends EventEmitter<InteractionEvent> {
       });
 
       // Register initial interest
-      this.interactions._registerCatResponse(this.catId, needId, "interested");
+      this.interactions._registerCatResponse(
+        this.catId,
+        needId,
+        "interested"
+      );
 
       // Approach the need
-      this.interactions._registerCatResponse(this.catId, needId, "approaching");
+      this.interactions._registerCatResponse(
+        this.catId,
+        needId,
+        "approaching"
+      );
       await this.brain._approachTarget(need.position);
 
       // Verify need is still active after approach
@@ -113,13 +121,21 @@ export class CatInteractions extends EventEmitter<InteractionEvent> {
       }
 
       // Consume the need
-      this.interactions._registerCatResponse(this.catId, needId, "consuming");
+      this.interactions._registerCatResponse(
+        this.catId,
+        needId,
+        "consuming"
+      );
       need._addConsumingCat(this.catId);
       await this.brain._consumeNeed();
 
       // Mark as satisfied
       need._removeConsumingCat(this.catId);
-      this.interactions._registerCatResponse(this.catId, needId, "satisfied");
+      this.interactions._registerCatResponse(
+        this.catId,
+        needId,
+        "satisfied"
+      );
 
       // Trigger lifecycle hook
       await this.hooks._trigger("afterInteractionEnd", {
@@ -136,7 +152,11 @@ export class CatInteractions extends EventEmitter<InteractionEvent> {
       });
     } else {
       // Not interested
-      this.interactions._registerCatResponse(this.catId, needId, "ignoring");
+      this.interactions._registerCatResponse(
+        this.catId,
+        needId,
+        "ignoring"
+      );
     }
   }
 
@@ -266,7 +286,10 @@ export class CatInteractions extends EventEmitter<InteractionEvent> {
    * await cat.interactions.chaseLaser({ x: 500, y: 300 });
    * ```
    */
-  async chaseLaser(position: { x: number; y: number }): Promise<void> {
+  async chaseLaser(position: {
+    x: number;
+    y: number;
+  }): Promise<void> {
     // Evaluate interest
     const interest = this.brain.evaluateInterest({
       type: "laser",

@@ -10,6 +10,8 @@ import { InvalidSettingsError } from "../errors.js";
 import type { CatMetadata } from "../../types/index.js";
 import type { ConfigManager } from "../config.js";
 import type { HookManager } from "./hook-manager.js";
+import type { StorageManager } from "./storage-manager.js";
+import type { InteractionManager } from "./interaction-manager.js";
 import { LifecycleHook } from "./hook-manager.js";
 import { generateId } from "../../meowkit/utils.js";
 import { SpatialGrid } from "./spatial-grid.js";
@@ -46,11 +48,20 @@ export interface FindCatsOptions {
 export class CatManager {
   private cats = new Map<string, MeowzerCat>();
   private hooks: HookManager;
+  private storage: StorageManager;
+  private interactions: InteractionManager;
   private spatialGrid: SpatialGrid;
 
-  constructor(_config: ConfigManager, hooks: HookManager) {
+  constructor(
+    _config: ConfigManager,
+    hooks: HookManager,
+    storage: StorageManager,
+    interactions: InteractionManager
+  ) {
     // Config will be used in future for default behaviors and boundaries
     this.hooks = hooks;
+    this.storage = storage;
+    this.interactions = interactions;
     this.spatialGrid = new SpatialGrid({ cellSize: 150 });
   }
 
@@ -135,16 +146,23 @@ export class CatManager {
     // Create MeowBrain for AI behavior
     const brain = new Brain(meowtionCat);
 
-    // Create MeowzerCat wrapper
-    const cat = new MeowzerCat({
-      id,
-      cat: meowtionCat,
-      brain,
-      seed,
-      name: options.name,
-      description: options.description,
-      metadata: options.metadata,
-    });
+    // Create MeowzerCat wrapper with manager dependencies
+    const cat = new MeowzerCat(
+      {
+        id,
+        cat: meowtionCat,
+        brain,
+        seed,
+        name: options.name,
+        description: options.description,
+        metadata: options.metadata,
+      },
+      {
+        storage: this.storage,
+        interactions: this.interactions,
+        hooks: this.hooks,
+      }
+    );
 
     // Register in memory
     this.cats.set(cat.id, cat);
@@ -334,7 +352,7 @@ export class CatManager {
     // Remove from spatial grid
     this.spatialGrid.removeCat(cat);
 
-    cat.destroy();
+    cat.lifecycle.destroy();
     this.cats.delete(id);
 
     // Trigger afterDelete hook

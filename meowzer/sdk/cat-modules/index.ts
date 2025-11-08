@@ -17,7 +17,19 @@ export { CatInteractions } from "./cat-interactions.js";
 export { CatEvents } from "./cat-events.js";
 
 // Re-export types
-export type { LifecycleEvent, LifecycleEventData } from "./cat-lifecycle.js";
-export type { PersistenceEvent, PersistenceEventData } from "./cat-persistence.js";
-export type { AccessoryEvent, AccessoryEventData } from "./cat-accessories.js";
-export type { InteractionEvent, InteractionEventData } from "./cat-interactions.js";
+export type {
+  LifecycleEvent,
+  LifecycleEventData,
+} from "./cat-lifecycle.js";
+export type {
+  PersistenceEvent,
+  PersistenceEventData,
+} from "./cat-persistence.js";
+export type {
+  AccessoryEvent,
+  AccessoryEventData,
+} from "./cat-accessories.js";
+export type {
+  InteractionEvent,
+  InteractionEventData,
+} from "./cat-interactions.js";

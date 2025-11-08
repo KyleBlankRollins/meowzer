@@ -179,7 +179,8 @@ export class StorageManager {
       };
 
       // Check if cat already exists in collection to determine add vs update
-      const isUpdate = cat._collectionName === collectionName;
+      const isUpdate =
+        cat.persistence.collectionName === collectionName;
 
       // Add or update cat in collection
       const result = isUpdate

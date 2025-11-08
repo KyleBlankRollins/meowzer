@@ -200,7 +200,7 @@ export class CatCreator extends LitElement {
       if (this.makeRoaming) {
         cat.element.style.position = "fixed";
         document.body.appendChild(cat.element);
-        cat.resume();
+        cat.lifecycle.resume();
       }
 
       // Dispatch success event

@@ -10,7 +10,10 @@ import type { HatType, HatData } from "../../types/index.js";
 import { generateCatSVG, isValidColor } from "../../meowkit/index.js";
 import { EventEmitter } from "../../utilities/event-emitter.js";
 
-export type AccessoryEvent = "hatApplied" | "hatRemoved" | "hatUpdated";
+export type AccessoryEvent =
+  | "hatApplied"
+  | "hatRemoved"
+  | "hatUpdated";
 
 export interface AccessoryEventData {
   catId: string;
@@ -191,7 +194,10 @@ export class CatAccessories extends EventEmitter<AccessoryEvent> {
   /**
    * Validate color strings
    */
-  private validateColors(baseColor: string, accentColor: string): void {
+  private validateColors(
+    baseColor: string,
+    accentColor: string
+  ): void {
     if (!isValidColor(baseColor)) {
       throw new Error(`Invalid base color: ${baseColor}`);
     }

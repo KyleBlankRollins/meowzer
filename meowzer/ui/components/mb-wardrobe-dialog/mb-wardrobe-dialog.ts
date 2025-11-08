@@ -97,7 +97,7 @@ export class MbWardrobeDialog extends LitElement {
   private initializeState() {
     if (!this.cat) return;
 
-    const currentHat = this.cat.getHat();
+    const currentHat = this.cat.accessories.getHat();
     if (currentHat) {
       // Cat has a hat - use its settings
       this.selectedHatType = currentHat.type;
@@ -151,18 +151,21 @@ export class MbWardrobeDialog extends LitElement {
   private handleApply() {
     if (!this.cat) return;
 
-    const hasHat = this.cat.hasHat();
+    const hasHat = this.cat.accessories.hasHat();
 
     if (hasHat) {
       // Update existing hat colors
-      const currentHat = this.cat.getHat();
+      const currentHat = this.cat.accessories.getHat();
       if (currentHat && currentHat.type === this.selectedHatType) {
         // Same hat type - just update colors
-        this.cat.updateHatColors(this.baseColor, this.accentColor);
+        this.cat.accessories.updateHatColors(
+          this.baseColor,
+          this.accentColor
+        );
       } else {
         // Different hat type - remove old and add new
-        this.cat.removeHat();
-        this.cat.addHat(
+        this.cat.accessories.removeHat();
+        this.cat.accessories.addHat(
           this.selectedHatType,
           this.baseColor,
           this.accentColor
@@ -170,7 +173,7 @@ export class MbWardrobeDialog extends LitElement {
       }
     } else {
       // Add new hat
-      this.cat.addHat(
+      this.cat.accessories.addHat(
         this.selectedHatType,
         this.baseColor,
         this.accentColor

@@ -85,17 +85,35 @@ export class Meowzer {
   constructor(config?: PartialMeowzerConfig) {
     this._config = new ConfigManager(config);
     this.hooks = new HookManager();
-    this.cats = new CatManager(this._config, this.hooks);
+
+    // Create storage manager first (needed by CatManager)
     this.storage = new StorageManager(
-      this.cats,
+      // We'll set the cat manager reference after creating it
+      null as any,
       this._config,
       this.hooks
     );
+
+    // Create interactions manager (needed by CatManager)
     this.interactions = new InteractionManager(
       this.hooks,
-      this.cats,
+      // We'll set the cat manager reference after creating it
+      null as any,
       this._config
     );
+
+    // Create cat manager with all dependencies
+    this.cats = new CatManager(
+      this._config,
+      this.hooks,
+      this.storage,
+      this.interactions
+    );
+
+    // Now set the cat manager references in storage and interactions
+    (this.storage as any).catManager = this.cats;
+    (this.interactions as any).cats = this.cats;
+
     this.plugins = new PluginManager({
       meowzer: this,
       hooks: this.hooks,
