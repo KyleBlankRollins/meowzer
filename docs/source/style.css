@@ -1,6 +1,6 @@
-/* Import Quiet UI styles */
-@import "@quietui/quiet/themes/quiet.css";
-@import "@quietui/quiet/themes/restyle.css";
+/* Import Carbon Web Components styles */
+@import "@carbon/styles/css/styles.css";
+@import "@carbon/web-components/es/globals/styles.css";
 
 /* Enable light and dark color schemes */
 :root {
@@ -12,8 +12,8 @@ body {
   margin: 0;
   font-family: system-ui, -apple-system, sans-serif;
   line-height: 1.6;
-  background: var(--quiet-background-color, var(--quiet-neutral-fill-base));
-  color: var(--quiet-text-body, var(--quiet-neutral-text-mid));
+  background: var(--cds-background);
+  color: var(--cds-text-primary);
 }
 
 /* Template layouts and component-specific styles are now in web components */
@@ -49,10 +49,10 @@ body {
 .doc-content code:not(pre code),
 .landing-content code:not(pre code),
 .home-content code:not(pre code) {
-  background: var(--quiet-neutral-fill-soft);
-  color: var(--quiet-neutral-text-loud);
+  background: var(--cds-layer-01);
+  color: var(--cds-text-primary);
   padding: 0.125rem 0.375rem;
-  border-radius: var(--quiet-border-radius-sm);
+  border-radius: 4px;
   font-family: ui-monospace, "Cascadia Code", "Source Code Pro", Menlo, Consolas, "DejaVu Sans Mono", monospace;
   font-size: 0.875em;
 }
@@ -62,7 +62,7 @@ body {
 .landing-content pre,
 .home-content pre {
   margin: 1.5rem 0;
-  border-radius: var(--quiet-border-radius-md);
+  border-radius: 4px;
   overflow-x: auto;
   /* Don't override background - Shiki provides it */
 }

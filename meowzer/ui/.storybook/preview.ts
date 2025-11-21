@@ -1,30 +1,22 @@
 import type { Preview } from "@storybook/web-components";
-import { setLibraryPath } from "@quietui/quiet";
 
-// Set Quiet UI library path to stories folder where we copied the assets
-setLibraryPath("/stories");
+// Import Carbon Web Components styles
+import "@carbon/styles/css/styles.css";
+import "@carbon/web-components/es/globals/styles.css";
 
-// Import Quiet UI styles (needed for components)
-import "@quietui/quiet/themes/quiet.css";
-import "@quietui/quiet/themes/restyle.css";
-
-// Import Quiet UI web components (needed for rendering)
-import "@quietui/quiet/components/card/card.js";
-import "@quietui/quiet/components/button/button.js";
-import "@quietui/quiet/components/text-field/text-field.js";
-import "@quietui/quiet/components/badge/badge.js";
-import "@quietui/quiet/components/callout/callout.js";
-import "@quietui/quiet/components/empty-state/empty-state.js";
-import "@quietui/quiet/components/icon/icon.js";
-import "@quietui/quiet/components/color-picker/color-picker.js";
-import "@quietui/quiet/components/popover/popover.js";
-import "@quietui/quiet/components/select/select.js";
-import "@quietui/quiet/components/checkbox/checkbox.js";
-import "@quietui/quiet/components/text-area/text-area.js";
-import "@quietui/quiet/components/spinner/spinner.js";
-import "@quietui/quiet/components/button-group/button-group.js";
-import "@quietui/quiet/components/divider/divider.js";
-import "@quietui/quiet/components/dialog/dialog.js";
+// Import Carbon Web Components (needed for rendering)
+import "@carbon/web-components/es/components/tile/index.js";
+import "@carbon/web-components/es/components/button/index.js";
+import "@carbon/web-components/es/components/text-input/index.js";
+import "@carbon/web-components/es/components/tag/index.js";
+import "@carbon/web-components/es/components/notification/index.js";
+import "@carbon/web-components/es/components/icon/index.js";
+import "@carbon/web-components/es/components/popover/index.js";
+import "@carbon/web-components/es/components/select/index.js";
+import "@carbon/web-components/es/components/checkbox/index.js";
+import "@carbon/web-components/es/components/textarea/index.js";
+import "@carbon/web-components/es/components/loading/index.js";
+import "@carbon/web-components/es/components/modal/index.js";
 
 const preview: Preview = {
   parameters: {

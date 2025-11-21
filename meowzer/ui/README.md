@@ -1,18 +1,18 @@
 ````markdown
 # @meowzer/ui
 
-Web Components library for adding Meowzer cats to any website. Built with Lit Element and Quiet UI.
+Web Components library for adding Meowzer cats to any website. Built with Lit Element and Carbon Web Components.
 
 ## Installation
 
 ```bash
-npm install meowzer @meowzer/ui @quietui/quiet lit
+npm install meowzer @meowzer/ui @carbon/web-components lit
 ```
 
 **Peer Dependencies:**
 
 - `meowzer` ^1.0.0 - Core Meowzer SDK
-- `@quietui/quiet` ^1.3.0 - UI component library
+- `@carbon/web-components` ^2.0.0 - IBM Carbon Design System web components
 - `lit` ^3.0.0 - Web components framework
 
 ## Quick Start
@@ -23,17 +23,13 @@ npm install meowzer @meowzer/ui @quietui/quiet lit
 <!DOCTYPE html>
 <html>
   <head>
-    <!-- Quiet UI styles -->
+    <!-- Carbon styles -->
     <link
       rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/@quietui/quiet@1.3.0/dist/themes/quiet.css"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/@quietui/quiet@1.3.0/dist/themes/restyle.css"
+      href="https://cdn.jsdelivr.net/npm/@carbon/styles@1.0.0/css/styles.css"
     />
   </head>
-  <body>
+  <body class="cds-theme-g10">
     <!-- Drop-in playground - that's it! -->
     <meowzer-provider auto-init>
       <mb-cat-playground></mb-cat-playground>
@@ -49,13 +45,12 @@ npm install meowzer @meowzer/ui @quietui/quiet lit
 ### Option 2: NPM (Recommended)
 
 ```bash
-npm install meowzer @meowzer/ui @quietui/quiet lit
+npm install meowzer @meowzer/ui @carbon/web-components lit
 ```
 
 ```typescript
-// Import Quiet UI styles
-import "@quietui/quiet/themes/quiet.css";
-import "@quietui/quiet/themes/restyle.css";
+// Import Carbon styles
+import "@carbon/styles/css/styles.css";
 
 // Import all components
 import "@meowzer/ui";
@@ -81,7 +76,7 @@ import {
 - **Provider pattern**: Lit Context API for reactive state management
 - **Reactive controllers**: Auto-subscribe to SDK hooks and events
 - **Framework agnostic**: Works with React, Vue, Angular, Svelte, vanilla
-- **Customizable UI**: Built on Quiet UI for consistent design
+- **Customizable UI**: Built on Carbon Design System for consistent design
 - **Boundary control**: Flexible cat movement areas (fullscreen, fixed, block)
 - **Modular components**: Use creation components independently or as part of playground
 

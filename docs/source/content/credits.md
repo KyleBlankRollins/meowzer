@@ -10,7 +10,7 @@ This documentation site was built with the following technologies:
 - **[Vite](https://vite.dev/)** (v7.1.14) - Fast build tool and dev server
 - **[TypeScript](https://www.typescriptlang.org/)** (~5.9.3) - Type-safe JavaScript
 - **[Lit](https://lit.dev/)** - Web components and HTML templating
-- **[Quiet UI](https://quietui.com/)** - Lightweight web component library
+- **[Carbon Design System](https://carbondesignsystem.com/)** - IBM's enterprise web component library
 - **[markdown-it](https://github.com/markdown-it/markdown-it)** - Markdown parser
 - **[gray-matter](https://github.com/jonschlinkert/gray-matter)** - YAML frontmatter parsing
 

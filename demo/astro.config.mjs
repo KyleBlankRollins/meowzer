@@ -11,7 +11,7 @@ export default defineConfig({
       noExternal: [
         "@meowzer/ui",
         "meowzer",
-        "@quietui/quiet",
+        "@carbon/web-components",
         "gsap",
       ],
     },

@@ -2,9 +2,8 @@
  * Automatic setup for Meowzer UI
  *
  * This module handles:
- * - Loading Quiet UI stylesheets
- * - Setting the Quiet UI library path
- * - Registering all Quiet UI components
+ * - Loading Carbon Web Components stylesheets
+ * - Registering all Carbon components
  *
  * Simply import this module to automatically configure everything:
  *
@@ -14,93 +13,68 @@
  * ```
  */
 
-// Import and register Quiet UI components
-import "@quietui/quiet/components/button/button.js";
-import "@quietui/quiet/components/card/card.js";
-import "@quietui/quiet/components/icon/icon.js";
-import "@quietui/quiet/components/select/select.js";
-import "@quietui/quiet/components/spinner/spinner.js";
-import "@quietui/quiet/components/badge/badge.js";
-import "@quietui/quiet/components/toolbar/toolbar.js";
-import "@quietui/quiet/components/dialog/dialog.js";
-import "@quietui/quiet/components/tooltip/tooltip.js";
-import "@quietui/quiet/components/callout/callout.js";
-import "@quietui/quiet/components/checkbox/checkbox.js";
-import "@quietui/quiet/components/text-field/text-field.js";
-import "@quietui/quiet/components/text-area/text-area.js";
-import "@quietui/quiet/components/empty-state/empty-state.js";
-import "@quietui/quiet/components/expander/expander.js";
-import "@quietui/quiet/components/color-picker/color-picker.js";
-import "@quietui/quiet/components/popover/popover.js";
-import "@quietui/quiet/components/divider/divider.js";
-import "@quietui/quiet/components/dropdown/dropdown.js";
-import "@quietui/quiet/components/dropdown-item/dropdown-item.js";
+// Import and register Carbon Web Components
+import "@carbon/web-components/es/components/button/index.js";
+import "@carbon/web-components/es/components/tile/index.js";
+import "@carbon/web-components/es/components/icon/index.js";
+import "@carbon/web-components/es/components/select/index.js";
+import "@carbon/web-components/es/components/loading/index.js";
+import "@carbon/web-components/es/components/tag/index.js";
+import "@carbon/web-components/es/components/ui-shell/index.js";
+import "@carbon/web-components/es/components/modal/index.js";
+import "@carbon/web-components/es/components/tooltip/index.js";
+import "@carbon/web-components/es/components/notification/index.js";
+import "@carbon/web-components/es/components/checkbox/index.js";
+import "@carbon/web-components/es/components/text-input/index.js";
+import "@carbon/web-components/es/components/textarea/index.js";
+import "@carbon/web-components/es/components/accordion/index.js";
+import "@carbon/web-components/es/components/popover/index.js";
+import "@carbon/web-components/es/components/dropdown/index.js";
 
 // Import Meowzer UI components
 import "../components/cat-color-picker/cat-color-picker.js";
 
-// Set Quiet UI library path
-import { setLibraryPath } from "@quietui/quiet";
-
 /**
- * Initialize Quiet UI with the correct library path
- *
- * @param customPath - Optional custom path to Quiet UI assets.
- *                     Defaults to CDN if not provided.
- */
-export function initializeQuietUI(customPath?: string) {
-  const libraryPath =
-    customPath ||
-    "https://cdn.jsdelivr.net/npm/@quietui/quiet@1.3.0/dist";
-  setLibraryPath(libraryPath);
-}
-
-/**
- * Load Quiet UI stylesheets dynamically
+ * Load Carbon Web Components stylesheets dynamically
  *
  * @param useCDN - Whether to use CDN or local assets. Defaults to true.
  */
-export function loadQuietUIStyles(useCDN = true) {
+export function loadCarbonStyles(useCDN = true) {
   if (typeof document === "undefined") {
     // SSR environment, skip
     return;
   }
 
   const baseUrl = useCDN
-    ? "https://cdn.jsdelivr.net/npm/@quietui/quiet@1.3.0/dist"
-    : "/node_modules/@quietui/quiet/dist";
+    ? "https://cdn.jsdelivr.net/npm/@carbon/styles@1.0.0"
+    : "/node_modules/@carbon/styles";
 
-  // Load Restyle (CSS reset)
-  const restyleLink = document.createElement("link");
-  restyleLink.rel = "stylesheet";
-  restyleLink.href = `${baseUrl}/themes/restyle.css`;
-
-  // Load Quiet UI theme
-  const quietLink = document.createElement("link");
-  quietLink.rel = "stylesheet";
-  quietLink.href = `${baseUrl}/themes/quiet.css`;
+  // Load Carbon styles
+  const carbonLink = document.createElement("link");
+  carbonLink.rel = "stylesheet";
+  carbonLink.href = `${baseUrl}/css/styles.css`;
 
   // Only add if not already present
-  if (!document.querySelector(`link[href*="restyle.css"]`)) {
-    document.head.appendChild(restyleLink);
+  if (!document.querySelector(`link[href*="@carbon/styles"]`)) {
+    document.head.appendChild(carbonLink);
   }
 
-  if (!document.querySelector(`link[href*="quiet.css"]`)) {
-    document.head.appendChild(quietLink);
+  // Set default theme
+  if (
+    !document.documentElement.classList.contains("cds-theme-g10") &&
+    !document.documentElement.classList.contains("cds-theme-g90")
+  ) {
+    const prefersDark = window.matchMedia(
+      "(prefers-color-scheme: dark)"
+    ).matches;
+    document.documentElement.classList.add(
+      prefersDark ? "cds-theme-g90" : "cds-theme-g10"
+    );
   }
 }
 
 // Auto-initialize on import
 if (typeof window !== "undefined") {
   // Load styles automatically
-  loadQuietUIStyles();
-
-  // Set library path when DOM is ready
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", () => {
-      initializeQuietUI();
-    });
-  } else {
-    initializeQuietUI();
-  }
+  loadCarbonStyles();
 }

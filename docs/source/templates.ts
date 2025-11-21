@@ -28,7 +28,7 @@ function getSidebarHTML(
 }
 
 /**
- * Base HTML shell with Quiet UI
+ * Base HTML shell with Carbon Web Components
  */
 function createBaseTemplate(
   props: TemplateProps,
@@ -43,7 +43,7 @@ function createBaseTemplate(
     }));
 
   return `<!DOCTYPE html>
-    <html lang="en" class="quiet-teal">
+    <html lang="en">
       <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -52,19 +52,23 @@ function createBaseTemplate(
           props.frontmatter.description || ""
         }" />
         <script>
-          // Apply dark theme class immediately to prevent flash
+          // Apply Carbon dark theme class immediately to prevent flash
           (function() {
             const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
             if (prefersDark) {
-              document.documentElement.classList.add('quiet-dark');
+              document.documentElement.classList.add('cds-theme-g90');
+            } else {
+              document.documentElement.classList.add('cds-theme-g10');
             }
             
             // Listen for theme changes
             window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
               if (e.matches) {
-                document.documentElement.classList.add('quiet-dark');
+                document.documentElement.classList.remove('cds-theme-g10');
+                document.documentElement.classList.add('cds-theme-g90');
               } else {
-                document.documentElement.classList.remove('quiet-dark');
+                document.documentElement.classList.remove('cds-theme-g90');
+                document.documentElement.classList.add('cds-theme-g10');
               }
             });
           })();

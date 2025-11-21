@@ -1,12 +1,12 @@
 #!/usr/bin/env node
 
 /**
- * Copy Quiet UI assets to dist folder
+ * Copy Carbon Web Components assets to dist folder
  *
- * This script copies necessary Quiet UI theme files to the dist folder
+ * This script copies necessary Carbon theme files to the dist folder
  * so users can optionally bundle them with @meowzer/ui if desired.
  *
- * Note: Users can also load these directly from @quietui/quiet in their projects.
+ * Note: Users can also load these directly from @carbon/styles in their projects.
  */
 
 import { copyFileSync, mkdirSync, existsSync } from "fs";
@@ -22,50 +22,13 @@ const packageRoot = join(__dirname, "..", "..");
 // Define assets to copy
 const assets = [
   {
-    src: "node_modules/@quietui/quiet/dist/themes/quiet.css",
-    dest: "dist/assets/themes/quiet.css",
-  },
-  {
-    src: "node_modules/@quietui/quiet/dist/themes/restyle.css",
-    dest: "dist/assets/themes/restyle.css",
+    src: "node_modules/@carbon/styles/css/styles.css",
+    dest: "dist/assets/themes/carbon.css",
   },
 ];
 
-// Only copy the icons we actually use
-const icons = [
-  {
-    src: "node_modules/@quietui/quiet/dist/assets/icons/outline/search.svg",
-    dest: "dist/assets/icons/outline/search.svg",
-  },
-  {
-    src: "node_modules/@quietui/quiet/dist/assets/icons/outline/cat.svg",
-    dest: "dist/assets/icons/outline/cat.svg",
-  },
-  {
-    src: "node_modules/@quietui/quiet/dist/assets/icons/outline/plus.svg",
-    dest: "dist/assets/icons/outline/plus.svg",
-  },
-  {
-    src: "node_modules/@quietui/quiet/dist/assets/icons/outline/edit.svg",
-    dest: "dist/assets/icons/outline/edit.svg",
-  },
-  {
-    src: "node_modules/@quietui/quiet/dist/assets/icons/outline/player-pause.svg",
-    dest: "dist/assets/icons/outline/player-pause.svg",
-  },
-  {
-    src: "node_modules/@quietui/quiet/dist/assets/icons/outline/player-play.svg",
-    dest: "dist/assets/icons/outline/player-play.svg",
-  },
-  {
-    src: "node_modules/@quietui/quiet/dist/assets/icons/outline/chart-bar.svg",
-    dest: "dist/assets/icons/outline/chart-bar.svg",
-  },
-  {
-    src: "node_modules/@quietui/quiet/dist/assets/icons/outline/trash.svg",
-    dest: "dist/assets/icons/outline/trash.svg",
-  },
-];
+// Carbon doesn't provide individual icon SVGs in the same way,
+// so we'll skip copying icons and document using @carbon/icons package instead
 
 // Interaction SVGs for cat interactions feature
 const interactions = [
@@ -122,13 +85,13 @@ const interactions = [
   },
 ];
 
-console.log("📦 Copying Quiet UI assets...\n");
+console.log("📦 Copying Carbon assets...\n");
 
 let copiedCount = 0;
 let errorCount = 0;
 
-// Copy theme files
-[...assets, ...icons, ...interactions].forEach(({ src, dest }) => {
+// Copy theme files and interactions
+[...assets, ...interactions].forEach(({ src, dest }) => {
   try {
     const srcPath = join(packageRoot, src);
     const destPath = join(packageRoot, dest);
@@ -162,7 +125,8 @@ if (errorCount > 0) {
   process.exit(1);
 }
 
+console.log("\n💡 Note: Users can load Carbon assets directly:");
+console.log('   import "@carbon/styles/css/styles.css"');
 console.log(
-  "\n💡 Note: Users can also load Quiet UI assets directly:"
+  '   For icons, use: import { Search16 } from "@carbon/icons"'
 );
-console.log('   import "@quietui/quiet/themes/quiet.css"');
