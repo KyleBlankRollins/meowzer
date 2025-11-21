@@ -6,7 +6,7 @@
  * Updates in real-time as settings change.
  */
 
-import { LitElement, html }  from "lit";
+import { LitElement, html } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import type { CatSettings, ProtoCat } from "meowzer";
 import { MeowzerUtils } from "meowzer";
@@ -157,7 +157,7 @@ export class CatPreview extends LitElement {
     return html`
       <div class="preview-container">
         <div class="preview-loading">
-          <quiet-spinner size="md"></quiet-spinner>
+          <cds-loading></cds-loading>
           <p>Waiting for settings...</p>
         </div>
       </div>

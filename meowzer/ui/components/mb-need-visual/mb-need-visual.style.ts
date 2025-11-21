@@ -40,10 +40,10 @@ export const needVisualStyles = css`
   }
 
   .consuming-indicator {
-    background: var(--quiet-primary-background-soft);
-    color: var(--quiet-primary-text-loud);
-    border: 1px solid var(--quiet-primary-stroke-soft);
-    border-radius: var(--quiet-border-radius-sm);
+    background: var(--cds-layer-accent-01);
+    color: var(--cds-text-on-color);
+    border: 1px solid var(--cds-border-interactive);
+    border-radius: 4px;
     padding: 0.125rem 0.375rem;
     font-size: 0.625rem;
     font-weight: 600;

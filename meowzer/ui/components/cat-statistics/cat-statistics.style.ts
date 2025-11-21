@@ -17,14 +17,14 @@ export const catStatisticsStyles = css`
     flex-direction: column;
     gap: 0.5rem;
     padding: 1rem;
-    background: var(--quiet-neutral-background-softest);
-    border-radius: var(--quiet-border-radius-md);
-    border: 1px solid var(--quiet-neutral-stroke-soft);
+    background: var(--cds-layer-01);
+    border-radius: 8px;
+    border: 1px solid var(--cds-border-subtle-01);
   }
 
   .stat-label {
     font-size: 0.875rem;
-    color: var(--quiet-neutral-text-soft);
+    color: var(--cds-text-helper);
     font-weight: 500;
     text-transform: uppercase;
     letter-spacing: 0.025em;
@@ -33,13 +33,13 @@ export const catStatisticsStyles = css`
   .stat-value {
     font-size: 2rem;
     font-weight: 700;
-    color: var(--quiet-neutral-text-loud);
+    color: var(--cds-text-primary);
     line-height: 1;
   }
 
   .stat-unit {
     font-size: 0.875rem;
-    color: var(--quiet-neutral-text-mid);
+    color: var(--cds-text-secondary);
     font-weight: 400;
     margin-left: 0.25rem;
   }

@@ -6,10 +6,10 @@ export const catPreviewStyles = css`
   }
 
   .preview-container {
-    border: 2px solid var(--quiet-neutral-stroke-soft);
-    border-radius: var(--quiet-border-radius-lg);
+    border: 2px solid var(--cds-border-subtle-01);
+    border-radius: 12px;
     padding: 2rem;
-    background: var(--quiet-neutral-background-softest);
+    background: var(--cds-layer-01);
     min-height: 300px;
   }
 
@@ -18,8 +18,8 @@ export const catPreviewStyles = css`
     display: flex;
     justify-content: center;
     align-items: center;
-    background: var(--quiet-neutral-fill-softer);
-    border-radius: var(--quiet-radius-md);
+    background: var(--cds-layer-02);
+    border-radius: 8px;
     min-height: 200px;
   }
 
@@ -34,7 +34,7 @@ export const catPreviewStyles = css`
 
   .preview-details {
     font-size: 0.875rem;
-    color: var(--quiet-neutral-text-soft);
+    color: var(--cds-text-helper);
     width: 100%;
   }
 
@@ -49,16 +49,16 @@ export const catPreviewStyles = css`
 
   .preview-details code {
     font-family: monospace;
-    background: var(--quiet-neutral-fill-softer);
+    background: var(--cds-layer-02);
     padding: 0.125rem 0.375rem;
-    border-radius: var(--quiet-radius-sm);
+    border-radius: 4px;
     font-size: 0.8125rem;
   }
 
   .preview-error {
     padding: 2rem;
     text-align: center;
-    color: var(--quiet-destructive-text-loud);
+    color: var(--cds-text-error);
   }
 
   .error-text {
@@ -69,7 +69,7 @@ export const catPreviewStyles = css`
   .preview-loading {
     padding: 2rem;
     text-align: center;
-    color: var(--quiet-neutral-text-soft);
+    color: var(--cds-text-helper);
   }
 
   /* Simplified preview styles (fallback) */
@@ -141,7 +141,7 @@ export const catPreviewStyles = css`
 
   .preview-label {
     font-size: 0.875rem;
-    color: var(--quiet-neutral-foreground-soft);
+    color: var(--cds-text-helper);
     text-align: center;
   }
 
@@ -151,8 +151,8 @@ export const catPreviewStyles = css`
     gap: 0.5rem;
     width: 100%;
     padding: 1rem;
-    background: var(--quiet-neutral-background);
-    border-radius: var(--quiet-border-radius-md);
+    background: var(--cds-layer-02);
+    border-radius: 8px;
     font-size: 0.875rem;
   }
 
@@ -162,11 +162,11 @@ export const catPreviewStyles = css`
   }
 
   .setting-label {
-    color: var(--quiet-neutral-foreground-soft);
+    color: var(--cds-text-helper);
   }
 
   .setting-value {
     font-weight: 500;
-    color: var(--quiet-neutral-foreground);
+    color: var(--cds-text-primary);
   }
 `;
