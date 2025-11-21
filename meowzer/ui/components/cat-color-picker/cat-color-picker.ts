@@ -4,7 +4,7 @@ import { colorPickerStyles } from "./cat-color-picker.styles.js";
 
 /**
  * Custom Color Picker Component
- * A compact color button that opens Quiet UI's color picker in a popover
+ * A compact color picker
  */
 @customElement("cat-color-picker")
 export class CatColorPicker extends LitElement {
@@ -18,13 +18,6 @@ export class CatColorPicker extends LitElement {
 
   @state()
   private internalValue = "#000000";
-
-  @state()
-  private get buttonId() {
-    return `color-button-${this.label
-      .replace(/\s+/g, "-")
-      .toLowerCase()}`;
-  }
 
   updated(changedProperties: Map<string, any>) {
     if (changedProperties.has("value")) {
@@ -68,22 +61,16 @@ export class CatColorPicker extends LitElement {
           ? html`<label class="label">${this.label}</label>`
           : ""}
 
-        <quiet-button id=${this.buttonId} variant="neutral">
+        <label class="color-button">
+          <input
+            type="color"
+            .value=${this.internalValue}
+            @input=${this.handleColorChange}
+            @change=${this.handleColorChange}
+          />
           <span class="color-preview"></span>
           <span class="color-value">${this.internalValue}</span>
-        </quiet-button>
-
-        <quiet-popover for=${this.buttonId} placement="bottom-start">
-          <quiet-color-picker
-            label=${this.label || "Color"}
-            .value=${this.internalValue}
-            format="hex"
-            with-input
-            size="sm"
-            @quiet-change=${this.handleColorChange}
-            @quiet-input=${this.handleColorChange}
-          ></quiet-color-picker>
-        </quiet-popover>
+        </label>
       </div>
     `;
   }

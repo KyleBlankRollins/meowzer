@@ -298,35 +298,54 @@ export class MbPlaygroundToolbar extends LitElement {
       this.laserPointer && this.laserPointer.isActive;
 
     return html`
-      <quiet-toolbar
-        orientation="vertical"
-        label="Playground Controls"
+      <div
+        class="toolbar"
+        role="toolbar"
+        aria-label="Playground Controls"
       >
         <!-- Create Cat -->
-        <quiet-button
-          variant="primary"
+        <cds-button
+          kind="primary"
           size="lg"
           @click=${this.handleCreateCat}
           title="Create New Cat"
         >
-          <quiet-icon family="outline" name="plus"></quiet-icon>
-        </quiet-button>
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 16 16"
+            fill="currentColor"
+          >
+            <path
+              d="M8 1C8.28125 1 8.5 1.21875 8.5 1.5V7.5H14.5C14.7812 7.5 15 7.71875 15 8C15 8.28125 14.7812 8.5 14.5 8.5H8.5V14.5C8.5 14.7812 8.28125 15 8 15C7.71875 15 7.5 14.7812 7.5 14.5V8.5H1.5C1.21875 8.5 1 8.28125 1 8C1 7.71875 1.21875 7.5 1.5 7.5H7.5V1.5C7.5 1.21875 7.71875 1 8 1Z"
+            />
+          </svg>
+        </cds-button>
 
         <!-- Statistics -->
-        <quiet-button
-          variant="neutral"
+        <cds-button
+          kind="tertiary"
           size="lg"
           @click=${this.handleViewStats}
           title="View Statistics"
         >
-          <quiet-icon family="outline" name="chart-bar"></quiet-icon>
-        </quiet-button>
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 16 16"
+            fill="currentColor"
+          >
+            <path
+              d="M8 2C8.28125 2 8.5 2.21875 8.5 2.5V13.5C8.5 13.7812 8.28125 14 8 14C7.71875 14 7.5 13.7812 7.5 13.5V2.5C7.5 2.21875 7.71875 2 8 2ZM4 6C4.28125 6 4.5 6.21875 4.5 6.5V13.5C4.5 13.7812 4.28125 14 4 14C3.71875 14 3.5 13.7812 3.5 13.5V6.5C3.5 6.21875 3.71875 6 4 6ZM12 10C12.2812 10 12.5 10.2188 12.5 10.5V13.5C12.5 13.7812 12.2812 14 12 14C11.7188 14 11.5 13.7812 11.5 13.5V10.5C11.5 10.2188 11.7188 10 12 10Z"
+            />
+          </svg>
+        </cds-button>
 
-        <quiet-divider></quiet-divider>
+        <div class="divider"></div>
 
         <!-- Basic Food -->
-        <quiet-button
-          variant="neutral"
+        <cds-button
+          kind="tertiary"
           size="lg"
           ?data-active=${this.cursor.isActive("food:basic")}
           @click=${() => this.handlePlacement("food:basic")}
@@ -340,11 +359,11 @@ export class MbPlaygroundToolbar extends LitElement {
           >
             ${this.renderBasicFoodIcon()}
           </svg>`}
-        </quiet-button>
+        </cds-button>
 
         <!-- Fancy Food -->
-        <quiet-button
-          variant="neutral"
+        <cds-button
+          kind="tertiary"
           size="lg"
           ?data-active=${this.cursor.isActive("food:fancy")}
           @click=${() => this.handlePlacement("food:fancy")}
@@ -358,11 +377,11 @@ export class MbPlaygroundToolbar extends LitElement {
           >
             ${this.renderFancyFoodIcon()}
           </svg>`}
-        </quiet-button>
+        </cds-button>
 
         <!-- Water -->
-        <quiet-button
-          variant="neutral"
+        <cds-button
+          kind="tertiary"
           size="lg"
           ?data-active=${this.cursor.isActive("water")}
           @click=${() => this.handlePlacement("water")}
@@ -376,13 +395,13 @@ export class MbPlaygroundToolbar extends LitElement {
           >
             ${this.renderWaterIcon()}
           </svg>`}
-        </quiet-button>
+        </cds-button>
 
-        <quiet-divider></quiet-divider>
+        <div class="divider"></div>
 
         <!-- Laser Pointer -->
-        <quiet-button
-          variant="neutral"
+        <cds-button
+          kind="tertiary"
           size="lg"
           ?data-active=${laserActive}
           @click=${() =>
@@ -401,11 +420,11 @@ export class MbPlaygroundToolbar extends LitElement {
           >
             ${this.renderLaserIcon()}
           </svg>`}
-        </quiet-button>
+        </cds-button>
 
         <!-- Yarn -->
-        <quiet-button
-          variant="neutral"
+        <cds-button
+          kind="tertiary"
           size="lg"
           ?data-active=${this.cursor.isActive("yarn")}
           @click=${() => this.handlePlacement("yarn")}
@@ -419,8 +438,8 @@ export class MbPlaygroundToolbar extends LitElement {
           >
             ${this.renderYarnIcon()}
           </svg>`}
-        </quiet-button>
-      </quiet-toolbar>
+        </cds-button>
+      </div>
     `;
   }
 }

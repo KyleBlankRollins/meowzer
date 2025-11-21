@@ -14,24 +14,38 @@ export const colorPickerStyles = css`
   .label {
     font-size: 0.875rem;
     font-weight: 500;
-    color: var(--quiet-neutral-text-mid);
+    color: var(--cds-text-secondary);
   }
 
-  quiet-button {
+  .color-button {
     width: 100%;
-  }
-
-  quiet-button span {
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: var(--cds-layer-01);
+    border: 1px solid var(--cds-border-subtle-01);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .color-button:hover {
+    background: var(--cds-layer-hover-01);
+  }
+
+  .color-button input[type="color"] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
   }
 
   .color-preview {
     width: 20px;
     height: 20px;
-    border-radius: var(--quiet-radius-sm);
-    border: 1px solid var(--quiet-neutral-stroke-mid);
+    border-radius: 4px;
+    border: 1px solid var(--cds-border-subtle-01);
     flex-shrink: 0;
     background-color: var(--color-value);
   }

@@ -6,7 +6,7 @@
  * @fires personality-change - Emitted when personality changes, with detail containing updated personality
  */
 
-import { LitElement, html }  from "lit";
+import { LitElement, html } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import type { Personality, PersonalityPreset } from "meowzer";
 import { catPersonalityPickerStyles } from "./cat-personality-picker.style.js";
@@ -118,91 +118,133 @@ export class CatPersonalityPicker extends LitElement {
         <div class="preset-buttons">
           ${PERSONALITY_PRESETS.map(
             (preset) => html`
-              <quiet-button
-                appearance=${this.selectedPreset === preset.value
-                  ? "normal"
-                  : "outline"}
-                variant=${this.selectedPreset === preset.value
+              <cds-button
+                kind=${this.selectedPreset === preset.value
                   ? "primary"
-                  : "neutral"}
+                  : "tertiary"}
                 @click=${() => this.handlePresetSelect(preset.value)}
               >
                 ${preset.name}
-              </quiet-button>
+              </cds-button>
             `
           )}
         </div>
 
         <div class="trait-sliders">
-          <quiet-slider
-            label="Curiosity"
-            min="0"
-            max="1"
-            step="0.1"
-            .value=${(this.personality as any).curiosity || 0.5}
-            @quiet-change=${(e: CustomEvent) =>
-              this.handleTraitChange(
-                "curiosity",
-                parseFloat(e.detail.value)
+          <div class="slider-field">
+            <label>Curiosity</label>
+            <input
+              type="range"
+              min="0"
+              max="1"
+              step="0.1"
+              .value=${String(
+                (this.personality as any).curiosity || 0.5
               )}
-          >
-          </quiet-slider>
+              @input=${(e: Event) =>
+                this.handleTraitChange(
+                  "curiosity",
+                  parseFloat((e.target as HTMLInputElement).value)
+                )}
+            />
+            <span class="slider-value"
+              >${((this.personality as any).curiosity || 0.5).toFixed(
+                1
+              )}</span
+            >
+          </div>
 
-          <quiet-slider
-            label="Playfulness"
-            min="0"
-            max="1"
-            step="0.1"
-            .value=${(this.personality as any).playfulness || 0.5}
-            @quiet-change=${(e: CustomEvent) =>
-              this.handleTraitChange(
-                "playfulness",
-                parseFloat(e.detail.value)
+          <div class="slider-field">
+            <label>Playfulness</label>
+            <input
+              type="range"
+              min="0"
+              max="1"
+              step="0.1"
+              .value=${String(
+                (this.personality as any).playfulness || 0.5
               )}
-          >
-          </quiet-slider>
+              @input=${(e: Event) =>
+                this.handleTraitChange(
+                  "playfulness",
+                  parseFloat((e.target as HTMLInputElement).value)
+                )}
+            />
+            <span class="slider-value"
+              >${(
+                (this.personality as any).playfulness || 0.5
+              ).toFixed(1)}</span
+            >
+          </div>
 
-          <quiet-slider
-            label="Independence"
-            min="0"
-            max="1"
-            step="0.1"
-            .value=${(this.personality as any).independence || 0.5}
-            @quiet-change=${(e: CustomEvent) =>
-              this.handleTraitChange(
-                "independence",
-                parseFloat(e.detail.value)
+          <div class="slider-field">
+            <label>Independence</label>
+            <input
+              type="range"
+              min="0"
+              max="1"
+              step="0.1"
+              .value=${String(
+                (this.personality as any).independence || 0.5
               )}
-          >
-          </quiet-slider>
+              @input=${(e: Event) =>
+                this.handleTraitChange(
+                  "independence",
+                  parseFloat((e.target as HTMLInputElement).value)
+                )}
+            />
+            <span class="slider-value"
+              >${(
+                (this.personality as any).independence || 0.5
+              ).toFixed(1)}</span
+            >
+          </div>
 
-          <quiet-slider
-            label="Sociability"
-            min="0"
-            max="1"
-            step="0.1"
-            .value=${(this.personality as any).sociability || 0.5}
-            @quiet-change=${(e: CustomEvent) =>
-              this.handleTraitChange(
-                "sociability",
-                parseFloat(e.detail.value)
+          <div class="slider-field">
+            <label>Sociability</label>
+            <input
+              type="range"
+              min="0"
+              max="1"
+              step="0.1"
+              .value=${String(
+                (this.personality as any).sociability || 0.5
               )}
-          >
-          </quiet-slider>
+              @input=${(e: Event) =>
+                this.handleTraitChange(
+                  "sociability",
+                  parseFloat((e.target as HTMLInputElement).value)
+                )}
+            />
+            <span class="slider-value"
+              >${(
+                (this.personality as any).sociability || 0.5
+              ).toFixed(1)}</span
+            >
+          </div>
 
-          <quiet-slider
-            label="Energy"
-            min="0"
-            max="1"
-            step="0.1"
-            .value=${(this.personality as any).energy || 0.5}
-            @quiet-change=${(e: CustomEvent) =>
-              this.handleTraitChange(
-                "energy",
-                parseFloat(e.detail.value)
+          <div class="slider-field">
+            <label>Energy</label>
+            <input
+              type="range"
+              min="0"
+              max="1"
+              step="0.1"
+              .value=${String(
+                (this.personality as any).energy || 0.5
               )}
-          >
-          </quiet-slider>
+              @input=${(e: Event) =>
+                this.handleTraitChange(
+                  "energy",
+                  parseFloat((e.target as HTMLInputElement).value)
+                )}
+            />
+            <span class="slider-value"
+              >${((this.personality as any).energy || 0.5).toFixed(
+                1
+              )}</span
+            >
+          </div>
         </div>
       </div>
     `;

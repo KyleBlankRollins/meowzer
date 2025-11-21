@@ -6,14 +6,15 @@ export const playgroundToolbarStyles = css`
     height: 100%;
   }
 
-  quiet-toolbar {
+  .toolbar {
     height: 100%;
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
+    padding: 0.5rem;
   }
 
-  quiet-button {
+  cds-button {
     width: 48px;
     height: 48px;
     display: inline-flex;
@@ -21,24 +22,26 @@ export const playgroundToolbarStyles = css`
     justify-content: center;
   }
 
-  quiet-button svg {
+  cds-button svg {
     display: block;
     width: 24px;
     height: 24px;
     flex-shrink: 0;
   }
 
-  quiet-button[data-active] {
-    background: var(--quiet-primary-background-soft);
-    border-color: var(--quiet-primary-stroke-loudmb-cat-playground);
+  cds-button[data-active] {
+    background: var(--cds-layer-accent-01);
+    border-color: var(--cds-border-interactive);
   }
 
-  quiet-divider {
+  .divider {
+    height: 1px;
+    background: var(--cds-border-subtle-01);
     margin: 0.5rem 0;
   }
 
   /* Tooltip styling for button titles */
-  quiet-button::part(base) {
+  cds-button::part(button) {
     position: relative;
   }
 `;

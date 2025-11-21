@@ -73,37 +73,43 @@ export class AppearanceSection extends LitElement {
             @color-change=${this.handleEyeColorChange}
           ></cat-color-picker>
 
-          <quiet-select
-            label="Pattern"
-            .value=${this.settings.pattern}
-            @quiet-change=${this.handlePatternChange}
-          >
-            <option value="solid">Solid</option>
-            <option value="tabby">Tabby</option>
-            <option value="calico">Calico</option>
-            <option value="tuxedo">Tuxedo</option>
-            <option value="spotted">Spotted</option>
-          </quiet-select>
+          <div class="select-field">
+            <label>Pattern</label>
+            <select
+              .value=${this.settings.pattern}
+              @change=${this.handlePatternChange}
+            >
+              <option value="solid">Solid</option>
+              <option value="tabby">Tabby</option>
+              <option value="calico">Calico</option>
+              <option value="tuxedo">Tuxedo</option>
+              <option value="spotted">Spotted</option>
+            </select>
+          </div>
 
-          <quiet-select
-            label="Fur Length"
-            .value=${this.settings.furLength}
-            @quiet-change=${this.handleFurLengthChange}
-          >
-            <option value="short">Short</option>
-            <option value="medium">Medium</option>
-            <option value="long">Long</option>
-          </quiet-select>
+          <div class="select-field">
+            <label>Fur Length</label>
+            <select
+              .value=${this.settings.furLength}
+              @change=${this.handleFurLengthChange}
+            >
+              <option value="short">Short</option>
+              <option value="medium">Medium</option>
+              <option value="long">Long</option>
+            </select>
+          </div>
 
-          <quiet-select
-            label="Body Size"
-            .value=${this.settings.size}
-            @quiet-change=${this.handleSizeChange}
-          >
-            <option value="small">Small</option>
-            <option value="medium">Medium</option>
-            <option value="large">Large</option>
-          </quiet-select>
+          <div class="select-field">
+            <label>Body Size</label>
+            <select
+              .value=${this.settings.size}
+              @change=${this.handleSizeChange}
+            >
+              <option value="small">Small</option>
+              <option value="medium">Medium</option>
+              <option value="large">Large</option>
+            </select>
+          </div>
         </div>
       </div>
     `;
