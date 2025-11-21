@@ -16,6 +16,16 @@ export const playgroundToolbarStyles = css`
   quiet-button {
     width: 48px;
     height: 48px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  quiet-button svg {
+    display: block;
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
   }
 
   quiet-button[data-active] {

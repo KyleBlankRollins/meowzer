@@ -18,9 +18,17 @@ export interface NearbyYarn {
   state: string;
 }
 
+export interface NearbyLaser {
+  type: string;
+  position: Position;
+  id: string;
+  isActive: boolean;
+}
+
 export interface DetectionConfig {
   needDetectionRange?: number;
   yarnDetectionRange?: number;
+  laserDetectionRange?: number;
 }
 
 /**
@@ -35,6 +43,7 @@ export class InteractionDetector {
     this.config = {
       needDetectionRange: config.needDetectionRange ?? 150,
       yarnDetectionRange: config.yarnDetectionRange ?? 150,
+      laserDetectionRange: config.laserDetectionRange ?? 300,
     };
   }
 
@@ -82,6 +91,40 @@ export class InteractionDetector {
       }));
     } catch {
       return [];
+    }
+  }
+
+  /**
+   * Check for nearby laser pointer (polling)
+   */
+  checkNearbyLaser(): NearbyLaser | null {
+    try {
+      const globalKey = Symbol.for("meowzer.interactions");
+      const interactions = (globalThis as any)[globalKey];
+
+      if (!interactions || !interactions.getActiveLaser) return null;
+
+      const laser = interactions.getActiveLaser();
+      if (!laser || !laser.isActive) return null;
+
+      // Check if laser is within detection range
+      const dist = Math.hypot(
+        laser.position.x - this.cat.position.x,
+        laser.position.y - this.cat.position.y
+      );
+
+      if (dist > (this.config.laserDetectionRange ?? 300)) {
+        return null;
+      }
+
+      return {
+        type: "laser",
+        position: laser.position,
+        id: laser.id,
+        isActive: laser.isActive,
+      };
+    } catch {
+      return null;
     }
   }
 

@@ -328,8 +328,7 @@ export class CatInteractions extends EventEmitter<InteractionEvent> {
   }
 
   /**
-   * Handle brain reaction events (need detection, yarn detection, etc.)
-   * Note: Laser detection removed - laser interaction manager not yet implemented
+   * Handle brain reaction events (need detection, yarn detection, laser detection, etc.)
    */
   private handleBrainReaction = async (data: any): Promise<void> => {
     if (!this.isActive) return;
@@ -345,6 +344,25 @@ export class CatInteractions extends EventEmitter<InteractionEvent> {
     if (data.type === "yarnDetected" || data.type === "yarnMoving") {
       if (data.yarnId) {
         await this.playWithYarn(data.yarnId);
+      }
+    }
+
+    // Handle laser reactions
+    if (
+      data.type === "laserDetected" ||
+      data.type === "laserMoving"
+    ) {
+      // Get laser position from global interaction manager
+      try {
+        const globalKey = Symbol.for("meowzer.interactions");
+        const interactions = (globalThis as any)[globalKey];
+        const laser = interactions?.getActiveLaser?.();
+
+        if (laser?.isActive && laser.position) {
+          await this.chaseLaser(laser.position);
+        }
+      } catch (error) {
+        // Silently handle if laser not available
       }
     }
 

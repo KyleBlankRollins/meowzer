@@ -313,6 +313,17 @@ export class Brain {
       }
     }
 
+    // Check for nearby laser pointer
+    const nearbyLaser = this.detector.checkNearbyLaser();
+    if (nearbyLaser) {
+      const interest = this.evaluator.evaluateInterest(nearbyLaser);
+
+      if (interest > 0.5) {
+        // Laser is highly interesting and triggers chasing
+        weights.chasing += interest * 3.0;
+      }
+    }
+
     // Choose a behavior
     let chosenBehavior = chooseBehavior(weights);
 
@@ -354,22 +365,38 @@ export class Brain {
     );
     this._boundaryHitCount = 0;
 
+    // Build context with target information
+    const context: any = {
+      visitedPositions: this.memoryManager.current.visitedPositions,
+    };
+
+    // Add target information for chasing/approaching behaviors
+    if (chosenBehavior === "chasing" || chosenBehavior === "approaching") {
+      // Priority: laser > yarn > need
+      if (nearbyLaser && chosenBehavior === "chasing") {
+        context.target = nearbyLaser.position;
+      } else if (nearbyYarns.length > 0) {
+        context.target = nearbyYarns[0].position;
+      } else if (nearbyNeeds.length > 0) {
+        context.target = nearbyNeeds[0].position;
+      }
+    }
+
     // Execute behavior
-    await this._executeBehavior(chosenBehavior);
+    await this._executeBehavior(chosenBehavior, context);
 
     // Schedule next decision
     this._scheduleNextDecision();
   }
 
   private async _executeBehavior(
-    behavior: BehaviorType
+    behavior: BehaviorType,
+    context: any = {}
   ): Promise<void> {
     if (!this._running || this._destroyed) return;
 
     try {
-      await this.orchestrator.execute(behavior, {
-        visitedPositions: this.memoryManager.current.visitedPositions,
-      });
+      await this.orchestrator.execute(behavior, context);
     } catch (error) {
       // Behavior was interrupted or cat was destroyed
     }
