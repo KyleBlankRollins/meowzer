@@ -15,11 +15,20 @@ export const playgroundToolbarStyles = css`
   }
 
   cds-button {
-    width: 48px;
-    height: 48px;
-    display: inline-flex;
+    min-width: 48px;
+    max-width: 48px;
+    min-height: 48px;
+    max-height: 48px;
+  }
+
+  /* Override Carbon's internal button styles to center SVGs */
+  cds-button::part(button) {
+    display: flex;
     align-items: center;
     justify-content: center;
+    padding: 0;
+    min-height: 48px;
+    width: 100%;
   }
 
   cds-button svg {
@@ -27,6 +36,7 @@ export const playgroundToolbarStyles = css`
     width: 24px;
     height: 24px;
     flex-shrink: 0;
+    margin: 0 auto;
   }
 
   cds-button[data-active] {
@@ -38,10 +48,5 @@ export const playgroundToolbarStyles = css`
     height: 1px;
     background: var(--cds-border-subtle-01);
     margin: 0.5rem 0;
-  }
-
-  /* Tooltip styling for button titles */
-  cds-button::part(button) {
-    position: relative;
   }
 `;

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="quiet-teal">
+<html lang="en" class="cds-theme-g10">
   <head>
     <meta charset="UTF-8" />
     <meta
@@ -14,7 +14,7 @@
           "(prefers-color-scheme: dark)"
         ).matches;
         if (prefersDark) {
-          document.documentElement.classList.add("quiet-dark");
+          document.documentElement.className = "cds-theme-g90";
         }
 
         // Listen for theme changes
@@ -22,9 +22,9 @@
           .matchMedia("(prefers-color-scheme: dark)")
           .addEventListener("change", (e) => {
             if (e.matches) {
-              document.documentElement.classList.add("quiet-dark");
+              document.documentElement.className = "cds-theme-g90";
             } else {
-              document.documentElement.classList.remove("quiet-dark");
+              document.documentElement.className = "cds-theme-g10";
             }
           });
       })();

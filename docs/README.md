@@ -60,19 +60,19 @@ Navigation is automatically generated from:
 - Page titles from frontmatter
 - Folder names are prettified (e.g., `getting-started` → "Getting Started")
 
-## Using Quiet UI Components
+## Using Carbon Web Components
 
-Quiet UI web components can be used directly in Markdown since they're valid HTML:
+Carbon web components can be used directly in Markdown since they're valid HTML:
 
 ```markdown
-<quiet-button variant="primary">Click me</quiet-button>
+<cds-button kind="primary">Click me</cds-button>
 
-<quiet-card>
-  This is a card with some content.
-</quiet-card>
+<cds-tile>
+  This is a tile with some content.
+</cds-tile>
 ```
 
-All Quiet UI components are registered in `source/main.ts`.
+All Carbon Web Components are registered in `source/main.ts`.
 
 ## Template System
 
@@ -84,7 +84,7 @@ The SSG uses **Lit HTML** for server-side template rendering. Templates are loca
 - **Automatic escaping** to prevent XSS vulnerabilities
 - **Clean syntax** using tagged template literals
 - **Composable** templates that can be nested
-- **Consistent** with Quiet UI's Lit-based web components
+- **Consistent** with Carbon's Lit-based web components
 
 ### How It Works
 

@@ -144,11 +144,11 @@ Learn more in [Architecture](/docs/concepts/architecture).
 
 ## Ready to Get Started?
 
-<quiet-button-group>
+<div style="display: flex; gap: 1rem; flex-wrap: wrap;">
   <a href="/docs/getting-started/installation">
-    <quiet-button variant="primary">Install Meowzer</quiet-button>
+    <cds-button kind="primary">Install Meowzer</cds-button>
   </a>
   <a href="/docs/getting-started/quick-start">
-    <quiet-button>Quick Start Guide</quiet-button>
+    <cds-button kind="secondary">Quick Start Guide</cds-button>
   </a>
-</quiet-button-group>
+</div>

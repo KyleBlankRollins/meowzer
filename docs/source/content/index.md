@@ -16,23 +16,27 @@ Meowzer is a TypeScript SDK for creating animated cat sprites that wander around
 
 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin: 3rem 0;">
 
-<quiet-card>
+<cds-tile>
   <h3>🐱 For End Users</h3>
   <p>Learn how to interact with Meowzer cats on websites. Feed them, play with toys, and understand their behaviors.</p>
   <p><strong>No coding required!</strong> Just enjoy the cats.</p>
-  <a href="/play/" slot="footer">
-    <quiet-button variant="primary">Explore Cats →</quiet-button>
-  </a>
-</quiet-card>
+  <div style="margin-top: 1rem;">
+    <a href="/play/">
+      <cds-button kind="primary">Explore Cats →</cds-button>
+    </a>
+  </div>
+</cds-tile>
 
-<quiet-card>
+<cds-tile>
   <h3>💻 For Developers</h3>
   <p>Integrate Meowzer into your projects. Full SDK documentation, tutorials, and API reference.</p>
   <p><strong>TypeScript-first</strong> with complete type safety.</p>
-  <a href="/docs/" slot="footer">
-    <quiet-button variant="primary">View Docs →</quiet-button>
-  </a>
-</quiet-card>
+  <div style="margin-top: 1rem;">
+    <a href="/docs/">
+      <cds-button kind="primary">View Docs →</cds-button>
+    </a>
+  </div>
+</cds-tile>
 
 </div>
 
@@ -48,7 +52,7 @@ Meowzer creates autonomous cats that:
 - 💾 **Can be saved** - Persist cats between sessions with IndexedDB
 - ✨ **Look beautiful** - Smooth GSAP animations and procedural generation
 
-<quiet-card>
+<cds-tile>
   <img
     slot="media"
     src="https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?q=80&w=1000&auto=format&fit=crop"
@@ -57,7 +61,7 @@ Meowzer creates autonomous cats that:
   
   Watch the cats on this very page! They're real Meowzer cats wandering around as you read. Notice how each one has its own personality and movement patterns.
 
-</quiet-card>
+</cds-tile>
 
 ---
 
@@ -124,14 +128,14 @@ cat.place(document.body);
 
 ## Ready to Start?
 
-<quiet-button-group>
+<div style="display: flex; gap: 1rem; flex-wrap: wrap;">
   <a href="/play/">
-    <quiet-button variant="primary">Play with Cats</quiet-button>
+    <cds-button kind="primary">Play with Cats</cds-button>
   </a>
   <a href="/docs/">
-    <quiet-button variant="primary">Developer Docs</quiet-button>
+    <cds-button kind="primary">Developer Docs</cds-button>
   </a>
   <a href="/docs/getting-started/installation">
-    <quiet-button>Install Meowzer</quiet-button>
+    <cds-button kind="secondary">Install Meowzer</cds-button>
   </a>
-</quiet-button-group>
+</div>

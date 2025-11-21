@@ -17,11 +17,63 @@ npm install meowzer @meowzer/ui @carbon/web-components lit
 
 ## Quick Start
 
-### Option 1: CDN (Fastest)
+### Option 1: NPM (Recommended)
+
+```bash
+npm install meowzer @meowzer/ui @carbon/web-components lit
+```
+
+**Import Carbon styles in your HTML/layout:**
 
 ```html
 <!DOCTYPE html>
-<html>
+<html class="cds-theme-g10">
+  <head>
+    <style>
+      @import "@meowzer/ui/styles";
+    </style>
+  </head>
+  <body>
+    <meowzer-provider auto-init>
+      <mb-cat-playground></mb-cat-playground>
+    </meowzer-provider>
+
+    <script type="module">
+      import "@meowzer/ui/setup";
+      import "@meowzer/ui";
+    </script>
+  </body>
+</html>
+```
+
+**Or with direct Carbon import:**
+
+```html
+<!DOCTYPE html>
+<html class="cds-theme-g10">
+  <head>
+    <style>
+      @import "@carbon/styles/css/styles.css";
+    </style>
+  </head>
+  <!-- ... -->
+</html>
+```
+
+**Frameworks (React, Vue, Astro, etc.):**
+
+```javascript
+// In your main layout/app component
+import "@meowzer/ui/styles"; // Or import "@carbon/styles/css/styles.css"
+import "@meowzer/ui/setup";
+import "@meowzer/ui";
+```
+
+### Option 2: CDN (Quick Testing)
+
+```html
+<!DOCTYPE html>
+<html class="cds-theme-g10">
   <head>
     <!-- Carbon styles -->
     <link
@@ -29,7 +81,7 @@ npm install meowzer @meowzer/ui @carbon/web-components lit
       href="https://cdn.jsdelivr.net/npm/@carbon/styles@1.0.0/css/styles.css"
     />
   </head>
-  <body class="cds-theme-g10">
+  <body>
     <!-- Drop-in playground - that's it! -->
     <meowzer-provider auto-init>
       <mb-cat-playground></mb-cat-playground>
@@ -40,12 +92,6 @@ npm install meowzer @meowzer/ui @carbon/web-components lit
     </script>
   </body>
 </html>
-```
-
-### Option 2: NPM (Recommended)
-
-```bash
-npm install meowzer @meowzer/ui @carbon/web-components lit
 ```
 
 ```typescript

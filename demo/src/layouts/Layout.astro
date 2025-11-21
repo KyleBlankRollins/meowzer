@@ -7,7 +7,7 @@ const { title = "Meowzer Playground" } = Astro.props;
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="en" class="cds-theme-g10">
   <head>
     <meta charset="UTF-8" />
     <meta
@@ -28,6 +28,8 @@ const { title = "Meowzer Playground" } = Astro.props;
 </html>
 
 <style is:global>
+  @import "@meowzer/ui/styles";
+
   :root {
     --bg-cream: #fffef9;
     --accent-orange: #ff9500;

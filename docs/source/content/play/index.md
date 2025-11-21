@@ -10,37 +10,37 @@ Meowzer brings adorable, interactive cats to websites. These aren't just images�
 
 ## What Makes Meowzer Cats Special?
 
-<quiet-card>
+<cds-tile>
 
 ### 🐾 They Move on Their Own
 
 Cats walk around, explore, and make their own decisions about where to go.
 
-</quiet-card>
+</cds-tile>
 
-<quiet-card>
+<cds-tile>
 
 ### 😺 Each Has Personality
 
 Some cats are playful and energetic. Others are lazy and prefer napping. Every cat is unique!
 
-</quiet-card>
+</cds-tile>
 
-<quiet-card>
+<cds-tile>
 
 ### 🎾 They're Interactive
 
 Feed them, give them toys to play with, or use a laser pointer to watch them chase the red dot!
 
-</quiet-card>
+</cds-tile>
 
-<quiet-card>
+<cds-tile>
 
 ### 😴 They Act Like Real Cats
 
 When they get tired, they rest. When they're curious, they explore. When they're playful, they zoom around!
 
-</quiet-card>
+</cds-tile>
 
 ## Try It Yourself!
 

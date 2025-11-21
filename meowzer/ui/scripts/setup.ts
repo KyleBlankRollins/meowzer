@@ -37,27 +37,27 @@ import "../components/cat-color-picker/cat-color-picker.js";
 /**
  * Load Carbon Web Components stylesheets dynamically
  *
- * @param useCDN - Whether to use CDN or local assets. Defaults to true.
+ * Note: It's recommended to import '@meowzer/ui/styles' directly in your HTML/layout
+ * instead of relying on this dynamic loader for better SSR and build tool support.
  */
-export function loadCarbonStyles(useCDN = true) {
+export function loadCarbonStyles() {
   if (typeof document === "undefined") {
     // SSR environment, skip
     return;
   }
 
-  const baseUrl = useCDN
-    ? "https://cdn.jsdelivr.net/npm/@carbon/styles@1.0.0"
-    : "/node_modules/@carbon/styles";
-
-  // Load Carbon styles
-  const carbonLink = document.createElement("link");
-  carbonLink.rel = "stylesheet";
-  carbonLink.href = `${baseUrl}/css/styles.css`;
-
-  // Only add if not already present
-  if (!document.querySelector(`link[href*="@carbon/styles"]`)) {
-    document.head.appendChild(carbonLink);
+  // Check if styles are already loaded
+  if (
+    document.querySelector(`link[href*="carbon"]`) ||
+    document.querySelector(`style[data-carbon]`)
+  ) {
+    return;
   }
+
+  console.warn(
+    "[Meowzer UI] Carbon styles not detected. " +
+      'Please import "@meowzer/ui/styles" in your HTML <head> or layout component.'
+  );
 
   // Set default theme
   if (
