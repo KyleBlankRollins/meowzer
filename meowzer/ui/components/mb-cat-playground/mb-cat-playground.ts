@@ -199,7 +199,6 @@ export class MbCatPlayground extends LitElement {
    */
   private async loadExistingCats() {
     if (!this.meowzer || !this.meowzer.storage.isInitialized()) {
-      console.log("Storage not initialized, skipping cat loading");
       return;
     }
 
@@ -236,9 +235,10 @@ export class MbCatPlayground extends LitElement {
       }
     } catch (err) {
       // Collection might not exist yet, which is fine
-      if (err instanceof Error && err.message.includes("not found")) {
-        console.log("No saved cats collection found yet");
-      } else {
+      if (
+        err instanceof Error &&
+        !err.message.includes("not found")
+      ) {
         console.error("Failed to load existing cats:", err);
       }
     }

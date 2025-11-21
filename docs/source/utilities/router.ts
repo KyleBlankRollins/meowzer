@@ -21,8 +21,6 @@ export function initializeRouter(): void {
 
   // Handle browser back/forward buttons
   window.addEventListener("popstate", handlePopState);
-
-  console.log("Client-side router initialized");
 }
 
 /**
@@ -51,7 +49,6 @@ async function handleLinkClick(event: MouseEvent): Promise<void> {
     return;
   }
 
-  console.log("Router intercepting navigation to:", link.href);
   event.preventDefault();
   event.stopPropagation();
 
@@ -134,62 +131,8 @@ function updatePage(newDoc: Document): void {
   const newTemplate = findTemplateElement(newDoc);
 
   if (oldTemplate && newTemplate) {
-    console.log(
-      "Replacing template:",
-      oldTemplate.tagName,
-      "→",
-      newTemplate.tagName
-    );
-
-    // Verify cat playground exists and will persist
-    const playground = document.getElementById("cat-playground");
-    const playgroundCats = playground
-      ? Array.from(playground.children)
-      : [];
-    console.log(
-      "Cat playground exists:",
-      !!playground,
-      "Children:",
-      playground?.children.length
-    );
-    console.log(
-      "Cat IDs before replacement:",
-      playgroundCats.map((c) => c.id)
-    );
-
-    // Check if the new document has a playground too
-    const newPlayground = newDoc.getElementById("cat-playground");
-    console.log(
-      "New document has playground?",
-      !!newPlayground,
-      "Children:",
-      newPlayground?.children.length
-    );
-
     // Replace the entire template component
     oldTemplate.replaceWith(newTemplate);
-
-    // Verify playground still exists after replacement
-    const playgroundAfter = document.getElementById("cat-playground");
-    const playgroundCatsAfter = playgroundAfter
-      ? Array.from(playgroundAfter.children)
-      : [];
-    console.log(
-      "Cat playground after replacement:",
-      !!playgroundAfter,
-      "Children:",
-      playgroundAfter?.children.length
-    );
-    console.log(
-      "Cat IDs after replacement:",
-      playgroundCatsAfter.map((c) => c.id)
-    );
-
-    // Check if playground is the same instance
-    console.log(
-      "Is same playground element?",
-      playground === playgroundAfter
-    );
 
     // Update nav active state
     updateNavigation(newDoc);
