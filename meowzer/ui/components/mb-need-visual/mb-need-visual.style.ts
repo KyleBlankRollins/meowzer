@@ -40,10 +40,10 @@ export const needVisualStyles = css`
   }
 
   .consuming-indicator {
-    background: var(--quiet-primary-background-soft, #e3f2fd);
-    color: var(--quiet-primary-text-loud, #1976d2);
-    border: 1px solid var(--quiet-primary-stroke-soft, #90caf9);
-    border-radius: var(--quiet-border-radius-sm, 0.25rem);
+    background: var(--quiet-primary-background-soft);
+    color: var(--quiet-primary-text-loud);
+    border: 1px solid var(--quiet-primary-stroke-soft);
+    border-radius: var(--quiet-border-radius-sm);
     padding: 0.125rem 0.375rem;
     font-size: 0.625rem;
     font-weight: 600;

@@ -23,5 +23,3 @@
 ## UI
 
 - feat: Create pick up/drop feature that applies to all objects in the playground
-- chore: Remove all of the stupid fallback values for `var()` in component styles.
-- feat: Add UI for changing hats

@@ -24,8 +24,8 @@ export const catPlaygroundStyles = css`
     flex-direction: column;
     gap: 1rem;
     padding: 1rem;
-    background: var(--quiet-neutral-background-softest, #f9fafb);
-    border-left: 1px solid var(--quiet-neutral-stroke-soft, #e0e0e0);
+    background: var(--quiet-neutral-background-softest);
+    border-left: 1px solid var(--quiet-neutral-stroke-soft);
     min-width: 80px;
     max-width: 80px;
   }
