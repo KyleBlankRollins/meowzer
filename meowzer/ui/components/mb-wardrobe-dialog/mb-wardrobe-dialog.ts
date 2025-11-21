@@ -202,14 +202,11 @@ export class MbWardrobeDialog extends LitElement {
   }
 
   /**
-   * Handle dialog close event from Quiet UI
-   * Only close if the event is from the dialog itself, not from nested components
+   * Handle dialog close event from Carbon
    */
   private handleDialogClose(e: CustomEvent) {
-    // Check if the event target is the dialog element itself
-    // This prevents nested component close events (like popover) from closing the dialog
     const target = e.target as HTMLElement;
-    if (target.tagName.toLowerCase() === "quiet-dialog") {
+    if (target.tagName.toLowerCase() === "cds-modal") {
       this.handleCancel();
     }
   }
@@ -224,13 +221,13 @@ export class MbWardrobeDialog extends LitElement {
         <div class="hat-buttons">
           ${this.hatTypes.map(
             (hat) => html`
-              <quiet-button
+              <cds-button
                 class="hat-button ${this.selectedHatType === hat.type
                   ? "selected"
                   : ""}"
-                variant=${this.selectedHatType === hat.type
+                kind=${this.selectedHatType === hat.type
                   ? "primary"
-                  : "neutral"}
+                  : "tertiary"}
                 @click=${() => this.handleHatSelect(hat.type)}
               >
                 <div class="hat-button-content">
@@ -243,7 +240,7 @@ export class MbWardrobeDialog extends LitElement {
                   ></div>
                   <span class="hat-label">${hat.label}</span>
                 </div>
-              </quiet-button>
+              </cds-button>
             `
           )}
         </div>
@@ -302,26 +299,33 @@ export class MbWardrobeDialog extends LitElement {
     const catName = this.cat?.name || "Cat";
 
     return html`
-      <quiet-dialog
+      <cds-modal
         ?open=${this.open}
-        @quiet-close=${this.handleDialogClose}
+        @cds-modal-closed=${this.handleDialogClose}
+        size="lg"
       >
-        <div slot="header">Change Hat for ${catName}</div>
+        <cds-modal-header>
+          <cds-modal-heading
+            >Change Hat for ${catName}</cds-modal-heading
+          >
+        </cds-modal-header>
 
-        <div class="wardrobe-content">
-          ${this.renderHatSelection()} ${this.renderColorPickers()}
-          ${this.renderPreview()}
-        </div>
+        <cds-modal-body>
+          <div class="wardrobe-content">
+            ${this.renderHatSelection()} ${this.renderColorPickers()}
+            ${this.renderPreview()}
+          </div>
+        </cds-modal-body>
 
-        <div slot="footer">
-          <quiet-button @click=${this.handleCancel}>
+        <cds-modal-footer>
+          <cds-button @click=${this.handleCancel} kind="secondary">
             Cancel
-          </quiet-button>
-          <quiet-button variant="primary" @click=${this.handleApply}>
+          </cds-button>
+          <cds-button @click=${this.handleApply} kind="primary">
             Apply Hat
-          </quiet-button>
-        </div>
-      </quiet-dialog>
+          </cds-button>
+        </cds-modal-footer>
+      </cds-modal>
     `;
   }
 }

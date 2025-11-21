@@ -2,7 +2,6 @@ import type { Meta, StoryObj } from "@storybook/web-components";
 import { html } from "lit";
 import "../providers/meowzer-provider.js";
 import "../components/cat-creator/cat-creator.js";
-import "../components/cat-manager/cat-manager.js";
 
 const meta = {
   title: "Providers/Meowzer Provider",

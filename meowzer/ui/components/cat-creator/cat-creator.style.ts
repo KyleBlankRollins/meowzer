@@ -51,8 +51,8 @@ export const catCreatorStyles = css`
     margin: 0;
     font-size: 1rem;
     font-weight: 600;
-    color: var(--quiet-neutral-text-loud);
-    border-bottom: 1px solid var(--quiet-neutral-stroke-soft);
+    color: var(--cds-text-primary);
+    border-bottom: 1px solid var(--cds-border-subtle-01);
     padding-bottom: 0.5rem;
   }
 
@@ -62,7 +62,7 @@ export const catCreatorStyles = css`
     gap: 1rem;
     justify-content: flex-end;
     padding-top: 1rem;
-    border-top: 1px solid var(--quiet-neutral-stroke-soft);
+    border-top: 1px solid var(--cds-border-subtle-01);
   }
 
   /* Step Indicator */
@@ -77,17 +77,18 @@ export const catCreatorStyles = css`
     width: 0.75rem;
     height: 0.75rem;
     border-radius: 50%;
-    background: var(--quiet-neutral-stroke-soft);
+    background: var(--cds-border-subtle-01);
     transition: all 0.2s ease;
   }
 
   .step-dot.active {
-    background: var(--quiet-primary-fill-loud);
+    background: var(--cds-background-brand);
     transform: scale(1.2);
   }
 
   .step-dot.completed {
-    background: var(--quiet-primary-fill-mid);
+    background: var(--cds-background-brand);
+    opacity: 0.6;
   }
 
   /* Wizard navigation */
@@ -97,7 +98,7 @@ export const catCreatorStyles = css`
     justify-content: space-between;
     align-items: center;
     padding-top: 1.5rem;
-    border-top: 1px solid var(--quiet-neutral-stroke-soft);
+    border-top: 1px solid var(--cds-border-subtle-01);
     margin-top: 1.5rem;
   }
 

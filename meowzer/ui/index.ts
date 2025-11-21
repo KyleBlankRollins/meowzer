@@ -1,8 +1,7 @@
 /**
  * @meowzer/ui - Web Components for Meowzer SDK
  *
- * Drop-in cat animations for any website using Lit Element and Quiet UI.
- * Inspired by Realm React's provider pattern.
+ * Drop-in cat animations for any website using Lit Element and Carbon Web Components.
  *
  * For automatic setup (stylesheets + component registration), import the setup module:
  * ```typescript

@@ -146,13 +146,6 @@ export class CatCreator extends LitElement {
   }
 
   /**
-   * Handle roaming checkbox change
-   */
-  private handleRoamingChange(e: CustomEvent) {
-    this.makeRoaming = (e.target as any).checked;
-  }
-
-  /**
    * Create the cat
    */
   private async handleCreate() {
@@ -282,12 +275,12 @@ export class CatCreator extends LitElement {
         <div class="nav-group">
           ${!isFirstStep
             ? html`
-                <quiet-button
+                <cds-button
                   @click=${this.previousStep}
-                  appearance="outline"
+                  kind="secondary"
                 >
                   Previous
-                </quiet-button>
+                </cds-button>
               `
             : html`<span></span>`}
         </div>
@@ -298,21 +291,18 @@ export class CatCreator extends LitElement {
         <div class="nav-group">
           ${!isLastStep
             ? html`
-                <quiet-button
-                  @click=${this.nextStep}
-                  variant="primary"
-                >
+                <cds-button @click=${this.nextStep} kind="primary">
                   Next
-                </quiet-button>
+                </cds-button>
               `
             : html`
-                <quiet-button
+                <cds-button
                   @click=${this.handleCreate}
-                  variant="primary"
+                  kind="primary"
                   ?disabled=${this.creating}
                 >
                   ${this.creating ? "Creating..." : "Create Cat"}
-                </quiet-button>
+                </cds-button>
               `}
         </div>
       </div>
@@ -322,22 +312,26 @@ export class CatCreator extends LitElement {
   render() {
     if (!this.meowzer) {
       return html`
-        <quiet-callout variant="destructive">
-          <strong>No Meowzer SDK</strong>
-          <p>
-            Please wrap this component in a
-            <code>&lt;meowzer-provider&gt;</code>.
-          </p>
-        </quiet-callout>
+        <cds-inline-notification
+          kind="error"
+          title="No Meowzer SDK"
+          subtitle="Please wrap this component in a <meowzer-provider>."
+          hideCloseButton
+        >
+        </cds-inline-notification>
       `;
     }
 
     return html`
       <div class="cat-creator">
         ${this.message
-          ? html`<quiet-callout variant="primary" class="message">
-              ${this.message}
-            </quiet-callout>`
+          ? html`<cds-inline-notification
+              kind="info"
+              title=${this.message}
+              hideCloseButton
+              class="message"
+            >
+            </cds-inline-notification>`
           : ""}
 
         <div class="creator-layout">
@@ -348,13 +342,13 @@ export class CatCreator extends LitElement {
               autoBuild
             ></cat-preview>
             <div class="preview-actions">
-              <quiet-button
+              <cds-button
                 @click=${this.reset}
-                appearance="outline"
+                kind="secondary"
                 size="sm"
               >
                 Reset
-              </quiet-button>
+              </cds-button>
             </div>
           </div>
 
@@ -363,17 +357,14 @@ export class CatCreator extends LitElement {
             <!-- Step Errors -->
             ${this.stepErrors.length > 0
               ? html`
-                  <quiet-callout
-                    variant="destructive"
+                  <cds-inline-notification
+                    kind="error"
+                    title="Please fix the following:"
+                    subtitle=${this.stepErrors.join(", ")}
+                    hideCloseButton
                     class="step-errors"
                   >
-                    <strong>Please fix the following:</strong>
-                    <ul>
-                      ${this.stepErrors.map(
-                        (error) => html`<li>${error}</li>`
-                      )}
-                    </ul>
-                  </quiet-callout>
+                  </cds-inline-notification>
                 `
               : ""}
 
@@ -415,12 +406,16 @@ export class CatCreator extends LitElement {
                 ? html`
                     <div class="form-section">
                       <h4>Behavior Options</h4>
-                      <quiet-checkbox
-                        .checked=${this.makeRoaming}
-                        @quiet-change=${this.handleRoamingChange}
+                      <cds-checkbox
+                        ?checked=${this.makeRoaming}
+                        @change=${(e: Event) => {
+                          this.makeRoaming = (
+                            e.target as HTMLInputElement
+                          ).checked;
+                        }}
                       >
                         Make cat roam the viewport
-                      </quiet-checkbox>
+                      </cds-checkbox>
                     </div>
                   `
                 : ""}

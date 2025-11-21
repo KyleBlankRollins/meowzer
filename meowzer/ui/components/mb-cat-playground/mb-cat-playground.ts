@@ -320,75 +320,45 @@ export class MbCatPlayground extends LitElement {
       existingMenu.remove();
     }
 
-    // Create menu container (no positioning - just a child element)
+    // Create menu container
     const menuContainer = document.createElement("div");
     menuContainer.className = "cat-context-menu";
 
-    // Create and configure the dropdown
-    const dropdown = document.createElement("quiet-dropdown") as any;
-    dropdown.open = true;
+    // Create native context menu
+    const menu = document.createElement("div");
+    menu.className = "context-menu-content";
 
-    // Create hidden trigger
-    const trigger = document.createElement("button");
-    // trigger.style.display = "none";
-    trigger.setAttribute("slot", "trigger");
-    dropdown.appendChild(trigger);
-
-    // Add menu items
-    this.addMenuItem(
-      dropdown,
-      "remove",
+    // Add menu items as buttons
+    const removeBtn = this.createMenuButton(
       "Remove",
-      "trash",
-      "destructive"
+      "destructive",
+      () => this.handleMenuAction("remove", cat)
     );
-    this.addMenuItem(dropdown, "rename", "Rename", "edit");
-
-    // Add divider
-    const divider = document.createElement("quiet-divider");
-    dropdown.appendChild(divider);
-
-    // Add hat menu item
-    this.addMenuItem(dropdown, "change-hat", "Change Hat", "shirt");
-
-    // Add divider before disabled items
-    const divider2 = document.createElement("quiet-divider");
-    dropdown.appendChild(divider2);
-
-    // Add disabled items with "Soon" badge
-    this.addMenuItem(
-      dropdown,
-      "pickup",
-      "Pick Up",
-      "hand",
-      undefined,
-      true
+    const renameBtn = this.createMenuButton("Rename", "normal", () =>
+      this.handleMenuAction("rename", cat)
     );
-    this.addMenuItem(
-      dropdown,
-      "pet",
-      "Pet",
-      "heart",
-      undefined,
-      true
+    const hatBtn = this.createMenuButton("Change Hat", "normal", () =>
+      this.handleMenuAction("change-hat", cat)
     );
 
-    // Handle menu selection
-    dropdown.addEventListener("quiet-select", (e: CustomEvent) => {
-      const action = e.detail.item.value;
+    menu.appendChild(removeBtn);
+    menu.appendChild(renameBtn);
+    menu.appendChild(document.createElement("hr"));
+    menu.appendChild(hatBtn);
 
-      // Set flag for actions that open another dialog
-      if (action === "rename" || action === "change-hat") {
-        this.keepSelectedCat = true;
+    menuContainer.appendChild(menu);
+
+    // Close menu on click outside
+    const closeOnClickOutside = (e: MouseEvent) => {
+      if (!menuContainer.contains(e.target as Node)) {
+        this.closeContextMenu();
+        document.removeEventListener("click", closeOnClickOutside);
       }
-
-      this.handleMenuAction(action, cat);
-    });
-
-    // Handle menu close
-    dropdown.addEventListener("quiet-close", this.closeContextMenu);
-
-    menuContainer.appendChild(dropdown);
+    };
+    setTimeout(
+      () => document.addEventListener("click", closeOnClickOutside),
+      0
+    );
 
     // Append to the info container instead of the cat element
     const infoContainer = cat.element.querySelector(
@@ -403,42 +373,21 @@ export class MbCatPlayground extends LitElement {
   }
 
   /**
-   * Helper to add a menu item
+   * Helper to create a menu button
    */
-  private addMenuItem(
-    dropdown: HTMLElement,
-    value: string,
+  private createMenuButton(
     label: string,
-    icon: string,
-    variant?: string,
-    disabled: boolean = false
-  ) {
-    const item = document.createElement("quiet-dropdown-item") as any;
-    item.value = value;
-    if (variant) item.variant = variant;
-    if (disabled) item.disabled = true;
-
-    // Add icon
-    const iconEl = document.createElement("quiet-icon") as any;
-    iconEl.family = "outline";
-    iconEl.name = icon;
-    iconEl.setAttribute("slot", "icon");
-    item.appendChild(iconEl);
-
-    // Add label text
-    item.appendChild(document.createTextNode(label));
-
-    // Add "Soon" badge for disabled items
-    if (disabled) {
-      const badge = document.createElement("quiet-badge") as any;
-      badge.variant = "primary";
-      badge.appearance = "outline";
-      badge.setAttribute("slot", "details");
-      badge.textContent = "Soon";
-      item.appendChild(badge);
-    }
-
-    dropdown.appendChild(item);
+    variant: string,
+    onClick: () => void
+  ): HTMLButtonElement {
+    const button = document.createElement("button");
+    button.className = `menu-item ${variant}`;
+    button.textContent = label;
+    button.addEventListener("click", () => {
+      onClick();
+      this.closeContextMenu();
+    });
+    return button;
   }
 
   /**
@@ -577,8 +526,6 @@ export class MbCatPlayground extends LitElement {
 
     this.newName = this.selectedCat.name || "";
     this.showRenameDialog = true;
-    // Don't call closeContextMenu() here - let the menu's quiet-close event handle it
-    // The keepSelectedCat flag is already set in the quiet-select handler
   }
 
   /**
@@ -651,11 +598,11 @@ export class MbCatPlayground extends LitElement {
     if (this.error) {
       return html`
         <div class="playground-container">
-          <quiet-card>
+          <cds-tile class="error-card">
             <div class="error-message">
               <strong>Playground Error:</strong> ${this.error.message}
             </div>
-          </quiet-card>
+          </cds-tile>
         </div>
       `;
     }
@@ -664,7 +611,7 @@ export class MbCatPlayground extends LitElement {
       return html`
         <div class="playground-container">
           <div class="loading-container">
-            <quiet-spinner></quiet-spinner>
+            <cds-loading></cds-loading>
             <p class="loading-text">Initializing playground...</p>
           </div>
         </div>
@@ -675,44 +622,48 @@ export class MbCatPlayground extends LitElement {
       <div class="playground-container">
         <!-- Main playground area for cats and interactions -->
         <div class="playground-main">
-          <!-- Context Menu is now injected directly into cat DOM -->
-
           <!-- Rename Dialog -->
           ${this.showRenameDialog
             ? html`
-                <quiet-dialog
+                <cds-modal
                   ?open=${this.showRenameDialog}
-                  @quiet-request-close=${this.handleRenameCancel}
+                  @cds-modal-closed=${this.handleRenameCancel}
                 >
-                  <div slot="header">Rename Cat</div>
+                  <cds-modal-header>
+                    <cds-modal-heading>Rename Cat</cds-modal-heading>
+                  </cds-modal-header>
 
-                  <quiet-text-field
-                    label="Cat Name"
-                    .value=${this.newName}
-                    @quiet-input=${(e: CustomEvent) =>
-                      (this.newName = (e.target as any).value)}
-                    @keydown=${(e: KeyboardEvent) => {
-                      if (e.key === "Enter")
-                        this.handleRenameSubmit();
-                    }}
-                  ></quiet-text-field>
+                  <cds-modal-body>
+                    <cds-text-input
+                      label="Cat Name"
+                      .value=${this.newName}
+                      @input=${(e: Event) =>
+                        (this.newName = (
+                          e.target as HTMLInputElement
+                        ).value)}
+                      @keydown=${(e: KeyboardEvent) => {
+                        if (e.key === "Enter")
+                          this.handleRenameSubmit();
+                      }}
+                    ></cds-text-input>
+                  </cds-modal-body>
 
-                  <div slot="footer">
-                    <quiet-button
-                      appearance="outline"
+                  <cds-modal-footer>
+                    <cds-button
+                      kind="secondary"
                       @click=${this.handleRenameCancel}
                     >
                       Cancel
-                    </quiet-button>
-                    <quiet-button
-                      variant="primary"
+                    </cds-button>
+                    <cds-button
+                      kind="primary"
                       @click=${this.handleRenameSubmit}
                       ?disabled=${!this.newName.trim()}
                     >
                       Rename
-                    </quiet-button>
-                  </div>
-                </quiet-dialog>
+                    </cds-button>
+                  </cds-modal-footer>
+                </cds-modal>
               `
             : ""}
 
@@ -724,26 +675,33 @@ export class MbCatPlayground extends LitElement {
           ></mb-wardrobe-dialog>
 
           <!-- Cat Creator Dialog -->
-          <quiet-dialog
+          <cds-modal
             id="creator-dialog"
-            @quiet-request-close=${this.closeCreatorDialog}
-            light-dismiss
+            @cds-modal-closed=${this.closeCreatorDialog}
+            size="lg"
           >
-            <div slot="header">Create Cat</div>
-            <cat-creator
-              @cat-created=${this.closeCreatorDialog}
-            ></cat-creator>
-          </quiet-dialog>
+            <cds-modal-header>
+              <cds-modal-heading>Create Cat</cds-modal-heading>
+            </cds-modal-header>
+            <cds-modal-body>
+              <cat-creator
+                @cat-created=${this.closeCreatorDialog}
+              ></cat-creator>
+            </cds-modal-body>
+          </cds-modal>
 
           <!-- Statistics Dialog -->
-          <quiet-dialog
+          <cds-modal
             id="stats-dialog"
-            @quiet-request-close=${this.closeStatsDialog}
-            light-dismiss
+            @cds-modal-closed=${this.closeStatsDialog}
           >
-            <div slot="header">Statistics</div>
-            <cat-statistics></cat-statistics>
-          </quiet-dialog>
+            <cds-modal-header>
+              <cds-modal-heading>Statistics</cds-modal-heading>
+            </cds-modal-header>
+            <cds-modal-body>
+              <cat-statistics></cat-statistics>
+            </cds-modal-body>
+          </cds-modal>
 
           <!-- Yarn Visuals -->
           ${Array.from(this.activeYarns.values()).map(

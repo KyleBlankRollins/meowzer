@@ -4,17 +4,17 @@ export const wardrobeDialogStyles = css`
   .wardrobe-content {
     display: flex;
     flex-direction: column;
-    gap: var(--quiet-spacing-6);
-    padding: var(--quiet-spacing-4) 0;
+    gap: 1.5rem;
+    padding: 1rem 0;
     min-width: 400px;
   }
 
   .section-label {
     display: block;
-    font-size: var(--quiet-font-size-sm);
-    font-weight: var(--quiet-font-weight-semibold);
-    color: var(--quiet-color-foreground-primary);
-    margin-bottom: var(--quiet-spacing-3);
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--cds-text-primary);
+    margin-bottom: 0.75rem;
   }
 
   /* Hat Selection */
@@ -26,11 +26,11 @@ export const wardrobeDialogStyles = css`
   .hat-buttons {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: var(--quiet-spacing-3);
+    gap: 0.75rem;
   }
 
   .hat-button {
-    padding: var(--quiet-spacing-4);
+    padding: 1rem;
     min-height: 80px;
   }
 
@@ -38,7 +38,7 @@ export const wardrobeDialogStyles = css`
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: var(--quiet-spacing-2);
+    gap: 0.5rem;
   }
 
   .hat-preview-svg {
@@ -48,21 +48,21 @@ export const wardrobeDialogStyles = css`
   }
 
   .hat-label {
-    font-size: var(--quiet-font-size-sm);
-    font-weight: var(--quiet-font-weight-medium);
+    font-size: 0.875rem;
+    font-weight: 500;
   }
 
   /* Color Customization */
   .color-customization {
     display: flex;
     flex-direction: column;
-    gap: var(--quiet-spacing-3);
+    gap: 0.75rem;
   }
 
   .color-pickers {
     display: flex;
     justify-content: center;
-    gap: var(--quiet-spacing-3);
+    gap: 0.75rem;
   }
 
   /* Preview */
@@ -72,10 +72,10 @@ export const wardrobeDialogStyles = css`
   }
 
   .preview-area {
-    background-color: var(--quiet-color-background-secondary);
-    border: 1px solid var(--quiet-color-border-primary);
-    border-radius: var(--quiet-radius-md);
-    padding: var(--quiet-spacing-6);
+    background-color: var(--cds-layer-02);
+    border: 1px solid var(--cds-border-subtle-01);
+    border-radius: 8px;
+    padding: 1.5rem;
     min-height: 160px;
     display: flex;
     align-items: center;
@@ -86,7 +86,7 @@ export const wardrobeDialogStyles = css`
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: var(--quiet-spacing-4);
+    gap: 1rem;
   }
 
   .preview-placeholder .hat-preview-svg {
@@ -97,14 +97,14 @@ export const wardrobeDialogStyles = css`
 
   .preview-colors {
     display: flex;
-    gap: var(--quiet-spacing-2);
+    gap: 0.5rem;
   }
 
   .preview-color-swatch {
     width: 32px;
     height: 32px;
-    border-radius: var(--quiet-radius-sm);
-    border: 2px solid var(--quiet-color-border-primary);
+    border-radius: 4px;
+    border: 2px solid var(--cds-border-subtle-01);
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   }
 `;

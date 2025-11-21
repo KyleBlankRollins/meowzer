@@ -2,7 +2,6 @@ import type { Preview } from "@storybook/web-components";
 
 // Import Carbon Web Components styles
 import "@carbon/styles/css/styles.css";
-import "@carbon/web-components/es/globals/styles.css";
 
 // Import Carbon Web Components (needed for rendering)
 import "@carbon/web-components/es/components/tile/index.js";

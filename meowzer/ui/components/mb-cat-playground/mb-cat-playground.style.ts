@@ -24,8 +24,8 @@ export const catPlaygroundStyles = css`
     flex-direction: column;
     gap: 1rem;
     padding: 1rem;
-    background: var(--quiet-neutral-background-softest);
-    border-left: 1px solid var(--quiet-neutral-stroke-soft);
+    background: var(--cds-layer-01);
+    border-left: 1px solid var(--cds-border-subtle-01);
     min-width: 80px;
     max-width: 80px;
   }
@@ -47,7 +47,7 @@ export const catPlaygroundStyles = css`
     color: var(--text-secondary);
   }
 
-  .preview-empty quiet-icon {
+  .preview-empty svg {
     font-size: 4rem;
     opacity: 0.3;
     margin-bottom: 1rem;
@@ -82,34 +82,10 @@ export const catPlaygroundStyles = css`
     color: var(--text-primary);
   }
 
-  /* Toolbar styling */
-  quiet-toolbar {
-    width: 100%;
-    justify-content: flex-start;
-    gap: 0.5rem;
-  }
-
-  quiet-toolbar quiet-button {
-    flex-shrink: 0;
-  }
-
-  /* Dialog content styling */
-  quiet-dialog {
-    --width: 800px;
-  }
-
-  quiet-dialog::part(panel) {
-    max-width: 90vw;
-  }
-
-  quiet-dialog::part(body) {
-    padding: 1.5rem;
-  }
-
   /* Error and loading states */
   .error-message {
     padding: 1rem;
-    color: var(--quiet-destructive-text);
+    color: var(--cds-text-error);
   }
 
   .loading-container {
@@ -119,7 +95,43 @@ export const catPlaygroundStyles = css`
 
   .loading-text {
     margin-top: 1rem;
-    color: var(--quiet-neutral-text-mid);
+    color: var(--cds-text-secondary);
+  }
+
+  /* Context menu styles */
+  .context-menu-content {
+    background: var(--cds-layer-01);
+    border: 1px solid var(--cds-border-subtle-01);
+    border-radius: 4px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    padding: 0.5rem 0;
+    min-width: 150px;
+  }
+
+  .menu-item {
+    display: block;
+    width: 100%;
+    padding: 0.5rem 1rem;
+    border: none;
+    background: transparent;
+    color: var(--cds-text-primary);
+    text-align: left;
+    cursor: pointer;
+    font-size: 0.875rem;
+  }
+
+  .menu-item:hover {
+    background: var(--cds-layer-hover-01);
+  }
+
+  .menu-item.destructive {
+    color: var(--cds-text-error);
+  }
+
+  .context-menu-content hr {
+    margin: 0.5rem 0;
+    border: none;
+    border-top: 1px solid var(--cds-border-subtle-01);
   }
 
   /* Responsive */
