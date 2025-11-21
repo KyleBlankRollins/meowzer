@@ -47,7 +47,7 @@ function createBaseTemplate(
       <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>${props.frontmatter.title} | Meowbase</title>
+        <title>${props.frontmatter.title} | Meowzer</title>
         <meta name="description" content="${
           props.frontmatter.description || ""
         }" />
@@ -79,13 +79,9 @@ function createBaseTemplate(
             "&quot;"
           )}"
           data-current-url="${props.url}"
-          data-site-title="Meowbase Docs 🐈‍⬛"
+          data-site-title="Meowzer 🐱"
         ></mb-nav>
         ${templateContent}
-        <mb-meowbase-provider>
-          <mb-meowzer-controls></mb-meowzer-controls>
-        </mb-meowbase-provider>
-        <div id="cat-playground" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 9998;"></div>
       </body>
     </html>`;
 }
