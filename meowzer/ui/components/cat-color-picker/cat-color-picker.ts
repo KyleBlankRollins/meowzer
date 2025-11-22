@@ -7,6 +7,7 @@ import { colorPickerStyles } from "./cat-color-picker.styles.js";
  * Each family has 4 variants: dark, medium, light, very light
  */
 const CAT_COLOR_SWATCHES = {
+  // TODO: add more varied colors
   black: ["#000000", "#2b2b2b", "#4a4a4a", "#6e6e6e"],
   brown: ["#3d2817", "#5c3d2e", "#8b5a3c", "#a67c52"],
   orange: ["#cc5500", "#ff6b35", "#ff8c42", "#ffad60"],

@@ -42,6 +42,18 @@ export class MbCatContextMenu extends LitElement {
   open = false;
 
   /**
+   * Left position in pixels
+   */
+  @property({ type: Number })
+  left = 0;
+
+  /**
+   * Top position in pixels
+   */
+  @property({ type: Number })
+  top = 0;
+
+  /**
    * Click outside listener reference for cleanup
    */
   private clickOutsideListener?: (e: MouseEvent) => void;
@@ -53,10 +65,50 @@ export class MbCatContextMenu extends LitElement {
     if (changedProperties.has("open")) {
       if (this.open) {
         this.setupClickOutside();
+        this.adjustPosition();
       } else {
         this.cleanupClickOutside();
       }
     }
+  }
+
+  /**
+   * Adjust position to stay within viewport bounds
+   */
+  private adjustPosition() {
+    // Wait for next frame to ensure menu is rendered
+    requestAnimationFrame(() => {
+      const menuRect = this.getBoundingClientRect();
+      const viewportWidth = window.innerWidth;
+      const viewportHeight = window.innerHeight;
+
+      let adjustedLeft = this.left;
+      let adjustedTop = this.top;
+
+      // Check right edge
+      if (this.left + menuRect.width > viewportWidth) {
+        adjustedLeft = viewportWidth - menuRect.width - 8; // 8px padding
+      }
+
+      // Check left edge
+      if (adjustedLeft < 8) {
+        adjustedLeft = 8;
+      }
+
+      // Check bottom edge
+      if (this.top + menuRect.height > viewportHeight) {
+        adjustedTop = viewportHeight - menuRect.height - 8; // 8px padding
+      }
+
+      // Check top edge
+      if (adjustedTop < 8) {
+        adjustedTop = 8;
+      }
+
+      // Apply adjusted position
+      this.style.left = `${adjustedLeft}px`;
+      this.style.top = `${adjustedTop}px`;
+    });
   }
 
   /**
@@ -134,6 +186,10 @@ export class MbCatContextMenu extends LitElement {
     if (!this.open || !this.cat) {
       return html``;
     }
+
+    // Set initial position from properties
+    this.style.left = `${this.left}px`;
+    this.style.top = `${this.top}px`;
 
     return html`
       <div class="context-menu-content">

@@ -5,7 +5,7 @@ export const catContextMenuStyles = [
   carbonTokens,
   css`
     :host {
-      position: absolute;
+      position: fixed;
       z-index: 9999;
       display: block;
     }
@@ -15,10 +15,10 @@ export const catContextMenuStyles = [
     }
 
     .context-menu-content {
-      background: var(--cds-background);
+      background: var(--cds-layer);
       border: 1px solid var(--cds-border-subtle);
       border-radius: 4px;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
       min-width: 160px;
       padding: 4px 0;
     }

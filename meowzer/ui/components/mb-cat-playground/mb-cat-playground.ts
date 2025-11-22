@@ -610,22 +610,25 @@ export class MbCatPlayground extends LitElement {
 
           <!-- Cat Context Menu -->
           ${this.selectedCat
-            ? html`
-                <mb-cat-context-menu
-                  .cat=${this.selectedCat}
-                  ?open=${this.contextMenuOpen}
-                  @cat-remove=${() => this.handleMenuAction("remove")}
-                  @cat-rename=${() => this.handleMenuAction("rename")}
-                  @cat-change-hat=${() =>
-                    this.handleMenuAction("change-hat")}
-                  @menu-close=${this.closeContextMenu}
-                  style="
-                    left: ${this.selectedCat.element.offsetLeft}px;
-                    top: ${this.selectedCat.element.offsetTop +
-                  this.selectedCat.element.offsetHeight}px;
-                  "
-                ></mb-cat-context-menu>
-              `
+            ? (() => {
+                const rect =
+                  this.selectedCat.element.getBoundingClientRect();
+                return html`
+                  <mb-cat-context-menu
+                    .cat=${this.selectedCat}
+                    ?open=${this.contextMenuOpen}
+                    .left=${rect.left}
+                    .top=${rect.bottom}
+                    @cat-remove=${() =>
+                      this.handleMenuAction("remove")}
+                    @cat-rename=${() =>
+                      this.handleMenuAction("rename")}
+                    @cat-change-hat=${() =>
+                      this.handleMenuAction("change-hat")}
+                    @menu-close=${this.closeContextMenu}
+                  ></mb-cat-context-menu>
+                `;
+              })()
             : ""}
         </div>
 
