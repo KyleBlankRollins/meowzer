@@ -1,126 +1,125 @@
 import { css } from "lit";
+import { carbonTokens } from "../../shared/carbon-tokens.js";
 
-export const catCreatorStyles = css`
-  :host {
-    display: block;
-  }
+export const catCreatorStyles = [
+  carbonTokens,
+  css`
+    :host {
+      display: block;
+    }
 
-  .cat-creator {
-    display: grid;
-    gap: 1rem;
-  }
+    .cat-creator {
+      display: grid;
+      gap: 1rem;
+    }
 
-  .message {
-    margin-bottom: 1rem;
-  }
+    .message {
+      margin-bottom: 1rem;
+    }
 
-  .creator-layout {
-    display: grid;
-    gap: 2rem;
-    grid-template-columns: 1fr 2fr;
-  }
-
-  @media (max-width: 768px) {
     .creator-layout {
-      grid-template-columns: 1fr;
-      grid-template-rows: auto 1fr;
+      display: grid;
+      gap: 2rem;
+      grid-template-columns: 1fr 2fr;
     }
 
+    @media (max-width: 768px) {
+      .creator-layout {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto 1fr;
+      }
+
+      .preview-panel {
+        order: -1; /* Ensure preview appears first on mobile */
+      }
+    }
+
+    /* Preview Panel */
     .preview-panel {
-      order: -1; /* Ensure preview appears first on mobile */
+      align-self: start;
     }
-  }
 
-  /* Preview Panel */
-  .preview-panel {
-    align-self: start;
-  }
+    /* Settings Panel */
+    .creator-form {
+      display: grid;
+      gap: 1.5rem;
+    }
 
-  /* Settings Panel */
-  .creator-form {
-    display: grid;
-    gap: 1.5rem;
-  }
+    .form-section h4 {
+      margin: 0;
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--cds-text-primary);
+      border-bottom: 1px solid var(--cds-border-subtle-01);
+      padding-bottom: 0.5rem;
+    }
 
-  .form-section {
-    display: grid;
-    gap: 1rem;
-  }
+    /* Form Actions */
+    .form-actions {
+      display: flex;
+      gap: 1rem;
+      justify-content: flex-end;
+      padding-top: 1rem;
+      border-top: 1px solid var(--cds-border-subtle-01);
+    }
 
-  .form-section h4 {
-    margin: 0;
-    font-size: 1rem;
-    font-weight: 600;
-    color: var(--cds-text-primary);
-    border-bottom: 1px solid var(--cds-border-subtle-01);
-    padding-bottom: 0.5rem;
-  }
+    /* Step Indicator */
+    .step-indicator {
+      display: flex;
+      gap: 0.5rem;
+      justify-content: center;
+      align-items: center;
+    }
 
-  /* Form Actions */
-  .form-actions {
-    display: flex;
-    gap: 1rem;
-    justify-content: flex-end;
-    padding-top: 1rem;
-    border-top: 1px solid var(--cds-border-subtle-01);
-  }
+    .step-dot {
+      width: 0.75rem;
+      height: 0.75rem;
+      border-radius: 50%;
+      background: var(--cds-border-subtle-01);
+      transition: all 0.2s ease;
+    }
 
-  /* Step Indicator */
-  .step-indicator {
-    display: flex;
-    gap: 0.5rem;
-    justify-content: center;
-    align-items: center;
-  }
+    .step-dot.active {
+      background: var(--cds-background-brand);
+      transform: scale(1.2);
+    }
 
-  .step-dot {
-    width: 0.75rem;
-    height: 0.75rem;
-    border-radius: 50%;
-    background: var(--cds-border-subtle-01);
-    transition: all 0.2s ease;
-  }
+    .step-dot.completed {
+      background: var(--cds-background-brand);
+      opacity: 0.6;
+    }
 
-  .step-dot.active {
-    background: var(--cds-background-brand);
-    transform: scale(1.2);
-  }
+    /* Wizard navigation */
+    .wizard-navigation {
+      display: flex;
+      gap: 1rem;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--cds-border-subtle-01);
+      margin-top: 1.5rem;
+    }
 
-  .step-dot.completed {
-    background: var(--cds-background-brand);
-    opacity: 0.6;
-  }
+    .wizard-navigation .nav-group {
+      display: flex;
+      gap: 0.5rem;
+    }
 
-  /* Wizard navigation */
-  .wizard-navigation {
-    display: flex;
-    gap: 1rem;
-    justify-content: space-between;
-    align-items: center;
-    padding-top: 1.5rem;
-    border-top: 1px solid var(--cds-border-subtle-01);
-    margin-top: 1.5rem;
-  }
+    /* Step errors */
+    .step-errors {
+      margin-bottom: 1rem;
+    }
 
-  .wizard-navigation .nav-group {
-    display: flex;
-    gap: 0.5rem;
-  }
+    .step-errors ul {
+      margin: 0.5rem 0 0 0;
+      padding-left: 1.5rem;
+    }
 
-  /* Step errors */
-  .step-errors {
-    margin-bottom: 1rem;
-  }
-
-  .step-errors ul {
-    margin: 0.5rem 0 0 0;
-    padding-left: 1.5rem;
-  }
-
-  /* Reset button under preview */
-  .preview-actions {
-    display: flex;
-    justify-content: center;
-    margin-top: 1rem;
-  }
-`;
+    /* Reset button under preview */
+    .preview-actions {
+      display: flex;
+      justify-content: center;
+      margin-top: 1rem;
+    }
+  `,
+];

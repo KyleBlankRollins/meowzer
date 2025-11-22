@@ -131,120 +131,68 @@ export class CatPersonalityPicker extends LitElement {
         </div>
 
         <div class="trait-sliders">
-          <div class="slider-field">
-            <label>Curiosity</label>
-            <input
-              type="range"
-              min="0"
-              max="1"
-              step="0.1"
-              .value=${String(
-                (this.personality as any).curiosity || 0.5
-              )}
-              @input=${(e: Event) =>
-                this.handleTraitChange(
-                  "curiosity",
-                  parseFloat((e.target as HTMLInputElement).value)
-                )}
-            />
-            <span class="slider-value"
-              >${((this.personality as any).curiosity || 0.5).toFixed(
-                1
-              )}</span
-            >
-          </div>
+          <cds-slider
+            label-text="Curiosity"
+            min="0"
+            max="1"
+            step="0.1"
+            value=${String(
+              (this.personality as any).curiosity || 0.5
+            )}
+            @cds-slider-changed=${(e: CustomEvent) =>
+              this.handleTraitChange("curiosity", e.detail.value)}
+          >
+          </cds-slider>
 
-          <div class="slider-field">
-            <label>Playfulness</label>
-            <input
-              type="range"
-              min="0"
-              max="1"
-              step="0.1"
-              .value=${String(
-                (this.personality as any).playfulness || 0.5
-              )}
-              @input=${(e: Event) =>
-                this.handleTraitChange(
-                  "playfulness",
-                  parseFloat((e.target as HTMLInputElement).value)
-                )}
-            />
-            <span class="slider-value"
-              >${(
-                (this.personality as any).playfulness || 0.5
-              ).toFixed(1)}</span
-            >
-          </div>
+          <cds-slider
+            label-text="Playfulness"
+            min="0"
+            max="1"
+            step="0.1"
+            value=${String(
+              (this.personality as any).playfulness || 0.5
+            )}
+            @cds-slider-changed=${(e: CustomEvent) =>
+              this.handleTraitChange("playfulness", e.detail.value)}
+          >
+          </cds-slider>
 
-          <div class="slider-field">
-            <label>Independence</label>
-            <input
-              type="range"
-              min="0"
-              max="1"
-              step="0.1"
-              .value=${String(
-                (this.personality as any).independence || 0.5
-              )}
-              @input=${(e: Event) =>
-                this.handleTraitChange(
-                  "independence",
-                  parseFloat((e.target as HTMLInputElement).value)
-                )}
-            />
-            <span class="slider-value"
-              >${(
-                (this.personality as any).independence || 0.5
-              ).toFixed(1)}</span
-            >
-          </div>
+          <cds-slider
+            label-text="Independence"
+            min="0"
+            max="1"
+            step="0.1"
+            value=${String(
+              (this.personality as any).independence || 0.5
+            )}
+            @cds-slider-changed=${(e: CustomEvent) =>
+              this.handleTraitChange("independence", e.detail.value)}
+          >
+          </cds-slider>
 
-          <div class="slider-field">
-            <label>Sociability</label>
-            <input
-              type="range"
-              min="0"
-              max="1"
-              step="0.1"
-              .value=${String(
-                (this.personality as any).sociability || 0.5
-              )}
-              @input=${(e: Event) =>
-                this.handleTraitChange(
-                  "sociability",
-                  parseFloat((e.target as HTMLInputElement).value)
-                )}
-            />
-            <span class="slider-value"
-              >${(
-                (this.personality as any).sociability || 0.5
-              ).toFixed(1)}</span
-            >
-          </div>
+          <cds-slider
+            label-text="Sociability"
+            min="0"
+            max="1"
+            step="0.1"
+            value=${String(
+              (this.personality as any).sociability || 0.5
+            )}
+            @cds-slider-changed=${(e: CustomEvent) =>
+              this.handleTraitChange("sociability", e.detail.value)}
+          >
+          </cds-slider>
 
-          <div class="slider-field">
-            <label>Energy</label>
-            <input
-              type="range"
-              min="0"
-              max="1"
-              step="0.1"
-              .value=${String(
-                (this.personality as any).energy || 0.5
-              )}
-              @input=${(e: Event) =>
-                this.handleTraitChange(
-                  "energy",
-                  parseFloat((e.target as HTMLInputElement).value)
-                )}
-            />
-            <span class="slider-value"
-              >${((this.personality as any).energy || 0.5).toFixed(
-                1
-              )}</span
-            >
-          </div>
+          <cds-slider
+            label-text="Energy"
+            min="0"
+            max="1"
+            step="0.1"
+            value=${String((this.personality as any).energy || 0.5)}
+            @cds-slider-changed=${(e: CustomEvent) =>
+              this.handleTraitChange("energy", e.detail.value)}
+          >
+          </cds-slider>
         </div>
       </div>
     `;

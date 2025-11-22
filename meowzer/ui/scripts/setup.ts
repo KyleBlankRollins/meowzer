@@ -30,6 +30,7 @@ import "@carbon/web-components/es/components/textarea/index.js";
 import "@carbon/web-components/es/components/accordion/index.js";
 import "@carbon/web-components/es/components/popover/index.js";
 import "@carbon/web-components/es/components/dropdown/index.js";
+import "@carbon/web-components/es/components/slider/index.js";
 
 // Import Meowzer UI components
 import "../components/cat-color-picker/cat-color-picker.js";

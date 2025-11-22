@@ -16,6 +16,7 @@ import "@carbon/web-components/es/components/checkbox/index.js";
 import "@carbon/web-components/es/components/textarea/index.js";
 import "@carbon/web-components/es/components/loading/index.js";
 import "@carbon/web-components/es/components/modal/index.js";
+import "@carbon/web-components/es/components/slider/index.js";
 
 const preview: Preview = {
   parameters: {

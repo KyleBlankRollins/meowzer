@@ -3,12 +3,14 @@ import { css } from "lit";
 export const colorPickerStyles = css`
   :host {
     display: block;
+    min-width: 0;
   }
 
   .color-picker {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
+    min-width: 0;
   }
 
   .label {
@@ -19,6 +21,7 @@ export const colorPickerStyles = css`
 
   .color-button {
     width: 100%;
+    min-width: 0;
     display: flex;
     align-items: center;
     gap: 0.5rem;
@@ -53,5 +56,9 @@ export const colorPickerStyles = css`
   .color-value {
     font-family: monospace;
     font-size: 0.875rem;
+    flex-shrink: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 `;
