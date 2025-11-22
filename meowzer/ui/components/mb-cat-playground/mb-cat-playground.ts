@@ -1,11 +1,6 @@
 import { LitElement, html } from "lit";
-import {
-  customElement,
-  property,
-  query,
-  state,
-} from "lit/decorators.js";
-import { provide } from "@lit/context";
+import { customElement, query, state } from "lit/decorators.js";
+import { consume } from "@lit/context";
 import { catPlaygroundStyles } from "./mb-cat-playground.style.js";
 import { meowzerContext } from "../../contexts/meowzer-context.js";
 import { CatsController } from "../../controllers/reactive-controllers.js";
@@ -15,67 +10,30 @@ import { Meowzer } from "meowzer";
  * Playground component for experimenting with Meowzer cats.
  *
  * Provides a complete sandbox environment with:
- * - Built-in MeowzerProvider
  * - Visual preview area showing cat count
  * - Quick action controls
  * - Live statistics
  * - Cat creation and management UI
  *
- * Perfect for demos, testing, and experimentation.
+ * Must be wrapped in a <meowzer-provider> component.
  *
  * @example
  * ```html
- * <mb-cat-playground></mb-cat-playground>
+ * <meowzer-provider auto-init>
+ *   <mb-cat-playground></mb-cat-playground>
+ * </meowzer-provider>
  * ```
- *
- * @fires playground-ready - Dispatched when playground is initialized
  */
 @customElement("mb-cat-playground")
 export class MbCatPlayground extends LitElement {
   static styles = [catPlaygroundStyles];
 
   /**
-   * Custom Meowzer configuration
+   * Meowzer instance consumed from provider
    */
-  @property({ type: Object })
-  config?: Record<string, any>;
-
-  /**
-   * Whether to show the preview area
-   */
-  @property({ type: Boolean })
-  showPreview = true;
-
-  /**
-   * Whether to show statistics
-   */
-  @property({ type: Boolean })
-  showStats = true;
-
-  /**
-   * Whether to auto-initialize Meowzer
-   */
-  @property({ type: Boolean })
-  autoInit = true;
-
-  /**
-   * Meowzer instance provided to children
-   */
-  @provide({ context: meowzerContext })
+  @consume({ context: meowzerContext, subscribe: true })
   @state()
   private meowzer?: Meowzer;
-
-  /**
-   * Initialization state
-   */
-  @state()
-  private initialized = false;
-
-  /**
-   * Error state
-   */
-  @state()
-  private error?: Error;
 
   /**
    * Reference to the creator dialog element
@@ -114,16 +72,16 @@ export class MbCatPlayground extends LitElement {
   private selectedCat: any = null; // MeowzerCat type
 
   /**
+   * Context menu open state
+   */
+  @state()
+  private contextMenuOpen = false;
+
+  /**
    * Rename dialog state
    */
   @state()
   private showRenameDialog = false;
-
-  /**
-   * Wardrobe dialog state
-   */
-  @state()
-  private showWardrobeDialog = false;
 
   /**
    * Flag to prevent clearing selectedCat when transitioning to another dialog
@@ -145,8 +103,21 @@ export class MbCatPlayground extends LitElement {
   async connectedCallback() {
     super.connectedCallback();
 
-    if (this.autoInit) {
-      await this.initialize();
+    console.log("Playground connected, meowzer:", this.meowzer);
+
+    // Wait for meowzer to be available from provider
+    if (this.meowzer) {
+      await this.setupMeowzer();
+    }
+  }
+
+  async updated(changedProperties: Map<string, any>) {
+    super.updated(changedProperties);
+
+    // Setup when meowzer becomes available
+    if (changedProperties.has("meowzer") && this.meowzer) {
+      console.log("Meowzer context received:", this.meowzer);
+      await this.setupMeowzer();
     }
   }
 
@@ -159,39 +130,48 @@ export class MbCatPlayground extends LitElement {
   }
 
   /**
-   * Initialize Meowzer SDK
+   * Track if setup has been called to prevent duplicate setup
    */
-  private async initialize() {
-    try {
-      this.meowzer = new Meowzer({
-        ...this.config,
+  private setupComplete = false;
+
+  /**
+   * Setup playground with meowzer instance from provider
+   */
+  private async setupMeowzer() {
+    if (!this.meowzer || this.setupComplete) return;
+
+    console.log("Setting up playground with meowzer instance");
+    this.setupComplete = true;
+
+    // Wait for meowzer to be initialized if it isn't already
+    if (!(this.meowzer as any)._initialized) {
+      console.log("Waiting for meowzer initialization...");
+      // Poll until initialized (provider initializes asynchronously)
+      await new Promise<void>((resolve) => {
+        const checkInit = () => {
+          if ((this.meowzer as any)._initialized) {
+            console.log("Meowzer initialization complete");
+            resolve();
+          } else {
+            setTimeout(checkInit, 50);
+          }
+        };
+        checkInit();
       });
-
-      await this.meowzer.init();
-      this.initialized = true;
-
-      // Reinitialize the cats controller now that meowzer is available
-      this.catsController.hostConnected();
-
-      // Setup yarn event listeners
-      this.setupYarnListeners();
-
-      // Setup need event listeners
-      this.setupNeedListeners();
-
-      // Load existing cats from storage
-      await this.loadExistingCats();
-
-      this.dispatchEvent(
-        new CustomEvent("playground-ready", {
-          detail: { meowzer: this.meowzer },
-          bubbles: true,
-          composed: true,
-        })
-      );
-    } catch (err) {
-      this.error = err as Error;
     }
+
+    // Reinitialize the cats controller now that meowzer is available
+    this.catsController.hostConnected();
+
+    // Setup yarn event listeners
+    this.setupYarnListeners();
+
+    // Setup need event listeners
+    this.setupNeedListeners();
+
+    // Load existing cats from storage
+    await this.loadExistingCats();
+    console.log("Playground setup complete");
   }
 
   /**
@@ -292,7 +272,8 @@ export class MbCatPlayground extends LitElement {
    * Setup event listeners for a cat
    */
   private setupCatEventListeners(cat: any) {
-    cat.on("menuClick", () => {
+    // Add click listener to cat element
+    cat.element.addEventListener("click", () => {
       // Auto-pause cat when menu opens
       if (cat.isActive) {
         cat.lifecycle.pause();
@@ -301,101 +282,16 @@ export class MbCatPlayground extends LitElement {
       // Add menu-open class to cat element
       cat.element.classList.add("menu-open");
 
+      // Update state to show menu
       this.selectedCat = cat;
-
-      // Inject menu into cat element
-      this.injectMenuIntoCat(cat);
+      this.contextMenuOpen = true;
     });
-  }
-
-  /**
-   * Inject the context menu directly into the cat's DOM element
-   */
-  private injectMenuIntoCat(cat: any) {
-    // Remove any existing menu
-    const existingMenu = cat.element.querySelector(
-      ".cat-context-menu"
-    );
-    if (existingMenu) {
-      existingMenu.remove();
-    }
-
-    // Create menu container
-    const menuContainer = document.createElement("div");
-    menuContainer.className = "cat-context-menu";
-
-    // Create native context menu
-    const menu = document.createElement("div");
-    menu.className = "context-menu-content";
-
-    // Add menu items as buttons
-    const removeBtn = this.createMenuButton(
-      "Remove",
-      "destructive",
-      () => this.handleMenuAction("remove", cat)
-    );
-    const renameBtn = this.createMenuButton("Rename", "normal", () =>
-      this.handleMenuAction("rename", cat)
-    );
-    const hatBtn = this.createMenuButton("Change Hat", "normal", () =>
-      this.handleMenuAction("change-hat", cat)
-    );
-
-    menu.appendChild(removeBtn);
-    menu.appendChild(renameBtn);
-    menu.appendChild(document.createElement("hr"));
-    menu.appendChild(hatBtn);
-
-    menuContainer.appendChild(menu);
-
-    // Close menu on click outside
-    const closeOnClickOutside = (e: MouseEvent) => {
-      if (!menuContainer.contains(e.target as Node)) {
-        this.closeContextMenu();
-        document.removeEventListener("click", closeOnClickOutside);
-      }
-    };
-    setTimeout(
-      () => document.addEventListener("click", closeOnClickOutside),
-      0
-    );
-
-    // Append to the info container instead of the cat element
-    const infoContainer = cat.element.querySelector(
-      ".meowtion-cat-info"
-    );
-    if (infoContainer) {
-      infoContainer.appendChild(menuContainer);
-    } else {
-      // Fallback if info container doesn't exist
-      cat.element.appendChild(menuContainer);
-    }
-  }
-
-  /**
-   * Helper to create a menu button
-   */
-  private createMenuButton(
-    label: string,
-    variant: string,
-    onClick: () => void
-  ): HTMLButtonElement {
-    const button = document.createElement("button");
-    button.className = `menu-item ${variant}`;
-    button.textContent = label;
-    button.addEventListener("click", () => {
-      onClick();
-      this.closeContextMenu();
-    });
-    return button;
   }
 
   /**
    * Handle menu action selection
    */
-  private handleMenuAction(action: string, cat: any) {
-    this.selectedCat = cat;
-
+  private handleMenuAction(action: string) {
     switch (action) {
       case "remove":
         this.handleRemove();
@@ -460,20 +356,13 @@ export class MbCatPlayground extends LitElement {
    */
   private closeContextMenu = () => {
     if (this.selectedCat) {
-      // Remove menu from DOM
-      const existingMenu = this.selectedCat.element.querySelector(
-        ".cat-context-menu"
-      );
-      if (existingMenu) {
-        existingMenu.remove();
-      }
-
       // Remove menu-open class
       this.selectedCat.element.classList.remove("menu-open");
 
       // Check if we should keep selectedCat (transitioning to another dialog)
       if (this.keepSelectedCat) {
-        this.keepSelectedCat = false;
+        // Don't reset keepSelectedCat here - it will be reset when the dialog closes
+        this.contextMenuOpen = false;
         return; // Don't resume or clear selectedCat
       }
 
@@ -483,6 +372,7 @@ export class MbCatPlayground extends LitElement {
       }
     }
 
+    this.contextMenuOpen = false;
     this.selectedCat = null;
   };
 
@@ -502,15 +392,8 @@ export class MbCatPlayground extends LitElement {
       // Don't resume if we're deleting
       this.selectedCat.element.classList.remove("menu-open");
 
-      // Remove menu from DOM
-      const existingMenu = this.selectedCat.element.querySelector(
-        ".cat-context-menu"
-      );
-      if (existingMenu) {
-        existingMenu.remove();
-      }
-
       await this.selectedCat.persistence.delete();
+      this.contextMenuOpen = false;
       this.selectedCat = null;
     } else {
       // If cancelled, close menu normally (which will resume)
@@ -525,6 +408,7 @@ export class MbCatPlayground extends LitElement {
     if (!this.selectedCat) return;
 
     this.newName = this.selectedCat.name || "";
+    this.contextMenuOpen = false;
     this.showRenameDialog = true;
   }
 
@@ -568,51 +452,46 @@ export class MbCatPlayground extends LitElement {
   }
 
   /**
-   * Handle change hat action
+   * Handle "Change Hat" menu option
    */
   private handleChangeHat() {
     if (!this.selectedCat) return;
 
-    // Open wardrobe dialog (selectedCat will be cleared when dialog closes)
-    this.showWardrobeDialog = true;
+    // Keep selectedCat alive when transitioning to wardrobe dialog
+    this.keepSelectedCat = true;
+
+    // Close menu
+    this.contextMenuOpen = false;
   }
 
   /**
    * Handle wardrobe dialog close
    */
   private handleWardrobeDialogClose() {
-    this.showWardrobeDialog = false;
+    // Reset the keepSelectedCat flag
+    this.keepSelectedCat = false;
 
-    // Resume cat if paused
-    if (this.selectedCat && !this.selectedCat.isActive) {
-      this.selectedCat.lifecycle.resume();
+    // Clear selectedCat after wardrobe dialog closes
+    if (this.selectedCat) {
+      if (!this.selectedCat.isActive) {
+        this.selectedCat.lifecycle.resume();
+      }
+      this.selectedCat = null;
     }
-
-    this.selectedCat = null;
   }
 
   /**
    * Handle placeholder actions
    */
   render() {
-    if (this.error) {
-      return html`
-        <div class="playground-container">
-          <cds-tile class="error-card">
-            <div class="error-message">
-              <strong>Playground Error:</strong> ${this.error.message}
-            </div>
-          </cds-tile>
-        </div>
-      `;
-    }
-
-    if (!this.initialized) {
+    if (!this.meowzer) {
       return html`
         <div class="playground-container">
           <div class="loading-container">
             <cds-loading></cds-loading>
-            <p class="loading-text">Initializing playground...</p>
+            <p class="loading-text">
+              Waiting for Meowzer provider...
+            </p>
           </div>
         </div>
       `;
@@ -670,7 +549,7 @@ export class MbCatPlayground extends LitElement {
           <!-- Wardrobe Dialog -->
           <mb-wardrobe-dialog
             .cat=${this.selectedCat}
-            ?open=${this.showWardrobeDialog}
+            ?open=${this.selectedCat && this.keepSelectedCat}
             @dialog-close=${this.handleWardrobeDialogClose}
           ></mb-wardrobe-dialog>
 
@@ -728,6 +607,26 @@ export class MbCatPlayground extends LitElement {
           <mb-laser-visual
             .laser=${this.activeLaser}
           ></mb-laser-visual>
+
+          <!-- Cat Context Menu -->
+          ${this.selectedCat
+            ? html`
+                <mb-cat-context-menu
+                  .cat=${this.selectedCat}
+                  ?open=${this.contextMenuOpen}
+                  @cat-remove=${() => this.handleMenuAction("remove")}
+                  @cat-rename=${() => this.handleMenuAction("rename")}
+                  @cat-change-hat=${() =>
+                    this.handleMenuAction("change-hat")}
+                  @menu-close=${this.closeContextMenu}
+                  style="
+                    left: ${this.selectedCat.element.offsetLeft}px;
+                    top: ${this.selectedCat.element.offsetTop +
+                  this.selectedCat.element.offsetHeight}px;
+                  "
+                ></mb-cat-context-menu>
+              `
+            : ""}
         </div>
 
         <!-- Sidebar for toolbar -->

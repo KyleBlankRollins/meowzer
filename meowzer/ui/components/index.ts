@@ -9,6 +9,7 @@ export { CatColorPicker } from "./cat-color-picker/cat-color-picker.js";
 export { CatStatistics } from "./cat-statistics/cat-statistics.js";
 export { MbCatPlayground } from "./mb-cat-playground/mb-cat-playground.js";
 export { MbWardrobeDialog } from "./mb-wardrobe-dialog/mb-wardrobe-dialog.js";
+export { MbCatContextMenu } from "./mb-cat-context-menu/mb-cat-context-menu.js";
 export { MbPlaygroundToolbar } from "./mb-playground-toolbar/mb-playground-toolbar.js";
 export { MbYarnVisual } from "./mb-yarn-visual/mb-yarn-visual.js";
 export { MbNeedVisual } from "./mb-need-visual/mb-need-visual.js";

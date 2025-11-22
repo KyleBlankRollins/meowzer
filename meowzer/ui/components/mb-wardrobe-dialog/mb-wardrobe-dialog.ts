@@ -203,12 +203,16 @@ export class MbWardrobeDialog extends LitElement {
 
   /**
    * Handle dialog close event from Carbon
+   * The cds-modal-closed event fires after the modal closes via any method
    */
-  private handleDialogClose(e: CustomEvent) {
-    const target = e.target as HTMLElement;
-    if (target.tagName.toLowerCase() === "cds-modal") {
-      this.handleCancel();
-    }
+  private handleDialogClose() {
+    this.dispatchEvent(
+      new CustomEvent("dialog-close", {
+        detail: { applied: false },
+        bubbles: true,
+        composed: true,
+      })
+    );
   }
 
   /**
