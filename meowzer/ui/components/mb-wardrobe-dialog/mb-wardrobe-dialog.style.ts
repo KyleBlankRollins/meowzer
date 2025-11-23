@@ -7,9 +7,9 @@ export const wardrobeDialogStyles = [
     .wardrobe-content {
       display: flex;
       flex-direction: column;
-      gap: 1.5rem;
-      padding: 1rem 0;
-      min-width: 400px;
+      gap: 1rem;
+      padding: 0.5rem 0;
+      min-width: 350px;
     }
 
     .section-label {
@@ -17,7 +17,7 @@ export const wardrobeDialogStyles = [
       font-size: 0.875rem;
       font-weight: 600;
       color: var(--cds-text-primary);
-      margin-bottom: 0.75rem;
+      margin-bottom: 0.5rem;
     }
 
     /* Hat Selection */
@@ -29,12 +29,12 @@ export const wardrobeDialogStyles = [
     .hat-buttons {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 0.75rem;
+      gap: 0.5rem;
     }
 
     .hat-button {
-      padding: 1rem;
-      min-height: 80px;
+      padding: 0.75rem;
+      min-height: 70px;
     }
 
     .hat-button-content {
@@ -65,7 +65,7 @@ export const wardrobeDialogStyles = [
     .color-pickers {
       display: flex;
       justify-content: center;
-      gap: 0.75rem;
+      gap: 1rem;
     }
 
     /* Preview */

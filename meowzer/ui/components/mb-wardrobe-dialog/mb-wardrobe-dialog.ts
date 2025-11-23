@@ -277,28 +277,6 @@ export class MbWardrobeDialog extends LitElement {
     `;
   }
 
-  /**
-   * Render preview section
-   */
-  private renderPreview() {
-    return html`
-      <div class="preview-section">
-        <label class="section-label">Preview:</label>
-        <div class="preview-area">
-          <div class="preview-placeholder">
-            <div
-              .innerHTML=${this.generateHatPreviewSVG(
-                this.selectedHatType,
-                this.baseColor,
-                this.accentColor
-              )}
-            ></div>
-          </div>
-        </div>
-      </div>
-    `;
-  }
-
   render() {
     const catName = this.cat?.name || "Cat";
 
@@ -306,7 +284,7 @@ export class MbWardrobeDialog extends LitElement {
       <cds-modal
         ?open=${this.open}
         @cds-modal-closed=${this.handleDialogClose}
-        size="lg"
+        size="sm"
       >
         <cds-modal-header>
           <cds-modal-heading
@@ -317,7 +295,6 @@ export class MbWardrobeDialog extends LitElement {
         <cds-modal-body>
           <div class="wardrobe-content">
             ${this.renderHatSelection()} ${this.renderColorPickers()}
-            ${this.renderPreview()}
           </div>
         </cds-modal-body>
 

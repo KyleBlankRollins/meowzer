@@ -65,13 +65,13 @@ export const colorPickerStyles = [
       position: absolute;
       top: 100%;
       left: 0;
-      margin-top: 0.5rem;
+      margin-top: 0.25rem;
       padding: 0.75rem;
-      background: var(--cds-layer-01);
+      background: var(--cds-layer);
       border: 1px solid var(--cds-border-subtle-01);
       border-radius: 4px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-      z-index: 1000;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      z-index: 999999;
       display: flex;
       flex-direction: column;
       gap: 0.5rem;

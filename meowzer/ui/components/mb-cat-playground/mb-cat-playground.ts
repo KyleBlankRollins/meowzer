@@ -103,8 +103,6 @@ export class MbCatPlayground extends LitElement {
   async connectedCallback() {
     super.connectedCallback();
 
-    console.log("Playground connected, meowzer:", this.meowzer);
-
     // Wait for meowzer to be available from provider
     if (this.meowzer) {
       await this.setupMeowzer();
@@ -116,7 +114,6 @@ export class MbCatPlayground extends LitElement {
 
     // Setup when meowzer becomes available
     if (changedProperties.has("meowzer") && this.meowzer) {
-      console.log("Meowzer context received:", this.meowzer);
       await this.setupMeowzer();
     }
   }
@@ -140,17 +137,14 @@ export class MbCatPlayground extends LitElement {
   private async setupMeowzer() {
     if (!this.meowzer || this.setupComplete) return;
 
-    console.log("Setting up playground with meowzer instance");
     this.setupComplete = true;
 
     // Wait for meowzer to be initialized if it isn't already
     if (!(this.meowzer as any)._initialized) {
-      console.log("Waiting for meowzer initialization...");
       // Poll until initialized (provider initializes asynchronously)
       await new Promise<void>((resolve) => {
         const checkInit = () => {
           if ((this.meowzer as any)._initialized) {
-            console.log("Meowzer initialization complete");
             resolve();
           } else {
             setTimeout(checkInit, 50);
@@ -171,7 +165,6 @@ export class MbCatPlayground extends LitElement {
 
     // Load existing cats from storage
     await this.loadExistingCats();
-    console.log("Playground setup complete");
   }
 
   /**

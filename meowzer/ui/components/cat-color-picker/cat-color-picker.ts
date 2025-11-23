@@ -34,6 +34,11 @@ export class CatColorPicker extends LitElement {
   @state()
   private showPicker = false;
 
+  @state()
+  private pickerPosition = { top: 0, left: 0 };
+
+  private portalContainer?: HTMLDivElement;
+
   private handleSwatchClick(color: string) {
     this.value = color;
     this.showPicker = false;
@@ -49,13 +54,31 @@ export class CatColorPicker extends LitElement {
 
   private togglePicker(e: Event) {
     e.stopPropagation();
+
+    if (!this.showPicker) {
+      const button = this.shadowRoot?.querySelector(
+        ".color-button"
+      ) as HTMLElement;
+      if (button) {
+        const rect = button.getBoundingClientRect();
+        this.pickerPosition = {
+          top: rect.bottom + 4,
+          left: rect.left,
+        };
+      }
+    }
+
     this.showPicker = !this.showPicker;
   }
 
   private handleClickOutside(e: MouseEvent) {
+    if (!this.showPicker) return;
+
     const path = e.composedPath();
     const clickedInside = path.some(
-      (el) => el === this.shadowRoot?.querySelector(".color-picker")
+      (el) =>
+        el === this.shadowRoot?.querySelector(".color-picker") ||
+        el === this.portalContainer
     );
 
     if (!clickedInside) {
@@ -77,6 +100,103 @@ export class CatColorPicker extends LitElement {
       "click",
       this.handleClickOutside.bind(this)
     );
+    this.cleanupPortal();
+  }
+
+  updated(changedProperties: Map<string, any>) {
+    super.updated(changedProperties);
+
+    if (changedProperties.has("showPicker")) {
+      if (this.showPicker) {
+        this.renderToBody();
+      } else {
+        this.cleanupPortal();
+      }
+    }
+  }
+
+  private renderToBody() {
+    if (!this.portalContainer) {
+      this.portalContainer = document.createElement("div");
+      document.body.appendChild(this.portalContainer);
+    }
+
+    // Use Lit's render function to render the swatch panel
+    import("lit/html.js").then(({ render }) => {
+      if (!this.portalContainer) return;
+
+      render(
+        html`
+          <div
+            class="swatch-panel-portal"
+            style="
+              position: fixed;
+              top: ${this.pickerPosition.top}px;
+              left: ${this.pickerPosition.left}px;
+              z-index: 999999;
+              padding: 0.75rem;
+              background: var(--cds-layer);
+              border: 1px solid var(--cds-border-subtle-01);
+              border-radius: 4px;
+              box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            "
+          >
+            ${Object.entries(CAT_COLOR_SWATCHES).map(
+              ([family, colors]) => html`
+                <div
+                  style="display: flex; gap: 0.5rem; margin-bottom: 0.5rem;"
+                >
+                  ${colors.map(
+                    (color) => html`
+                      <button
+                        class="swatch ${this.value === color
+                          ? "selected"
+                          : ""}"
+                        style="
+                          width: 32px;
+                          height: 32px;
+                          border: 2px solid ${this.value === color
+                          ? "var(--cds-border-interactive)"
+                          : "transparent"};
+                          border-radius: 4px;
+                          cursor: pointer;
+                          padding: 0;
+                          background-color: ${color};
+                          transition: all 0.15s ease;
+                        "
+                        @click=${() => this.handleSwatchClick(color)}
+                        @mouseenter=${(e: Event) => {
+                          const btn = e.target as HTMLElement;
+                          btn.style.transform = "scale(1.1)";
+                          btn.style.borderColor =
+                            "var(--cds-border-interactive)";
+                        }}
+                        @mouseleave=${(e: Event) => {
+                          const btn = e.target as HTMLElement;
+                          btn.style.transform = "scale(1)";
+                          if (this.value !== color) {
+                            btn.style.borderColor = "transparent";
+                          }
+                        }}
+                        title="${family}: ${color}"
+                      ></button>
+                    `
+                  )}
+                </div>
+              `
+            )}
+          </div>
+        `,
+        this.portalContainer
+      );
+    });
+  }
+
+  private cleanupPortal() {
+    if (this.portalContainer) {
+      this.portalContainer.remove();
+      this.portalContainer = undefined;
+    }
   }
 
   render() {
@@ -95,31 +215,7 @@ export class CatColorPicker extends LitElement {
           <span class="color-value">${this.value}</span>
         </button>
 
-        ${this.showPicker
-          ? html`
-              <div class="swatch-panel">
-                ${Object.entries(CAT_COLOR_SWATCHES).map(
-                  ([family, colors]) => html`
-                    <div class="swatch-row">
-                      ${colors.map(
-                        (color) => html`
-                          <button
-                            class="swatch ${this.value === color
-                              ? "selected"
-                              : ""}"
-                            style="background-color: ${color}"
-                            @click=${() =>
-                              this.handleSwatchClick(color)}
-                            title="${family}: ${color}"
-                          ></button>
-                        `
-                      )}
-                    </div>
-                  `
-                )}
-              </div>
-            `
-          : ""}
+        <!-- Swatch panel rendered to document.body via portal -->
       </div>
     `;
   }
