@@ -25,6 +25,15 @@ const assets = [
     src: "node_modules/@carbon/styles/css/styles.css",
     dest: "dist/assets/themes/carbon.css",
   },
+  // Shoelace theme CSS
+  {
+    src: "node_modules/@shoelace-style/shoelace/dist/themes/light.css",
+    dest: "dist/assets/themes/shoelace-light.css",
+  },
+  {
+    src: "node_modules/@shoelace-style/shoelace/dist/themes/dark.css",
+    dest: "dist/assets/themes/shoelace-dark.css",
+  },
 ];
 
 // Carbon doesn't provide individual icon SVGs in the same way,

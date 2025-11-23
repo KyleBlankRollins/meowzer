@@ -1,5 +1,6 @@
 import { LitElement, html } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
+import { unsafeSVG } from "lit/directives/unsafe-svg.js";
 import { wardrobeDialogStyles } from "./mb-wardrobe-dialog.style.js";
 import type { HatType } from "meowzer";
 import type { MeowzerCat } from "meowzer";
@@ -226,22 +227,22 @@ export class MbWardrobeDialog extends LitElement {
           ${this.hatTypes.map(
             (hat) => html`
               <cds-button
-                class="hat-button ${this.selectedHatType === hat.type
-                  ? "selected"
-                  : ""}"
+                class="hat-button"
                 kind=${this.selectedHatType === hat.type
                   ? "primary"
                   : "tertiary"}
                 @click=${() => this.handleHatSelect(hat.type)}
               >
                 <div class="hat-button-content">
-                  <div
-                    .innerHTML=${this.generateHatPreviewSVG(
-                      hat.type,
-                      this.baseColor,
-                      this.accentColor
+                  <span class="hat-icon">
+                    ${unsafeSVG(
+                      this.generateHatPreviewSVG(
+                        hat.type,
+                        this.baseColor,
+                        this.accentColor
+                      )
                     )}
-                  ></div>
+                  </span>
                   <span class="hat-label">${hat.label}</span>
                 </div>
               </cds-button>

@@ -7,7 +7,6 @@ export const colorPickerStyles = [
     :host {
       display: block;
       min-width: 0;
-      position: relative;
     }
 
     .color-picker {
@@ -15,7 +14,6 @@ export const colorPickerStyles = [
       flex-direction: column;
       gap: 0.5rem;
       min-width: 0;
-      position: relative;
     }
 
     .label {
@@ -58,48 +56,6 @@ export const colorPickerStyles = [
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
-    }
-
-    /* Swatch Panel */
-    .swatch-panel {
-      position: absolute;
-      top: 100%;
-      left: 0;
-      margin-top: 0.25rem;
-      padding: 0.75rem;
-      background: var(--cds-layer);
-      border: 1px solid var(--cds-border-subtle-01);
-      border-radius: 4px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-      z-index: 999999;
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-    }
-
-    .swatch-row {
-      display: flex;
-      gap: 0.5rem;
-    }
-
-    .swatch {
-      width: 32px;
-      height: 32px;
-      border: 2px solid transparent;
-      border-radius: 4px;
-      cursor: pointer;
-      transition: all 0.15s ease;
-      padding: 0;
-    }
-
-    .swatch:hover {
-      transform: scale(1.1);
-      border-color: var(--cds-border-interactive);
-    }
-
-    .swatch.selected {
-      border-color: var(--cds-border-interactive);
-      box-shadow: 0 0 0 2px var(--cds-background);
     }
   `,
 ];

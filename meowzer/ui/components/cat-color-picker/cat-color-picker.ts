@@ -1,25 +1,17 @@
 import { LitElement, html } from "lit";
-import { customElement, property, state } from "lit/decorators.js";
+import {
+  customElement,
+  property,
+  state,
+  query,
+} from "lit/decorators.js";
 import { colorPickerStyles } from "./cat-color-picker.styles.js";
+import "@shoelace-style/shoelace/dist/components/color-picker/color-picker.js";
+import type SlColorPicker from "@shoelace-style/shoelace/dist/components/color-picker/color-picker.js";
 
 /**
- * Cat color swatches organized by color family
- * Each family has 4 variants: dark, medium, light, very light
- */
-const CAT_COLOR_SWATCHES = {
-  // TODO: add more varied colors
-  black: ["#000000", "#2b2b2b", "#4a4a4a", "#6e6e6e"],
-  brown: ["#3d2817", "#5c3d2e", "#8b5a3c", "#a67c52"],
-  orange: ["#cc5500", "#ff6b35", "#ff8c42", "#ffad60"],
-  cream: ["#c9a87c", "#d4bc96", "#e8d5b7", "#f5e6d3"],
-  gray: ["#5a5a5a", "#808080", "#a8a8a8", "#d3d3d3"],
-  white: ["#c0c0c0", "#d9d9d9", "#efefef", "#ffffff"],
-  golden: ["#b8860b", "#daa520", "#f0c808", "#ffd700"],
-};
-
-/**
- * Custom Color Picker Component
- * A swatch-based color picker with 7 color families
+ * Color Picker Component using Shoelace with Portal
+ * Renders the inline color picker in document.body to escape modal transform context
  */
 @customElement("cat-color-picker")
 export class CatColorPicker extends LitElement {
@@ -37,11 +29,15 @@ export class CatColorPicker extends LitElement {
   @state()
   private pickerPosition = { top: 0, left: 0 };
 
-  private portalContainer?: HTMLDivElement;
+  @query(".color-button")
+  private colorButton?: HTMLElement;
 
-  private handleSwatchClick(color: string) {
-    this.value = color;
-    this.showPicker = false;
+  private portalContainer?: HTMLDivElement;
+  private portalPicker?: SlColorPicker;
+
+  private handleColorChange(e: Event) {
+    const picker = e.target as SlColorPicker;
+    this.value = picker.value;
 
     this.dispatchEvent(
       new CustomEvent("color-change", {
@@ -52,54 +48,38 @@ export class CatColorPicker extends LitElement {
     );
   }
 
-  private togglePicker(e: Event) {
-    e.stopPropagation();
-
-    if (!this.showPicker) {
-      const button = this.shadowRoot?.querySelector(
-        ".color-button"
-      ) as HTMLElement;
-      if (button) {
-        const rect = button.getBoundingClientRect();
-        this.pickerPosition = {
-          top: rect.bottom + 4,
-          left: rect.left,
-        };
-      }
+  private togglePicker() {
+    if (!this.showPicker && this.colorButton) {
+      const rect = this.colorButton.getBoundingClientRect();
+      this.pickerPosition = {
+        top: rect.bottom + 4,
+        left: rect.left,
+      };
     }
-
     this.showPicker = !this.showPicker;
   }
 
-  private handleClickOutside(e: MouseEvent) {
+  private handleClickOutside = (e: MouseEvent) => {
     if (!this.showPicker) return;
 
     const path = e.composedPath();
     const clickedInside = path.some(
-      (el) =>
-        el === this.shadowRoot?.querySelector(".color-picker") ||
-        el === this.portalContainer
+      (el) => el === this.colorButton || el === this.portalContainer
     );
 
     if (!clickedInside) {
       this.showPicker = false;
     }
-  }
+  };
 
   connectedCallback() {
     super.connectedCallback();
-    document.addEventListener(
-      "click",
-      this.handleClickOutside.bind(this)
-    );
+    document.addEventListener("click", this.handleClickOutside);
   }
 
   disconnectedCallback() {
     super.disconnectedCallback();
-    document.removeEventListener(
-      "click",
-      this.handleClickOutside.bind(this)
-    );
+    document.removeEventListener("click", this.handleClickOutside);
     this.cleanupPortal();
   }
 
@@ -113,86 +93,48 @@ export class CatColorPicker extends LitElement {
         this.cleanupPortal();
       }
     }
+
+    // Update portal picker value when component value changes
+    if (changedProperties.has("value") && this.portalPicker) {
+      this.portalPicker.value = this.value;
+    }
   }
 
   private renderToBody() {
     if (!this.portalContainer) {
       this.portalContainer = document.createElement("div");
+      this.portalContainer.style.cssText = `
+        position: fixed;
+        top: ${this.pickerPosition.top}px;
+        left: ${this.pickerPosition.left}px;
+        z-index: 999999;
+      `;
       document.body.appendChild(this.portalContainer);
     }
 
-    // Use Lit's render function to render the swatch panel
-    import("lit/html.js").then(({ render }) => {
-      if (!this.portalContainer) return;
+    // Create Shoelace color picker element
+    if (!this.portalPicker) {
+      this.portalPicker = document.createElement(
+        "sl-color-picker"
+      ) as SlColorPicker;
+      this.portalPicker.setAttribute("inline", "");
+      this.portalPicker.format = "hex";
+      this.portalPicker.value = this.value;
 
-      render(
-        html`
-          <div
-            class="swatch-panel-portal"
-            style="
-              position: fixed;
-              top: ${this.pickerPosition.top}px;
-              left: ${this.pickerPosition.left}px;
-              z-index: 999999;
-              padding: 0.75rem;
-              background: var(--cds-layer);
-              border: 1px solid var(--cds-border-subtle-01);
-              border-radius: 4px;
-              box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-            "
-          >
-            ${Object.entries(CAT_COLOR_SWATCHES).map(
-              ([family, colors]) => html`
-                <div
-                  style="display: flex; gap: 0.5rem; margin-bottom: 0.5rem;"
-                >
-                  ${colors.map(
-                    (color) => html`
-                      <button
-                        class="swatch ${this.value === color
-                          ? "selected"
-                          : ""}"
-                        style="
-                          width: 32px;
-                          height: 32px;
-                          border: 2px solid ${this.value === color
-                          ? "var(--cds-border-interactive)"
-                          : "transparent"};
-                          border-radius: 4px;
-                          cursor: pointer;
-                          padding: 0;
-                          background-color: ${color};
-                          transition: all 0.15s ease;
-                        "
-                        @click=${() => this.handleSwatchClick(color)}
-                        @mouseenter=${(e: Event) => {
-                          const btn = e.target as HTMLElement;
-                          btn.style.transform = "scale(1.1)";
-                          btn.style.borderColor =
-                            "var(--cds-border-interactive)";
-                        }}
-                        @mouseleave=${(e: Event) => {
-                          const btn = e.target as HTMLElement;
-                          btn.style.transform = "scale(1)";
-                          if (this.value !== color) {
-                            btn.style.borderColor = "transparent";
-                          }
-                        }}
-                        title="${family}: ${color}"
-                      ></button>
-                    `
-                  )}
-                </div>
-              `
-            )}
-          </div>
-        `,
-        this.portalContainer
-      );
-    });
+      // Listen to change events
+      this.portalPicker.addEventListener("sl-change", (e) => {
+        this.handleColorChange(e);
+      });
+
+      this.portalContainer.appendChild(this.portalPicker);
+    }
   }
 
   private cleanupPortal() {
+    if (this.portalPicker) {
+      this.portalPicker.remove();
+      this.portalPicker = undefined;
+    }
     if (this.portalContainer) {
       this.portalContainer.remove();
       this.portalContainer = undefined;
@@ -215,7 +157,7 @@ export class CatColorPicker extends LitElement {
           <span class="color-value">${this.value}</span>
         </button>
 
-        <!-- Swatch panel rendered to document.body via portal -->
+        <!-- Color picker rendered to document.body via portal -->
       </div>
     `;
   }

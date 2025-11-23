@@ -33,8 +33,8 @@ export const wardrobeDialogStyles = [
     }
 
     .hat-button {
-      padding: 0.75rem;
       min-height: 70px;
+      width: 100%;
     }
 
     .hat-button-content {
@@ -42,9 +42,16 @@ export const wardrobeDialogStyles = [
       flex-direction: column;
       align-items: center;
       gap: 0.5rem;
+      padding: 0.5rem;
     }
 
-    .hat-preview-svg {
+    .hat-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .hat-icon svg {
       width: 48px;
       height: 32px;
       filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1));

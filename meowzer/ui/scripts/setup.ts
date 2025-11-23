@@ -4,6 +4,7 @@
  * This module handles:
  * - Loading Carbon Web Components stylesheets
  * - Registering all Carbon components
+ * - Configuring Shoelace components
  *
  * Simply import this module to automatically configure everything:
  *
@@ -12,6 +13,17 @@
  * import '@meowzer/ui/setup';
  * ```
  */
+
+// Configure Shoelace base path for icons and assets
+import { setBasePath } from "@shoelace-style/shoelace/dist/utilities/base-path.js";
+
+// Import and register Shoelace components
+import "@shoelace-style/shoelace/dist/components/color-picker/color-picker.js";
+
+// Set base path to Shoelace CDN (you can also use a local path if you copy the assets)
+setBasePath(
+  "https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.20.1/cdn/"
+);
 
 // Import and register Carbon Web Components
 import "@carbon/web-components/es/components/button/index.js";
@@ -74,8 +86,32 @@ export function loadCarbonStyles() {
   }
 }
 
+/**
+ * Load Shoelace stylesheets dynamically
+ *
+ * Note: It's recommended to import '@meowzer/ui/styles/shoelace-light' directly
+ * instead of relying on this dynamic loader for better SSR and build tool support.
+ */
+export function loadShoelaceStyles() {
+  if (typeof document === "undefined") {
+    // SSR environment, skip
+    return;
+  }
+
+  // Check if Shoelace styles are already loaded
+  if (document.querySelector(`link[href*="shoelace"]`)) {
+    return;
+  }
+
+  console.warn(
+    "[Meowzer UI] Shoelace styles not detected. " +
+      'Please import "@meowzer/ui/styles/shoelace-light" in your HTML <head> or layout component.'
+  );
+}
+
 // Auto-initialize on import
 if (typeof window !== "undefined") {
   // Load styles automatically
   loadCarbonStyles();
+  loadShoelaceStyles();
 }
