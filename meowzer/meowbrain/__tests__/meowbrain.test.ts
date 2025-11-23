@@ -1,7 +1,6 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
 import {
   createBrain,
-  BrainBuilder,
   getPersonality,
   getPersonalityPresets,
 } from "../index.js";
@@ -302,47 +301,6 @@ describe("Meowbrain", () => {
       brain.on("behaviorChange", handler2);
 
       expect(true).toBe(true);
-    });
-  });
-
-  describe("BrainBuilder", () => {
-    it("should build brain with fluent API", () => {
-      const brain = new BrainBuilder(cat)
-        .withPersonality("playful")
-        .withEnvironment({
-          boundaries: { minX: 0, maxX: 800, minY: 0, maxY: 600 },
-        })
-        .withDecisionInterval(1000, 3000)
-        .build();
-
-      expect(brain).toBeDefined();
-      expect(brain.personality.playfulness).toBeGreaterThan(0.8);
-    });
-
-    it("should allow method chaining", () => {
-      const builder = new BrainBuilder(cat);
-      const result = builder.withPersonality("curious");
-      expect(result).toBe(builder);
-    });
-
-    it("should configure motivation decay", () => {
-      const brain = new BrainBuilder(cat)
-        .withMotivationDecay({
-          rest: 0.005,
-          stimulation: 0.01,
-          exploration: 0.003,
-        })
-        .build();
-
-      expect(brain).toBeDefined();
-    });
-
-    it("should configure decision interval", () => {
-      const brain = new BrainBuilder(cat)
-        .withDecisionInterval(500, 1500)
-        .build();
-
-      expect(brain).toBeDefined();
     });
   });
 

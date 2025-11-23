@@ -2,13 +2,12 @@ import { describe, it, expect } from "vitest";
 import {
   buildCat,
   buildCatFromSeed,
-  validateSettings,
+  validateCatSettings,
   generateSeed,
   parseSeed,
   serializeCat,
   deserializeCat,
-  CatBuilder,
-} from "../meowkit.js";
+} from "../index.js";
 import type { CatSettings } from "../../types/index.js";
 
 describe("Meowkit", () => {
@@ -20,15 +19,15 @@ describe("Meowkit", () => {
     furLength: "short",
   };
 
-  describe("validateSettings", () => {
+  describe("validateCatSettings", () => {
     it("should validate correct settings", () => {
-      const result = validateSettings(validSettings);
+      const result = validateCatSettings(validSettings);
       expect(result.valid).toBe(true);
       expect(result.errors).toHaveLength(0);
     });
 
     it("should reject invalid color", () => {
-      const result = validateSettings({
+      const result = validateCatSettings({
         ...validSettings,
         color: "not-a-color",
       });
@@ -37,7 +36,7 @@ describe("Meowkit", () => {
     });
 
     it("should reject invalid pattern", () => {
-      const result = validateSettings({
+      const result = validateCatSettings({
         ...validSettings,
         pattern: "invalid" as any,
       });
@@ -48,7 +47,7 @@ describe("Meowkit", () => {
     });
 
     it("should accept named colors", () => {
-      const result = validateSettings({
+      const result = validateCatSettings({
         ...validSettings,
         color: "orange",
         eyeColor: "green",
@@ -222,38 +221,6 @@ describe("Meowkit", () => {
 
       expect(restored.spriteData.svg).toBeDefined();
       expect(restored.spriteData.svg.length).toBeGreaterThan(0);
-    });
-  });
-
-  describe("CatBuilder", () => {
-    it("should build a cat using builder pattern", () => {
-      const cat = new CatBuilder()
-        .withColor("#FF9500")
-        .withEyeColor("#00FF00")
-        .withPattern("tabby")
-        .withSize("medium")
-        .withFurLength("short")
-        .build();
-
-      expect(cat.appearance.color).toBe("#FF9500");
-      expect(cat.appearance.pattern).toBe("tabby");
-    });
-
-    it("should throw if not all properties are set", () => {
-      const builder = new CatBuilder()
-        .withColor("#FF9500")
-        .withEyeColor("#00FF00");
-
-      expect(() => builder.build()).toThrow();
-    });
-
-    it("should allow method chaining", () => {
-      const builder = new CatBuilder();
-      const result = builder
-        .withColor("#FF9500")
-        .withEyeColor("#00FF00");
-
-      expect(result).toBe(builder);
     });
   });
 

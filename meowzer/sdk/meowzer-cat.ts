@@ -165,7 +165,7 @@ export class MeowzerCat {
   }
 
   get personality(): Personality {
-    return { ...this._brain.state.motivation } as any; // TODO: Get actual personality from brain
+    return this._brain.personality;
   }
 
   get isActive(): boolean {

@@ -6,7 +6,7 @@ import type {
   Human,
 } from "../types.js";
 import { generateUUID } from "./utils.js";
-import { CatNameGenerator } from "./cat-names.js";
+import { CatNameGenerator } from "../../utilities/cat-names.js";
 
 /**
  * Sample dataset for Meowbase

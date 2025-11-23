@@ -3,11 +3,7 @@
  */
 
 export { Cat } from "./cat.js";
-export { CatAnimator } from "./animator.js";
-export {
-  injectBaseStyles,
-  CatAnimationManager,
-} from "./animations/index.js";
+export { injectBaseStyles } from "./animations/index.js";
 
 import type {
   ProtoCat,

@@ -93,6 +93,13 @@ export {
 // Utilities
 export { MeowzerUtils } from "./utils.js";
 
+// Personality presets
+export {
+  getPersonality,
+  getPersonalityPresets,
+  PERSONALITY_PRESETS,
+} from "../meowbrain/personality.js";
+
 // Errors
 export {
   ErrorCode,

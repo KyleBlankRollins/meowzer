@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
-import { animateCat, CatAnimator } from "../index.js";
+import { animateCat } from "../index.js";
 import type { ProtoCat } from "../../types/index.js";
 
 // Mock ProtoCat for testing
@@ -365,39 +365,6 @@ describe("Meowtion", () => {
 
       expect(handler1).toHaveBeenCalled();
       expect(handler2).toHaveBeenCalled();
-    });
-  });
-
-  describe("CatAnimator builder", () => {
-    it("should build cat with fluent API", () => {
-      const container = document.createElement("div");
-      const cat = new CatAnimator(protoCat)
-        .in(container)
-        .at(100, 200)
-        .withState("sitting")
-        .withinBounds({ minX: 0, maxX: 800, minY: 0, maxY: 600 })
-        .animate();
-
-      expect(cat.position.x).toBe(100);
-      expect(cat.position.y).toBe(200);
-      expect(cat.state.type).toBe("sitting");
-      expect(container.contains(cat.element)).toBe(true);
-    });
-
-    it("should allow method chaining", () => {
-      const animator = new CatAnimator(protoCat);
-      const result = animator.at(50, 50);
-      expect(result).toBe(animator);
-    });
-
-    it("should configure physics", () => {
-      const cat = new CatAnimator(protoCat)
-        .withPhysics({ friction: 0.5, maxSpeed: 200 })
-        .animate();
-
-      cat.setVelocity(500, 500);
-      const speed = Math.hypot(cat.velocity.x, cat.velocity.y);
-      expect(speed).toBeCloseTo(200, 0);
     });
   });
 });

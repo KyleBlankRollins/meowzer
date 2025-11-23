@@ -5,8 +5,6 @@
 
 // Re-export validation
 export { validateCatSettings } from "./validation.js";
-// Keep old name for backward compatibility
-export { validateCatSettings as validateSettings } from "./validation.js";
 
 // Re-export serialization
 export {
@@ -29,26 +27,16 @@ export function deserializeCat(json: string): ProtoCat {
 }
 
 // Re-export builder and main functions
-export {
-  buildCat,
-  buildCatFromSeed,
-  buildCatWithAccessories,
-  CatBuilder,
-} from "./builder.js";
+export { buildCat, buildCatFromSeed } from "./builder.js";
 
 // Re-export accessory functions
-export { generateHatSVG, getHatElementId } from "./accessories.js";
+export { generateHatSVG } from "./accessories.js";
 
 // Re-export color utilities
 export { isValidColor, normalizeColor } from "./color-utils.js";
 
 export { generateCatSVG } from "./svg-generator.js";
-export {
-  generateId,
-  darkenColor,
-  lightenColor,
-  randomColor,
-} from "./utils.js";
+export { generateId } from "./utils.js";
 
 // Re-export types from shared types package
 export type {

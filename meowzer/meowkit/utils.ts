@@ -13,6 +13,7 @@ export function generateId(): string {
 
 /**
  * Darkens a hex color by a given amount (0-1)
+ * @internal - For internal package use only
  */
 export function darkenColor(hex: string, amount: number): string {
   const color = hex.replace("#", "");
@@ -35,6 +36,7 @@ export function darkenColor(hex: string, amount: number): string {
 
 /**
  * Lightens a hex color by a given amount (0-1)
+ * @internal - For internal package use only
  */
 export function lightenColor(hex: string, amount: number): string {
   const color = hex.replace("#", "");
@@ -58,15 +60,6 @@ export function lightenColor(hex: string, amount: number): string {
   );
 
   return `#${((r << 16) | (g << 8) | b)
-    .toString(16)
-    .padStart(6, "0")}`;
-}
-
-/**
- * Generates a random hex color
- */
-export function randomColor(): string {
-  return `#${Math.floor(Math.random() * 16777215)
     .toString(16)
     .padStart(6, "0")}`;
 }

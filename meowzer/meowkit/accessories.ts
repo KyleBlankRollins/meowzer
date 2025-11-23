@@ -131,6 +131,7 @@ export function generateHatSVG(
 
 /**
  * Gets the element ID that will be used for a hat
+ * @internal - For internal package use only
  */
 export function getHatElementId(
   type: HatType,

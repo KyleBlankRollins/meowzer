@@ -1,5 +1,5 @@
 /**
- * Cat Name Generator for Meowbase Sample Data
+ * Cat Name Generator for Meowzer
  *
  * Generates random cat names combining food themes, cat themes, and pop culture
  */
@@ -174,6 +174,17 @@ export class CatNameGenerator {
    */
   static resetUsedNames(): void {
     this.usedNames.clear();
+  }
+
+  /**
+   * Get all available pre-defined names
+   */
+  static getAllNames(): string[] {
+    return [
+      ...this.foodPrefixes,
+      ...this.starWarsCats,
+      ...this.simpleCatNames,
+    ];
   }
 
   private static generateFoodName(): string {

@@ -9,8 +9,10 @@
 import { LitElement, html } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import type { Personality, PersonalityPreset } from "meowzer";
+import { getPersonality } from "meowzer";
 import { catPersonalityPickerStyles } from "./cat-personality-picker.style.js";
 
+// Get preset names for UI display
 const PERSONALITY_PRESETS: Array<{
   name: string;
   value: PersonalityPreset;
@@ -22,52 +24,6 @@ const PERSONALITY_PRESETS: Array<{
   { name: "Energetic", value: "energetic" },
   { name: "Balanced", value: "balanced" },
 ];
-
-// Preset trait values
-const PRESET_TRAIT_VALUES: Record<PersonalityPreset, Personality> = {
-  playful: {
-    curiosity: 0.7,
-    playfulness: 0.9,
-    independence: 0.4,
-    sociability: 0.8,
-    energy: 0.8,
-  },
-  lazy: {
-    curiosity: 0.3,
-    playfulness: 0.2,
-    independence: 0.7,
-    sociability: 0.3,
-    energy: 0.2,
-  },
-  curious: {
-    curiosity: 0.9,
-    playfulness: 0.6,
-    independence: 0.6,
-    sociability: 0.5,
-    energy: 0.6,
-  },
-  aloof: {
-    curiosity: 0.4,
-    playfulness: 0.3,
-    independence: 0.9,
-    sociability: 0.2,
-    energy: 0.5,
-  },
-  energetic: {
-    curiosity: 0.6,
-    playfulness: 0.7,
-    independence: 0.5,
-    sociability: 0.7,
-    energy: 0.9,
-  },
-  balanced: {
-    curiosity: 0.5,
-    playfulness: 0.5,
-    independence: 0.5,
-    sociability: 0.5,
-    energy: 0.5,
-  },
-};
 
 @customElement("cat-personality-picker")
 export class CatPersonalityPicker extends LitElement {
@@ -89,8 +45,8 @@ export class CatPersonalityPicker extends LitElement {
   private handlePresetSelect(preset: PersonalityPreset) {
     this.selectedPreset = preset;
 
-    // Get the trait values for this preset
-    const presetTraits = PRESET_TRAIT_VALUES[preset];
+    // Get the trait values for this preset from meowbrain
+    const presetTraits = getPersonality(preset);
 
     // Update the personality property to reflect the preset values
     this.personality = presetTraits;

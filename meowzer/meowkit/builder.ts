@@ -9,8 +9,6 @@ import type {
   DimensionData,
   SpriteData,
   CatSize,
-  CatPattern,
-  FurLength,
   AccessorySettings,
 } from "../types/index.js";
 import { generateCatSVG } from "./svg-generator.js";
@@ -120,8 +118,9 @@ export function buildCat(settings: CatSettings): ProtoCat {
 
 /**
  * Creates a complete ProtoCat from user settings with accessories
+ * @internal
  */
-export function buildCatWithAccessories(
+function buildCatWithAccessories(
   settings: CatSettings,
   accessories?: AccessorySettings
 ): ProtoCat {
@@ -172,53 +171,4 @@ export function buildCatFromSeed(seed: string): ProtoCat {
   }
 
   return buildCat(settings);
-}
-
-/**
- * Builder class for more control over cat creation
- */
-export class CatBuilder {
-  private settings: Partial<CatSettings> = {};
-
-  withColor(color: string): CatBuilder {
-    this.settings.color = color;
-    return this;
-  }
-
-  withEyeColor(eyeColor: string): CatBuilder {
-    this.settings.eyeColor = eyeColor;
-    return this;
-  }
-
-  withPattern(pattern: CatPattern): CatBuilder {
-    this.settings.pattern = pattern;
-    return this;
-  }
-
-  withSize(size: CatSize): CatBuilder {
-    this.settings.size = size;
-    return this;
-  }
-
-  withFurLength(furLength: FurLength): CatBuilder {
-    this.settings.furLength = furLength;
-    return this;
-  }
-
-  build(): ProtoCat {
-    // Ensure all required fields are present
-    if (
-      !this.settings.color ||
-      !this.settings.eyeColor ||
-      !this.settings.pattern ||
-      !this.settings.size ||
-      !this.settings.furLength
-    ) {
-      throw new Error(
-        "All cat properties must be set before building"
-      );
-    }
-
-    return buildCat(this.settings as CatSettings);
-  }
 }

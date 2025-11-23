@@ -3,7 +3,6 @@
  */
 
 export { Brain, type BrainOptions } from "./brain.js";
-export { BrainBuilder } from "./builder.js";
 export {
   getPersonality,
   getPersonalityPresets,
