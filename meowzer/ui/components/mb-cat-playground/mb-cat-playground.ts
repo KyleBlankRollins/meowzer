@@ -313,7 +313,12 @@ export class MbCatPlayground extends LitElement {
   /**
    * Close the creator dialog
    */
-  private closeCreatorDialog() {
+  private closeCreatorDialog(e?: CustomEvent) {
+    // If a cat was created, set up event listeners for it
+    if (e?.detail?.cat) {
+      this.setupCatEventListeners(e.detail.cat);
+    }
+
     if (this.creatorDialog) {
       this.creatorDialog.open = false;
     }
@@ -385,7 +390,8 @@ export class MbCatPlayground extends LitElement {
       // Don't resume if we're deleting
       this.selectedCat.element.classList.remove("menu-open");
 
-      await this.selectedCat.persistence.delete();
+      // Use delete() instead of persistence.delete() to properly clean up
+      await this.selectedCat.delete();
       this.contextMenuOpen = false;
       this.selectedCat = null;
     } else {
