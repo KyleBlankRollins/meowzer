@@ -1,0 +1,9 @@
+{# Sidebar component - renders hierarchical navigation for documentation pages #}
+{# Note: navigation data will be populated in Phase 3 #}
+{% if navigation %}
+<mb-sidebar
+  slot="sidebar"
+  data-navigation="{{ navigation | dump | safe }}"
+  data-current-url="{{ page.url }}"
+></mb-sidebar>
+{% endif %}

@@ -4,16 +4,26 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc && vite build",
-    "preview": "vite preview"
+    "dev": "eleventy --serve",
+    "build": "eleventy",
+    "preview": "eleventy --serve",
+    "clean": "rm -rf _site .11ty-vite",
+    "new-page": "tsx scripts/new-page.ts",
+    "debug": "DEBUG=Eleventy* eleventy",
+    "validate": "eleventy --dryrun"
   },
   "devDependencies": {
+    "@11ty/eleventy": "^3.1.2",
+    "@11ty/eleventy-plugin-syntaxhighlight": "^5.0.2",
+    "@11ty/eleventy-plugin-vite": "^7.0.0",
+    "@esbuild/darwin-arm64": "^0.27.0",
     "@shikijs/markdown-it": "^3.13.0",
     "@types/markdown-it": "^14.1.2",
+    "esbuild": "^0.25.11",
     "gray-matter": "^4.0.3",
     "lit-html": "^3.3.1",
     "markdown-it": "^14.1.0",
+    "markdown-it-anchor": "^9.2.0",
     "typescript": "~5.9.3",
     "vite": "npm:rolldown-vite@7.1.14"
   },

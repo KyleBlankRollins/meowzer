@@ -1,0 +1,10 @@
+---
+layout: layouts/base.njk
+---
+<mb-home-template
+  data-frontmatter='{{ { title: title, description: description } | dump | safe }}'
+>
+  <div slot="content">
+    {{ content | safe }}
+  </div>
+</mb-home-template>

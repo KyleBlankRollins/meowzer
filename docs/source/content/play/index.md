@@ -1,6 +1,6 @@
 ---
 title: Play with Meowzer
-template: Landing
+layout: layouts/landing.njk
 description: Learn how to interact with adorable AI cats on websites
 ---
 

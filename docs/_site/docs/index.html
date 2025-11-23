@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Developer Documentation | Meowzer</title>
+    <meta name="description" content="Learn how to integrate Meowzer into your projects" />
+    
+    
+    <link rel="stylesheet" href="/styles/main.css" />
+    
+    <script>
+      // Apply Carbon dark theme class immediately to prevent flash
+      (function() {
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (prefersDark) {
+          document.documentElement.classList.add('cds-theme-g90');
+        } else {
+          document.documentElement.classList.add('cds-theme-g10');
+        }
+        
+        // Listen for theme changes
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+          if (e.matches) {
+            document.documentElement.classList.remove('cds-theme-g10');
+            document.documentElement.classList.add('cds-theme-g90');
+          } else {
+            document.documentElement.classList.remove('cds-theme-g90');
+            document.documentElement.classList.add('cds-theme-g10');
+          }
+        });
+      })();
+    </script>
+    <script type="module" crossorigin src="/assets/modulepreload-polyfill-B5Qt9EMX.js"></script>
+  </head>
+  <body>
+    
+    <mb-nav
+      data-links='[{&quot;title&quot;:&quot;API Reference&quot;,&quot;url&quot;:&quot;/api/&quot;},{&quot;title&quot;:&quot;Developer Documentation&quot;,&quot;url&quot;:&quot;/docs/&quot;},{&quot;title&quot;:&quot;Play with Meowzer&quot;,&quot;url&quot;:&quot;/play/&quot;}]'
+      data-current-url="/docs/"
+      data-site-title="Meowzer 🐱"
+    ></mb-nav>
+    
+    
+    <mb-landing-template
+  data-frontmatter='{&quot;title&quot;:&quot;Developer Documentation&quot;,&quot;description&quot;:&quot;Learn how to integrate Meowzer into your projects&quot;}'
+>
+  
+  <mb-sidebar
+    slot="sidebar"
+    data-navigation='[{&quot;title&quot;:&quot;API Reference&quot;,&quot;url&quot;:&quot;/api/&quot;,&quot;children&quot;:[{&quot;title&quot;:&quot;Collections API&quot;,&quot;url&quot;:&quot;/api/collections/&quot;,&quot;children&quot;:[]}]},{&quot;title&quot;:&quot;Developer Documentation&quot;,&quot;url&quot;:&quot;/docs/&quot;,&quot;children&quot;:[{&quot;title&quot;:&quot;Getting Started&quot;,&quot;url&quot;:&quot;/docs/getting-started/&quot;,&quot;children&quot;:[{&quot;title&quot;:&quot;Your First Cat - Detailed Tutorial&quot;,&quot;url&quot;:&quot;/docs/getting-started/first-cat/&quot;},{&quot;title&quot;:&quot;Installation&quot;,&quot;url&quot;:&quot;/docs/getting-started/installation/&quot;},{&quot;title&quot;:&quot;Introduction to Meowzer&quot;,&quot;url&quot;:&quot;/docs/getting-started/introduction/&quot;},{&quot;title&quot;:&quot;Quick Start&quot;,&quot;url&quot;:&quot;/docs/getting-started/quick-start/&quot;}]}]},{&quot;title&quot;:&quot;Play with Meowzer&quot;,&quot;url&quot;:&quot;/play/&quot;,&quot;children&quot;:[]}]'
+    data-current-url="/docs/"
+  ></mb-sidebar>
+  
+  <div slot="content">
+    <h1 id="meowzer-sdk-documentation" tabindex="-1"><a class="heading-anchor" href="#meowzer-sdk-documentation"><span>Meowzer SDK Documentation</span></a></h1>
+<blockquote>
+<p>A TypeScript SDK for creating autonomous, animated cat sprites with AI-driven behaviors.</p>
+</blockquote>
+<h2 id="what-is-meowzer" tabindex="-1"><a class="heading-anchor" href="#what-is-meowzer"><span>What is Meowzer?</span></a></h2>
+<p>Meowzer is a powerful SDK that lets you programmatically create animated cats that move autonomously around web pages. Each cat has:</p>
+<ul>
+<li><strong>🎨 Unique appearance</strong> - Procedurally generated or fully customized</li>
+<li><strong>🧠 Autonomous behavior</strong> - AI-powered decision-making (MeowBrain)</li>
+<li><strong>✨ Smooth animations</strong> - GSAP-based movement engine (Meowtion)</li>
+<li><strong>🎮 Interactive elements</strong> - Responds to food, toys, and laser pointers</li>
+<li><strong>💾 Persistence</strong> - Save and load cats from IndexedDB</li>
+</ul>
+<p>Perfect for adding delightful, autonomous companions to websites, games, or interactive experiences.</p>
+<hr>
+<h2 id="quick-start" tabindex="-1"><a class="heading-anchor" href="#quick-start"><span>Quick Start</span></a></h2>
+<p>Get a cat on your page in under 5 minutes:</p>
+<pre class="language-typescript" tabindex="0"><code class="language-typescript"><span class="token keyword">import</span> <span class="token punctuation">{</span> Meowzer <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"meowzer"</span><span class="token punctuation">;</span>
+
+<span class="token comment">// Initialize</span>
+<span class="token keyword">const</span> meowzer <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Meowzer</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">await</span> meowzer<span class="token punctuation">.</span><span class="token function">init</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// Create a cat</span>
+<span class="token keyword">const</span> cat <span class="token operator">=</span> <span class="token keyword">await</span> meowzer<span class="token punctuation">.</span>cats<span class="token punctuation">.</span><span class="token function">create</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+  name<span class="token operator">:</span> <span class="token string">"Whiskers"</span><span class="token punctuation">,</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// Place it on the page</span>
+cat<span class="token punctuation">.</span><span class="token function">place</span><span class="token punctuation">(</span>document<span class="token punctuation">.</span>body<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// Cat now wanders autonomously! 🐈</span></code></pre>
+<hr>
+<h2 id="documentation-sections" tabindex="-1"><a class="heading-anchor" href="#documentation-sections"><span>Documentation Sections</span></a></h2>
+<h3 id="-getting-started" tabindex="-1"><a class="heading-anchor" href="#-getting-started"><span>🚀 Getting Started</span></a></h3>
+<p>New to Meowzer? Start here!</p>
+<ul>
+<li><a href="/docs/getting-started/introduction">Introduction</a> - What is Meowzer?</li>
+<li><a href="/docs/getting-started/installation">Installation</a> - Set up Meowzer</li>
+<li><a href="/docs/getting-started/quick-start">Quick Start</a> - Your first cat in 5 minutes</li>
+<li><a href="/docs/getting-started/first-cat">First Cat Tutorial</a> - Detailed walkthrough</li>
+</ul>
+<h3 id="-concepts" tabindex="-1"><a class="heading-anchor" href="#-concepts"><span>💡 Concepts</span></a></h3>
+<p>Understand how Meowzer works under the hood.</p>
+<ul>
+<li><a href="/docs/concepts/architecture">Architecture</a> - How the libraries work together</li>
+<li><a href="/docs/concepts/cat-lifecycle">Cat Lifecycle</a> - From creation to destruction</li>
+<li><a href="/docs/concepts/ai-behaviors">AI Behaviors</a> - Understanding autonomous decisions</li>
+<li><a href="/docs/concepts/storage-persistence">Storage &amp; Persistence</a> - Saving and loading</li>
+<li><a href="/docs/concepts/event-system">Event System</a> - Hooks and listeners</li>
+</ul>
+<h3 id="-tutorials" tabindex="-1"><a class="heading-anchor" href="#-tutorials"><span>📚 Tutorials</span></a></h3>
+<p>Learn by building real projects.</p>
+<ul>
+<li><a href="/docs/tutorials/basic-integration">Basic Integration</a> - Add cats to a webpage</li>
+<li><a href="/docs/tutorials/interactive-playground">Interactive Playground</a> - Build a full playground</li>
+<li><a href="/docs/tutorials/persistence-setup">Persistence Setup</a> - Save cats between sessions</li>
+<li><a href="/docs/tutorials/framework-integration">Framework Integration</a> - React, Vue, Svelte, Astro</li>
+</ul>
+<h3 id="-guides" tabindex="-1"><a class="heading-anchor" href="#-guides"><span>📖 Guides</span></a></h3>
+<p>Deep dives into specific topics.</p>
+<ul>
+<li><a href="/docs/guides/customization">Customization</a> - Appearance and personality</li>
+<li><a href="/docs/guides/interactions">Interactions</a> - Food, toys, laser pointers</li>
+<li><a href="/docs/guides/performance">Performance</a> - Optimization tips</li>
+<li><a href="/docs/guides/best-practices">Best Practices</a> - Recommended patterns</li>
+</ul>
+<h3 id="-api-reference" tabindex="-1"><a class="heading-anchor" href="#-api-reference"><span>📋 API Reference</span></a></h3>
+<p>Complete API documentation.</p>
+<ul>
+<li><a href="/docs/api/meowzer-sdk">Meowzer SDK</a> - Main SDK class</li>
+<li><a href="/docs/api/managers">Managers</a> - CatManager, StorageManager, etc.</li>
+<li><a href="/docs/api/meowzer-cat">MeowzerCat</a> - Cat instance API</li>
+<li><a href="/docs/api/interactions">Interactions</a> - LaserPointer, Yarn, Need</li>
+<li><a href="/docs/api/types">Types</a> - TypeScript definitions</li>
+</ul>
+<h3 id="-examples" tabindex="-1"><a class="heading-anchor" href="#-examples"><span>🧪 Examples</span></a></h3>
+<p>Ready-to-use code snippets.</p>
+<ul>
+<li><a href="/docs/examples/code-snippets">Code Snippets</a> - Common tasks</li>
+<li><a href="/docs/examples/live-demos">Live Demos</a> - Interactive examples</li>
+<li><a href="/docs/examples/templates">Templates</a> - Project starters</li>
+</ul>
+<hr>
+<h2 id="architecture-overview" tabindex="-1"><a class="heading-anchor" href="#architecture-overview"><span>Architecture Overview</span></a></h2>
+<p>Meowzer combines four specialized libraries:</p>
+<pre><code>┌─────────────────────────────────────────────┐
+│              MEOWZER SDK                    │
+│         (Main API Entry Point)              │
+└─────────────────────────────────────────────┘
+     │
+     ├──► Managers (API Layer)
+     │    ├── CatManager
+     │    ├── StorageManager
+     │    ├── InteractionManager
+     │    ├── HookManager
+     │    └── PluginManager
+     │
+     └──► Libraries (Core Engine)
+          ├── MeowKit   - Cat generation
+          ├── Meowtion  - Animation engine
+          ├── MeowBrain - AI behaviors
+          └── MeowBase  - Storage layer
+</code></pre>
+<p>Learn more in <a href="/docs/concepts/architecture">Architecture</a>.</p>
+<hr>
+<h2 id="need-help" tabindex="-1"><a class="heading-anchor" href="#need-help"><span>Need Help?</span></a></h2>
+<ul>
+<li>📖 Check the <a href="/docs/api">API Reference</a></li>
+<li>💬 Ask questions on GitHub Discussions</li>
+<li>🐛 Report bugs on GitHub Issues</li>
+<li>📺 Watch tutorial videos (coming soon)</li>
+</ul>
+<hr>
+<h2 id="ready-to-get-started" tabindex="-1"><a class="heading-anchor" href="#ready-to-get-started"><span>Ready to Get Started?</span></a></h2>
+<div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+  <a href="/docs/getting-started/installation">
+    <cds-button kind="primary">Install Meowzer</cds-button>
+  </a>
+  <a href="/docs/getting-started/quick-start">
+    <cds-button kind="secondary">Quick Start Guide</cds-button>
+  </a>
+</div>
+
+  </div>
+</mb-landing-template>
+
+    
+    
+    <script type="module" src="/scripts/main.js"></script>
+  </body>
+</html>

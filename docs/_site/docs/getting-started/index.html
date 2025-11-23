@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Getting Started | Meowzer</title>
+    <meta name="description" content="Everything you need to start using Meowzer" />
+    
+    
+    <link rel="stylesheet" href="/styles/main.css" />
+    
+    <script>
+      // Apply Carbon dark theme class immediately to prevent flash
+      (function() {
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (prefersDark) {
+          document.documentElement.classList.add('cds-theme-g90');
+        } else {
+          document.documentElement.classList.add('cds-theme-g10');
+        }
+        
+        // Listen for theme changes
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+          if (e.matches) {
+            document.documentElement.classList.remove('cds-theme-g10');
+            document.documentElement.classList.add('cds-theme-g90');
+          } else {
+            document.documentElement.classList.remove('cds-theme-g90');
+            document.documentElement.classList.add('cds-theme-g10');
+          }
+        });
+      })();
+    </script>
+    <script type="module" crossorigin src="/assets/modulepreload-polyfill-B5Qt9EMX.js"></script>
+  </head>
+  <body>
+    
+    <mb-nav
+      data-links='[{&quot;title&quot;:&quot;API Reference&quot;,&quot;url&quot;:&quot;/api/&quot;},{&quot;title&quot;:&quot;Developer Documentation&quot;,&quot;url&quot;:&quot;/docs/&quot;},{&quot;title&quot;:&quot;Play with Meowzer&quot;,&quot;url&quot;:&quot;/play/&quot;}]'
+      data-current-url="/docs/getting-started/"
+      data-site-title="Meowzer 🐱"
+    ></mb-nav>
+    
+    
+    <mb-landing-template
+  data-frontmatter='{&quot;title&quot;:&quot;Getting Started&quot;,&quot;description&quot;:&quot;Everything you need to start using Meowzer&quot;}'
+>
+  
+  <mb-sidebar
+    slot="sidebar"
+    data-navigation='[{&quot;title&quot;:&quot;API Reference&quot;,&quot;url&quot;:&quot;/api/&quot;,&quot;children&quot;:[{&quot;title&quot;:&quot;Collections API&quot;,&quot;url&quot;:&quot;/api/collections/&quot;,&quot;children&quot;:[]}]},{&quot;title&quot;:&quot;Developer Documentation&quot;,&quot;url&quot;:&quot;/docs/&quot;,&quot;children&quot;:[{&quot;title&quot;:&quot;Getting Started&quot;,&quot;url&quot;:&quot;/docs/getting-started/&quot;,&quot;children&quot;:[{&quot;title&quot;:&quot;Your First Cat - Detailed Tutorial&quot;,&quot;url&quot;:&quot;/docs/getting-started/first-cat/&quot;},{&quot;title&quot;:&quot;Installation&quot;,&quot;url&quot;:&quot;/docs/getting-started/installation/&quot;},{&quot;title&quot;:&quot;Introduction to Meowzer&quot;,&quot;url&quot;:&quot;/docs/getting-started/introduction/&quot;},{&quot;title&quot;:&quot;Quick Start&quot;,&quot;url&quot;:&quot;/docs/getting-started/quick-start/&quot;}]}]},{&quot;title&quot;:&quot;Play with Meowzer&quot;,&quot;url&quot;:&quot;/play/&quot;,&quot;children&quot;:[]}]'
+    data-current-url="/docs/getting-started/"
+  ></mb-sidebar>
+  
+  <div slot="content">
+    <h1 id="getting-started-with-meowzer" tabindex="-1"><a class="heading-anchor" href="#getting-started-with-meowzer"><span>Getting Started with Meowzer</span></a></h1>
+<p>Welcome! This guide will help you get up and running with Meowzer quickly.</p>
+<h2 id="learning-path" tabindex="-1"><a class="heading-anchor" href="#learning-path"><span>Learning Path</span></a></h2>
+<p>Follow these pages in order for the best experience:</p>
+<h3 id="1-introduction" tabindex="-1"><a class="heading-anchor" href="#1-introduction"><span>1. Introduction</span></a></h3>
+<p><a href="/docs/getting-started/introduction">What is Meowzer?</a></p>
+<p>Learn what Meowzer is, what it can do, and how the pieces fit together.</p>
+<p><strong>Time:</strong> 5 minutes</p>
+<hr>
+<h3 id="2-installation" tabindex="-1"><a class="heading-anchor" href="#2-installation"><span>2. Installation</span></a></h3>
+<p><a href="/docs/getting-started/installation">Install Meowzer</a></p>
+<p>Set up Meowzer in your project using npm, yarn, or pnpm.</p>
+<p><strong>Time:</strong> 5 minutes</p>
+<hr>
+<h3 id="3-quick-start" tabindex="-1"><a class="heading-anchor" href="#3-quick-start"><span>3. Quick Start</span></a></h3>
+<p><a href="/docs/getting-started/quick-start">Your First Cat in 5 Minutes</a></p>
+<p>Create and place your first autonomous cat with minimal code.</p>
+<p><strong>Time:</strong> 5 minutes</p>
+<hr>
+<h3 id="4-first-cat-tutorial" tabindex="-1"><a class="heading-anchor" href="#4-first-cat-tutorial"><span>4. First Cat Tutorial</span></a></h3>
+<p><a href="/docs/getting-started/first-cat">Detailed Walkthrough</a></p>
+<p>Build a complete example step-by-step with explanations.</p>
+<p><strong>Time:</strong> 20 minutes</p>
+<hr>
+<h2 id="already-experienced" tabindex="-1"><a class="heading-anchor" href="#already-experienced"><span>Already Experienced?</span></a></h2>
+<p>Skip ahead to what you need:</p>
+<ul>
+<li><strong><a href="/docs/concepts">Concepts</a></strong> - Deep dive into architecture and systems</li>
+<li><strong><a href="/docs/tutorials">Tutorials</a></strong> - Build real projects</li>
+<li><strong><a href="/docs/api">API Reference</a></strong> - Complete API documentation</li>
+<li><strong><a href="/docs/examples">Examples</a></strong> - Ready-to-use code snippets</li>
+</ul>
+<h2 id="need-help" tabindex="-1"><a class="heading-anchor" href="#need-help"><span>Need Help?</span></a></h2>
+<ul>
+<li>📖 Check the <a href="/docs/api">API Reference</a></li>
+<li>💬 Ask questions on GitHub Discussions</li>
+<li>🐛 Report bugs on GitHub Issues</li>
+</ul>
+<hr>
+<h2 id="what-youll-learn" tabindex="-1"><a class="heading-anchor" href="#what-youll-learn"><span>What You’ll Learn</span></a></h2>
+<p>By the end of Getting Started, you’ll be able to:</p>
+<p>✅ Install and initialize Meowzer<br>
+✅ Create cats with custom appearance<br>
+✅ Place cats on web pages<br>
+✅ Understand basic cat behaviors<br>
+✅ Know where to learn more</p>
+<p>Let’s get started! →</p>
+
+  </div>
+</mb-landing-template>
+
+    
+    
+    <script type="module" src="/scripts/main.js"></script>
+  </body>
+</html>

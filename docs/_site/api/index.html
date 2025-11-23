@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>API Reference | Meowzer</title>
+    <meta name="description" content="Complete API reference for Meowbase" />
+    
+    
+    <link rel="stylesheet" href="/styles/main.css" />
+    
+    <script>
+      // Apply Carbon dark theme class immediately to prevent flash
+      (function() {
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (prefersDark) {
+          document.documentElement.classList.add('cds-theme-g90');
+        } else {
+          document.documentElement.classList.add('cds-theme-g10');
+        }
+        
+        // Listen for theme changes
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+          if (e.matches) {
+            document.documentElement.classList.remove('cds-theme-g10');
+            document.documentElement.classList.add('cds-theme-g90');
+          } else {
+            document.documentElement.classList.remove('cds-theme-g90');
+            document.documentElement.classList.add('cds-theme-g10');
+          }
+        });
+      })();
+    </script>
+    <script type="module" crossorigin src="/assets/modulepreload-polyfill-B5Qt9EMX.js"></script>
+  </head>
+  <body>
+    
+    <mb-nav
+      data-links='[{&quot;title&quot;:&quot;API Reference&quot;,&quot;url&quot;:&quot;/api/&quot;},{&quot;title&quot;:&quot;Developer Documentation&quot;,&quot;url&quot;:&quot;/docs/&quot;},{&quot;title&quot;:&quot;Play with Meowzer&quot;,&quot;url&quot;:&quot;/play/&quot;}]'
+      data-current-url="/api/"
+      data-site-title="Meowzer 🐱"
+    ></mb-nav>
+    
+    
+    <mb-landing-template
+  data-frontmatter='{&quot;title&quot;:&quot;API Reference&quot;,&quot;description&quot;:&quot;Complete API reference for Meowbase&quot;}'
+>
+  
+  <mb-sidebar
+    slot="sidebar"
+    data-navigation='[{&quot;title&quot;:&quot;API Reference&quot;,&quot;url&quot;:&quot;/api/&quot;,&quot;children&quot;:[{&quot;title&quot;:&quot;Collections API&quot;,&quot;url&quot;:&quot;/api/collections/&quot;,&quot;children&quot;:[]}]},{&quot;title&quot;:&quot;Developer Documentation&quot;,&quot;url&quot;:&quot;/docs/&quot;,&quot;children&quot;:[{&quot;title&quot;:&quot;Getting Started&quot;,&quot;url&quot;:&quot;/docs/getting-started/&quot;,&quot;children&quot;:[{&quot;title&quot;:&quot;Your First Cat - Detailed Tutorial&quot;,&quot;url&quot;:&quot;/docs/getting-started/first-cat/&quot;},{&quot;title&quot;:&quot;Installation&quot;,&quot;url&quot;:&quot;/docs/getting-started/installation/&quot;},{&quot;title&quot;:&quot;Introduction to Meowzer&quot;,&quot;url&quot;:&quot;/docs/getting-started/introduction/&quot;},{&quot;title&quot;:&quot;Quick Start&quot;,&quot;url&quot;:&quot;/docs/getting-started/quick-start/&quot;}]}]},{&quot;title&quot;:&quot;Play with Meowzer&quot;,&quot;url&quot;:&quot;/play/&quot;,&quot;children&quot;:[]}]'
+    data-current-url="/api/"
+  ></mb-sidebar>
+  
+  <div slot="content">
+    <p>Complete reference for the Meowbase API.</p>
+<h2 id="collections-api" tabindex="-1"><a class="heading-anchor" href="#collections-api"><span>Collections API</span></a></h2>
+<p>Documentation for working with collections.</p>
+<ul>
+<li><a href="/api/collections/create">Creating Collections</a></li>
+<li><a href="/api/collections/load">Loading Collections</a></li>
+<li><a href="/api/collections/save">Saving Collections</a></li>
+</ul>
+<h2 id="cats-api" tabindex="-1"><a class="heading-anchor" href="#cats-api"><span>Cats API</span></a></h2>
+<p>Documentation for working with cats within collections.</p>
+<ul>
+<li><a href="/api/cats/find">Finding Cats</a></li>
+<li><a href="/api/cats/add">Adding Cats</a></li>
+<li><a href="/api/cats/update">Updating Cats</a></li>
+<li><a href="/api/cats/remove">Removing Cats</a></li>
+</ul>
+
+  </div>
+</mb-landing-template>
+
+    
+    
+    <script type="module" src="/scripts/main.js"></script>
+  </body>
+</html>

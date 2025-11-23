@@ -1,6 +1,7 @@
 ---
 title: Credits
 description: Technology stack and acknowledgments for the Meowbase documentation site
+isMeta: true
 ---
 
 ## Tech Stack

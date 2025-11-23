@@ -1,6 +1,6 @@
 ---
 title: Welcome to Meowzer
-template: Home
+layout: layouts/home.njk
 description: Autonomous, animated cats for your web projects
 ---
 

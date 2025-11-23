@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Your First Cat - Detailed Tutorial | Meowzer</title>
+    <meta name="description" content="A comprehensive walkthrough of creating and customizing your first Meowzer cat" />
+    
+    
+    <link rel="stylesheet" href="/styles/main.css" />
+    
+    <script>
+      // Apply Carbon dark theme class immediately to prevent flash
+      (function() {
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (prefersDark) {
+          document.documentElement.classList.add('cds-theme-g90');
+        } else {
+          document.documentElement.classList.add('cds-theme-g10');
+        }
+        
+        // Listen for theme changes
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+          if (e.matches) {
+            document.documentElement.classList.remove('cds-theme-g10');
+            document.documentElement.classList.add('cds-theme-g90');
+          } else {
+            document.documentElement.classList.remove('cds-theme-g90');
+            document.documentElement.classList.add('cds-theme-g10');
+          }
+        });
+      })();
+    </script>
+    <script type="module" crossorigin src="/assets/modulepreload-polyfill-B5Qt9EMX.js"></script>
+  </head>
+  <body>
+    
+    <mb-nav
+      data-links='[{&quot;title&quot;:&quot;API Reference&quot;,&quot;url&quot;:&quot;/api/&quot;},{&quot;title&quot;:&quot;Developer Documentation&quot;,&quot;url&quot;:&quot;/docs/&quot;},{&quot;title&quot;:&quot;Play with Meowzer&quot;,&quot;url&quot;:&quot;/play/&quot;}]'
+      data-current-url="/docs/getting-started/first-cat/"
+      data-site-title="Meowzer 🐱"
+    ></mb-nav>
+    
+    
+    <mb-doc-template
+  data-frontmatter='{&quot;title&quot;:&quot;Your First Cat - Detailed Tutorial&quot;,&quot;description&quot;:&quot;A comprehensive walkthrough of creating and customizing your first Meowzer cat&quot;,&quot;previous&quot;:&quot;/docs/getting-started/quick-start&quot;,&quot;next&quot;:&quot;/docs/tutorials/basic-integration&quot;}'
+>
+  
+  <mb-sidebar
+    slot="sidebar"
+    data-navigation='[{&quot;title&quot;:&quot;API Reference&quot;,&quot;url&quot;:&quot;/api/&quot;,&quot;children&quot;:[{&quot;title&quot;:&quot;Collections API&quot;,&quot;url&quot;:&quot;/api/collections/&quot;,&quot;children&quot;:[]}]},{&quot;title&quot;:&quot;Developer Documentation&quot;,&quot;url&quot;:&quot;/docs/&quot;,&quot;children&quot;:[{&quot;title&quot;:&quot;Getting Started&quot;,&quot;url&quot;:&quot;/docs/getting-started/&quot;,&quot;children&quot;:[{&quot;title&quot;:&quot;Your First Cat - Detailed Tutorial&quot;,&quot;url&quot;:&quot;/docs/getting-started/first-cat/&quot;},{&quot;title&quot;:&quot;Installation&quot;,&quot;url&quot;:&quot;/docs/getting-started/installation/&quot;},{&quot;title&quot;:&quot;Introduction to Meowzer&quot;,&quot;url&quot;:&quot;/docs/getting-started/introduction/&quot;},{&quot;title&quot;:&quot;Quick Start&quot;,&quot;url&quot;:&quot;/docs/getting-started/quick-start/&quot;}]}]},{&quot;title&quot;:&quot;Play with Meowzer&quot;,&quot;url&quot;:&quot;/play/&quot;,&quot;children&quot;:[]}]'
+    data-current-url="/docs/getting-started/first-cat/"
+  ></mb-sidebar>
+  
+  <div slot="content">
+    <h1 id="your-first-cat---detailed-tutorial" tabindex="-1"><a class="heading-anchor" href="#your-first-cat---detailed-tutorial"><span>Your First Cat - Detailed Tutorial</span></a></h1>
+<p>This tutorial provides a comprehensive, step-by-step walkthrough of creating your first Meowzer cat. We’ll cover everything from setup to customization, interactions, and persistence.</p>
+<p><strong>Time:</strong> 15-20 minutes<br>
+<strong>Level:</strong> Beginner<br>
+<strong>Prerequisites:</strong> Meowzer installed (<a href="/docs/getting-started/installation">Installation Guide</a>)</p>
+<h2 id="what-youll-build" tabindex="-1"><a class="heading-anchor" href="#what-youll-build"><span>What You’ll Build</span></a></h2>
+<p>By the end of this tutorial, you’ll have:</p>
+<ul>
+<li>✅ A fully customized cat with unique appearance</li>
+<li>✅ Personality traits that affect behavior</li>
+<li>✅ Interactive elements (food, toys)</li>
+<li>✅ Persistence (save and reload your cat)</li>
+<li>✅ UI controls to manage your cat</li>
+</ul>
+<h2 id="project-setup" tabindex="-1"><a class="heading-anchor" href="#project-setup"><span>Project Setup</span></a></h2>
+<h3 id="1-create-project-structure" tabindex="-1"><a class="heading-anchor" href="#1-create-project-structure"><span>1. Create Project Structure</span></a></h3>
+<p>Create a new directory and set up files:</p>
+<pre class="language-bash" tabindex="0"><code class="language-bash"><span class="token function">mkdir</span> my-first-cat
+<span class="token builtin class-name">cd</span> my-first-cat
+<span class="token function">npm</span> init <span class="token parameter variable">-y</span>
+<span class="token function">npm</span> <span class="token function">install</span> meowzer vite</code></pre>
+<p>Your <code>package.json</code> should look like:</p>
+<pre class="language-json" tabindex="0"><code class="language-json"><span class="token punctuation">{</span>
+  <span class="token property">"name"</span><span class="token operator">:</span> <span class="token string">"my-first-cat"</span><span class="token punctuation">,</span>
+  <span class="token property">"type"</span><span class="token operator">:</span> <span class="token string">"module"</span><span class="token punctuation">,</span>
+  <span class="token property">"scripts"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token property">"dev"</span><span class="token operator">:</span> <span class="token string">"vite"</span><span class="token punctuation">,</span>
+    <span class="token property">"build"</span><span class="token operator">:</span> <span class="token string">"vite build"</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token property">"dependencies"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token property">"meowzer"</span><span class="token operator">:</span> <span class="token string">"^1.0.0"</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token property">"devDependencies"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token property">"vite"</span><span class="token operator">:</span> <span class="token string">"^5.0.0"</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<h3 id="2-create-html-file" tabindex="-1"><a class="heading-anchor" href="#2-create-html-file"><span>2. Create HTML File</span></a></h3>
+<p>Create <code>index.html</code>:</p>
+<pre class="language-html" tabindex="0"><code class="language-html"><span class="token doctype"><span class="token punctuation">&lt;!</span><span class="token doctype-tag">DOCTYPE</span> <span class="token name">html</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>html</span> <span class="token attr-name">lang</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>en<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>head</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>meta</span> <span class="token attr-name">charset</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>UTF-8<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>meta</span>
+      <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>viewport<span class="token punctuation">"</span></span>
+      <span class="token attr-name">content</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>width=device-width, initial-scale=1.0<span class="token punctuation">"</span></span>
+    <span class="token punctuation">/></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>title</span><span class="token punctuation">></span></span>My First Meowzer Cat<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>title</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>style</span><span class="token punctuation">></span></span><span class="token style"><span class="token language-css">
+      <span class="token selector">*</span> <span class="token punctuation">{</span>
+        <span class="token property">margin</span><span class="token punctuation">:</span> 0<span class="token punctuation">;</span>
+        <span class="token property">padding</span><span class="token punctuation">:</span> 0<span class="token punctuation">;</span>
+        <span class="token property">box-sizing</span><span class="token punctuation">:</span> border-box<span class="token punctuation">;</span>
+      <span class="token punctuation">}</span>
+
+      <span class="token selector">body</span> <span class="token punctuation">{</span>
+        <span class="token property">font-family</span><span class="token punctuation">:</span> -apple-system<span class="token punctuation">,</span> BlinkMacSystemFont<span class="token punctuation">,</span> <span class="token string">"Segoe UI"</span><span class="token punctuation">,</span>
+          Roboto<span class="token punctuation">,</span> Oxygen<span class="token punctuation">,</span> Ubuntu<span class="token punctuation">,</span> sans-serif<span class="token punctuation">;</span>
+        <span class="token property">background</span><span class="token punctuation">:</span> <span class="token function">linear-gradient</span><span class="token punctuation">(</span>135deg<span class="token punctuation">,</span> #667eea 0%<span class="token punctuation">,</span> #764ba2 100%<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token property">min-height</span><span class="token punctuation">:</span> 100vh<span class="token punctuation">;</span>
+        <span class="token property">color</span><span class="token punctuation">:</span> white<span class="token punctuation">;</span>
+      <span class="token punctuation">}</span>
+
+      <span class="token selector">#controls</span> <span class="token punctuation">{</span>
+        <span class="token property">position</span><span class="token punctuation">:</span> fixed<span class="token punctuation">;</span>
+        <span class="token property">top</span><span class="token punctuation">:</span> 20px<span class="token punctuation">;</span>
+        <span class="token property">right</span><span class="token punctuation">:</span> 20px<span class="token punctuation">;</span>
+        <span class="token property">background</span><span class="token punctuation">:</span> <span class="token function">rgba</span><span class="token punctuation">(</span>255<span class="token punctuation">,</span> 255<span class="token punctuation">,</span> 255<span class="token punctuation">,</span> 0.95<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token property">padding</span><span class="token punctuation">:</span> 20px<span class="token punctuation">;</span>
+        <span class="token property">border-radius</span><span class="token punctuation">:</span> 12px<span class="token punctuation">;</span>
+        <span class="token property">box-shadow</span><span class="token punctuation">:</span> 0 8px 32px <span class="token function">rgba</span><span class="token punctuation">(</span>0<span class="token punctuation">,</span> 0<span class="token punctuation">,</span> 0<span class="token punctuation">,</span> 0.2<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token property">color</span><span class="token punctuation">:</span> #333<span class="token punctuation">;</span>
+        <span class="token property">max-width</span><span class="token punctuation">:</span> 300px<span class="token punctuation">;</span>
+      <span class="token punctuation">}</span>
+
+      <span class="token selector">h1</span> <span class="token punctuation">{</span>
+        <span class="token property">font-size</span><span class="token punctuation">:</span> 1.5rem<span class="token punctuation">;</span>
+        <span class="token property">margin-bottom</span><span class="token punctuation">:</span> 1rem<span class="token punctuation">;</span>
+      <span class="token punctuation">}</span>
+
+      <span class="token selector">.control-group</span> <span class="token punctuation">{</span>
+        <span class="token property">margin-bottom</span><span class="token punctuation">:</span> 1rem<span class="token punctuation">;</span>
+      <span class="token punctuation">}</span>
+
+      <span class="token selector">label</span> <span class="token punctuation">{</span>
+        <span class="token property">display</span><span class="token punctuation">:</span> block<span class="token punctuation">;</span>
+        <span class="token property">font-size</span><span class="token punctuation">:</span> 0.9rem<span class="token punctuation">;</span>
+        <span class="token property">font-weight</span><span class="token punctuation">:</span> 600<span class="token punctuation">;</span>
+        <span class="token property">margin-bottom</span><span class="token punctuation">:</span> 0.5rem<span class="token punctuation">;</span>
+        <span class="token property">color</span><span class="token punctuation">:</span> #555<span class="token punctuation">;</span>
+      <span class="token punctuation">}</span>
+
+      <span class="token selector">input,
+      select,
+      button</span> <span class="token punctuation">{</span>
+        <span class="token property">width</span><span class="token punctuation">:</span> 100%<span class="token punctuation">;</span>
+        <span class="token property">padding</span><span class="token punctuation">:</span> 0.5rem<span class="token punctuation">;</span>
+        <span class="token property">border</span><span class="token punctuation">:</span> 2px solid #ddd<span class="token punctuation">;</span>
+        <span class="token property">border-radius</span><span class="token punctuation">:</span> 6px<span class="token punctuation">;</span>
+        <span class="token property">font-size</span><span class="token punctuation">:</span> 0.9rem<span class="token punctuation">;</span>
+      <span class="token punctuation">}</span>
+
+      <span class="token selector">button</span> <span class="token punctuation">{</span>
+        <span class="token property">background</span><span class="token punctuation">:</span> #667eea<span class="token punctuation">;</span>
+        <span class="token property">color</span><span class="token punctuation">:</span> white<span class="token punctuation">;</span>
+        <span class="token property">border</span><span class="token punctuation">:</span> none<span class="token punctuation">;</span>
+        <span class="token property">cursor</span><span class="token punctuation">:</span> pointer<span class="token punctuation">;</span>
+        <span class="token property">font-weight</span><span class="token punctuation">:</span> 600<span class="token punctuation">;</span>
+        <span class="token property">margin-top</span><span class="token punctuation">:</span> 0.5rem<span class="token punctuation">;</span>
+        <span class="token property">transition</span><span class="token punctuation">:</span> background 0.2s<span class="token punctuation">;</span>
+      <span class="token punctuation">}</span>
+
+      <span class="token selector">button:hover</span> <span class="token punctuation">{</span>
+        <span class="token property">background</span><span class="token punctuation">:</span> #5568d3<span class="token punctuation">;</span>
+      <span class="token punctuation">}</span>
+
+      <span class="token selector">button:active</span> <span class="token punctuation">{</span>
+        <span class="token property">transform</span><span class="token punctuation">:</span> <span class="token function">scale</span><span class="token punctuation">(</span>0.98<span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token punctuation">}</span>
+
+      <span class="token selector">.info</span> <span class="token punctuation">{</span>
+        <span class="token property">background</span><span class="token punctuation">:</span> <span class="token function">rgba</span><span class="token punctuation">(</span>102<span class="token punctuation">,</span> 126<span class="token punctuation">,</span> 234<span class="token punctuation">,</span> 0.1<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token property">padding</span><span class="token punctuation">:</span> 1rem<span class="token punctuation">;</span>
+        <span class="token property">border-radius</span><span class="token punctuation">:</span> 6px<span class="token punctuation">;</span>
+        <span class="token property">margin-top</span><span class="token punctuation">:</span> 1rem<span class="token punctuation">;</span>
+        <span class="token property">font-size</span><span class="token punctuation">:</span> 0.85rem<span class="token punctuation">;</span>
+      <span class="token punctuation">}</span>
+
+      <span class="token selector">.info p</span> <span class="token punctuation">{</span>
+        <span class="token property">margin</span><span class="token punctuation">:</span> 0.25rem 0<span class="token punctuation">;</span>
+      <span class="token punctuation">}</span>
+    </span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>style</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>head</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>body</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>controls<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>h1</span><span class="token punctuation">></span></span>🐱 Cat Creator<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>h1</span><span class="token punctuation">></span></span>
+
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>control-group<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>label</span> <span class="token attr-name">for</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>cat-name<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>Cat Name<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>label</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>text<span class="token punctuation">"</span></span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>cat-name<span class="token punctuation">"</span></span> <span class="token attr-name">value</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>Whiskers<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span>
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
+
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>control-group<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>label</span> <span class="token attr-name">for</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>fur-color<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>Fur Color<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>label</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>color<span class="token punctuation">"</span></span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>fur-color<span class="token punctuation">"</span></span> <span class="token attr-name">value</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>#FF9500<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span>
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
+
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>control-group<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>label</span> <span class="token attr-name">for</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>eye-color<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>Eye Color<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>label</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>color<span class="token punctuation">"</span></span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>eye-color<span class="token punctuation">"</span></span> <span class="token attr-name">value</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>#00FF00<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span>
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
+
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>control-group<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>label</span> <span class="token attr-name">for</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>pattern<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>Pattern<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>label</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>select</span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>pattern<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+          <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>option</span> <span class="token attr-name">value</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>solid<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>Solid<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>option</span><span class="token punctuation">></span></span>
+          <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>option</span> <span class="token attr-name">value</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>tabby<span class="token punctuation">"</span></span> <span class="token attr-name">selected</span><span class="token punctuation">></span></span>Tabby<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>option</span><span class="token punctuation">></span></span>
+          <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>option</span> <span class="token attr-name">value</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>spotted<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>Spotted<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>option</span><span class="token punctuation">></span></span>
+          <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>option</span> <span class="token attr-name">value</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>tuxedo<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>Tuxedo<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>option</span><span class="token punctuation">></span></span>
+          <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>option</span> <span class="token attr-name">value</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>calico<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>Calico<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>option</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>select</span><span class="token punctuation">></span></span>
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
+
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>control-group<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>label</span> <span class="token attr-name">for</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>personality<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>Personality<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>label</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>select</span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>personality<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+          <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>option</span> <span class="token attr-name">value</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>playful<span class="token punctuation">"</span></span> <span class="token attr-name">selected</span><span class="token punctuation">></span></span>Playful<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>option</span><span class="token punctuation">></span></span>
+          <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>option</span> <span class="token attr-name">value</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>lazy<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>Lazy<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>option</span><span class="token punctuation">></span></span>
+          <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>option</span> <span class="token attr-name">value</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>curious<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>Curious<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>option</span><span class="token punctuation">></span></span>
+          <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>option</span> <span class="token attr-name">value</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>energetic<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>Energetic<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>option</span><span class="token punctuation">></span></span>
+          <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>option</span> <span class="token attr-name">value</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>calm<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>Calm<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>option</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>select</span><span class="token punctuation">></span></span>
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
+
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>button</span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>create-cat<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>Create Cat<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>button</span><span class="token punctuation">></span></span>
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>button</span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>feed-cat<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>🍖 Feed Cat<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>button</span><span class="token punctuation">></span></span>
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>button</span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>throw-yarn<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>🧶 Throw Yarn<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>button</span><span class="token punctuation">></span></span>
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>button</span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>save-cat<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>💾 Save Cat<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>button</span><span class="token punctuation">></span></span>
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>button</span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>load-cat<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>📂 Load Cat<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>button</span><span class="token punctuation">></span></span>
+
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>info<span class="token punctuation">"</span></span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>cat-info<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>strong</span><span class="token punctuation">></span></span>No cat yet<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>strong</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>p</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span><span class="token punctuation">></span></span>Create a cat to get started!<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>p</span><span class="token punctuation">></span></span>
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
+
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>script</span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>module<span class="token punctuation">"</span></span> <span class="token attr-name">src</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>/main.js<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token script"></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>script</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>body</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>html</span><span class="token punctuation">></span></span></code></pre>
+<h3 id="3-create-javascript-file" tabindex="-1"><a class="heading-anchor" href="#3-create-javascript-file"><span>3. Create JavaScript File</span></a></h3>
+<p>Create <code>main.js</code> - we’ll build this step by step.</p>
+<h2 id="step-by-step-implementation" tabindex="-1"><a class="heading-anchor" href="#step-by-step-implementation"><span>Step-by-Step Implementation</span></a></h2>
+<h3 id="step-1-initialize-meowzer" tabindex="-1"><a class="heading-anchor" href="#step-1-initialize-meowzer"><span>Step 1: Initialize Meowzer</span></a></h3>
+<p>First, let’s set up the Meowzer instance:</p>
+<pre class="language-javascript" tabindex="0"><code class="language-javascript"><span class="token comment">// main.js</span>
+<span class="token keyword">import</span> <span class="token punctuation">{</span> Meowzer <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"meowzer"</span><span class="token punctuation">;</span>
+
+<span class="token comment">// Global variables</span>
+<span class="token keyword">let</span> meowzer<span class="token punctuation">;</span>
+<span class="token keyword">let</span> currentCat<span class="token punctuation">;</span>
+
+<span class="token comment">// Initialize on page load</span>
+<span class="token keyword">async</span> <span class="token keyword">function</span> <span class="token function">init</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token comment">// Create Meowzer instance with configuration</span>
+  meowzer <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Meowzer</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+    <span class="token literal-property property">storage</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+      <span class="token literal-property property">adapter</span><span class="token operator">:</span> <span class="token string">"indexeddb"</span><span class="token punctuation">,</span>
+      <span class="token literal-property property">enabled</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+      <span class="token literal-property property">defaultCollection</span><span class="token operator">:</span> <span class="token string">"my-cats"</span><span class="token punctuation">,</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token literal-property property">behavior</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+      <span class="token literal-property property">boundaries</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+        <span class="token literal-property property">minX</span><span class="token operator">:</span> <span class="token number">0</span><span class="token punctuation">,</span>
+        <span class="token literal-property property">maxX</span><span class="token operator">:</span> window<span class="token punctuation">.</span>innerWidth<span class="token punctuation">,</span>
+        <span class="token literal-property property">minY</span><span class="token operator">:</span> <span class="token number">0</span><span class="token punctuation">,</span>
+        <span class="token literal-property property">maxY</span><span class="token operator">:</span> window<span class="token punctuation">.</span>innerHeight<span class="token punctuation">,</span>
+      <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token comment">// MUST call init before using SDK</span>
+  <span class="token keyword">await</span> meowzer<span class="token punctuation">.</span><span class="token function">init</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">"Meowzer initialized! ✅"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token comment">// Set up event listeners</span>
+  <span class="token function">setupEventListeners</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token comment">// Run init when page loads</span>
+<span class="token function">init</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p><strong>What’s happening:</strong></p>
+<ul>
+<li>We create a global <code>meowzer</code> variable accessible throughout our app</li>
+<li>We configure storage to use IndexedDB</li>
+<li>We set boundaries to match the window size</li>
+<li>We call <code>init()</code> which is <strong>required</strong> before using any features</li>
+</ul>
+<h3 id="step-2-create-cat-function" tabindex="-1"><a class="heading-anchor" href="#step-2-create-cat-function"><span>Step 2: Create Cat Function</span></a></h3>
+<p>Add a function to create cats based on user input:</p>
+<pre class="language-javascript" tabindex="0"><code class="language-javascript"><span class="token keyword">async</span> <span class="token keyword">function</span> <span class="token function">createCat</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token comment">// If there's already a cat, remove it</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span>currentCat<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    currentCat<span class="token punctuation">.</span><span class="token function">destroy</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token comment">// Get values from form inputs</span>
+  <span class="token keyword">const</span> name <span class="token operator">=</span> document<span class="token punctuation">.</span><span class="token function">getElementById</span><span class="token punctuation">(</span><span class="token string">"cat-name"</span><span class="token punctuation">)</span><span class="token punctuation">.</span>value<span class="token punctuation">;</span>
+  <span class="token keyword">const</span> furColor <span class="token operator">=</span> document<span class="token punctuation">.</span><span class="token function">getElementById</span><span class="token punctuation">(</span><span class="token string">"fur-color"</span><span class="token punctuation">)</span><span class="token punctuation">.</span>value<span class="token punctuation">;</span>
+  <span class="token keyword">const</span> eyeColor <span class="token operator">=</span> document<span class="token punctuation">.</span><span class="token function">getElementById</span><span class="token punctuation">(</span><span class="token string">"eye-color"</span><span class="token punctuation">)</span><span class="token punctuation">.</span>value<span class="token punctuation">;</span>
+  <span class="token keyword">const</span> pattern <span class="token operator">=</span> document<span class="token punctuation">.</span><span class="token function">getElementById</span><span class="token punctuation">(</span><span class="token string">"pattern"</span><span class="token punctuation">)</span><span class="token punctuation">.</span>value<span class="token punctuation">;</span>
+  <span class="token keyword">const</span> personality <span class="token operator">=</span> document<span class="token punctuation">.</span><span class="token function">getElementById</span><span class="token punctuation">(</span><span class="token string">"personality"</span><span class="token punctuation">)</span><span class="token punctuation">.</span>value<span class="token punctuation">;</span>
+
+  <span class="token comment">// Create the cat with custom settings</span>
+  currentCat <span class="token operator">=</span> <span class="token keyword">await</span> meowzer<span class="token punctuation">.</span>cats<span class="token punctuation">.</span><span class="token function">create</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+    <span class="token literal-property property">name</span><span class="token operator">:</span> name<span class="token punctuation">,</span>
+    <span class="token literal-property property">settings</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+      <span class="token literal-property property">color</span><span class="token operator">:</span> furColor<span class="token punctuation">,</span>
+      <span class="token literal-property property">eyeColor</span><span class="token operator">:</span> eyeColor<span class="token punctuation">,</span>
+      <span class="token literal-property property">pattern</span><span class="token operator">:</span> pattern<span class="token punctuation">,</span>
+      <span class="token literal-property property">size</span><span class="token operator">:</span> <span class="token string">"medium"</span><span class="token punctuation">,</span>
+      <span class="token literal-property property">furLength</span><span class="token operator">:</span> <span class="token string">"short"</span><span class="token punctuation">,</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token literal-property property">personality</span><span class="token operator">:</span> personality<span class="token punctuation">,</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token comment">// Place cat on the page</span>
+  currentCat<span class="token punctuation">.</span><span class="token function">place</span><span class="token punctuation">(</span>document<span class="token punctuation">.</span>body<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">Created cat: </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>currentCat<span class="token punctuation">.</span>name<span class="token interpolation-punctuation punctuation">}</span></span><span class="token template-punctuation string">`</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token comment">// Update UI</span>
+  <span class="token function">updateCatInfo</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token comment">// Listen to cat events</span>
+  currentCat<span class="token punctuation">.</span><span class="token function">on</span><span class="token punctuation">(</span><span class="token string">"stateChanged"</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token parameter">event</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+    console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token template-string"><span class="token template-punctuation string">`</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>currentCat<span class="token punctuation">.</span>name<span class="token interpolation-punctuation punctuation">}</span></span><span class="token string"> is now </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>event<span class="token punctuation">.</span>newState<span class="token interpolation-punctuation punctuation">}</span></span><span class="token template-punctuation string">`</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p><strong>What’s happening:</strong></p>
+<ul>
+<li>We gather form values for appearance and personality</li>
+<li>We create a new cat with <code>meowzer.cats.create()</code></li>
+<li>We place it on the page with <code>cat.place()</code></li>
+<li>We set up event listeners to track state changes</li>
+</ul>
+<h3 id="step-3-add-interactions" tabindex="-1"><a class="heading-anchor" href="#step-3-add-interactions"><span>Step 3: Add Interactions</span></a></h3>
+<p>Create functions for feeding and playing:</p>
+<pre class="language-javascript" tabindex="0"><code class="language-javascript"><span class="token keyword">async</span> <span class="token keyword">function</span> <span class="token function">feedCat</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>currentCat<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token function">alert</span><span class="token punctuation">(</span><span class="token string">"Create a cat first!"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token comment">// Place food near the cat</span>
+  <span class="token keyword">const</span> catPosition <span class="token operator">=</span> currentCat<span class="token punctuation">.</span><span class="token function">getPosition</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token keyword">await</span> meowzer<span class="token punctuation">.</span>interactions<span class="token punctuation">.</span><span class="token function">placeNeed</span><span class="token punctuation">(</span><span class="token string">"food:basic"</span><span class="token punctuation">,</span> <span class="token punctuation">{</span>
+    <span class="token literal-property property">x</span><span class="token operator">:</span> catPosition<span class="token punctuation">.</span>x <span class="token operator">+</span> <span class="token number">100</span><span class="token punctuation">,</span>
+    <span class="token literal-property property">y</span><span class="token operator">:</span> catPosition<span class="token punctuation">.</span>y<span class="token punctuation">,</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">"Food placed! Cat should notice it soon."</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">async</span> <span class="token keyword">function</span> <span class="token function">throwYarn</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>currentCat<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token function">alert</span><span class="token punctuation">(</span><span class="token string">"Create a cat first!"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token comment">// Place yarn in a random spot</span>
+  <span class="token keyword">const</span> x <span class="token operator">=</span> Math<span class="token punctuation">.</span><span class="token function">random</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">*</span> window<span class="token punctuation">.</span>innerWidth<span class="token punctuation">;</span>
+  <span class="token keyword">const</span> y <span class="token operator">=</span> Math<span class="token punctuation">.</span><span class="token function">random</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">*</span> window<span class="token punctuation">.</span>innerHeight<span class="token punctuation">;</span>
+
+  <span class="token keyword">await</span> meowzer<span class="token punctuation">.</span>interactions<span class="token punctuation">.</span><span class="token function">placeYarn</span><span class="token punctuation">(</span><span class="token punctuation">{</span> x<span class="token punctuation">,</span> y <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">"Yarn thrown! Cat might play with it."</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p><strong>What’s happening:</strong></p>
+<ul>
+<li>We check if a cat exists before placing items</li>
+<li>We use <code>meowzer.interactions</code> to place food and toys</li>
+<li>The cat’s AI will notice these items and interact with them</li>
+</ul>
+<h3 id="step-4-add-persistence" tabindex="-1"><a class="heading-anchor" href="#step-4-add-persistence"><span>Step 4: Add Persistence</span></a></h3>
+<p>Create save and load functions:</p>
+<pre class="language-javascript" tabindex="0"><code class="language-javascript"><span class="token keyword">async</span> <span class="token keyword">function</span> <span class="token function">saveCat</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>currentCat<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token function">alert</span><span class="token punctuation">(</span><span class="token string">"Create a cat first!"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token keyword">try</span> <span class="token punctuation">{</span>
+    <span class="token keyword">await</span> meowzer<span class="token punctuation">.</span>storage<span class="token punctuation">.</span><span class="token function">save</span><span class="token punctuation">(</span>currentCat<span class="token punctuation">.</span>id<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">alert</span><span class="token punctuation">(</span><span class="token template-string"><span class="token template-punctuation string">`</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>currentCat<span class="token punctuation">.</span>name<span class="token interpolation-punctuation punctuation">}</span></span><span class="token string"> saved successfully! 💾</span><span class="token template-punctuation string">`</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span>error<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    console<span class="token punctuation">.</span><span class="token function">error</span><span class="token punctuation">(</span><span class="token string">"Failed to save cat:"</span><span class="token punctuation">,</span> error<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">alert</span><span class="token punctuation">(</span><span class="token string">"Failed to save cat. Check console for details."</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">async</span> <span class="token keyword">function</span> <span class="token function">loadCat</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">try</span> <span class="token punctuation">{</span>
+    <span class="token comment">// Get list of saved cats</span>
+    <span class="token keyword">const</span> savedCats <span class="token operator">=</span> <span class="token keyword">await</span> meowzer<span class="token punctuation">.</span>storage<span class="token punctuation">.</span><span class="token function">listCats</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>savedCats<span class="token punctuation">.</span>length <span class="token operator">===</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token function">alert</span><span class="token punctuation">(</span><span class="token string">"No saved cats found. Create and save a cat first!"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token keyword">return</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token comment">// Load the most recently saved cat</span>
+    <span class="token keyword">const</span> latestCat <span class="token operator">=</span> savedCats<span class="token punctuation">[</span>savedCats<span class="token punctuation">.</span>length <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+
+    <span class="token comment">// Remove current cat if exists</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>currentCat<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      currentCat<span class="token punctuation">.</span><span class="token function">destroy</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token comment">// Load the cat</span>
+    currentCat <span class="token operator">=</span> <span class="token keyword">await</span> meowzer<span class="token punctuation">.</span>storage<span class="token punctuation">.</span><span class="token function">load</span><span class="token punctuation">(</span>latestCat<span class="token punctuation">.</span>id<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    currentCat<span class="token punctuation">.</span><span class="token function">place</span><span class="token punctuation">(</span>document<span class="token punctuation">.</span>body<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">Loaded cat: </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>currentCat<span class="token punctuation">.</span>name<span class="token interpolation-punctuation punctuation">}</span></span><span class="token template-punctuation string">`</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment">// Update UI</span>
+    <span class="token function">updateCatInfo</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token function">alert</span><span class="token punctuation">(</span><span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">Loaded </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>currentCat<span class="token punctuation">.</span>name<span class="token interpolation-punctuation punctuation">}</span></span><span class="token string">! 📂</span><span class="token template-punctuation string">`</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span>error<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    console<span class="token punctuation">.</span><span class="token function">error</span><span class="token punctuation">(</span><span class="token string">"Failed to load cat:"</span><span class="token punctuation">,</span> error<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">alert</span><span class="token punctuation">(</span><span class="token string">"Failed to load cat. Check console for details."</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p><strong>What’s happening:</strong></p>
+<ul>
+<li>We use <code>meowzer.storage.save()</code> to persist the cat to IndexedDB</li>
+<li>We use <code>meowzer.storage.listCats()</code> to see what’s saved</li>
+<li>We use <code>meowzer.storage.load()</code> to restore a saved cat</li>
+</ul>
+<h3 id="step-5-update-ui-info" tabindex="-1"><a class="heading-anchor" href="#step-5-update-ui-info"><span>Step 5: Update UI Info</span></a></h3>
+<p>Add a function to display cat information:</p>
+<pre class="language-javascript" tabindex="0"><code class="language-javascript"><span class="token keyword">function</span> <span class="token function">updateCatInfo</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">const</span> infoDiv <span class="token operator">=</span> document<span class="token punctuation">.</span><span class="token function">getElementById</span><span class="token punctuation">(</span><span class="token string">"cat-info"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>currentCat<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    infoDiv<span class="token punctuation">.</span>innerHTML <span class="token operator">=</span> <span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">
+      &lt;p>&lt;strong>No cat yet&lt;/strong>&lt;/p>
+      &lt;p>Create a cat to get started!&lt;/p>
+    </span><span class="token template-punctuation string">`</span></span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token keyword">const</span> position <span class="token operator">=</span> currentCat<span class="token punctuation">.</span><span class="token function">getPosition</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  infoDiv<span class="token punctuation">.</span>innerHTML <span class="token operator">=</span> <span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">
+    &lt;p>&lt;strong>Name:&lt;/strong> </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>currentCat<span class="token punctuation">.</span>name<span class="token interpolation-punctuation punctuation">}</span></span><span class="token string">&lt;/p>
+    &lt;p>&lt;strong>ID:&lt;/strong> </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>currentCat<span class="token punctuation">.</span>id<span class="token punctuation">.</span><span class="token function">substring</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">8</span><span class="token punctuation">)</span><span class="token interpolation-punctuation punctuation">}</span></span><span class="token string">...&lt;/p>
+    &lt;p>&lt;strong>Position:&lt;/strong> (</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>Math<span class="token punctuation">.</span><span class="token function">round</span><span class="token punctuation">(</span>
+      position<span class="token punctuation">.</span>x
+    <span class="token punctuation">)</span><span class="token interpolation-punctuation punctuation">}</span></span><span class="token string">, </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>Math<span class="token punctuation">.</span><span class="token function">round</span><span class="token punctuation">(</span>position<span class="token punctuation">.</span>y<span class="token punctuation">)</span><span class="token interpolation-punctuation punctuation">}</span></span><span class="token string">)&lt;/p>
+    &lt;p>&lt;strong>State:&lt;/strong> </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>currentCat<span class="token punctuation">.</span><span class="token function">getState</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token interpolation-punctuation punctuation">}</span></span><span class="token string">&lt;/p>
+  </span><span class="token template-punctuation string">`</span></span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<h3 id="step-6-set-up-event-listeners" tabindex="-1"><a class="heading-anchor" href="#step-6-set-up-event-listeners"><span>Step 6: Set Up Event Listeners</span></a></h3>
+<p>Connect buttons to functions:</p>
+<pre class="language-javascript" tabindex="0"><code class="language-javascript"><span class="token keyword">function</span> <span class="token function">setupEventListeners</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  document
+    <span class="token punctuation">.</span><span class="token function">getElementById</span><span class="token punctuation">(</span><span class="token string">"create-cat"</span><span class="token punctuation">)</span>
+    <span class="token punctuation">.</span><span class="token function">addEventListener</span><span class="token punctuation">(</span><span class="token string">"click"</span><span class="token punctuation">,</span> createCat<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  document
+    <span class="token punctuation">.</span><span class="token function">getElementById</span><span class="token punctuation">(</span><span class="token string">"feed-cat"</span><span class="token punctuation">)</span>
+    <span class="token punctuation">.</span><span class="token function">addEventListener</span><span class="token punctuation">(</span><span class="token string">"click"</span><span class="token punctuation">,</span> feedCat<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  document
+    <span class="token punctuation">.</span><span class="token function">getElementById</span><span class="token punctuation">(</span><span class="token string">"throw-yarn"</span><span class="token punctuation">)</span>
+    <span class="token punctuation">.</span><span class="token function">addEventListener</span><span class="token punctuation">(</span><span class="token string">"click"</span><span class="token punctuation">,</span> throwYarn<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  document
+    <span class="token punctuation">.</span><span class="token function">getElementById</span><span class="token punctuation">(</span><span class="token string">"save-cat"</span><span class="token punctuation">)</span>
+    <span class="token punctuation">.</span><span class="token function">addEventListener</span><span class="token punctuation">(</span><span class="token string">"click"</span><span class="token punctuation">,</span> saveCat<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  document
+    <span class="token punctuation">.</span><span class="token function">getElementById</span><span class="token punctuation">(</span><span class="token string">"load-cat"</span><span class="token punctuation">)</span>
+    <span class="token punctuation">.</span><span class="token function">addEventListener</span><span class="token punctuation">(</span><span class="token string">"click"</span><span class="token punctuation">,</span> loadCat<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token comment">// Update boundaries on window resize</span>
+  window<span class="token punctuation">.</span><span class="token function">addEventListener</span><span class="token punctuation">(</span><span class="token string">"resize"</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>currentCat<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      currentCat<span class="token punctuation">.</span><span class="token function">setBoundaries</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+        <span class="token literal-property property">minX</span><span class="token operator">:</span> <span class="token number">0</span><span class="token punctuation">,</span>
+        <span class="token literal-property property">maxX</span><span class="token operator">:</span> window<span class="token punctuation">.</span>innerWidth<span class="token punctuation">,</span>
+        <span class="token literal-property property">minY</span><span class="token operator">:</span> <span class="token number">0</span><span class="token punctuation">,</span>
+        <span class="token literal-property property">maxY</span><span class="token operator">:</span> window<span class="token punctuation">.</span>innerHeight<span class="token punctuation">,</span>
+      <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token comment">// Update info every 2 seconds</span>
+  <span class="token function">setInterval</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>currentCat<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token function">updateCatInfo</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token number">2000</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<h2 id="complete-code" tabindex="-1"><a class="heading-anchor" href="#complete-code"><span>Complete Code</span></a></h2>
+<p>Here’s the full <code>main.js</code> file:</p>
+<pre class="language-javascript" tabindex="0"><code class="language-javascript"><span class="token keyword">import</span> <span class="token punctuation">{</span> Meowzer <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"meowzer"</span><span class="token punctuation">;</span>
+
+<span class="token keyword">let</span> meowzer<span class="token punctuation">;</span>
+<span class="token keyword">let</span> currentCat<span class="token punctuation">;</span>
+
+<span class="token keyword">async</span> <span class="token keyword">function</span> <span class="token function">init</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  meowzer <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Meowzer</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+    <span class="token literal-property property">storage</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+      <span class="token literal-property property">adapter</span><span class="token operator">:</span> <span class="token string">"indexeddb"</span><span class="token punctuation">,</span>
+      <span class="token literal-property property">enabled</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+      <span class="token literal-property property">defaultCollection</span><span class="token operator">:</span> <span class="token string">"my-cats"</span><span class="token punctuation">,</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token literal-property property">behavior</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+      <span class="token literal-property property">boundaries</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+        <span class="token literal-property property">minX</span><span class="token operator">:</span> <span class="token number">0</span><span class="token punctuation">,</span>
+        <span class="token literal-property property">maxX</span><span class="token operator">:</span> window<span class="token punctuation">.</span>innerWidth<span class="token punctuation">,</span>
+        <span class="token literal-property property">minY</span><span class="token operator">:</span> <span class="token number">0</span><span class="token punctuation">,</span>
+        <span class="token literal-property property">maxY</span><span class="token operator">:</span> window<span class="token punctuation">.</span>innerHeight<span class="token punctuation">,</span>
+      <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token keyword">await</span> meowzer<span class="token punctuation">.</span><span class="token function">init</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">"Meowzer initialized! ✅"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token function">setupEventListeners</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">async</span> <span class="token keyword">function</span> <span class="token function">createCat</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span>currentCat<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    currentCat<span class="token punctuation">.</span><span class="token function">destroy</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token keyword">const</span> name <span class="token operator">=</span> document<span class="token punctuation">.</span><span class="token function">getElementById</span><span class="token punctuation">(</span><span class="token string">"cat-name"</span><span class="token punctuation">)</span><span class="token punctuation">.</span>value<span class="token punctuation">;</span>
+  <span class="token keyword">const</span> furColor <span class="token operator">=</span> document<span class="token punctuation">.</span><span class="token function">getElementById</span><span class="token punctuation">(</span><span class="token string">"fur-color"</span><span class="token punctuation">)</span><span class="token punctuation">.</span>value<span class="token punctuation">;</span>
+  <span class="token keyword">const</span> eyeColor <span class="token operator">=</span> document<span class="token punctuation">.</span><span class="token function">getElementById</span><span class="token punctuation">(</span><span class="token string">"eye-color"</span><span class="token punctuation">)</span><span class="token punctuation">.</span>value<span class="token punctuation">;</span>
+  <span class="token keyword">const</span> pattern <span class="token operator">=</span> document<span class="token punctuation">.</span><span class="token function">getElementById</span><span class="token punctuation">(</span><span class="token string">"pattern"</span><span class="token punctuation">)</span><span class="token punctuation">.</span>value<span class="token punctuation">;</span>
+  <span class="token keyword">const</span> personality <span class="token operator">=</span> document<span class="token punctuation">.</span><span class="token function">getElementById</span><span class="token punctuation">(</span><span class="token string">"personality"</span><span class="token punctuation">)</span><span class="token punctuation">.</span>value<span class="token punctuation">;</span>
+
+  currentCat <span class="token operator">=</span> <span class="token keyword">await</span> meowzer<span class="token punctuation">.</span>cats<span class="token punctuation">.</span><span class="token function">create</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+    <span class="token literal-property property">name</span><span class="token operator">:</span> name<span class="token punctuation">,</span>
+    <span class="token literal-property property">settings</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+      <span class="token literal-property property">color</span><span class="token operator">:</span> furColor<span class="token punctuation">,</span>
+      <span class="token literal-property property">eyeColor</span><span class="token operator">:</span> eyeColor<span class="token punctuation">,</span>
+      <span class="token literal-property property">pattern</span><span class="token operator">:</span> pattern<span class="token punctuation">,</span>
+      <span class="token literal-property property">size</span><span class="token operator">:</span> <span class="token string">"medium"</span><span class="token punctuation">,</span>
+      <span class="token literal-property property">furLength</span><span class="token operator">:</span> <span class="token string">"short"</span><span class="token punctuation">,</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token literal-property property">personality</span><span class="token operator">:</span> personality<span class="token punctuation">,</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  currentCat<span class="token punctuation">.</span><span class="token function">place</span><span class="token punctuation">(</span>document<span class="token punctuation">.</span>body<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">Created cat: </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>currentCat<span class="token punctuation">.</span>name<span class="token interpolation-punctuation punctuation">}</span></span><span class="token template-punctuation string">`</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token function">updateCatInfo</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  currentCat<span class="token punctuation">.</span><span class="token function">on</span><span class="token punctuation">(</span><span class="token string">"stateChanged"</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token parameter">event</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+    console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token template-string"><span class="token template-punctuation string">`</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>currentCat<span class="token punctuation">.</span>name<span class="token interpolation-punctuation punctuation">}</span></span><span class="token string"> is now </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>event<span class="token punctuation">.</span>newState<span class="token interpolation-punctuation punctuation">}</span></span><span class="token template-punctuation string">`</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">async</span> <span class="token keyword">function</span> <span class="token function">feedCat</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>currentCat<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token function">alert</span><span class="token punctuation">(</span><span class="token string">"Create a cat first!"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token keyword">const</span> catPosition <span class="token operator">=</span> currentCat<span class="token punctuation">.</span><span class="token function">getPosition</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">await</span> meowzer<span class="token punctuation">.</span>interactions<span class="token punctuation">.</span><span class="token function">placeNeed</span><span class="token punctuation">(</span><span class="token string">"food:basic"</span><span class="token punctuation">,</span> <span class="token punctuation">{</span>
+    <span class="token literal-property property">x</span><span class="token operator">:</span> catPosition<span class="token punctuation">.</span>x <span class="token operator">+</span> <span class="token number">100</span><span class="token punctuation">,</span>
+    <span class="token literal-property property">y</span><span class="token operator">:</span> catPosition<span class="token punctuation">.</span>y<span class="token punctuation">,</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">"Food placed!"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">async</span> <span class="token keyword">function</span> <span class="token function">throwYarn</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>currentCat<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token function">alert</span><span class="token punctuation">(</span><span class="token string">"Create a cat first!"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token keyword">const</span> x <span class="token operator">=</span> Math<span class="token punctuation">.</span><span class="token function">random</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">*</span> window<span class="token punctuation">.</span>innerWidth<span class="token punctuation">;</span>
+  <span class="token keyword">const</span> y <span class="token operator">=</span> Math<span class="token punctuation">.</span><span class="token function">random</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">*</span> window<span class="token punctuation">.</span>innerHeight<span class="token punctuation">;</span>
+
+  <span class="token keyword">await</span> meowzer<span class="token punctuation">.</span>interactions<span class="token punctuation">.</span><span class="token function">placeYarn</span><span class="token punctuation">(</span><span class="token punctuation">{</span> x<span class="token punctuation">,</span> y <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">"Yarn thrown!"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">async</span> <span class="token keyword">function</span> <span class="token function">saveCat</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>currentCat<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token function">alert</span><span class="token punctuation">(</span><span class="token string">"Create a cat first!"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token keyword">try</span> <span class="token punctuation">{</span>
+    <span class="token keyword">await</span> meowzer<span class="token punctuation">.</span>storage<span class="token punctuation">.</span><span class="token function">save</span><span class="token punctuation">(</span>currentCat<span class="token punctuation">.</span>id<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">alert</span><span class="token punctuation">(</span><span class="token template-string"><span class="token template-punctuation string">`</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>currentCat<span class="token punctuation">.</span>name<span class="token interpolation-punctuation punctuation">}</span></span><span class="token string"> saved successfully! 💾</span><span class="token template-punctuation string">`</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span>error<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    console<span class="token punctuation">.</span><span class="token function">error</span><span class="token punctuation">(</span><span class="token string">"Failed to save cat:"</span><span class="token punctuation">,</span> error<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">alert</span><span class="token punctuation">(</span><span class="token string">"Failed to save cat."</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">async</span> <span class="token keyword">function</span> <span class="token function">loadCat</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">try</span> <span class="token punctuation">{</span>
+    <span class="token keyword">const</span> savedCats <span class="token operator">=</span> <span class="token keyword">await</span> meowzer<span class="token punctuation">.</span>storage<span class="token punctuation">.</span><span class="token function">listCats</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>savedCats<span class="token punctuation">.</span>length <span class="token operator">===</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token function">alert</span><span class="token punctuation">(</span><span class="token string">"No saved cats found!"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token keyword">return</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">const</span> latestCat <span class="token operator">=</span> savedCats<span class="token punctuation">[</span>savedCats<span class="token punctuation">.</span>length <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>currentCat<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      currentCat<span class="token punctuation">.</span><span class="token function">destroy</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    currentCat <span class="token operator">=</span> <span class="token keyword">await</span> meowzer<span class="token punctuation">.</span>storage<span class="token punctuation">.</span><span class="token function">load</span><span class="token punctuation">(</span>latestCat<span class="token punctuation">.</span>id<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    currentCat<span class="token punctuation">.</span><span class="token function">place</span><span class="token punctuation">(</span>document<span class="token punctuation">.</span>body<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">Loaded cat: </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>currentCat<span class="token punctuation">.</span>name<span class="token interpolation-punctuation punctuation">}</span></span><span class="token template-punctuation string">`</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">updateCatInfo</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">alert</span><span class="token punctuation">(</span><span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">Loaded </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>currentCat<span class="token punctuation">.</span>name<span class="token interpolation-punctuation punctuation">}</span></span><span class="token string">! 📂</span><span class="token template-punctuation string">`</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span>error<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    console<span class="token punctuation">.</span><span class="token function">error</span><span class="token punctuation">(</span><span class="token string">"Failed to load cat:"</span><span class="token punctuation">,</span> error<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">alert</span><span class="token punctuation">(</span><span class="token string">"Failed to load cat."</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">function</span> <span class="token function">updateCatInfo</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">const</span> infoDiv <span class="token operator">=</span> document<span class="token punctuation">.</span><span class="token function">getElementById</span><span class="token punctuation">(</span><span class="token string">"cat-info"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>currentCat<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    infoDiv<span class="token punctuation">.</span>innerHTML <span class="token operator">=</span> <span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">
+      &lt;p>&lt;strong>No cat yet&lt;/strong>&lt;/p>
+      &lt;p>Create a cat to get started!&lt;/p>
+    </span><span class="token template-punctuation string">`</span></span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token keyword">const</span> position <span class="token operator">=</span> currentCat<span class="token punctuation">.</span><span class="token function">getPosition</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  infoDiv<span class="token punctuation">.</span>innerHTML <span class="token operator">=</span> <span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">
+    &lt;p>&lt;strong>Name:&lt;/strong> </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>currentCat<span class="token punctuation">.</span>name<span class="token interpolation-punctuation punctuation">}</span></span><span class="token string">&lt;/p>
+    &lt;p>&lt;strong>ID:&lt;/strong> </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>currentCat<span class="token punctuation">.</span>id<span class="token punctuation">.</span><span class="token function">substring</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">8</span><span class="token punctuation">)</span><span class="token interpolation-punctuation punctuation">}</span></span><span class="token string">...&lt;/p>
+    &lt;p>&lt;strong>Position:&lt;/strong> (</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>Math<span class="token punctuation">.</span><span class="token function">round</span><span class="token punctuation">(</span>
+      position<span class="token punctuation">.</span>x
+    <span class="token punctuation">)</span><span class="token interpolation-punctuation punctuation">}</span></span><span class="token string">, </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>Math<span class="token punctuation">.</span><span class="token function">round</span><span class="token punctuation">(</span>position<span class="token punctuation">.</span>y<span class="token punctuation">)</span><span class="token interpolation-punctuation punctuation">}</span></span><span class="token string">)&lt;/p>
+    &lt;p>&lt;strong>State:&lt;/strong> </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>currentCat<span class="token punctuation">.</span><span class="token function">getState</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token interpolation-punctuation punctuation">}</span></span><span class="token string">&lt;/p>
+  </span><span class="token template-punctuation string">`</span></span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">function</span> <span class="token function">setupEventListeners</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  document
+    <span class="token punctuation">.</span><span class="token function">getElementById</span><span class="token punctuation">(</span><span class="token string">"create-cat"</span><span class="token punctuation">)</span>
+    <span class="token punctuation">.</span><span class="token function">addEventListener</span><span class="token punctuation">(</span><span class="token string">"click"</span><span class="token punctuation">,</span> createCat<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  document
+    <span class="token punctuation">.</span><span class="token function">getElementById</span><span class="token punctuation">(</span><span class="token string">"feed-cat"</span><span class="token punctuation">)</span>
+    <span class="token punctuation">.</span><span class="token function">addEventListener</span><span class="token punctuation">(</span><span class="token string">"click"</span><span class="token punctuation">,</span> feedCat<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  document
+    <span class="token punctuation">.</span><span class="token function">getElementById</span><span class="token punctuation">(</span><span class="token string">"throw-yarn"</span><span class="token punctuation">)</span>
+    <span class="token punctuation">.</span><span class="token function">addEventListener</span><span class="token punctuation">(</span><span class="token string">"click"</span><span class="token punctuation">,</span> throwYarn<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  document
+    <span class="token punctuation">.</span><span class="token function">getElementById</span><span class="token punctuation">(</span><span class="token string">"save-cat"</span><span class="token punctuation">)</span>
+    <span class="token punctuation">.</span><span class="token function">addEventListener</span><span class="token punctuation">(</span><span class="token string">"click"</span><span class="token punctuation">,</span> saveCat<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  document
+    <span class="token punctuation">.</span><span class="token function">getElementById</span><span class="token punctuation">(</span><span class="token string">"load-cat"</span><span class="token punctuation">)</span>
+    <span class="token punctuation">.</span><span class="token function">addEventListener</span><span class="token punctuation">(</span><span class="token string">"click"</span><span class="token punctuation">,</span> loadCat<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  window<span class="token punctuation">.</span><span class="token function">addEventListener</span><span class="token punctuation">(</span><span class="token string">"resize"</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>currentCat<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      currentCat<span class="token punctuation">.</span><span class="token function">setBoundaries</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+        <span class="token literal-property property">minX</span><span class="token operator">:</span> <span class="token number">0</span><span class="token punctuation">,</span>
+        <span class="token literal-property property">maxX</span><span class="token operator">:</span> window<span class="token punctuation">.</span>innerWidth<span class="token punctuation">,</span>
+        <span class="token literal-property property">minY</span><span class="token operator">:</span> <span class="token number">0</span><span class="token punctuation">,</span>
+        <span class="token literal-property property">maxY</span><span class="token operator">:</span> window<span class="token punctuation">.</span>innerHeight<span class="token punctuation">,</span>
+      <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token function">setInterval</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>currentCat<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token function">updateCatInfo</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token number">2000</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token function">init</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<h2 id="run-your-project" tabindex="-1"><a class="heading-anchor" href="#run-your-project"><span>Run Your Project</span></a></h2>
+<p>Start the development server:</p>
+<pre class="language-bash" tabindex="0"><code class="language-bash"><span class="token function">npm</span> run dev</code></pre>
+<p>Open the URL shown (usually <code>http://localhost:5173</code>) in your browser.</p>
+<h2 id="try-it-out" tabindex="-1"><a class="heading-anchor" href="#try-it-out"><span>Try It Out</span></a></h2>
+<p>Now you can:</p>
+<ol>
+<li><strong>Create a cat</strong> - Customize name, colors, pattern, personality</li>
+<li><strong>Watch it wander</strong> - The cat moves autonomously</li>
+<li><strong>Feed it</strong> - Click “Feed Cat” to place food</li>
+<li><strong>Play with it</strong> - Click “Throw Yarn” for a toy</li>
+<li><strong>Save it</strong> - Click “Save Cat” to persist to IndexedDB</li>
+<li><strong>Reload the page</strong> - Click “Load Cat” to restore your saved cat</li>
+</ol>
+<h2 id="understanding-the-cats-behavior" tabindex="-1"><a class="heading-anchor" href="#understanding-the-cats-behavior"><span>Understanding the Cat’s Behavior</span></a></h2>
+<h3 id="personality-effects" tabindex="-1"><a class="heading-anchor" href="#personality-effects"><span>Personality Effects</span></a></h3>
+<p>Different personalities behave differently:</p>
+<ul>
+<li><strong>Playful</strong> - Interacts with toys more, energetic movement</li>
+<li><strong>Lazy</strong> - Sits more often, moves slowly</li>
+<li><strong>Curious</strong> - Explores more, investigates new items</li>
+<li><strong>Energetic</strong> - Rarely stops moving, fast pace</li>
+<li><strong>Calm</strong> - Balanced behavior, peaceful movements</li>
+</ul>
+<h3 id="state-machine" tabindex="-1"><a class="heading-anchor" href="#state-machine"><span>State Machine</span></a></h3>
+<p>Cats go through different states:</p>
+<ul>
+<li><code>idle</code> - Standing still, looking around</li>
+<li><code>walking</code> - Moving to a destination</li>
+<li><code>sitting</code> - Resting</li>
+<li><code>playing</code> - Interacting with a toy</li>
+<li><code>eating</code> - Consuming food</li>
+</ul>
+<p>Watch the console and info panel to see state changes!</p>
+<h2 id="next-steps" tabindex="-1"><a class="heading-anchor" href="#next-steps"><span>Next Steps</span></a></h2>
+<p>Congratulations! You’ve created a fully functional Meowzer cat with:</p>
+<ul>
+<li>✅ Custom appearance</li>
+<li>✅ Personality traits</li>
+<li>✅ Interactions</li>
+<li>✅ Persistence</li>
+</ul>
+<h3 id="enhancements-to-try" tabindex="-1"><a class="heading-anchor" href="#enhancements-to-try"><span>Enhancements to Try</span></a></h3>
+<ol>
+<li><strong>Add more cats</strong> - Create multiple cats at once</li>
+<li><strong>Custom boundaries</strong> - Restrict cats to specific areas</li>
+<li><strong>Laser pointer</strong> - Implement mouse-following laser</li>
+<li><strong>Collection management</strong> - Load different saved cats</li>
+<li><strong>Visual feedback</strong> - Show animations when feeding/playing</li>
+</ol>
+<h3 id="continue-learning" tabindex="-1"><a class="heading-anchor" href="#continue-learning"><span>Continue Learning</span></a></h3>
+<ul>
+<li><a href="/docs/tutorials/basic-integration"><strong>Basic Integration Tutorial</strong></a> - Build a simple cat page</li>
+<li><a href="/docs/guides/customization"><strong>Customization Guide</strong></a> - All appearance options</li>
+<li><a href="/docs/guides/interactions"><strong>Interactions Guide</strong></a> - Complete interaction reference</li>
+<li><a href="/docs/api/meowzer-sdk"><strong>API Reference</strong></a> - Full SDK documentation</li>
+</ul>
+<h2 id="common-issues" tabindex="-1"><a class="heading-anchor" href="#common-issues"><span>Common Issues</span></a></h2>
+<h3 id="cat-doesnt-appear" tabindex="-1"><a class="heading-anchor" href="#cat-doesnt-appear"><span>Cat doesn’t appear</span></a></h3>
+<p><strong>Check:</strong> Did you call <code>await meowzer.init()</code> before creating the cat?</p>
+<h3 id="cat-wanders-off-screen" tabindex="-1"><a class="heading-anchor" href="#cat-wanders-off-screen"><span>Cat wanders off screen</span></a></h3>
+<p><strong>Solution:</strong> Boundaries are set on initialization. Make sure they match your viewport.</p>
+<h3 id="storage-fails-in-private-mode" tabindex="-1"><a class="heading-anchor" href="#storage-fails-in-private-mode"><span>Storage fails in private mode</span></a></h3>
+<p><strong>Solution:</strong> Some browsers disable IndexedDB in private mode. Use memory adapter:</p>
+<pre class="language-javascript" tabindex="0"><code class="language-javascript"><span class="token keyword">const</span> meowzer <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Meowzer</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+  <span class="token literal-property property">storage</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token literal-property property">adapter</span><span class="token operator">:</span> <span class="token string">"memory"</span><span class="token punctuation">,</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<h3 id="foodyarn-doesnt-appear" tabindex="-1"><a class="heading-anchor" href="#foodyarn-doesnt-appear"><span>Food/Yarn doesn’t appear</span></a></h3>
+<p><strong>Check:</strong> Items are placed at specific coordinates. Make sure coordinates are within viewport bounds.</p>
+<h2 id="full-project-download" tabindex="-1"><a class="heading-anchor" href="#full-project-download"><span>Full Project Download</span></a></h2>
+<p>Want the complete code? <a href="#">Download the example project on GitHub</a> (coming soon).</p>
+<p>Happy cat-making! 🐱</p>
+
+  </div>
+</mb-doc-template>
+
+    
+    
+    <script type="module" src="/scripts/main.js"></script>
+  </body>
+</html>

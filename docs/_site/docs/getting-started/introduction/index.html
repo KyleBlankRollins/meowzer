@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Introduction to Meowzer | Meowzer</title>
+    <meta name="description" content="Learn what Meowzer is and what it can do" />
+    
+    
+    <link rel="stylesheet" href="/styles/main.css" />
+    
+    <script>
+      // Apply Carbon dark theme class immediately to prevent flash
+      (function() {
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (prefersDark) {
+          document.documentElement.classList.add('cds-theme-g90');
+        } else {
+          document.documentElement.classList.add('cds-theme-g10');
+        }
+        
+        // Listen for theme changes
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+          if (e.matches) {
+            document.documentElement.classList.remove('cds-theme-g10');
+            document.documentElement.classList.add('cds-theme-g90');
+          } else {
+            document.documentElement.classList.remove('cds-theme-g90');
+            document.documentElement.classList.add('cds-theme-g10');
+          }
+        });
+      })();
+    </script>
+    <script type="module" crossorigin src="/assets/modulepreload-polyfill-B5Qt9EMX.js"></script>
+  </head>
+  <body>
+    
+    <mb-nav
+      data-links='[{&quot;title&quot;:&quot;API Reference&quot;,&quot;url&quot;:&quot;/api/&quot;},{&quot;title&quot;:&quot;Developer Documentation&quot;,&quot;url&quot;:&quot;/docs/&quot;},{&quot;title&quot;:&quot;Play with Meowzer&quot;,&quot;url&quot;:&quot;/play/&quot;}]'
+      data-current-url="/docs/getting-started/introduction/"
+      data-site-title="Meowzer 🐱"
+    ></mb-nav>
+    
+    
+    <mb-doc-template
+  data-frontmatter='{&quot;title&quot;:&quot;Introduction to Meowzer&quot;,&quot;description&quot;:&quot;Learn what Meowzer is and what it can do&quot;,&quot;next&quot;:&quot;/docs/getting-started/installation&quot;}'
+>
+  
+  <mb-sidebar
+    slot="sidebar"
+    data-navigation='[{&quot;title&quot;:&quot;API Reference&quot;,&quot;url&quot;:&quot;/api/&quot;,&quot;children&quot;:[{&quot;title&quot;:&quot;Collections API&quot;,&quot;url&quot;:&quot;/api/collections/&quot;,&quot;children&quot;:[]}]},{&quot;title&quot;:&quot;Developer Documentation&quot;,&quot;url&quot;:&quot;/docs/&quot;,&quot;children&quot;:[{&quot;title&quot;:&quot;Getting Started&quot;,&quot;url&quot;:&quot;/docs/getting-started/&quot;,&quot;children&quot;:[{&quot;title&quot;:&quot;Your First Cat - Detailed Tutorial&quot;,&quot;url&quot;:&quot;/docs/getting-started/first-cat/&quot;},{&quot;title&quot;:&quot;Installation&quot;,&quot;url&quot;:&quot;/docs/getting-started/installation/&quot;},{&quot;title&quot;:&quot;Introduction to Meowzer&quot;,&quot;url&quot;:&quot;/docs/getting-started/introduction/&quot;},{&quot;title&quot;:&quot;Quick Start&quot;,&quot;url&quot;:&quot;/docs/getting-started/quick-start/&quot;}]}]},{&quot;title&quot;:&quot;Play with Meowzer&quot;,&quot;url&quot;:&quot;/play/&quot;,&quot;children&quot;:[]}]'
+    data-current-url="/docs/getting-started/introduction/"
+  ></mb-sidebar>
+  
+  <div slot="content">
+    <h1 id="introduction-to-meowzer" tabindex="-1"><a class="heading-anchor" href="#introduction-to-meowzer"><span>Introduction to Meowzer</span></a></h1>
+<p>Meowzer is a TypeScript SDK for creating autonomous, animated cat sprites with AI-driven behaviors. It brings delightful, interactive cats to web projects.</p>
+<h2 id="what-is-meowzer" tabindex="-1"><a class="heading-anchor" href="#what-is-meowzer"><span>What is Meowzer?</span></a></h2>
+<p>Meowzer creates animated cats that:</p>
+<ul>
+<li><strong>Move on their own</strong> - Powered by AI decision-making engine (MeowBrain)</li>
+<li><strong>Have unique personalities</strong> - Curious, playful, lazy, energetic, etc.</li>
+<li><strong>Respond to interactions</strong> - Food, water, toys, laser pointers</li>
+<li><strong>Persist across sessions</strong> - Save and load from IndexedDB</li>
+<li><strong>Look great</strong> - Smooth GSAP animations and procedural generation</li>
+</ul>
+<h2 id="perfect-for" tabindex="-1"><a class="heading-anchor" href="#perfect-for"><span>Perfect For</span></a></h2>
+<p><strong>Interactive Websites</strong>
+Add life to landing pages, portfolios, or marketing sites with wandering cats.</p>
+<p><strong>Games &amp; Experiences</strong>
+Create pet simulation games, virtual companions, or interactive storytelling.</p>
+<p><strong>Educational Projects</strong>
+Demonstrate AI behaviors, state machines, or animation techniques.</p>
+<p><strong>Creative Experiments</strong>
+Build unique, delightful web experiences that stand out.</p>
+<h2 id="key-features" tabindex="-1"><a class="heading-anchor" href="#key-features"><span>Key Features</span></a></h2>
+<h3 id="-customizable-appearance" tabindex="-1"><a class="heading-anchor" href="#-customizable-appearance"><span>🎨 Customizable Appearance</span></a></h3>
+<ul>
+<li>Procedurally generated or fully custom</li>
+<li>Fur colors and patterns (tabby, spotted, tuxedo, calico)</li>
+<li>Eye colors</li>
+<li>Different sizes</li>
+<li>Accessories (coming soon: hats, collars)</li>
+</ul>
+<h3 id="-autonomous-ai-meowbrain" tabindex="-1"><a class="heading-anchor" href="#-autonomous-ai-meowbrain"><span>🧠 Autonomous AI (MeowBrain)</span></a></h3>
+<ul>
+<li>Personality-driven decision making</li>
+<li>Behavior system (wandering, playing, resting, exploring)</li>
+<li>Environmental awareness</li>
+<li>Interaction responses</li>
+<li>Configurable decision frequency</li>
+</ul>
+<h3 id="-smooth-animation-meowtion" tabindex="-1"><a class="heading-anchor" href="#-smooth-animation-meowtion"><span>✨ Smooth Animation (Meowtion)</span></a></h3>
+<ul>
+<li>GSAP-based movement</li>
+<li>Multiple states (idle, walking, sitting, sleeping, running)</li>
+<li>Curved path generation</li>
+<li>Boundary detection</li>
+<li>Physics simulation</li>
+</ul>
+<h3 id="-interactive-elements" tabindex="-1"><a class="heading-anchor" href="#-interactive-elements"><span>🎮 Interactive Elements</span></a></h3>
+<ul>
+<li><strong>Food</strong> - Basic and fancy variants</li>
+<li><strong>Water</strong> - Hydration system</li>
+<li><strong>Yarn</strong> - Throwable and battable</li>
+<li><strong>Laser Pointer</strong> - Chase mechanics</li>
+<li><strong>Custom interactions</strong> - Extend with plugins</li>
+</ul>
+<h3 id="-persistence-meowbase" tabindex="-1"><a class="heading-anchor" href="#-persistence-meowbase"><span>💾 Persistence (MeowBase)</span></a></h3>
+<ul>
+<li>IndexedDB storage</li>
+<li>Collection management</li>
+<li>Async operations</li>
+<li>Import/export cats</li>
+<li>Migration support</li>
+</ul>
+<h3 id="-extensible" tabindex="-1"><a class="heading-anchor" href="#-extensible"><span>🔌 Extensible</span></a></h3>
+<ul>
+<li>Plugin system</li>
+<li>Lifecycle hooks</li>
+<li>Event emitters</li>
+<li>Custom behaviors</li>
+<li>Framework integrations</li>
+</ul>
+<h2 id="architecture" tabindex="-1"><a class="heading-anchor" href="#architecture"><span>Architecture</span></a></h2>
+<p>Meowzer combines four specialized libraries:</p>
+<pre><code>┌──────────────────────────────────────┐
+│         MEOWZER SDK                  │
+│     (Main API Entry Point)           │
+└──────────────────────────────────────┘
+          │
+          ├──► Managers (API Layer)
+          │    ├── CatManager
+          │    ├── StorageManager
+          │    ├── InteractionManager
+          │    ├── HookManager
+          │    └── PluginManager
+          │
+          └──► Core Libraries
+               ├── MeowKit   - Cat generation
+               ├── Meowtion  - Animation engine
+               ├── MeowBrain - AI behaviors
+               └── MeowBase  - Storage layer
+</code></pre>
+<p><strong>MeowKit</strong> generates cat appearance from settings → Creates ProtoCat data</p>
+<p><strong>Meowtion</strong> renders ProtoCat as animated SVG → Manages movement and states</p>
+<p><strong>MeowBrain</strong> adds autonomous decision-making → Controls cat behaviors</p>
+<p><strong>MeowzerCat</strong> wraps everything → Public API you interact with</p>
+<p><strong>MeowBase</strong> persists cats → Survive page reloads</p>
+<p>Learn more in <a href="/docs/concepts/architecture">Architecture Concepts</a>.</p>
+<h2 id="how-it-works" tabindex="-1"><a class="heading-anchor" href="#how-it-works"><span>How It Works</span></a></h2>
+<h3 id="1-initialize-the-sdk" tabindex="-1"><a class="heading-anchor" href="#1-initialize-the-sdk"><span>1. Initialize the SDK</span></a></h3>
+<pre class="language-typescript" tabindex="0"><code class="language-typescript"><span class="token keyword">import</span> <span class="token punctuation">{</span> Meowzer <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"meowzer"</span><span class="token punctuation">;</span>
+
+<span class="token keyword">const</span> meowzer <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Meowzer</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">await</span> meowzer<span class="token punctuation">.</span><span class="token function">init</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<h3 id="2-create-a-cat" tabindex="-1"><a class="heading-anchor" href="#2-create-a-cat"><span>2. Create a Cat</span></a></h3>
+<pre class="language-typescript" tabindex="0"><code class="language-typescript"><span class="token keyword">const</span> cat <span class="token operator">=</span> <span class="token keyword">await</span> meowzer<span class="token punctuation">.</span>cats<span class="token punctuation">.</span><span class="token function">create</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+  name<span class="token operator">:</span> <span class="token string">"Whiskers"</span><span class="token punctuation">,</span>
+  settings<span class="token operator">:</span> <span class="token punctuation">{</span>
+    color<span class="token operator">:</span> <span class="token string">"#FF9500"</span><span class="token punctuation">,</span>
+    pattern<span class="token operator">:</span> <span class="token string">"tabby"</span><span class="token punctuation">,</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p><strong>What happens:</strong></p>
+<ol>
+<li>MeowKit generates unique cat appearance</li>
+<li>Meowtion creates animated sprite</li>
+<li>MeowBrain initializes AI decision engine</li>
+<li>Everything wrapped in MeowzerCat instance</li>
+</ol>
+<h3 id="3-place-on-page" tabindex="-1"><a class="heading-anchor" href="#3-place-on-page"><span>3. Place on Page</span></a></h3>
+<pre class="language-typescript" tabindex="0"><code class="language-typescript">cat<span class="token punctuation">.</span><span class="token function">place</span><span class="token punctuation">(</span>document<span class="token punctuation">.</span>body<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p><strong>What happens:</strong></p>
+<ol>
+<li>DOM element appended to container</li>
+<li>AI behaviors start</li>
+<li>Cat begins autonomous wandering</li>
+<li>Event listeners activated</li>
+</ol>
+<h3 id="4-cat-lives-autonomously" tabindex="-1"><a class="heading-anchor" href="#4-cat-lives-autonomously"><span>4. Cat Lives Autonomously</span></a></h3>
+<p>The cat now:</p>
+<ul>
+<li>Makes decisions every 5-30 seconds</li>
+<li>Executes behaviors (wandering, resting, playing)</li>
+<li>Responds to interactions</li>
+<li>Emits events for state changes</li>
+</ul>
+<h2 id="browser-support" tabindex="-1"><a class="heading-anchor" href="#browser-support"><span>Browser Support</span></a></h2>
+<p><strong>Minimum Requirements:</strong></p>
+<ul>
+<li>ES6+ support</li>
+<li>RequestAnimationFrame API</li>
+<li>IndexedDB (for persistence features)</li>
+<li>Modern browser (Chrome 90+, Firefox 88+, Safari 14+, Edge 90+)</li>
+</ul>
+<p><strong>Dependencies:</strong></p>
+<ul>
+<li><code>gsap</code> - Animation library (only runtime dependency)</li>
+</ul>
+<h2 id="typescript-support" tabindex="-1"><a class="heading-anchor" href="#typescript-support"><span>TypeScript Support</span></a></h2>
+<p>Meowzer is TypeScript-first with:</p>
+<ul>
+<li>Full type definitions</li>
+<li>Strict type checking</li>
+<li>Comprehensive JSDoc comments</li>
+<li>Type inference</li>
+</ul>
+<pre class="language-typescript" tabindex="0"><code class="language-typescript"><span class="token keyword">import</span> <span class="token keyword">type</span> <span class="token punctuation">{</span>
+  MeowzerConfig<span class="token punctuation">,</span>
+  CatSettings<span class="token punctuation">,</span>
+  Personality<span class="token punctuation">,</span>
+<span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"meowzer"</span><span class="token punctuation">;</span></code></pre>
+<h2 id="whats-next" tabindex="-1"><a class="heading-anchor" href="#whats-next"><span>What’s Next?</span></a></h2>
+<p>Ready to get started?</p>
+<ol>
+<li><a href="/docs/getting-started/installation"><strong>Installation</strong></a> - Install Meowzer in your project</li>
+<li><a href="/docs/getting-started/quick-start"><strong>Quick Start</strong></a> - Your first cat in 5 minutes</li>
+<li><a href="/docs/getting-started/first-cat"><strong>First Cat Tutorial</strong></a> - Detailed walkthrough</li>
+</ol>
+<p>Or explore concepts:</p>
+<ul>
+<li><a href="/docs/concepts/architecture">Architecture</a> - How the pieces fit together</li>
+<li><a href="/docs/concepts/cat-lifecycle">Cat Lifecycle</a> - From creation to destruction</li>
+<li><a href="/docs/concepts/ai-behaviors">AI Behaviors</a> - How cats make decisions</li>
+</ul>
+
+  </div>
+</mb-doc-template>
+
+    
+    
+    <script type="module" src="/scripts/main.js"></script>
+  </body>
+</html>

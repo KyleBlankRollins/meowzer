@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{ title }} | Meowzer</title>
+    <meta name="description" content="{{ description }}" />
+    
+    {# Styles - Vite will process these automatically #}
+    <link rel="stylesheet" href="{{ '/styles/main.css' | url }}" />
+    
+    <script>
+      // Apply Carbon dark theme class immediately to prevent flash
+      (function() {
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (prefersDark) {
+          document.documentElement.classList.add('cds-theme-g90');
+        } else {
+          document.documentElement.classList.add('cds-theme-g10');
+        }
+        
+        // Listen for theme changes
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+          if (e.matches) {
+            document.documentElement.classList.remove('cds-theme-g10');
+            document.documentElement.classList.add('cds-theme-g90');
+          } else {
+            document.documentElement.classList.remove('cds-theme-g90');
+            document.documentElement.classList.add('cds-theme-g10');
+          }
+        });
+      })();
+    </script>
+  </head>
+  <body>
+    {# Navigation component with top-level navigation links #}
+    <mb-nav
+      data-links='{{ collections.topNav | dump | safe }}'
+      data-current-url="{{ page.url }}"
+      data-site-title="Meowzer 🐱"
+    ></mb-nav>
+    
+    {# Main content from child layouts #}
+    {{ content | safe }}
+    
+    {# Scripts - Vite will process these automatically #}
+    <script type="module" src="{{ '/scripts/main.js' | url }}"></script>
+  </body>
+</html>

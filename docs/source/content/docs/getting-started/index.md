@@ -1,6 +1,6 @@
 ---
 title: Getting Started
-template: Landing
+layout: layouts/landing.njk
 description: Everything you need to start using Meowzer
 ---
 
@@ -34,7 +34,7 @@ Set up Meowzer in your project using npm, yarn, or pnpm.
 
 ### 3. Quick Start
 
-[Your First Cat in 5 Minutes](/docs/getting-started/quick-start) _(Coming Soon)_
+[Your First Cat in 5 Minutes](/docs/getting-started/quick-start)
 
 Create and place your first autonomous cat with minimal code.
 
@@ -44,7 +44,7 @@ Create and place your first autonomous cat with minimal code.
 
 ### 4. First Cat Tutorial
 
-[Detailed Walkthrough](/docs/getting-started/first-cat) _(Coming Soon)_
+[Detailed Walkthrough](/docs/getting-started/first-cat)
 
 Build a complete example step-by-step with explanations.
 

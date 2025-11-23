@@ -1,6 +1,6 @@
 ---
 title: Developer Documentation
-template: Landing
+layout: layouts/landing.njk
 description: Learn how to integrate Meowzer into your projects
 ---
 

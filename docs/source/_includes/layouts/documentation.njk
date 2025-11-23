@@ -1,0 +1,17 @@
+---
+layout: layouts/base.njk
+---
+<mb-doc-template
+  data-frontmatter='{{ { title: title, description: description, previous: previous, next: next } | dump | safe }}'
+>
+  {# Sidebar with hierarchical navigation #}
+  <mb-sidebar
+    slot="sidebar"
+    data-navigation='{{ collections.navigation | dump | safe }}'
+    data-current-url="{{ page.url }}"
+  ></mb-sidebar>
+  
+  <div slot="content">
+    {{ content | safe }}
+  </div>
+</mb-doc-template>
