@@ -8,30 +8,6 @@
     
     
     <link rel="stylesheet" href="/styles/main.css" />
-    
-    <script>
-      // Apply Carbon dark theme class immediately to prevent flash
-      (function() {
-        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        if (prefersDark) {
-          document.documentElement.classList.add('cds-theme-g90');
-        } else {
-          document.documentElement.classList.add('cds-theme-g10');
-        }
-        
-        // Listen for theme changes
-        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
-          if (e.matches) {
-            document.documentElement.classList.remove('cds-theme-g10');
-            document.documentElement.classList.add('cds-theme-g90');
-          } else {
-            document.documentElement.classList.remove('cds-theme-g90');
-            document.documentElement.classList.add('cds-theme-g10');
-          }
-        });
-      })();
-    </script>
-    <script type="module" crossorigin src="/assets/modulepreload-polyfill-B5Qt9EMX.js"></script>
   </head>
   <body>
     
@@ -53,9 +29,9 @@
   ></mb-sidebar>
   
   <div slot="content">
-    <h1 id="quick-start" tabindex="-1"><a class="heading-anchor" href="#quick-start"><span>Quick Start</span></a></h1>
+    <h1 id="quick-start" tabindex="-1">Quick Start <a class="heading-anchor" href="#quick-start" aria-hidden="true">#</a></h1>
 <p>Get a cat on your page in under 5 minutes. This guide assumes you’ve already <a href="/docs/getting-started/installation">installed Meowzer</a>.</p>
-<h2 id="the-essentials" tabindex="-1"><a class="heading-anchor" href="#the-essentials"><span>The Essentials</span></a></h2>
+<h2 id="the-essentials" tabindex="-1">The Essentials <a class="heading-anchor" href="#the-essentials" aria-hidden="true">#</a></h2>
 <p>Creating a Meowzer cat requires just 4 steps:</p>
 <pre class="language-typescript" tabindex="0"><code class="language-typescript"><span class="token keyword">import</span> <span class="token punctuation">{</span> Meowzer <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"meowzer"</span><span class="token punctuation">;</span>
 
@@ -71,12 +47,12 @@
 <span class="token comment">// 4. Place it on the page</span>
 cat<span class="token punctuation">.</span><span class="token function">place</span><span class="token punctuation">(</span>document<span class="token punctuation">.</span>body<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
 <p>That’s it! You now have an autonomous cat wandering around your page. 🎉</p>
-<h2 id="what-just-happened" tabindex="-1"><a class="heading-anchor" href="#what-just-happened"><span>What Just Happened?</span></a></h2>
+<h2 id="what-just-happened" tabindex="-1">What Just Happened? <a class="heading-anchor" href="#what-just-happened" aria-hidden="true">#</a></h2>
 <p>Let’s break down each step:</p>
-<h3 id="1-create-sdk-instance" tabindex="-1"><a class="heading-anchor" href="#1-create-sdk-instance"><span>1. Create SDK Instance</span></a></h3>
+<h3 id="1-create-sdk-instance" tabindex="-1">1. Create SDK Instance <a class="heading-anchor" href="#1-create-sdk-instance" aria-hidden="true">#</a></h3>
 <pre class="language-typescript" tabindex="0"><code class="language-typescript"><span class="token keyword">const</span> meowzer <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Meowzer</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
 <p>Creates a new Meowzer instance. This is your main entry point to all SDK features. You can create multiple instances if needed (e.g., separate instances for different pages).</p>
-<h3 id="2-initialize" tabindex="-1"><a class="heading-anchor" href="#2-initialize"><span>2. Initialize</span></a></h3>
+<h3 id="2-initialize" tabindex="-1">2. Initialize <a class="heading-anchor" href="#2-initialize" aria-hidden="true">#</a></h3>
 <pre class="language-typescript" tabindex="0"><code class="language-typescript"><span class="token keyword">await</span> meowzer<span class="token punctuation">.</span><span class="token function">init</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
 <p><strong>This is required before using any Meowzer features.</strong> Initialization sets up:</p>
 <ul>
@@ -85,7 +61,7 @@ cat<span class="token punctuation">.</span><span class="token function">place</s
 <li>Default configurations</li>
 </ul>
 <p>Always <code>await</code> this call before proceeding.</p>
-<h3 id="3-create-a-cat" tabindex="-1"><a class="heading-anchor" href="#3-create-a-cat"><span>3. Create a Cat</span></a></h3>
+<h3 id="3-create-a-cat" tabindex="-1">3. Create a Cat <a class="heading-anchor" href="#3-create-a-cat" aria-hidden="true">#</a></h3>
 <pre class="language-typescript" tabindex="0"><code class="language-typescript"><span class="token keyword">const</span> cat <span class="token operator">=</span> <span class="token keyword">await</span> meowzer<span class="token punctuation">.</span>cats<span class="token punctuation">.</span><span class="token function">create</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
 <p>Generates a new cat with:</p>
 <ul>
@@ -94,7 +70,7 @@ cat<span class="token punctuation">.</span><span class="token function">place</s
 <li>Unique AI behaviors</li>
 </ul>
 <p>Returns a <code>MeowzerCat</code> instance you can interact with.</p>
-<h3 id="4-place-on-page" tabindex="-1"><a class="heading-anchor" href="#4-place-on-page"><span>4. Place on Page</span></a></h3>
+<h3 id="4-place-on-page" tabindex="-1">4. Place on Page <a class="heading-anchor" href="#4-place-on-page" aria-hidden="true">#</a></h3>
 <pre class="language-typescript" tabindex="0"><code class="language-typescript">cat<span class="token punctuation">.</span><span class="token function">place</span><span class="token punctuation">(</span>document<span class="token punctuation">.</span>body<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
 <p>Adds the cat to your page and starts its autonomous behavior. The cat will:</p>
 <ul>
@@ -103,7 +79,7 @@ cat<span class="token punctuation">.</span><span class="token function">place</s
 <li>Make decisions based on its personality</li>
 <li>Respond to interactions</li>
 </ul>
-<h2 id="complete-example" tabindex="-1"><a class="heading-anchor" href="#complete-example"><span>Complete Example</span></a></h2>
+<h2 id="complete-example" tabindex="-1">Complete Example <a class="heading-anchor" href="#complete-example" aria-hidden="true">#</a></h2>
 <p>Here’s a full working example you can copy and paste:</p>
 <pre class="language-html" tabindex="0"><code class="language-html"><span class="token doctype"><span class="token punctuation">&lt;!</span><span class="token doctype-tag">DOCTYPE</span> <span class="token name">html</span><span class="token punctuation">></span></span>
 <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>html</span> <span class="token attr-name">lang</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>en<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
@@ -140,12 +116,12 @@ cat<span class="token punctuation">.</span><span class="token function">place</s
   <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>body</span><span class="token punctuation">></span></span>
 <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>html</span><span class="token punctuation">></span></span></code></pre>
 <p>Copy this into an HTML file, open it in a browser, and watch your cat appear!</p>
-<h2 id="customizing-your-cat" tabindex="-1"><a class="heading-anchor" href="#customizing-your-cat"><span>Customizing Your Cat</span></a></h2>
-<h3 id="give-it-a-name" tabindex="-1"><a class="heading-anchor" href="#give-it-a-name"><span>Give It a Name</span></a></h3>
+<h2 id="customizing-your-cat" tabindex="-1">Customizing Your Cat <a class="heading-anchor" href="#customizing-your-cat" aria-hidden="true">#</a></h2>
+<h3 id="give-it-a-name" tabindex="-1">Give It a Name <a class="heading-anchor" href="#give-it-a-name" aria-hidden="true">#</a></h3>
 <pre class="language-typescript" tabindex="0"><code class="language-typescript"><span class="token keyword">const</span> cat <span class="token operator">=</span> <span class="token keyword">await</span> meowzer<span class="token punctuation">.</span>cats<span class="token punctuation">.</span><span class="token function">create</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
   name<span class="token operator">:</span> <span class="token string">"Mittens"</span><span class="token punctuation">,</span>
 <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
-<h3 id="choose-colors" tabindex="-1"><a class="heading-anchor" href="#choose-colors"><span>Choose Colors</span></a></h3>
+<h3 id="choose-colors" tabindex="-1">Choose Colors <a class="heading-anchor" href="#choose-colors" aria-hidden="true">#</a></h3>
 <pre class="language-typescript" tabindex="0"><code class="language-typescript"><span class="token keyword">const</span> cat <span class="token operator">=</span> <span class="token keyword">await</span> meowzer<span class="token punctuation">.</span>cats<span class="token punctuation">.</span><span class="token function">create</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
   name<span class="token operator">:</span> <span class="token string">"Tiger"</span><span class="token punctuation">,</span>
   settings<span class="token operator">:</span> <span class="token punctuation">{</span>
@@ -153,19 +129,19 @@ cat<span class="token punctuation">.</span><span class="token function">place</s
     eyeColor<span class="token operator">:</span> <span class="token string">"#FFD700"</span><span class="token punctuation">,</span> <span class="token comment">// Golden eyes</span>
   <span class="token punctuation">}</span><span class="token punctuation">,</span>
 <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
-<h3 id="pick-a-pattern" tabindex="-1"><a class="heading-anchor" href="#pick-a-pattern"><span>Pick a Pattern</span></a></h3>
+<h3 id="pick-a-pattern" tabindex="-1">Pick a Pattern <a class="heading-anchor" href="#pick-a-pattern" aria-hidden="true">#</a></h3>
 <pre class="language-typescript" tabindex="0"><code class="language-typescript"><span class="token keyword">const</span> cat <span class="token operator">=</span> <span class="token keyword">await</span> meowzer<span class="token punctuation">.</span>cats<span class="token punctuation">.</span><span class="token function">create</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
   settings<span class="token operator">:</span> <span class="token punctuation">{</span>
     color<span class="token operator">:</span> <span class="token string">"#8B4513"</span><span class="token punctuation">,</span>
     pattern<span class="token operator">:</span> <span class="token string">"tabby"</span><span class="token punctuation">,</span> <span class="token comment">// Options: solid, tabby, spotted, tuxedo, calico</span>
   <span class="token punctuation">}</span><span class="token punctuation">,</span>
 <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
-<h3 id="set-personality" tabindex="-1"><a class="heading-anchor" href="#set-personality"><span>Set Personality</span></a></h3>
+<h3 id="set-personality" tabindex="-1">Set Personality <a class="heading-anchor" href="#set-personality" aria-hidden="true">#</a></h3>
 <pre class="language-typescript" tabindex="0"><code class="language-typescript"><span class="token keyword">const</span> cat <span class="token operator">=</span> <span class="token keyword">await</span> meowzer<span class="token punctuation">.</span>cats<span class="token punctuation">.</span><span class="token function">create</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
   name<span class="token operator">:</span> <span class="token string">"Lazy Larry"</span><span class="token punctuation">,</span>
   personality<span class="token operator">:</span> <span class="token string">"lazy"</span><span class="token punctuation">,</span> <span class="token comment">// Options: playful, lazy, curious, energetic, calm</span>
 <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
-<h2 id="creating-multiple-cats" tabindex="-1"><a class="heading-anchor" href="#creating-multiple-cats"><span>Creating Multiple Cats</span></a></h2>
+<h2 id="creating-multiple-cats" tabindex="-1">Creating Multiple Cats <a class="heading-anchor" href="#creating-multiple-cats" aria-hidden="true">#</a></h2>
 <p>Want more cats? Just create more:</p>
 <pre class="language-typescript" tabindex="0"><code class="language-typescript"><span class="token keyword">const</span> meowzer <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Meowzer</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token keyword">await</span> meowzer<span class="token punctuation">.</span><span class="token function">init</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -186,21 +162,21 @@ cat3<span class="token punctuation">.</span><span class="token function">place</
   <span class="token keyword">const</span> cat <span class="token operator">=</span> <span class="token keyword">await</span> meowzer<span class="token punctuation">.</span>cats<span class="token punctuation">.</span><span class="token function">create</span><span class="token punctuation">(</span><span class="token punctuation">{</span> name <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
   cat<span class="token punctuation">.</span><span class="token function">place</span><span class="token punctuation">(</span>document<span class="token punctuation">.</span>body<span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span></code></pre>
-<h2 id="interacting-with-cats" tabindex="-1"><a class="heading-anchor" href="#interacting-with-cats"><span>Interacting With Cats</span></a></h2>
-<h3 id="feed-a-cat" tabindex="-1"><a class="heading-anchor" href="#feed-a-cat"><span>Feed a Cat</span></a></h3>
+<h2 id="interacting-with-cats" tabindex="-1">Interacting With Cats <a class="heading-anchor" href="#interacting-with-cats" aria-hidden="true">#</a></h2>
+<h3 id="feed-a-cat" tabindex="-1">Feed a Cat <a class="heading-anchor" href="#feed-a-cat" aria-hidden="true">#</a></h3>
 <pre class="language-typescript" tabindex="0"><code class="language-typescript"><span class="token comment">// Place food where the cat can find it</span>
 <span class="token keyword">await</span> meowzer<span class="token punctuation">.</span>interactions<span class="token punctuation">.</span><span class="token function">placeNeed</span><span class="token punctuation">(</span><span class="token string">"food:basic"</span><span class="token punctuation">,</span> <span class="token punctuation">{</span>
   x<span class="token operator">:</span> <span class="token number">400</span><span class="token punctuation">,</span>
   y<span class="token operator">:</span> <span class="token number">300</span><span class="token punctuation">,</span>
 <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
 <p>The cat will notice the food and walk over to eat it!</p>
-<h3 id="throw-a-toy" tabindex="-1"><a class="heading-anchor" href="#throw-a-toy"><span>Throw a Toy</span></a></h3>
+<h3 id="throw-a-toy" tabindex="-1">Throw a Toy <a class="heading-anchor" href="#throw-a-toy" aria-hidden="true">#</a></h3>
 <pre class="language-typescript" tabindex="0"><code class="language-typescript"><span class="token comment">// Give the cat something to play with</span>
 <span class="token keyword">await</span> meowzer<span class="token punctuation">.</span>interactions<span class="token punctuation">.</span><span class="token function">placeYarn</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
   x<span class="token operator">:</span> <span class="token number">500</span><span class="token punctuation">,</span>
   y<span class="token operator">:</span> <span class="token number">200</span><span class="token punctuation">,</span>
 <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
-<h3 id="use-a-laser-pointer" tabindex="-1"><a class="heading-anchor" href="#use-a-laser-pointer"><span>Use a Laser Pointer</span></a></h3>
+<h3 id="use-a-laser-pointer" tabindex="-1">Use a Laser Pointer <a class="heading-anchor" href="#use-a-laser-pointer" aria-hidden="true">#</a></h3>
 <pre class="language-typescript" tabindex="0"><code class="language-typescript"><span class="token keyword">const</span> laser <span class="token operator">=</span> meowzer<span class="token punctuation">.</span><span class="token function">createLaserPointer</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
 <span class="token comment">// Turn on the laser</span>
@@ -211,13 +187,13 @@ laser<span class="token punctuation">.</span><span class="token function">moveTo
 
 <span class="token comment">// Turn it off</span>
 laser<span class="token punctuation">.</span><span class="token function">turnOff</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
-<h2 id="saving-and-loading" tabindex="-1"><a class="heading-anchor" href="#saving-and-loading"><span>Saving and Loading</span></a></h2>
+<h2 id="saving-and-loading" tabindex="-1">Saving and Loading <a class="heading-anchor" href="#saving-and-loading" aria-hidden="true">#</a></h2>
 <p>Cats can be saved to IndexedDB and loaded later:</p>
-<h3 id="save-a-cat" tabindex="-1"><a class="heading-anchor" href="#save-a-cat"><span>Save a Cat</span></a></h3>
+<h3 id="save-a-cat" tabindex="-1">Save a Cat <a class="heading-anchor" href="#save-a-cat" aria-hidden="true">#</a></h3>
 <pre class="language-typescript" tabindex="0"><code class="language-typescript"><span class="token comment">// Cat automatically gets saved when created (if storage enabled)</span>
 <span class="token comment">// Or manually save:</span>
 <span class="token keyword">await</span> meowzer<span class="token punctuation">.</span>storage<span class="token punctuation">.</span><span class="token function">save</span><span class="token punctuation">(</span>cat<span class="token punctuation">.</span>id<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
-<h3 id="load-a-saved-cat" tabindex="-1"><a class="heading-anchor" href="#load-a-saved-cat"><span>Load a Saved Cat</span></a></h3>
+<h3 id="load-a-saved-cat" tabindex="-1">Load a Saved Cat <a class="heading-anchor" href="#load-a-saved-cat" aria-hidden="true">#</a></h3>
 <pre class="language-typescript" tabindex="0"><code class="language-typescript"><span class="token keyword">const</span> meowzer <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Meowzer</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token keyword">await</span> meowzer<span class="token punctuation">.</span><span class="token function">init</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
@@ -228,8 +204,8 @@ laser<span class="token punctuation">.</span><span class="token function">turnOf
 <span class="token comment">// Load a specific cat by ID</span>
 <span class="token keyword">const</span> cat <span class="token operator">=</span> <span class="token keyword">await</span> meowzer<span class="token punctuation">.</span>storage<span class="token punctuation">.</span><span class="token function">load</span><span class="token punctuation">(</span><span class="token string">"cat-id-here"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 cat<span class="token punctuation">.</span><span class="token function">place</span><span class="token punctuation">(</span>document<span class="token punctuation">.</span>body<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
-<h2 id="common-patterns" tabindex="-1"><a class="heading-anchor" href="#common-patterns"><span>Common Patterns</span></a></h2>
-<h3 id="set-boundaries" tabindex="-1"><a class="heading-anchor" href="#set-boundaries"><span>Set Boundaries</span></a></h3>
+<h2 id="common-patterns" tabindex="-1">Common Patterns <a class="heading-anchor" href="#common-patterns" aria-hidden="true">#</a></h2>
+<h3 id="set-boundaries" tabindex="-1">Set Boundaries <a class="heading-anchor" href="#set-boundaries" aria-hidden="true">#</a></h3>
 <p>Prevent cats from wandering off-screen:</p>
 <pre class="language-typescript" tabindex="0"><code class="language-typescript"><span class="token keyword">const</span> meowzer <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Meowzer</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
   behavior<span class="token operator">:</span> <span class="token punctuation">{</span>
@@ -241,7 +217,7 @@ cat<span class="token punctuation">.</span><span class="token function">place</s
     <span class="token punctuation">}</span><span class="token punctuation">,</span>
   <span class="token punctuation">}</span><span class="token punctuation">,</span>
 <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
-<h3 id="update-boundaries-on-resize" tabindex="-1"><a class="heading-anchor" href="#update-boundaries-on-resize"><span>Update Boundaries on Resize</span></a></h3>
+<h3 id="update-boundaries-on-resize" tabindex="-1">Update Boundaries on Resize <a class="heading-anchor" href="#update-boundaries-on-resize" aria-hidden="true">#</a></h3>
 <pre class="language-typescript" tabindex="0"><code class="language-typescript">window<span class="token punctuation">.</span><span class="token function">addEventListener</span><span class="token punctuation">(</span><span class="token string">"resize"</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
   <span class="token keyword">const</span> cats <span class="token operator">=</span> meowzer<span class="token punctuation">.</span>cats<span class="token punctuation">.</span><span class="token function">getAll</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
   cats<span class="token punctuation">.</span><span class="token function">forEach</span><span class="token punctuation">(</span><span class="token punctuation">(</span>cat<span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
@@ -253,7 +229,7 @@ cat<span class="token punctuation">.</span><span class="token function">place</s
     <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
   <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
-<h3 id="listen-to-events" tabindex="-1"><a class="heading-anchor" href="#listen-to-events"><span>Listen to Events</span></a></h3>
+<h3 id="listen-to-events" tabindex="-1">Listen to Events <a class="heading-anchor" href="#listen-to-events" aria-hidden="true">#</a></h3>
 <pre class="language-typescript" tabindex="0"><code class="language-typescript">cat<span class="token punctuation">.</span><span class="token function">on</span><span class="token punctuation">(</span><span class="token string">"stateChanged"</span><span class="token punctuation">,</span> <span class="token punctuation">(</span>event<span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
   <span class="token builtin">console</span><span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">Cat is now </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>event<span class="token punctuation">.</span>newState<span class="token interpolation-punctuation punctuation">}</span></span><span class="token template-punctuation string">`</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -261,10 +237,10 @@ cat<span class="token punctuation">.</span><span class="token function">place</s
 meowzer<span class="token punctuation">.</span>hooks<span class="token punctuation">.</span><span class="token function">on</span><span class="token punctuation">(</span><span class="token string">"afterCreate"</span><span class="token punctuation">,</span> <span class="token punctuation">(</span>ctx<span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
   <span class="token builtin">console</span><span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">"New cat created:"</span><span class="token punctuation">,</span> ctx<span class="token punctuation">.</span>catId<span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
-<h3 id="remove-a-cat" tabindex="-1"><a class="heading-anchor" href="#remove-a-cat"><span>Remove a Cat</span></a></h3>
+<h3 id="remove-a-cat" tabindex="-1">Remove a Cat <a class="heading-anchor" href="#remove-a-cat" aria-hidden="true">#</a></h3>
 <pre class="language-typescript" tabindex="0"><code class="language-typescript"><span class="token comment">// Clean up when done</span>
 cat<span class="token punctuation">.</span><span class="token function">destroy</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
-<h2 id="using-a-bundler" tabindex="-1"><a class="heading-anchor" href="#using-a-bundler"><span>Using a Bundler</span></a></h2>
+<h2 id="using-a-bundler" tabindex="-1">Using a Bundler <a class="heading-anchor" href="#using-a-bundler" aria-hidden="true">#</a></h2>
 <p>For production, use a bundler like Vite:</p>
 <p><strong>package.json:</strong></p>
 <pre class="language-json" tabindex="0"><code class="language-json"><span class="token punctuation">{</span>
@@ -297,8 +273,8 @@ cat<span class="token punctuation">.</span><span class="token function">destroy<
 <span class="token function">init</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
 <p><strong>Run:</strong></p>
 <pre class="language-bash" tabindex="0"><code class="language-bash"><span class="token function">npm</span> run dev</code></pre>
-<h2 id="troubleshooting" tabindex="-1"><a class="heading-anchor" href="#troubleshooting"><span>Troubleshooting</span></a></h2>
-<h3 id="cat-doesnt-appear" tabindex="-1"><a class="heading-anchor" href="#cat-doesnt-appear"><span>Cat Doesn’t Appear</span></a></h3>
+<h2 id="troubleshooting" tabindex="-1">Troubleshooting <a class="heading-anchor" href="#troubleshooting" aria-hidden="true">#</a></h2>
+<h3 id="cat-doesnt-appear" tabindex="-1">Cat Doesn’t Appear <a class="heading-anchor" href="#cat-doesnt-appear" aria-hidden="true">#</a></h3>
 <p><strong>Check:</strong></p>
 <ol>
 <li>Did you call <code>await meowzer.init()</code>?</li>
@@ -306,18 +282,18 @@ cat<span class="token punctuation">.</span><span class="token function">destroy<
 <li>Is the container visible in the DOM?</li>
 <li>Check browser console for errors</li>
 </ol>
-<h3 id="cat-wanders-off-screen" tabindex="-1"><a class="heading-anchor" href="#cat-wanders-off-screen"><span>Cat Wanders Off Screen</span></a></h3>
+<h3 id="cat-wanders-off-screen" tabindex="-1">Cat Wanders Off Screen <a class="heading-anchor" href="#cat-wanders-off-screen" aria-hidden="true">#</a></h3>
 <p><strong>Solution:</strong> Set boundaries when creating the Meowzer instance (see “Set Boundaries” above).</p>
-<h3 id="typescript-errors" tabindex="-1"><a class="heading-anchor" href="#typescript-errors"><span>TypeScript Errors</span></a></h3>
+<h3 id="typescript-errors" tabindex="-1">TypeScript Errors <a class="heading-anchor" href="#typescript-errors" aria-hidden="true">#</a></h3>
 <p><strong>Solution:</strong> Meowzer includes full TypeScript definitions. Ensure your <code>tsconfig.json</code> is configured for ES modules.</p>
-<h3 id="storage-not-working" tabindex="-1"><a class="heading-anchor" href="#storage-not-working"><span>Storage Not Working</span></a></h3>
+<h3 id="storage-not-working" tabindex="-1">Storage Not Working <a class="heading-anchor" href="#storage-not-working" aria-hidden="true">#</a></h3>
 <p><strong>Solution:</strong> Some browsers disable IndexedDB in private mode. Use memory adapter:</p>
 <pre class="language-typescript" tabindex="0"><code class="language-typescript"><span class="token keyword">const</span> meowzer <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Meowzer</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
   storage<span class="token operator">:</span> <span class="token punctuation">{</span>
     adapter<span class="token operator">:</span> <span class="token string">"memory"</span><span class="token punctuation">,</span>
   <span class="token punctuation">}</span><span class="token punctuation">,</span>
 <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
-<h2 id="next-steps" tabindex="-1"><a class="heading-anchor" href="#next-steps"><span>Next Steps</span></a></h2>
+<h2 id="next-steps" tabindex="-1">Next Steps <a class="heading-anchor" href="#next-steps" aria-hidden="true">#</a></h2>
 <p>Now that you have a basic cat working:</p>
 <ol>
 <li><strong><a href="/docs/getting-started/first-cat">First Cat Tutorial</a></strong> - Detailed walkthrough with more customization</li>
@@ -325,7 +301,7 @@ cat<span class="token punctuation">.</span><span class="token function">destroy<
 <li><strong><a href="/docs/guides/interactions">Interactions Guide</a></strong> - Food, toys, and more</li>
 <li><strong><a href="/docs/api/meowzer-sdk">API Reference</a></strong> - Complete SDK documentation</li>
 </ol>
-<h2 id="try-it-yourself" tabindex="-1"><a class="heading-anchor" href="#try-it-yourself"><span>Try It Yourself</span></a></h2>
+<h2 id="try-it-yourself" tabindex="-1">Try It Yourself <a class="heading-anchor" href="#try-it-yourself" aria-hidden="true">#</a></h2>
 <p>Experiment with these challenges:</p>
 <ul>
 <li>✅ Create a cat with a specific color scheme</li>

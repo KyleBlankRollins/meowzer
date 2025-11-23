@@ -8,30 +8,6 @@
     
     
     <link rel="stylesheet" href="/styles/main.css" />
-    
-    <script>
-      // Apply Carbon dark theme class immediately to prevent flash
-      (function() {
-        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        if (prefersDark) {
-          document.documentElement.classList.add('cds-theme-g90');
-        } else {
-          document.documentElement.classList.add('cds-theme-g10');
-        }
-        
-        // Listen for theme changes
-        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
-          if (e.matches) {
-            document.documentElement.classList.remove('cds-theme-g10');
-            document.documentElement.classList.add('cds-theme-g90');
-          } else {
-            document.documentElement.classList.remove('cds-theme-g90');
-            document.documentElement.classList.add('cds-theme-g10');
-          }
-        });
-      })();
-    </script>
-    <script type="module" crossorigin src="/assets/modulepreload-polyfill-B5Qt9EMX.js"></script>
   </head>
   <body>
     
@@ -53,31 +29,31 @@
   ></mb-sidebar>
   
   <div slot="content">
-    <h1 id="getting-started-with-meowzer" tabindex="-1"><a class="heading-anchor" href="#getting-started-with-meowzer"><span>Getting Started with Meowzer</span></a></h1>
+    <h1 id="getting-started-with-meowzer" tabindex="-1">Getting Started with Meowzer <a class="heading-anchor" href="#getting-started-with-meowzer" aria-hidden="true">#</a></h1>
 <p>Welcome! This guide will help you get up and running with Meowzer quickly.</p>
-<h2 id="learning-path" tabindex="-1"><a class="heading-anchor" href="#learning-path"><span>Learning Path</span></a></h2>
+<h2 id="learning-path" tabindex="-1">Learning Path <a class="heading-anchor" href="#learning-path" aria-hidden="true">#</a></h2>
 <p>Follow these pages in order for the best experience:</p>
-<h3 id="1-introduction" tabindex="-1"><a class="heading-anchor" href="#1-introduction"><span>1. Introduction</span></a></h3>
+<h3 id="1-introduction" tabindex="-1">1. Introduction <a class="heading-anchor" href="#1-introduction" aria-hidden="true">#</a></h3>
 <p><a href="/docs/getting-started/introduction">What is Meowzer?</a></p>
 <p>Learn what Meowzer is, what it can do, and how the pieces fit together.</p>
 <p><strong>Time:</strong> 5 minutes</p>
 <hr>
-<h3 id="2-installation" tabindex="-1"><a class="heading-anchor" href="#2-installation"><span>2. Installation</span></a></h3>
+<h3 id="2-installation" tabindex="-1">2. Installation <a class="heading-anchor" href="#2-installation" aria-hidden="true">#</a></h3>
 <p><a href="/docs/getting-started/installation">Install Meowzer</a></p>
 <p>Set up Meowzer in your project using npm, yarn, or pnpm.</p>
 <p><strong>Time:</strong> 5 minutes</p>
 <hr>
-<h3 id="3-quick-start" tabindex="-1"><a class="heading-anchor" href="#3-quick-start"><span>3. Quick Start</span></a></h3>
+<h3 id="3-quick-start" tabindex="-1">3. Quick Start <a class="heading-anchor" href="#3-quick-start" aria-hidden="true">#</a></h3>
 <p><a href="/docs/getting-started/quick-start">Your First Cat in 5 Minutes</a></p>
 <p>Create and place your first autonomous cat with minimal code.</p>
 <p><strong>Time:</strong> 5 minutes</p>
 <hr>
-<h3 id="4-first-cat-tutorial" tabindex="-1"><a class="heading-anchor" href="#4-first-cat-tutorial"><span>4. First Cat Tutorial</span></a></h3>
+<h3 id="4-first-cat-tutorial" tabindex="-1">4. First Cat Tutorial <a class="heading-anchor" href="#4-first-cat-tutorial" aria-hidden="true">#</a></h3>
 <p><a href="/docs/getting-started/first-cat">Detailed Walkthrough</a></p>
 <p>Build a complete example step-by-step with explanations.</p>
 <p><strong>Time:</strong> 20 minutes</p>
 <hr>
-<h2 id="already-experienced" tabindex="-1"><a class="heading-anchor" href="#already-experienced"><span>Already Experienced?</span></a></h2>
+<h2 id="already-experienced" tabindex="-1">Already Experienced? <a class="heading-anchor" href="#already-experienced" aria-hidden="true">#</a></h2>
 <p>Skip ahead to what you need:</p>
 <ul>
 <li><strong><a href="/docs/concepts">Concepts</a></strong> - Deep dive into architecture and systems</li>
@@ -85,14 +61,14 @@
 <li><strong><a href="/docs/api">API Reference</a></strong> - Complete API documentation</li>
 <li><strong><a href="/docs/examples">Examples</a></strong> - Ready-to-use code snippets</li>
 </ul>
-<h2 id="need-help" tabindex="-1"><a class="heading-anchor" href="#need-help"><span>Need Help?</span></a></h2>
+<h2 id="need-help" tabindex="-1">Need Help? <a class="heading-anchor" href="#need-help" aria-hidden="true">#</a></h2>
 <ul>
 <li>📖 Check the <a href="/docs/api">API Reference</a></li>
 <li>💬 Ask questions on GitHub Discussions</li>
 <li>🐛 Report bugs on GitHub Issues</li>
 </ul>
 <hr>
-<h2 id="what-youll-learn" tabindex="-1"><a class="heading-anchor" href="#what-youll-learn"><span>What You’ll Learn</span></a></h2>
+<h2 id="what-youll-learn" tabindex="-1">What You’ll Learn <a class="heading-anchor" href="#what-youll-learn" aria-hidden="true">#</a></h2>
 <p>By the end of Getting Started, you’ll be able to:</p>
 <p>✅ Install and initialize Meowzer<br>
 ✅ Create cats with custom appearance<br>

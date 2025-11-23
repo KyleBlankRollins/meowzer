@@ -8,29 +8,6 @@
     
     {# Styles - Vite will process these automatically #}
     <link rel="stylesheet" href="{{ '/styles/main.css' | url }}" />
-    
-    <script>
-      // Apply Carbon dark theme class immediately to prevent flash
-      (function() {
-        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        if (prefersDark) {
-          document.documentElement.classList.add('cds-theme-g90');
-        } else {
-          document.documentElement.classList.add('cds-theme-g10');
-        }
-        
-        // Listen for theme changes
-        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
-          if (e.matches) {
-            document.documentElement.classList.remove('cds-theme-g10');
-            document.documentElement.classList.add('cds-theme-g90');
-          } else {
-            document.documentElement.classList.remove('cds-theme-g90');
-            document.documentElement.classList.add('cds-theme-g10');
-          }
-        });
-      })();
-    </script>
   </head>
   <body>
     {# Navigation component with top-level navigation links #}

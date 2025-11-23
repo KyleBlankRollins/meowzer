@@ -8,30 +8,6 @@
     
     
     <link rel="stylesheet" href="/styles/main.css" />
-    
-    <script>
-      // Apply Carbon dark theme class immediately to prevent flash
-      (function() {
-        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        if (prefersDark) {
-          document.documentElement.classList.add('cds-theme-g90');
-        } else {
-          document.documentElement.classList.add('cds-theme-g10');
-        }
-        
-        // Listen for theme changes
-        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
-          if (e.matches) {
-            document.documentElement.classList.remove('cds-theme-g10');
-            document.documentElement.classList.add('cds-theme-g90');
-          } else {
-            document.documentElement.classList.remove('cds-theme-g90');
-            document.documentElement.classList.add('cds-theme-g10');
-          }
-        });
-      })();
-    </script>
-    <script type="module" crossorigin src="/assets/modulepreload-polyfill-B5Qt9EMX.js"></script>
   </head>
   <body>
     
@@ -46,13 +22,13 @@
   data-frontmatter='{&quot;title&quot;:&quot;Welcome to Meowzer&quot;,&quot;description&quot;:&quot;Autonomous, animated cats for your web projects&quot;}'
 >
   <div slot="content">
-    <h1 id="meowzer" tabindex="-1"><a class="heading-anchor" href="#meowzer"><span>Meowzer</span></a></h1>
+    <h1 id="meowzer" tabindex="-1">Meowzer <a class="heading-anchor" href="#meowzer" aria-hidden="true">#</a></h1>
 <blockquote>
 <p>Bring autonomous, AI-powered cats to your web projects</p>
 </blockquote>
 <p>Meowzer is a TypeScript SDK for creating animated cat sprites that wander around web pages with personality-driven AI behaviors. Perfect for adding delightful, interactive companions to websites, games, and creative projects.</p>
 <hr>
-<h2 id="choose-your-path" tabindex="-1"><a class="heading-anchor" href="#choose-your-path"><span>Choose Your Path</span></a></h2>
+<h2 id="choose-your-path" tabindex="-1">Choose Your Path <a class="heading-anchor" href="#choose-your-path" aria-hidden="true">#</a></h2>
 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin: 3rem 0;">
 <cds-tile>
   <h3>🐱 For End Users</h3>
@@ -76,7 +52,7 @@
 </cds-tile>
 </div>
 <hr>
-<h2 id="what-is-meowzer" tabindex="-1"><a class="heading-anchor" href="#what-is-meowzer"><span>What is Meowzer?</span></a></h2>
+<h2 id="what-is-meowzer" tabindex="-1">What is Meowzer? <a class="heading-anchor" href="#what-is-meowzer" aria-hidden="true">#</a></h2>
 <p>Meowzer creates autonomous cats that:</p>
 <ul>
 <li>🐾 <strong>Move on their own</strong> - AI-powered wandering and exploration</li>
@@ -94,7 +70,7 @@
 <p>Watch the cats on this very page! They’re real Meowzer cats wandering around as you read. Notice how each one has its own personality and movement patterns.</p>
 </cds-tile>
 <hr>
-<h2 id="quick-start-developers" tabindex="-1"><a class="heading-anchor" href="#quick-start-developers"><span>Quick Start (Developers)</span></a></h2>
+<h2 id="quick-start-developers" tabindex="-1">Quick Start (Developers) <a class="heading-anchor" href="#quick-start-developers" aria-hidden="true">#</a></h2>
 <p>Get a cat on your page in 5 minutes:</p>
 <pre class="language-typescript" tabindex="0"><code class="language-typescript"><span class="token keyword">import</span> <span class="token punctuation">{</span> Meowzer <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"meowzer"</span><span class="token punctuation">;</span>
 
@@ -108,7 +84,7 @@
 cat<span class="token punctuation">.</span><span class="token function">place</span><span class="token punctuation">(</span>document<span class="token punctuation">.</span>body<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
 <p><a href="/docs/getting-started/quick-start">View full Quick Start guide →</a></p>
 <hr>
-<h2 id="features-at-a-glance" tabindex="-1"><a class="heading-anchor" href="#features-at-a-glance"><span>Features at a Glance</span></a></h2>
+<h2 id="features-at-a-glance" tabindex="-1">Features at a Glance <a class="heading-anchor" href="#features-at-a-glance" aria-hidden="true">#</a></h2>
 <p><strong>🎨 Customizable Appearance</strong></p>
 <ul>
 <li>Fur colors and patterns</li>
@@ -146,7 +122,7 @@ cat<span class="token punctuation">.</span><span class="token function">place</s
 <li>Custom behaviors</li>
 </ul>
 <hr>
-<h2 id="ready-to-start" tabindex="-1"><a class="heading-anchor" href="#ready-to-start"><span>Ready to Start?</span></a></h2>
+<h2 id="ready-to-start" tabindex="-1">Ready to Start? <a class="heading-anchor" href="#ready-to-start" aria-hidden="true">#</a></h2>
 <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
   <a href="/play/">
     <cds-button kind="primary">Play with Cats</cds-button>

@@ -8,30 +8,6 @@
     
     
     <link rel="stylesheet" href="/styles/main.css" />
-    
-    <script>
-      // Apply Carbon dark theme class immediately to prevent flash
-      (function() {
-        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        if (prefersDark) {
-          document.documentElement.classList.add('cds-theme-g90');
-        } else {
-          document.documentElement.classList.add('cds-theme-g10');
-        }
-        
-        // Listen for theme changes
-        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
-          if (e.matches) {
-            document.documentElement.classList.remove('cds-theme-g10');
-            document.documentElement.classList.add('cds-theme-g90');
-          } else {
-            document.documentElement.classList.remove('cds-theme-g90');
-            document.documentElement.classList.add('cds-theme-g10');
-          }
-        });
-      })();
-    </script>
-    <script type="module" crossorigin src="/assets/modulepreload-polyfill-B5Qt9EMX.js"></script>
   </head>
   <body>
     
@@ -53,12 +29,12 @@
   ></mb-sidebar>
   
   <div slot="content">
-    <h1 id="your-first-cat---detailed-tutorial" tabindex="-1"><a class="heading-anchor" href="#your-first-cat---detailed-tutorial"><span>Your First Cat - Detailed Tutorial</span></a></h1>
+    <h1 id="your-first-cat---detailed-tutorial" tabindex="-1">Your First Cat - Detailed Tutorial <a class="heading-anchor" href="#your-first-cat---detailed-tutorial" aria-hidden="true">#</a></h1>
 <p>This tutorial provides a comprehensive, step-by-step walkthrough of creating your first Meowzer cat. We’ll cover everything from setup to customization, interactions, and persistence.</p>
 <p><strong>Time:</strong> 15-20 minutes<br>
 <strong>Level:</strong> Beginner<br>
 <strong>Prerequisites:</strong> Meowzer installed (<a href="/docs/getting-started/installation">Installation Guide</a>)</p>
-<h2 id="what-youll-build" tabindex="-1"><a class="heading-anchor" href="#what-youll-build"><span>What You’ll Build</span></a></h2>
+<h2 id="what-youll-build" tabindex="-1">What You’ll Build <a class="heading-anchor" href="#what-youll-build" aria-hidden="true">#</a></h2>
 <p>By the end of this tutorial, you’ll have:</p>
 <ul>
 <li>✅ A fully customized cat with unique appearance</li>
@@ -67,8 +43,8 @@
 <li>✅ Persistence (save and reload your cat)</li>
 <li>✅ UI controls to manage your cat</li>
 </ul>
-<h2 id="project-setup" tabindex="-1"><a class="heading-anchor" href="#project-setup"><span>Project Setup</span></a></h2>
-<h3 id="1-create-project-structure" tabindex="-1"><a class="heading-anchor" href="#1-create-project-structure"><span>1. Create Project Structure</span></a></h3>
+<h2 id="project-setup" tabindex="-1">Project Setup <a class="heading-anchor" href="#project-setup" aria-hidden="true">#</a></h2>
+<h3 id="1-create-project-structure" tabindex="-1">1. Create Project Structure <a class="heading-anchor" href="#1-create-project-structure" aria-hidden="true">#</a></h3>
 <p>Create a new directory and set up files:</p>
 <pre class="language-bash" tabindex="0"><code class="language-bash"><span class="token function">mkdir</span> my-first-cat
 <span class="token builtin class-name">cd</span> my-first-cat
@@ -89,7 +65,7 @@
     <span class="token property">"vite"</span><span class="token operator">:</span> <span class="token string">"^5.0.0"</span>
   <span class="token punctuation">}</span>
 <span class="token punctuation">}</span></code></pre>
-<h3 id="2-create-html-file" tabindex="-1"><a class="heading-anchor" href="#2-create-html-file"><span>2. Create HTML File</span></a></h3>
+<h3 id="2-create-html-file" tabindex="-1">2. Create HTML File <a class="heading-anchor" href="#2-create-html-file" aria-hidden="true">#</a></h3>
 <p>Create <code>index.html</code>:</p>
 <pre class="language-html" tabindex="0"><code class="language-html"><span class="token doctype"><span class="token punctuation">&lt;!</span><span class="token doctype-tag">DOCTYPE</span> <span class="token name">html</span><span class="token punctuation">></span></span>
 <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>html</span> <span class="token attr-name">lang</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>en<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
@@ -241,10 +217,10 @@
     <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>script</span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>module<span class="token punctuation">"</span></span> <span class="token attr-name">src</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>/main.js<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token script"></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>script</span><span class="token punctuation">></span></span>
   <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>body</span><span class="token punctuation">></span></span>
 <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>html</span><span class="token punctuation">></span></span></code></pre>
-<h3 id="3-create-javascript-file" tabindex="-1"><a class="heading-anchor" href="#3-create-javascript-file"><span>3. Create JavaScript File</span></a></h3>
+<h3 id="3-create-javascript-file" tabindex="-1">3. Create JavaScript File <a class="heading-anchor" href="#3-create-javascript-file" aria-hidden="true">#</a></h3>
 <p>Create <code>main.js</code> - we’ll build this step by step.</p>
-<h2 id="step-by-step-implementation" tabindex="-1"><a class="heading-anchor" href="#step-by-step-implementation"><span>Step-by-Step Implementation</span></a></h2>
-<h3 id="step-1-initialize-meowzer" tabindex="-1"><a class="heading-anchor" href="#step-1-initialize-meowzer"><span>Step 1: Initialize Meowzer</span></a></h3>
+<h2 id="step-by-step-implementation" tabindex="-1">Step-by-Step Implementation <a class="heading-anchor" href="#step-by-step-implementation" aria-hidden="true">#</a></h2>
+<h3 id="step-1-initialize-meowzer" tabindex="-1">Step 1: Initialize Meowzer <a class="heading-anchor" href="#step-1-initialize-meowzer" aria-hidden="true">#</a></h3>
 <p>First, let’s set up the Meowzer instance:</p>
 <pre class="language-javascript" tabindex="0"><code class="language-javascript"><span class="token comment">// main.js</span>
 <span class="token keyword">import</span> <span class="token punctuation">{</span> Meowzer <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"meowzer"</span><span class="token punctuation">;</span>
@@ -290,7 +266,7 @@
 <li>We set boundaries to match the window size</li>
 <li>We call <code>init()</code> which is <strong>required</strong> before using any features</li>
 </ul>
-<h3 id="step-2-create-cat-function" tabindex="-1"><a class="heading-anchor" href="#step-2-create-cat-function"><span>Step 2: Create Cat Function</span></a></h3>
+<h3 id="step-2-create-cat-function" tabindex="-1">Step 2: Create Cat Function <a class="heading-anchor" href="#step-2-create-cat-function" aria-hidden="true">#</a></h3>
 <p>Add a function to create cats based on user input:</p>
 <pre class="language-javascript" tabindex="0"><code class="language-javascript"><span class="token keyword">async</span> <span class="token keyword">function</span> <span class="token function">createCat</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
   <span class="token comment">// If there's already a cat, remove it</span>
@@ -338,7 +314,7 @@
 <li>We place it on the page with <code>cat.place()</code></li>
 <li>We set up event listeners to track state changes</li>
 </ul>
-<h3 id="step-3-add-interactions" tabindex="-1"><a class="heading-anchor" href="#step-3-add-interactions"><span>Step 3: Add Interactions</span></a></h3>
+<h3 id="step-3-add-interactions" tabindex="-1">Step 3: Add Interactions <a class="heading-anchor" href="#step-3-add-interactions" aria-hidden="true">#</a></h3>
 <p>Create functions for feeding and playing:</p>
 <pre class="language-javascript" tabindex="0"><code class="language-javascript"><span class="token keyword">async</span> <span class="token keyword">function</span> <span class="token function">feedCat</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
   <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>currentCat<span class="token punctuation">)</span> <span class="token punctuation">{</span>
@@ -377,7 +353,7 @@
 <li>We use <code>meowzer.interactions</code> to place food and toys</li>
 <li>The cat’s AI will notice these items and interact with them</li>
 </ul>
-<h3 id="step-4-add-persistence" tabindex="-1"><a class="heading-anchor" href="#step-4-add-persistence"><span>Step 4: Add Persistence</span></a></h3>
+<h3 id="step-4-add-persistence" tabindex="-1">Step 4: Add Persistence <a class="heading-anchor" href="#step-4-add-persistence" aria-hidden="true">#</a></h3>
 <p>Create save and load functions:</p>
 <pre class="language-javascript" tabindex="0"><code class="language-javascript"><span class="token keyword">async</span> <span class="token keyword">function</span> <span class="token function">saveCat</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
   <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>currentCat<span class="token punctuation">)</span> <span class="token punctuation">{</span>
@@ -433,7 +409,7 @@
 <li>We use <code>meowzer.storage.listCats()</code> to see what’s saved</li>
 <li>We use <code>meowzer.storage.load()</code> to restore a saved cat</li>
 </ul>
-<h3 id="step-5-update-ui-info" tabindex="-1"><a class="heading-anchor" href="#step-5-update-ui-info"><span>Step 5: Update UI Info</span></a></h3>
+<h3 id="step-5-update-ui-info" tabindex="-1">Step 5: Update UI Info <a class="heading-anchor" href="#step-5-update-ui-info" aria-hidden="true">#</a></h3>
 <p>Add a function to display cat information:</p>
 <pre class="language-javascript" tabindex="0"><code class="language-javascript"><span class="token keyword">function</span> <span class="token function">updateCatInfo</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
   <span class="token keyword">const</span> infoDiv <span class="token operator">=</span> document<span class="token punctuation">.</span><span class="token function">getElementById</span><span class="token punctuation">(</span><span class="token string">"cat-info"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -457,7 +433,7 @@
     &lt;p>&lt;strong>State:&lt;/strong> </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>currentCat<span class="token punctuation">.</span><span class="token function">getState</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token interpolation-punctuation punctuation">}</span></span><span class="token string">&lt;/p>
   </span><span class="token template-punctuation string">`</span></span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span></code></pre>
-<h3 id="step-6-set-up-event-listeners" tabindex="-1"><a class="heading-anchor" href="#step-6-set-up-event-listeners"><span>Step 6: Set Up Event Listeners</span></a></h3>
+<h3 id="step-6-set-up-event-listeners" tabindex="-1">Step 6: Set Up Event Listeners <a class="heading-anchor" href="#step-6-set-up-event-listeners" aria-hidden="true">#</a></h3>
 <p>Connect buttons to functions:</p>
 <pre class="language-javascript" tabindex="0"><code class="language-javascript"><span class="token keyword">function</span> <span class="token function">setupEventListeners</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
   document
@@ -499,7 +475,7 @@
     <span class="token punctuation">}</span>
   <span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token number">2000</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span></code></pre>
-<h2 id="complete-code" tabindex="-1"><a class="heading-anchor" href="#complete-code"><span>Complete Code</span></a></h2>
+<h2 id="complete-code" tabindex="-1">Complete Code <a class="heading-anchor" href="#complete-code" aria-hidden="true">#</a></h2>
 <p>Here’s the full <code>main.js</code> file:</p>
 <pre class="language-javascript" tabindex="0"><code class="language-javascript"><span class="token keyword">import</span> <span class="token punctuation">{</span> Meowzer <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"meowzer"</span><span class="token punctuation">;</span>
 
@@ -688,11 +664,11 @@
 <span class="token punctuation">}</span>
 
 <span class="token function">init</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
-<h2 id="run-your-project" tabindex="-1"><a class="heading-anchor" href="#run-your-project"><span>Run Your Project</span></a></h2>
+<h2 id="run-your-project" tabindex="-1">Run Your Project <a class="heading-anchor" href="#run-your-project" aria-hidden="true">#</a></h2>
 <p>Start the development server:</p>
 <pre class="language-bash" tabindex="0"><code class="language-bash"><span class="token function">npm</span> run dev</code></pre>
 <p>Open the URL shown (usually <code>http://localhost:5173</code>) in your browser.</p>
-<h2 id="try-it-out" tabindex="-1"><a class="heading-anchor" href="#try-it-out"><span>Try It Out</span></a></h2>
+<h2 id="try-it-out" tabindex="-1">Try It Out <a class="heading-anchor" href="#try-it-out" aria-hidden="true">#</a></h2>
 <p>Now you can:</p>
 <ol>
 <li><strong>Create a cat</strong> - Customize name, colors, pattern, personality</li>
@@ -702,8 +678,8 @@
 <li><strong>Save it</strong> - Click “Save Cat” to persist to IndexedDB</li>
 <li><strong>Reload the page</strong> - Click “Load Cat” to restore your saved cat</li>
 </ol>
-<h2 id="understanding-the-cats-behavior" tabindex="-1"><a class="heading-anchor" href="#understanding-the-cats-behavior"><span>Understanding the Cat’s Behavior</span></a></h2>
-<h3 id="personality-effects" tabindex="-1"><a class="heading-anchor" href="#personality-effects"><span>Personality Effects</span></a></h3>
+<h2 id="understanding-the-cats-behavior" tabindex="-1">Understanding the Cat’s Behavior <a class="heading-anchor" href="#understanding-the-cats-behavior" aria-hidden="true">#</a></h2>
+<h3 id="personality-effects" tabindex="-1">Personality Effects <a class="heading-anchor" href="#personality-effects" aria-hidden="true">#</a></h3>
 <p>Different personalities behave differently:</p>
 <ul>
 <li><strong>Playful</strong> - Interacts with toys more, energetic movement</li>
@@ -712,7 +688,7 @@
 <li><strong>Energetic</strong> - Rarely stops moving, fast pace</li>
 <li><strong>Calm</strong> - Balanced behavior, peaceful movements</li>
 </ul>
-<h3 id="state-machine" tabindex="-1"><a class="heading-anchor" href="#state-machine"><span>State Machine</span></a></h3>
+<h3 id="state-machine" tabindex="-1">State Machine <a class="heading-anchor" href="#state-machine" aria-hidden="true">#</a></h3>
 <p>Cats go through different states:</p>
 <ul>
 <li><code>idle</code> - Standing still, looking around</li>
@@ -722,7 +698,7 @@
 <li><code>eating</code> - Consuming food</li>
 </ul>
 <p>Watch the console and info panel to see state changes!</p>
-<h2 id="next-steps" tabindex="-1"><a class="heading-anchor" href="#next-steps"><span>Next Steps</span></a></h2>
+<h2 id="next-steps" tabindex="-1">Next Steps <a class="heading-anchor" href="#next-steps" aria-hidden="true">#</a></h2>
 <p>Congratulations! You’ve created a fully functional Meowzer cat with:</p>
 <ul>
 <li>✅ Custom appearance</li>
@@ -730,7 +706,7 @@
 <li>✅ Interactions</li>
 <li>✅ Persistence</li>
 </ul>
-<h3 id="enhancements-to-try" tabindex="-1"><a class="heading-anchor" href="#enhancements-to-try"><span>Enhancements to Try</span></a></h3>
+<h3 id="enhancements-to-try" tabindex="-1">Enhancements to Try <a class="heading-anchor" href="#enhancements-to-try" aria-hidden="true">#</a></h3>
 <ol>
 <li><strong>Add more cats</strong> - Create multiple cats at once</li>
 <li><strong>Custom boundaries</strong> - Restrict cats to specific areas</li>
@@ -738,28 +714,28 @@
 <li><strong>Collection management</strong> - Load different saved cats</li>
 <li><strong>Visual feedback</strong> - Show animations when feeding/playing</li>
 </ol>
-<h3 id="continue-learning" tabindex="-1"><a class="heading-anchor" href="#continue-learning"><span>Continue Learning</span></a></h3>
+<h3 id="continue-learning" tabindex="-1">Continue Learning <a class="heading-anchor" href="#continue-learning" aria-hidden="true">#</a></h3>
 <ul>
 <li><a href="/docs/tutorials/basic-integration"><strong>Basic Integration Tutorial</strong></a> - Build a simple cat page</li>
 <li><a href="/docs/guides/customization"><strong>Customization Guide</strong></a> - All appearance options</li>
 <li><a href="/docs/guides/interactions"><strong>Interactions Guide</strong></a> - Complete interaction reference</li>
 <li><a href="/docs/api/meowzer-sdk"><strong>API Reference</strong></a> - Full SDK documentation</li>
 </ul>
-<h2 id="common-issues" tabindex="-1"><a class="heading-anchor" href="#common-issues"><span>Common Issues</span></a></h2>
-<h3 id="cat-doesnt-appear" tabindex="-1"><a class="heading-anchor" href="#cat-doesnt-appear"><span>Cat doesn’t appear</span></a></h3>
+<h2 id="common-issues" tabindex="-1">Common Issues <a class="heading-anchor" href="#common-issues" aria-hidden="true">#</a></h2>
+<h3 id="cat-doesnt-appear" tabindex="-1">Cat doesn’t appear <a class="heading-anchor" href="#cat-doesnt-appear" aria-hidden="true">#</a></h3>
 <p><strong>Check:</strong> Did you call <code>await meowzer.init()</code> before creating the cat?</p>
-<h3 id="cat-wanders-off-screen" tabindex="-1"><a class="heading-anchor" href="#cat-wanders-off-screen"><span>Cat wanders off screen</span></a></h3>
+<h3 id="cat-wanders-off-screen" tabindex="-1">Cat wanders off screen <a class="heading-anchor" href="#cat-wanders-off-screen" aria-hidden="true">#</a></h3>
 <p><strong>Solution:</strong> Boundaries are set on initialization. Make sure they match your viewport.</p>
-<h3 id="storage-fails-in-private-mode" tabindex="-1"><a class="heading-anchor" href="#storage-fails-in-private-mode"><span>Storage fails in private mode</span></a></h3>
+<h3 id="storage-fails-in-private-mode" tabindex="-1">Storage fails in private mode <a class="heading-anchor" href="#storage-fails-in-private-mode" aria-hidden="true">#</a></h3>
 <p><strong>Solution:</strong> Some browsers disable IndexedDB in private mode. Use memory adapter:</p>
 <pre class="language-javascript" tabindex="0"><code class="language-javascript"><span class="token keyword">const</span> meowzer <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Meowzer</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
   <span class="token literal-property property">storage</span><span class="token operator">:</span> <span class="token punctuation">{</span>
     <span class="token literal-property property">adapter</span><span class="token operator">:</span> <span class="token string">"memory"</span><span class="token punctuation">,</span>
   <span class="token punctuation">}</span><span class="token punctuation">,</span>
 <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
-<h3 id="foodyarn-doesnt-appear" tabindex="-1"><a class="heading-anchor" href="#foodyarn-doesnt-appear"><span>Food/Yarn doesn’t appear</span></a></h3>
+<h3 id="foodyarn-doesnt-appear" tabindex="-1">Food/Yarn doesn’t appear <a class="heading-anchor" href="#foodyarn-doesnt-appear" aria-hidden="true">#</a></h3>
 <p><strong>Check:</strong> Items are placed at specific coordinates. Make sure coordinates are within viewport bounds.</p>
-<h2 id="full-project-download" tabindex="-1"><a class="heading-anchor" href="#full-project-download"><span>Full Project Download</span></a></h2>
+<h2 id="full-project-download" tabindex="-1">Full Project Download <a class="heading-anchor" href="#full-project-download" aria-hidden="true">#</a></h2>
 <p>Want the complete code? <a href="#">Download the example project on GitHub</a> (coming soon).</p>
 <p>Happy cat-making! 🐱</p>
 

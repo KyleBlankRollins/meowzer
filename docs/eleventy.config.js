@@ -27,8 +27,18 @@ export default function (eleventyConfig) {
   // The plugin automatically scans HTML for asset references and processes them
   eleventyConfig.addPlugin(EleventyVitePlugin, {
     viteOptions: {
+      clearScreen: false,
       server: {
-        port: 3001,
+        middlewareMode: true,
+      },
+      build: {
+        rollupOptions: {
+          output: {
+            assetFileNames: "assets/[name]-[hash][extname]",
+            chunkFileNames: "assets/[name]-[hash].js",
+            entryFileNames: "assets/[name]-[hash].js",
+          },
+        },
       },
     },
   });
@@ -53,9 +63,10 @@ export default function (eleventyConfig) {
   }).use(markdownItAnchor, {
     // Add anchor links to headings
     level: [1, 2, 3, 4], // Which heading levels get anchors
-    permalink: markdownItAnchor.permalink.headerLink({
-      safariReaderFix: true,
+    permalink: markdownItAnchor.permalink.ariaHidden({
+      placement: "after",
       class: "heading-anchor",
+      symbol: "#",
     }),
     slugify: (s) =>
       s
@@ -136,14 +147,7 @@ export default function (eleventyConfig) {
   eleventyConfig.addPairedShortcode(
     "alert",
     (content, type = "info") => {
-      const types = {
-        info: "cds--inline-notification--low-contrast cds--inline-notification--info",
-        warning: "cds--inline-notification--warning",
-        error: "cds--inline-notification--error",
-        success: "cds--inline-notification--success",
-      };
-      const className = types[type] || types.info;
-      return `<cds-inline-notification kind="${type}" hide-close-button>${content}</cds-inline-notification>`;
+      return `<div class="alert alert-${type}">${content}</div>`;
     }
   );
 

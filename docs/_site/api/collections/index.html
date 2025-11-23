@@ -8,30 +8,6 @@
     
     
     <link rel="stylesheet" href="/styles/main.css" />
-    
-    <script>
-      // Apply Carbon dark theme class immediately to prevent flash
-      (function() {
-        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        if (prefersDark) {
-          document.documentElement.classList.add('cds-theme-g90');
-        } else {
-          document.documentElement.classList.add('cds-theme-g10');
-        }
-        
-        // Listen for theme changes
-        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
-          if (e.matches) {
-            document.documentElement.classList.remove('cds-theme-g10');
-            document.documentElement.classList.add('cds-theme-g90');
-          } else {
-            document.documentElement.classList.remove('cds-theme-g90');
-            document.documentElement.classList.add('cds-theme-g10');
-          }
-        });
-      })();
-    </script>
-    <script type="module" crossorigin src="/assets/modulepreload-polyfill-B5Qt9EMX.js"></script>
   </head>
   <body>
     
@@ -54,16 +30,16 @@
   
   <div slot="content">
     <p>Learn about collection operations in Meowbase.</p>
-<h2 id="overview" tabindex="-1"><a class="heading-anchor" href="#overview"><span>Overview</span></a></h2>
+<h2 id="overview" tabindex="-1">Overview <a class="heading-anchor" href="#overview" aria-hidden="true">#</a></h2>
 <p>Collections are the top-level containers for cats in Meowbase. Each collection is stored in IndexedDB and can be loaded into memory for fast access.</p>
-<h2 id="key-concepts" tabindex="-1"><a class="heading-anchor" href="#key-concepts"><span>Key Concepts</span></a></h2>
+<h2 id="key-concepts" tabindex="-1">Key Concepts <a class="heading-anchor" href="#key-concepts" aria-hidden="true">#</a></h2>
 <ul>
 <li>Collections are stored in IndexedDB with the prefix <code>meowbase-{id}</code></li>
 <li>Maximum of 5 collections can be loaded in memory at once</li>
 <li>Collections use LRU (Least Recently Used) eviction when memory is full</li>
 <li>Each collection can hold up to 100 cats</li>
 </ul>
-<h2 id="available-operations" tabindex="-1"><a class="heading-anchor" href="#available-operations"><span>Available Operations</span></a></h2>
+<h2 id="available-operations" tabindex="-1">Available Operations <a class="heading-anchor" href="#available-operations" aria-hidden="true">#</a></h2>
 <ul>
 <li><a href="/api/collections/create">Create Collection</a></li>
 <li><a href="/api/collections/load">Load Collection</a></li>
