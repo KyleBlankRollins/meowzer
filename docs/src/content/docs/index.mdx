@@ -1,0 +1,117 @@
+---
+title: Meowzer
+description: Autonomous, animated cats for your web projects
+template: splash
+hero:
+  tagline: Bring autonomous, AI-powered cats to your web projects
+  image:
+    alt: Meowzer - Autonomous animated cats
+    file: ../../assets/houston.webp
+  actions:
+    - text: Get Started
+      link: /getting-started/introduction/
+      icon: right-arrow
+      variant: primary
+    - text: Quick Start
+      link: /getting-started/quick-start/
+      icon: rocket
+      variant: secondary
+---
+
+import { Card, CardGrid, LinkCard } from '@astrojs/starlight/components';
+
+## What is Meowzer?
+
+Meowzer is a TypeScript SDK for creating animated cat sprites that wander around web pages with personality-driven AI behaviors. Perfect for adding delightful, interactive companions to websites, games, and creative projects.
+
+<CardGrid stagger>
+  <Card title="🐾 Autonomous Movement" icon="star">
+    AI-powered wandering and exploration with personality-driven decision making
+  </Card>
+  <Card title="😺 Unique Personalities" icon="heart">
+    Each cat is unique with customizable traits: playful, lazy, curious, energetic, and more
+  </Card>
+  <Card title="🎾 Interactive Elements" icon="puzzle">
+    Feed them, give toys, use laser pointers - cats respond to user interactions
+  </Card>
+  <Card title="💾 Persistent Cats" icon="approve-check">
+    Save and load cats between sessions with IndexedDB storage
+  </Card>
+  <Card title="✨ Beautiful Animation" icon="rocket">
+    Smooth GSAP animations and procedural SVG generation
+  </Card>
+  <Card title="🔌 Extensible SDK" icon="setting">
+    Plugin system, lifecycle hooks, and framework integrations
+  </Card>
+</CardGrid>
+
+## Quick Example
+
+Get a cat on your page in just 4 lines of code:
+
+```typescript
+import { Meowzer } from "meowzer";
+
+const meowzer = new Meowzer();
+await meowzer.init();
+
+const cat = await meowzer.cats.create({ name: "Whiskers" });
+cat.place(document.body);
+```
+
+## Key Features
+
+### Customizable Appearance
+
+- Fur colors and patterns (tabby, spotted, tuxedo, calico)
+- Eye colors and sizes
+- Different body sizes
+- Accessories (coming soon)
+
+### AI-Driven Behaviors
+
+- Personality-based decision making
+- Environmental awareness
+- State machine with multiple behaviors
+- Configurable decision frequency
+
+### Rich Interactions
+
+- **Food** - Basic and fancy variants
+- **Water** - Hydration system
+- **Yarn** - Throwable toys
+- **Laser Pointer** - Chase mechanics
+- **Custom interactions** - Extend with plugins
+
+### Persistence & Storage
+
+- IndexedDB integration
+- Collection management
+- Import/export support
+- Migration system
+
+## Choose Your Path
+
+<CardGrid>
+  <LinkCard
+    title="Getting Started"
+    description="New to Meowzer? Start here to learn the basics and create your first cat."
+    href="/getting-started/introduction/"
+  />
+  <LinkCard
+    title="API Reference"
+    description="Complete API documentation for the Meowzer SDK and all its features."
+    href="/api/"
+  />
+</CardGrid>
+
+## Browser Support
+
+Meowzer works on all modern browsers:
+
+- Chrome 90+
+- Firefox 88+
+- Safari 14+
+- Edge 90+
+
+Only one runtime dependency: **GSAP** for smooth animations (~70KB total)

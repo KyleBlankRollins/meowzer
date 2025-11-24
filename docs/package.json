@@ -1,37 +1,17 @@
 {
-  "name": "meowbase-docs",
-  "private": true,
-  "version": "0.0.0",
+  "name": "docs",
   "type": "module",
+  "version": "0.0.1",
   "scripts": {
-    "dev": "eleventy --serve",
-    "build": "eleventy",
-    "preview": "eleventy --serve",
-    "clean": "rm -rf _site .11ty-vite",
-    "new-page": "tsx scripts/new-page.ts",
-    "debug": "DEBUG=Eleventy* eleventy",
-    "validate": "eleventy --dryrun"
-  },
-  "devDependencies": {
-    "@11ty/eleventy": "^3.1.2",
-    "@11ty/eleventy-plugin-syntaxhighlight": "^5.0.2",
-    "@11ty/eleventy-plugin-vite": "^7.0.0",
-    "@esbuild/darwin-arm64": "^0.27.0",
-    "@shikijs/markdown-it": "^3.13.0",
-    "@types/markdown-it": "^14.1.2",
-    "esbuild": "^0.25.11",
-    "gray-matter": "^4.0.3",
-    "lit-html": "^3.3.1",
-    "markdown-it": "^14.1.0",
-    "markdown-it-anchor": "^9.2.0",
-    "typescript": "~5.9.3",
-    "vite": "npm:rolldown-vite@7.1.14"
-  },
-  "overrides": {
-    "vite": "npm:rolldown-vite@7.1.14"
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
   },
   "dependencies": {
-    "@lit/context": "^1.1.6",
-    "meowzer": "file:../meowzer/sdk"
+    "@astrojs/starlight": "^0.36.3",
+    "astro": "^5.6.1",
+    "sharp": "^0.34.2"
   }
 }
