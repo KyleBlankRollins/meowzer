@@ -38,6 +38,23 @@ export default defineConfig({
           ],
         },
         {
+          label: "Tutorials",
+          items: [
+            {
+              label: "Basic Integration",
+              slug: "tutorials/basic-integration",
+            },
+            {
+              label: "Persistence Setup",
+              slug: "tutorials/persistence-setup",
+            },
+            {
+              label: "Cat Customization",
+              slug: "tutorials/customization",
+            },
+          ],
+        },
+        {
           label: "API Reference",
           autogenerate: { directory: "api" },
         },
