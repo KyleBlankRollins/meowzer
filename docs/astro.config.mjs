@@ -72,6 +72,23 @@ export default defineConfig({
           ],
         },
         {
+          label: "Guides",
+          items: [
+            {
+              label: "Customization",
+              slug: "guides/customization",
+            },
+            {
+              label: "Performance",
+              slug: "guides/performance",
+            },
+            {
+              label: "Best Practices",
+              slug: "guides/best-practices",
+            },
+          ],
+        },
+        {
           label: "API Reference",
           items: [
             {
@@ -111,6 +128,19 @@ export default defineConfig({
             {
               label: "Live Demos",
               slug: "examples/live-demos",
+            },
+          ],
+        },
+        {
+          label: "Advanced",
+          items: [
+            {
+              label: "Plugin Development",
+              slug: "advanced/plugin-development",
+            },
+            {
+              label: "Framework Integration",
+              slug: "advanced/framework-integration",
             },
           ],
         },
