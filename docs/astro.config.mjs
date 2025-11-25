@@ -55,6 +55,23 @@ export default defineConfig({
           ],
         },
         {
+          label: "Concepts",
+          items: [
+            {
+              label: "Architecture",
+              slug: "concepts/architecture",
+            },
+            {
+              label: "Cat Lifecycle",
+              slug: "concepts/cat-lifecycle",
+            },
+            {
+              label: "AI Behaviors",
+              slug: "concepts/ai-behaviors",
+            },
+          ],
+        },
+        {
           label: "API Reference",
           items: [
             {
@@ -94,6 +111,28 @@ export default defineConfig({
             {
               label: "Live Demos",
               slug: "examples/live-demos",
+            },
+          ],
+        },
+        {
+          label: "Play",
+          items: [
+            {
+              label: "Understanding Cats",
+              slug: "play/understanding-cats",
+            },
+            {
+              label: "Interacting",
+              items: [
+                {
+                  label: "Feeding Cats",
+                  slug: "play/interacting/feeding-cats",
+                },
+                {
+                  label: "Playing with Toys",
+                  slug: "play/interacting/playing-with-toys",
+                },
+              ],
             },
           ],
         },
