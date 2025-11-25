@@ -142,21 +142,10 @@ const cat = await meowzer.cats.create({
 2. Meowtion creates animated sprite
 3. MeowBrain initializes AI decision engine
 4. Everything wrapped in MeowzerCat instance
+5. Cat automatically added to DOM and spatial grid
+6. AI behaviors start immediately
 
-### 3. Place on Page
-
-```typescript
-cat.place(document.body);
-```
-
-**What happens:**
-
-1. DOM element appended to container
-2. AI behaviors start
-3. Cat begins autonomous wandering
-4. Event listeners activated
-
-### 4. Cat Lives Autonomously
+### 3. Cat Lives Autonomously
 
 The cat now:
 

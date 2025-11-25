@@ -709,7 +709,7 @@ document
       personality,
     });
 
-    cat.place(document.body);
+    // Cat is automatically placed on the page!
     console.log(`Created ${name}!`, {
       settings: cat.settings,
       personality,

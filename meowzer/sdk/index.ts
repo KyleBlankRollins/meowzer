@@ -15,8 +15,7 @@
  *   name: "Whiskers",
  *   settings: { color: "orange", pattern: "tabby", size: "medium", furLength: "short", eyeColor: "green" }
  * });
- *
- * cat.place(document.body);
+ * // Cat automatically appears on the page!
  * ```
  *
  * @packageDocumentation

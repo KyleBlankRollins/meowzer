@@ -172,7 +172,7 @@ async function init() {
     name: "Test Cat",
   });
 
-  cat.place(document.body);
+  // Cat automatically appears on the page!
 }
 
 init();

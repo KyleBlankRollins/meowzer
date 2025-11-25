@@ -88,7 +88,7 @@ const cat = await meowzer.cats.create({
   },
 });
 
-cat.place(document.body);
+// Cat is automatically placed on the page!
 
 // Save to storage
 try {
@@ -119,7 +119,7 @@ try {
   // Load each cat
   for (const catMeta of savedCats) {
     const cat = await meowzer.storage.load(catMeta.id);
-    cat.place(document.body);
+    // Cat is automatically placed on the page!
     console.log(`Loaded ${cat.name}`);
   }
 } catch (error) {
@@ -316,7 +316,7 @@ document
       const cat = await meowzer.cats.create({
         name: `Cat ${activeCats.size + 1}`,
       });
-      cat.place(document.body);
+      // Cat is automatically placed on the page!
       activeCats.add(cat);
       await updateCounts();
       showStatus(`Created ${cat.name}!`);
@@ -366,7 +366,7 @@ document
 
       for (const catMeta of savedCats) {
         const cat = await meowzer.storage.load(catMeta.id);
-        cat.place(document.body);
+        // Cat is automatically placed on the page!
         activeCats.add(cat);
       }
 
@@ -524,7 +524,7 @@ const failed = [];
 for (const catMeta of savedCats) {
   try {
     const cat = await meowzer.storage.load(catMeta.id);
-    cat.place(document.body);
+    // Cat is automatically placed on the page!
     loaded.push(cat);
   } catch (error) {
     console.error(`Failed to load ${catMeta.id}:`, error);

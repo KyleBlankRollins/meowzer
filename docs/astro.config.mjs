@@ -56,7 +56,25 @@ export default defineConfig({
         },
         {
           label: "API Reference",
-          autogenerate: { directory: "api" },
+          items: [
+            {
+              label: "Meowzer SDK",
+              slug: "api/meowzer-sdk",
+            },
+            {
+              label: "MeowzerCat",
+              slug: "api/meowzer-cat",
+            },
+            {
+              label: "Managers",
+              items: [
+                {
+                  label: "CatManager",
+                  slug: "api/managers/cat-manager",
+                },
+              ],
+            },
+          ],
         },
         {
           label: "Resources",

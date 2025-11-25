@@ -195,7 +195,7 @@ document
       name: `Cat ${activeCats.size + 1}`,
     });
 
-    cat.place(document.body);
+    // Cat is automatically placed on the page!
     activeCats.add(cat);
     updateCount();
 
@@ -285,13 +285,12 @@ await meowzer.init();
 const cat = await meowzer.cats.create({
   name: `Cat ${activeCats.size + 1}`,
 });
-
-cat.place(document.body);
+// Cat is automatically placed on the page and AI starts!
 ```
 
 - `create()` generates a new cat with random appearance
 - Each cat gets a unique name
-- `place()` adds the cat to the DOM and starts AI behaviors
+- Cat automatically appears on the page and starts autonomous behavior
 
 ### Managing State
 
@@ -365,7 +364,7 @@ document
       },
     });
 
-    cat.place(document.body);
+    // Cat is automatically placed on the page!
     activeCats.add(cat);
     updateCount();
   });
@@ -381,8 +380,7 @@ const cat = await meowzer.cats.create({ name: "Whiskers" });
 cat.on("stateChanged", (event) => {
   console.log(`${cat.name} is now ${event.newState}`);
 });
-
-cat.place(document.body);
+// Cat is automatically placed on the page!
 ```
 
 ## Next Steps
@@ -399,7 +397,7 @@ Now that you have a basic integration working:
 
 - Check browser console for errors
 - Verify `await meowzer.init()` was called
-- Ensure `cat.place()` is called after creation
+- Ensure cat creation completes without errors
 
 ### Cats walk off-screen
 

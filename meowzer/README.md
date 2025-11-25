@@ -42,10 +42,7 @@ const cat = await meowzer.cats.create({
   },
 });
 
-// 4. Place it on the page
-cat.place(document.body);
-
-// Cat now wanders autonomously! 🐈
+// Cat automatically appears on the page and starts wandering! 🐈
 ```
 
 ---
@@ -161,7 +158,6 @@ cat.personality; // { energy, curiosity, playfulness, independence, sociability 
 cat.element; // HTMLElement for the cat
 
 // Cat methods
-cat.place(container); // Add to DOM
 cat.pause(); // Stop AI behaviors
 cat.resume(); // Resume AI behaviors
 cat.destroy(); // Remove and cleanup
@@ -181,7 +177,7 @@ cat.chaseLaser(position); // Chase laser pointer
 ```typescript
 // No options = random appearance and personality
 const cat = await meowzer.cats.create();
-cat.place(document.body);
+// Cat automatically appears on the page!
 ```
 
 #### Custom Appearance
@@ -258,19 +254,11 @@ await meowzer.cats.destroyMany(["cat-1", "cat-2"]);
 await meowzer.cats.destroyAll();
 ```
 
-### Cat Placement & Control
+### Cat Control
 
 ```typescript
 const cat = await meowzer.cats.create();
-
-// Place in specific container
-cat.place(document.getElementById("playground"));
-
-// Or place in body
-cat.place(document.body);
-
-// Remove from DOM (but keep in memory)
-cat.remove();
+// Cat automatically appears on document.body
 
 // Pause AI (cat stops moving)
 cat.pause();
@@ -335,7 +323,7 @@ await meowzer.storage.save(cat.id);
 
 // Later, load the cat
 const loadedCat = await meowzer.storage.load("cat-abc123");
-loadedCat.place(document.body);
+// Cat automatically appears on the page!
 
 // Load all saved cats
 const allSavedCats = await meowzer.storage.loadAll();
@@ -669,7 +657,7 @@ const meowzer = new Meowzer();
 await meowzer.init();
 
 const cat = await meowzer.cats.create();
-cat.place(document.body);
+// Cat automatically appears on the page!
 ```
 
 ### Custom Cat with Persistence
@@ -695,14 +683,14 @@ const cat = await meowzer.cats.create({
   },
 });
 
-cat.place(document.body);
+// Cat automatically appears on the page!
 
 // Save for later
 await meowzer.storage.save(cat.id);
 
 // Later session...
 const loadedCat = await meowzer.storage.load(cat.id);
-loadedCat.place(document.body);
+// Cat automatically appears on the page!
 ```
 
 ### Interactive Playground
@@ -716,9 +704,7 @@ await meowzer.init();
 // Create a few cats
 const cat1 = await meowzer.cats.create({ name: "Fluffy" });
 const cat2 = await meowzer.cats.create({ name: "Shadow" });
-
-cat1.place(document.body);
-cat2.place(document.body);
+// Cats automatically appear on the page!
 
 // Add food
 const food = await meowzer.interactions.placeNeed("food:fancy", {
@@ -765,7 +751,7 @@ const meowzer = new Meowzer({
 await meowzer.init();
 
 const cat = await meowzer.cats.create();
-cat.place(document.body);
+// Cat automatically appears on the page!
 
 // Update boundaries on resize
 window.addEventListener("resize", () => {
@@ -813,7 +799,7 @@ await meowzer.storage.addToCollection(collectionId, cat2.id);
 
 // Later, load entire collection
 const cats = await meowzer.storage.loadCollection(collectionId);
-cats.forEach((cat) => cat.place(document.body));
+// All cats automatically appear on the page!
 ```
 
 ---

@@ -34,8 +34,7 @@ import { InvalidStateError } from "./errors.js";
  *   name: "Whiskers",
  *   settings: { color: "orange", pattern: "tabby", ... }
  * });
- *
- * cat.place(document.body);
+ * // Cat automatically appears on the page!
  * ```
  */
 export class Meowzer {

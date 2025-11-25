@@ -47,7 +47,7 @@ Meowzer is a TypeScript SDK for creating animated cat sprites that wander around
 
 ## Quick Example
 
-Get a cat on your page in just 4 lines of code:
+Get a cat on your page in just 3 lines of code:
 
 ```typescript
 import { Meowzer } from "meowzer";
@@ -56,7 +56,7 @@ const meowzer = new Meowzer();
 await meowzer.init();
 
 const cat = await meowzer.cats.create({ name: "Whiskers" });
-cat.place(document.body);
+// Cat automatically appears on the page!
 ```
 
 ## Key Features

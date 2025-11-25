@@ -20,12 +20,9 @@ await meowzer.init();
 
 // 3. Create a cat
 const cat = await meowzer.cats.create();
-
-// 4. Place it on the page
-cat.place(document.body);
 ```
 
-That's it! You now have an autonomous cat wandering around your page. 🎉
+That's it! The cat automatically appears and starts wandering around your page. 🎉
 
 ## What Just Happened?
 
@@ -67,18 +64,12 @@ Generates a new cat with:
 
 Returns a `MeowzerCat` instance you can interact with.
 
-### 4. Place on Page
+The cat is automatically added to the page and starts its autonomous behavior:
 
-```typescript
-cat.place(document.body);
-```
-
-Adds the cat to your page and starts its autonomous behavior. The cat will:
-
-- Appear as an animated SVG
-- Start wandering around
-- Make decisions based on its personality
-- Respond to interactions
+- Appears as an animated SVG
+- Starts wandering around immediately
+- Makes decisions based on its personality
+- Responds to interactions
 
 ## Complete Example
 
@@ -110,7 +101,7 @@ Here's a full working example you can copy and paste:
           name: "Whiskers",
         });
 
-        cat.place(document.body);
+        // Cat automatically appears on the page!
 
         console.log("Cat created:", cat.name);
       }
@@ -174,14 +165,11 @@ const meowzer = new Meowzer();
 await meowzer.init();
 
 // Create 3 cats
-const cat1 = await meowzer.cats.create({ name: "Cat 1" });
-const cat2 = await meowzer.cats.create({ name: "Cat 2" });
-const cat3 = await meowzer.cats.create({ name: "Cat 3" });
+const cat1 = await meowzer.cats.create({ name: "Whiskers" });
+const cat2 = await meowzer.cats.create({ name: "Mittens" });
+const cat3 = await meowzer.cats.create({ name: "Shadow" });
 
-// Place them all
-cat1.place(document.body);
-cat2.place(document.body);
-cat3.place(document.body);
+// All cats automatically appear on the page!
 ```
 
 Or use a loop:
@@ -191,7 +179,7 @@ const catNames = ["Whiskers", "Mittens", "Shadow", "Tiger", "Fluffy"];
 
 for (const name of catNames) {
   const cat = await meowzer.cats.create({ name });
-  cat.place(document.body);
+  // Each cat automatically appears on the page!
 }
 ```
 
@@ -258,7 +246,7 @@ console.log("Saved cats:", savedCats);
 
 // Load a specific cat by ID
 const cat = await meowzer.storage.load("cat-id-here");
-cat.place(document.body);
+// Cat automatically appears on the page!
 ```
 
 ## Common Patterns
@@ -350,7 +338,7 @@ async function init() {
     name: "Production Cat",
   });
 
-  cat.place(document.body);
+  // Cat automatically appears on the page!
 }
 
 init();
@@ -369,9 +357,8 @@ npm run dev
 **Check:**
 
 1. Did you call `await meowzer.init()`?
-2. Did you call `cat.place(container)`?
-3. Is the container visible in the DOM?
-4. Check browser console for errors
+2. Is your container visible in the DOM?
+3. Check browser console for errors
 
 ### Cat Wanders Off Screen
 

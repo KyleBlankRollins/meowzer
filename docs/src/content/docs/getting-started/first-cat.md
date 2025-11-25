@@ -244,7 +244,7 @@ async function createCat() {
     personality: personality,
   });
 
-  currentCat.place(document.body);
+  // Cat is automatically placed on the page!
   console.log(`Created cat: ${currentCat.name}`);
   updateCatInfo();
 
@@ -312,7 +312,7 @@ async function loadCat() {
     }
 
     currentCat = await meowzer.storage.load(latestCat.id);
-    currentCat.place(document.body);
+    // Cat is automatically placed on the page!
 
     console.log(`Loaded cat: ${currentCat.name}`);
     updateCatInfo();
