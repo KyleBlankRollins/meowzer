@@ -72,7 +72,28 @@ export default defineConfig({
                   label: "CatManager",
                   slug: "api/managers/cat-manager",
                 },
+                {
+                  label: "StorageManager",
+                  slug: "api/managers/storage-manager",
+                },
+                {
+                  label: "InteractionManager",
+                  slug: "api/managers/interaction-manager",
+                },
               ],
+            },
+          ],
+        },
+        {
+          label: "Examples",
+          items: [
+            {
+              label: "Code Snippets",
+              slug: "examples/code-snippets",
+            },
+            {
+              label: "Live Demos",
+              slug: "examples/live-demos",
             },
           ],
         },
