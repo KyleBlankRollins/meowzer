@@ -128,6 +128,10 @@ export default defineConfig({
             {
               label: "Live Demos",
               slug: "examples/live-demos",
+              badge: {
+                text: "Coming Soon",
+                variant: "note",
+              },
             },
           ],
         },
@@ -168,7 +172,10 @@ export default defineConfig({
         },
         {
           label: "Resources",
-          items: [{ label: "Credits", slug: "credits" }],
+          items: [
+            { label: "About These Docs", slug: "about" },
+            { label: "Credits", slug: "credits" },
+          ],
         },
       ],
     }),

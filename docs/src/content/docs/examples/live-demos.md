@@ -3,7 +3,11 @@ title: Live Demos
 description: Interactive examples and playgrounds for Meowzer
 ---
 
-Explore Meowzer through interactive demos and code examples. All demos are hosted on CodeSandbox for easy experimentation.
+:::note[Coming Soon]
+Interactive demos are currently in development. This page outlines planned demos that will be available soon. Check back later for live, interactive examples!
+:::
+
+The following demos are planned for future implementation. Each will be hosted on CodeSandbox for easy experimentation and learning.
 
 ## Quick Start Demos
 
@@ -28,7 +32,7 @@ const cat = await meowzer.cats.create({
 });
 ```
 
-[Open in CodeSandbox →](https://codesandbox.io/s/meowzer-hello-world)
+_Demo coming soon_
 
 ---
 
@@ -64,7 +68,7 @@ document
   });
 ```
 
-[Open in CodeSandbox →](https://codesandbox.io/s/meowzer-control-panel)
+_Demo coming soon_
 
 ---
 
@@ -82,7 +86,7 @@ Visual customizer for creating cats with different appearances.
 - Live preview
 - Export settings as JSON
 
-[Open in CodeSandbox →](https://codesandbox.io/s/meowzer-appearance-generator)
+_Demo coming soon_
 
 ---
 
@@ -97,7 +101,7 @@ Experiment with personality traits and observe behavioral differences.
 - Behavioral comparison
 - Preset personalities (playful, lazy, curious, etc.)
 
-[Open in CodeSandbox →](https://codesandbox.io/s/meowzer-personality-playground)
+_Demo coming soon_
 
 ---
 
@@ -126,7 +130,7 @@ document.addEventListener("click", async (e) => {
 });
 ```
 
-[Open in CodeSandbox →](https://codesandbox.io/s/meowzer-feeding-station)
+_Demo coming soon_
 
 ---
 
@@ -142,7 +146,7 @@ Throw yarn balls and watch cats play.
 - Yarn removal after timeout
 - Play statistics
 
-[Open in CodeSandbox →](https://codesandbox.io/s/meowzer-yarn-playground)
+_Demo coming soon_
 
 ---
 
@@ -176,7 +180,7 @@ document.addEventListener("mousemove", (e) => {
 });
 ```
 
-[Open in CodeSandbox →](https://codesandbox.io/s/meowzer-laser-pointer)
+_Demo coming soon_
 
 ---
 
@@ -194,7 +198,7 @@ Save, load, and organize cats into collections.
 - Import/export functionality
 - Storage statistics
 
-[Open in CodeSandbox →](https://codesandbox.io/s/meowzer-collection-manager)
+_Demo coming soon_
 
 ---
 
@@ -220,7 +224,7 @@ await meowzer.init();
 const savedCats = await meowzer.storage.loadAll();
 ```
 
-[Open in CodeSandbox →](https://codesandbox.io/s/meowzer-session-persistence)
+_Demo coming soon_
 
 ---
 
@@ -239,7 +243,7 @@ Complex environment with multiple cats, interactions, and autonomous behaviors.
 - Performance monitoring
 - Event logging
 
-[Open in CodeSandbox →](https://codesandbox.io/s/meowzer-ecosystem)
+_Demo coming soon_
 
 ---
 
@@ -255,7 +259,7 @@ Monitor cat behaviors and interactions with real-time analytics.
 - Performance metrics
 - Export data as CSV
 
-[Open in CodeSandbox →](https://codesandbox.io/s/meowzer-analytics)
+_Demo coming soon_
 
 ---
 
@@ -271,7 +275,7 @@ Cats that adapt to viewport changes and device orientation.
 - Landscape/portrait adaptation
 - Device motion integration
 
-[Open in CodeSandbox →](https://codesandbox.io/s/meowzer-responsive)
+_Demo coming soon_
 
 ---
 
@@ -303,7 +307,7 @@ function App() {
 }
 ```
 
-[Open in CodeSandbox →](https://codesandbox.io/s/meowzer-react)
+_Demo coming soon_
 
 ---
 
@@ -318,7 +322,7 @@ Meowzer with Vue 3 Composition API.
 - Component composition
 - TypeScript support
 
-[Open in CodeSandbox →](https://codesandbox.io/s/meowzer-vue)
+_Demo coming soon_
 
 ---
 
@@ -333,7 +337,7 @@ Meowzer in a Svelte application.
 - Component-based UI
 - TypeScript support
 
-[Open in CodeSandbox →](https://codesandbox.io/s/meowzer-svelte)
+_Demo coming soon_
 
 ---
 
@@ -350,7 +354,7 @@ Ready-to-use Vite template with TypeScript and Meowzer.
 - Basic cat examples
 - Hot module replacement
 
-[Open in CodeSandbox →](https://codesandbox.io/s/meowzer-vite-template)
+_Demo coming soon_
 
 ---
 
@@ -365,7 +369,7 @@ Meowzer in a Next.js application with SSR support.
 - Client component examples
 - TypeScript configuration
 
-[Open in CodeSandbox →](https://codesandbox.io/s/meowzer-nextjs)
+_Demo coming soon_
 
 ---
 
@@ -380,7 +384,7 @@ Static site with Meowzer using Astro.
 - Component islands
 - TypeScript support
 
-[Open in CodeSandbox →](https://codesandbox.io/s/meowzer-astro)
+_Demo coming soon_
 
 ---
 
@@ -448,15 +452,14 @@ All demos follow this basic structure:
 
 ---
 
-## Contributing Demos
+## Want to Help?
 
-Have a cool demo to share? We'd love to see it!
+Interested in building these demos? We'd love your contributions!
 
-1. Create your demo on CodeSandbox
-2. Open an issue with the link and description
-3. We'll review and add it to this page
-
-[Submit a Demo →](https://github.com/KyleBlankRollins/meowzer/issues/new?template=demo-submission.md)
+1. Pick a demo from the list above
+2. Create it on CodeSandbox
+3. Open a PR with the link and any improvements to the description
+4. We'll review and integrate it
 
 ---
 
