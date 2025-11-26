@@ -1,22 +1,22 @@
 {
-  "name": "meowbase-monorepo",
+  "name": "meowzer-monorepo",
   "version": "0.1.0",
   "private": true,
   "workspaces": [
-    "meowbase",
-    "docs"
+    "meowzer/sdk",
+    "meowzer/ui",
+    "docs",
+    "demo"
   ],
   "scripts": {
-    "test": "npm run test --workspace=meowbase",
-    "test:watch": "npm run test:watch --workspace=meowbase",
-    "test:ui": "npm run test:ui --workspace=meowbase",
-    "test:coverage": "npm run test:coverage --workspace=meowbase",
     "dev:docs": "npm run dev --workspace=docs",
     "build:docs": "npm run build --workspace=docs",
-    "build": "npm run build:sdk && npm run build:ui",
-    "build:sdk": "cd meowzer/sdk && npm run build",
-    "build:ui": "cd meowzer/ui && npm run build"
+    "dev:demo": "npm run dev --workspace=demo",
+    "build:demo": "npm run build --workspace=demo",
+    "build:sdk": "npm run build --workspace=meowzer/sdk",
+    "build:ui": "npm run build --workspace=meowzer/ui",
+    "build": "npm run build:sdk && npm run build:ui"
   },
   "devDependencies": {},
-  "description": "Monorepo containing Meowbase library and documentation website"
+  "description": "Monorepo containing Meowzer SDK, UI components, documentation, and demo site"
 }
