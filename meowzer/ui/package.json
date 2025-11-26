@@ -61,6 +61,7 @@
     "meowzer": "^1.0.0"
   },
   "dependencies": {
+    "@carbon/styles": "^1.95.0",
     "@lit/context": "^1.1.0",
     "@shoelace-style/shoelace": "^2.20.1",
     "gsap": "^3.13.0"
@@ -75,7 +76,6 @@
   },
   "devDependencies": {
     "@carbon/icons": "^11.70.0",
-    "@carbon/styles": "^1.95.0",
     "@carbon/web-components": "^2.43.0",
     "@storybook/addon-a11y": "^8.6.14",
     "@storybook/addon-essentials": "^8.6.14",
