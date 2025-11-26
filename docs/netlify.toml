@@ -1,0 +1,5 @@
+[build]
+# Set base directory for docs deployment
+base = "docs"
+command = "npm run build"
+publish = "dist"

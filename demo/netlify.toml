@@ -1,0 +1,6 @@
+[build]
+# Set base directory for demo deployment
+base = "demo"
+# Build the dependencies first, then the demo
+command = "cd .. && npm run build:sdk && npm run build:ui && npm run build --workspace=demo"
+publish = "dist"
