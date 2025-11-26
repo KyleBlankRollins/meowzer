@@ -14,9 +14,6 @@
       "import": "./dist/scripts/setup.js",
       "types": "./dist/scripts/setup.d.ts"
     },
-    "./styles": "./dist/assets/themes/carbon.css",
-    "./styles/shoelace-light": "./dist/assets/themes/shoelace-light.css",
-    "./styles/shoelace-dark": "./dist/assets/themes/shoelace-dark.css",
     "./providers": {
       "import": "./dist/providers/index.js",
       "types": "./dist/providers/index.d.ts"
@@ -61,9 +58,7 @@
     "meowzer": "^1.0.0"
   },
   "dependencies": {
-    "@carbon/styles": "^1.95.0",
     "@lit/context": "^1.1.0",
-    "@shoelace-style/shoelace": "^2.20.1",
     "gsap": "^3.13.0"
   },
   "peerDependenciesMeta": {

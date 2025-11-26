@@ -21,6 +21,16 @@ const { title = "Meowzer Playground" } = Astro.props;
       name="description"
       content="Create and customize your own animated cats. Play with personalities, colors, and watch them roam!"
     />
+    <!-- Carbon Design System styles -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@carbon/styles@1.95.0/css/styles.min.css"
+    />
+    <!-- Shoelace light theme -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.20.1/dist/themes/light.css"
+    />
   </head>
   <body>
     <slot />
@@ -28,9 +38,6 @@ const { title = "Meowzer Playground" } = Astro.props;
 </html>
 
 <style is:global>
-  @import "@meowzer/ui/styles";
-  @import "@meowzer/ui/styles/shoelace-light";
-
   :root {
     --bg-cream: #fffef9;
     --accent-orange: #ff9500;

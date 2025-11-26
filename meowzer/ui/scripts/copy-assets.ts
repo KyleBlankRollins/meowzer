@@ -19,26 +19,6 @@ const __dirname = dirname(__filename);
 // Get the package root (go up from dist/scripts/ to package root)
 const packageRoot = join(__dirname, "..", "..");
 
-// Define assets to copy
-const assets = [
-  {
-    src: "node_modules/@carbon/styles/css/styles.css",
-    dest: "dist/assets/themes/carbon.css",
-  },
-  // Shoelace theme CSS
-  {
-    src: "node_modules/@shoelace-style/shoelace/dist/themes/light.css",
-    dest: "dist/assets/themes/shoelace-light.css",
-  },
-  {
-    src: "node_modules/@shoelace-style/shoelace/dist/themes/dark.css",
-    dest: "dist/assets/themes/shoelace-dark.css",
-  },
-];
-
-// Carbon doesn't provide individual icon SVGs in the same way,
-// so we'll skip copying icons and document using @carbon/icons package instead
-
 // Interaction SVGs for cat interactions feature
 const interactions = [
   // Food
@@ -94,13 +74,13 @@ const interactions = [
   },
 ];
 
-console.log("📦 Copying Carbon assets...\n");
+console.log("📦 Copying interaction assets...\n");
 
 let copiedCount = 0;
 let errorCount = 0;
 
-// Copy theme files and interactions
-[...assets, ...interactions].forEach(({ src, dest }) => {
+// Copy interaction SVGs
+interactions.forEach(({ src, dest }) => {
   try {
     const srcPath = join(packageRoot, src);
     const destPath = join(packageRoot, dest);
@@ -133,9 +113,3 @@ if (errorCount > 0) {
   console.log(`   Errors: ${errorCount} files`);
   process.exit(1);
 }
-
-console.log("\n💡 Note: Users can load Carbon assets directly:");
-console.log('   import "@carbon/styles/css/styles.css"');
-console.log(
-  '   For icons, use: import { Search16 } from "@carbon/icons"'
-);
