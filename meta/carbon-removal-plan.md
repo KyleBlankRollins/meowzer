@@ -820,7 +820,7 @@ Replace: `<cds-icon>` → `<mb-icon>`
 
 ---
 
-### Phase 4: Specialized Components (Week 4) ✅ **50% COMPLETE**
+### Phase 4: Specialized Components (Week 4) ✅ **100% COMPLETE**
 
 **Goal**: Replace remaining components and Shoelace
 
@@ -884,27 +884,55 @@ Replace: `<sl-color-picker>`
 
 ---
 
-#### 4.2 Tooltip (Optional)
+#### 4.2 Tooltip ✅ **DONE**
 
 **Priority**: 🟢 **LOW**
 
 Replace: `<cds-tooltip>`
 
+**Status**: ✅ Complete - **32 tests passing**
+
 **File**: `components/mb-tooltip/mb-tooltip.ts`
 
-**Features**:
+**Features Implemented**:
 
-- Hover trigger
-- Position: top, bottom, left, right
-- Delay
+- ✅ Hover and focus triggers
+- ✅ 4 positions: top, bottom, left, right
+- ✅ Customizable delay (default 200ms)
+- ✅ Auto-positioning within viewport
+- ✅ Smooth fade-in animations
+- ✅ Disabled state
+- ✅ Fixed positioning (portal-style)
+- ✅ Arrow/pointer indicator
+- ✅ CSS parts for customization
+- ✅ Full accessibility (ARIA, keyboard nav)
 
 **API**:
 
 ```typescript
-<mb-tooltip text="Helpful hint" position="top">
+<mb-tooltip text="Helpful hint" position="top" delay="200">
   <mb-button>Hover me</mb-button>
 </mb-tooltip>
 ```
+
+**Tests**: 32 passing
+
+- Basic rendering (8 tests)
+- Properties (6 tests)
+- Positions (4 tests)
+- Hover interaction (4 tests)
+- Focus interaction (2 tests)
+- Arrow (1 test)
+- Accessibility (3 tests)
+- CSS parts (3 tests)
+- Slotted content (1 test)
+
+**Migration from Carbon**:
+
+- Element: `cds-tooltip` → `mb-tooltip`
+- Simpler API: text as property instead of nested element
+- Single slot for trigger element
+- Position property instead of alignment attributes
 
 ---
 

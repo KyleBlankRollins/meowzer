@@ -42,6 +42,7 @@ export {
   MbNotification,
   MbIcon,
   MbColorPicker,
+  MbTooltip,
   CatCreator,
   CatPersonalityPicker,
   CatPreview,
