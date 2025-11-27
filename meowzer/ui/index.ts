@@ -40,6 +40,7 @@ export {
   MbSelect,
   MbModal,
   MbNotification,
+  MbIcon,
   CatCreator,
   CatPersonalityPicker,
   CatPreview,

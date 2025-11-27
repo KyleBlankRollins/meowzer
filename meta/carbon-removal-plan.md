@@ -591,7 +591,7 @@ Replace: `<cds-select>` → `<mb-select>`
 
 ---
 
-### Phase 3: Complex Components (Week 3) - **2/3 COMPLETE** (67%)
+### Phase 3: Complex Components (Week 3) - ✅ **COMPLETE** (100%)
 
 **Goal**: Replace modal system and notifications
 
@@ -755,28 +755,68 @@ Replace: `<cds-inline-notification>` → `<mb-notification>`
 
 ---
 
-#### 3.3 Icon Component
+#### 3.3 Icon Component ✅ **DONE**
 
 **Priority**: 🟢 **LOW** (registered but minimal usage)
 
-Replace: `<cds-icon>`
+Replace: `<cds-icon>` → `<mb-icon>`
+
+**Status**: ✅ Complete - 18 tests passing
 
 **File**: `components/mb-icon/mb-icon.ts`
 
-**Options**:
+**Features**:
 
-1. Use SVG sprites
-2. Use inline SVG with data
-3. Use icon font (not recommended)
-4. Keep using `@carbon/icons` package directly
-
-**Recommended**: Create simple wrapper for SVG icons
+- Lightweight SVG icon wrapper
+- Predefined size variants (16, 20, 24, 32, 48)
+- Custom size via CSS variable
+- SVG string property or slotted content
+- Color inheritance via currentColor
+- Accessibility (role and aria-label support)
+- Simple API with minimal overhead
 
 **API**:
 
 ```typescript
-<mb-icon name="add" size="16"></mb-icon>
+<mb-icon
+  size="16|20|24|32|48"
+  .svg=${svgString}
+  label="Accessible label"
+>
+  <!-- Or use slotted SVG -->
+  <svg>...</svg>
+</mb-icon>
 ```
+
+**Properties**:
+
+- `size: "16" | "20" | "24" | "32" | "48"` - Predefined size (default: "24")
+- `svg: string` - SVG content as string
+- `name: string` - Reserved for future icon library integration
+- `label: string` - Accessible label (adds role="img" and aria-label)
+
+**Slots**:
+
+- (default) - SVG content
+
+**CSS Parts**:
+
+- `icon` - The icon container
+
+**CSS Custom Properties**:
+
+- `--mb-icon-size` - Custom icon size (overrides size attribute)
+
+**Rendering Modes**:
+
+1. SVG property - Pass SVG as string (dynamic icons)
+2. Slotted content - Insert SVG as child (static icons)
+
+**Integration**:
+
+- Compatible with `@carbon/icons` package
+- Works with any SVG source
+- Can be used with custom icon libraries
 
 ---
 
