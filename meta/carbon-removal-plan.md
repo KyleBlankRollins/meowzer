@@ -591,27 +591,33 @@ Replace: `<cds-select>` → `<mb-select>`
 
 ---
 
-### Phase 3: Complex Components (Week 3)
+### Phase 3: Complex Components (Week 3) - **1/3 COMPLETE** (33%)
 
 **Goal**: Replace modal system and notifications
 
-#### 3.1 Modal/Dialog System
+#### 3.1 Modal/Dialog System ✅ **DONE**
 
 **Priority**: 🔴 **CRITICAL** (used in playground for all dialogs)
 
-Replace: `<cds-modal>`, `<cds-modal-header>`, `<cds-modal-heading>`, `<cds-modal-body>`, `<cds-modal-footer>`
+Replace: `<cds-modal>`, `<cds-modal-header>`, `<cds-modal-heading>`, `<cds-modal-body>`, `<cds-modal-footer>` → `<mb-modal>`
+
+**Status**: ✅ Complete - 30 tests passing
 
 **File**: `components/mb-modal/mb-modal.ts`
 
 **Features**:
 
-- Open/close state
-- Backdrop click to close
-- ESC key to close
-- Prevent scroll when open
-- Focus trap
+- Open/close state with `open` property
+- Backdrop click to close (configurable via `closeOnBackdrop`)
+- ESC key to close (configurable via `closeOnEscape`)
+- Prevent body scroll when open
+- Focus trap with Tab/Shift+Tab cycling
+- Restore focus on close
 - Header/body/footer slots
-- Size variants
+- Size variants (sm: 400px, md: 600px, lg: 900px)
+- Close button (configurable via `showClose`)
+- Smooth animations (backdrop fade-in, modal slide-in)
+- Accessibility (role="dialog", aria-modal="true")
 
 **API**:
 
@@ -619,33 +625,57 @@ Replace: `<cds-modal>`, `<cds-modal-header>`, `<cds-modal-heading>`, `<cds-modal
 <mb-modal
   ?open=${isOpen}
   size="sm|md|lg"
-  @close=${handleClose}
+  heading="Modal Title"
+  ?showClose=${true}
+  ?closeOnBackdrop=${true}
+  ?closeOnEscape=${true}
+  @mb-close=${handleClose}
 >
-  <div slot="header">
-    <h2>Modal Title</h2>
-  </div>
-
-  <div slot="body">
-    Modal content goes here
-  </div>
+  <p>Modal content goes here</p>
 
   <div slot="footer">
-    <mb-button @click=${handleCancel}>Cancel</mb-button>
+    <mb-button variant="secondary" @click=${handleCancel}>Cancel</mb-button>
     <mb-button variant="primary" @click=${handleConfirm}>Confirm</mb-button>
   </div>
 </mb-modal>
 ```
 
+**Properties**:
+
+- `open: boolean` - Controls visibility (default: false)
+- `size: "sm" | "md" | "lg"` - Size variant (default: "md")
+- `heading: string` - Optional heading text
+- `showClose: boolean` - Show close button (default: true)
+- `closeOnBackdrop: boolean` - Close on backdrop click (default: true)
+- `closeOnEscape: boolean` - Close on ESC key (default: true)
+
+**Events**:
+
+- `mb-close` - Fired when modal is closed
+
+**Slots**:
+
+- `header` - Custom header content (overrides `heading` property)
+- (default) - Modal body content
+- `footer` - Footer content (typically action buttons)
+
+**CSS Parts**:
+
+- `backdrop`, `modal`, `header`, `body`, `footer`
+
 **Affected Components**:
 
 - `mb-cat-playground` (create cat dialog, edit cat dialog, delete confirmation)
+- `mb-wardrobe-dialog` (hat selection dialog)
 
 **Implementation Notes**:
 
-- Use `<dialog>` native element as base
-- Implement focus trap with Tab key handling
-- Prevent body scroll with CSS `overflow: hidden`
-- Portal pattern for rendering outside component tree (optional)
+- Uses native focus trap implementation (no external dependencies)
+- Tab key cycling through focusable elements
+- Restores focus to previously focused element on close
+- Prevents body scroll with `overflow: hidden`
+- Backdrop with blur effect and fade-in animation
+- Modal with slide-in animation from center
 
 ---
 

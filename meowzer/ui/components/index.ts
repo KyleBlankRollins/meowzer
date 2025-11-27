@@ -14,6 +14,9 @@ export { MbTextarea } from "./mb-textarea/mb-textarea.js";
 export { MbCheckbox } from "./mb-checkbox/mb-checkbox.js";
 export { MbSelect } from "./mb-select/mb-select.js";
 
+// Phase 3 - Complex Components
+export { MbModal } from "./mb-modal/mb-modal.js";
+
 // Phase 2+ - Feature Components
 export { CatCreator } from "./cat-creator/cat-creator.js";
 export { CatPersonalityPicker } from "./cat-personality-picker/cat-personality-picker.js";
