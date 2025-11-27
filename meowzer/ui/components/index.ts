@@ -19,6 +19,9 @@ export { MbModal } from "./mb-modal/mb-modal.js";
 export { MbNotification } from "./mb-notification/mb-notification.js";
 export { MbIcon } from "./mb-icon/mb-icon.js";
 
+// Phase 4 - Specialized Components
+export { MbColorPicker } from "./mb-color-picker/mb-color-picker.js";
+
 // Phase 2+ - Feature Components
 export { CatCreator } from "./cat-creator/cat-creator.js";
 export { CatPersonalityPicker } from "./cat-personality-picker/cat-personality-picker.js";

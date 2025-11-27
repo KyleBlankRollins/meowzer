@@ -820,70 +820,67 @@ Replace: `<cds-icon>` → `<mb-icon>`
 
 ---
 
-### Phase 4: Specialized Components (Week 4)
+### Phase 4: Specialized Components (Week 4) ✅ **50% COMPLETE**
 
 **Goal**: Replace remaining components and Shoelace
 
-#### 4.1 Color Picker (Replace Shoelace)
+#### 4.1 Color Picker (Replace Shoelace) ✅ **DONE**
 
 **Priority**: 🔴 **CRITICAL** (only Shoelace dependency)
 
 Replace: `<sl-color-picker>`
 
-**File**: `components/mb-color-picker/mb-color-picker.ts` (refactor existing)
+**Status**: ✅ Complete - **45 tests passing**
 
-**Options**:
+**File**: `components/mb-color-picker/mb-color-picker.ts`
 
-1. **Native HTML5**: `<input type="color">` + custom UI overlay
-2. **Custom Implementation**: Build from scratch with Lit
-3. **Lightweight Library**: Use `vanilla-colorful` (13KB)
+**Implementation**: Native HTML5 `<input type="color">` + custom HSV UI
 
-**Recommended**: Option 1 (Native + Custom UI)
+**Features Implemented**:
 
-**Features**:
+- ✅ Hex color format (#RRGGBB)
+- ✅ Inline display mode (no border/shadow)
+- ✅ HSV color selection (saturation/value grid + hue slider)
+- ✅ Color swatch preview with checkerboard pattern
+- ✅ Text input for manual hex entry with validation
+- ✅ Native color input as fallback
+- ✅ Pointer and touch event support for dragging
+- ✅ Portal rendering compatible (works in modal context)
+- ✅ `mb-change` and `mb-input` events
+- ✅ Disabled state
+- ✅ CSS parts for styling customization
+- ✅ Full accessibility (ARIA labels, roles, keyboard nav)
 
-- Hex color format
-- Inline display mode
-- Portal rendering (keep existing pattern)
-- Color swatch preview
-- Text input for hex value
-
-**API** (keep existing):
+**API**:
 
 ```typescript
 <mb-color-picker
-  .value=${'#ff9500'}
-  @color-change=${handleColorChange}
+  value="#ff9500"
+  inline
+  @mb-change=${handleColorChange}
+  @mb-input=${handleColorInput}
 ></mb-color-picker>
 ```
 
-**Implementation**:
+**Tests**: 45 passing
 
-```typescript
-// Use native input as data layer
-private nativeInput: HTMLInputElement;
+- Basic rendering (10 tests)
+- Properties (4 tests)
+- Color conversions (5 tests)
+- Text input (4 tests)
+- Events (3 tests)
+- Grid interaction (2 tests)
+- Hue slider (2 tests)
+- Disabled state (2 tests)
+- Accessibility (5 tests)
+- CSS parts (8 tests)
 
-// Custom UI overlay for better visuals
-render() {
-  return html`
-    <div class="color-picker">
-      <button @click=${this.togglePicker}>
-        <span class="swatch" style="background: ${this.value}"></span>
-        <span class="value">${this.value}</span>
-      </button>
+**Migration from Shoelace**:
 
-      <input
-        type="color"
-        .value=${this.value}
-        @input=${this.handleNativeInput}
-        style="position: absolute; opacity: 0; pointer-events: none;"
-      >
-
-      ${this.showPicker ? this.renderPicker() : ''}
-    </div>
-  `;
-}
-```
+- Element: `sl-color-picker` → `mb-color-picker`
+- Event: `sl-change` → `mb-change`
+- Event detail: `e.target.value` → `e.detail.value`
+- All existing functionality preserved
 
 ---
 
