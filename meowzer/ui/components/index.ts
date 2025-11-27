@@ -12,6 +12,7 @@ export { MbSlider } from "./mb-slider/mb-slider.js";
 export { MbTextInput } from "./mb-text-input/mb-text-input.js";
 export { MbTextarea } from "./mb-textarea/mb-textarea.js";
 export { MbCheckbox } from "./mb-checkbox/mb-checkbox.js";
+export { MbSelect } from "./mb-select/mb-select.js";
 
 // Phase 2+ - Feature Components
 export { CatCreator } from "./cat-creator/cat-creator.js";

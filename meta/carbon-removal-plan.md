@@ -380,7 +380,7 @@ Replace: `<cds-tag>` → `<mb-tag>`
 
 **Goal**: Replace all form input components
 
-**Status**: 🔄 In Progress (4/5 components complete - 80%)
+**Status**: ✅ COMPLETE (5/5 components - 100%)
 
 #### 2.1 Text Input ✅ **DONE**
 
@@ -541,20 +541,27 @@ Replace: `<cds-slider>` → `<mb-slider>`
 
 ---
 
-#### 2.5 Select Dropdown
+#### 2.5 Select Dropdown ✅ **DONE**
 
 **Priority**: 🟢 **LOW** (registered but rarely used)
 
-Replace: `<cds-select>`
+Replace: `<cds-select>` → `<mb-select>`
+
+**Status**: ✅ Complete - 27 tests passing
 
 **File**: `components/mb-select/mb-select.ts`
 
 **Features**:
 
-- Options list
-- Label support
+- Native select element with slotted options
+- Label support with required indicator
+- Helper text and error states
 - Disabled state
 - Value binding
+- Size variants (sm, md, lg)
+- Placeholder option
+- Form integration (name, value, required)
+- Custom events (mb-change)
 
 **API**:
 
@@ -562,13 +569,25 @@ Replace: `<cds-select>`
 <mb-select
   label="Pattern"
   .value=${pattern}
-  @change=${handleChange}
+  helper="Choose a pattern"
+  error-message="Error text"
+  ?error=${hasError}
+  ?disabled=${false}
+  ?required=${true}
+  size="md"
+  placeholder="Select an option"
+  name="field-name"
+  @mb-change=${(e: CustomEvent) => {
+    console.log(e.detail.value);
+  }}
 >
   <option value="solid">Solid</option>
   <option value="tabby">Tabby</option>
   <option value="spotted">Spotted</option>
 </mb-select>
 ```
+
+**Note**: Uses native `<option>` elements in default slot for maximum compatibility and accessibility.
 
 ---
 

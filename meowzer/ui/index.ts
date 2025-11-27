@@ -37,6 +37,7 @@ export {
   MbTextInput,
   MbTextarea,
   MbCheckbox,
+  MbSelect,
   CatCreator,
   CatPersonalityPicker,
   CatPreview,
