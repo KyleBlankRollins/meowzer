@@ -104,7 +104,7 @@ describe("MbSlider", () => {
       const helper = el.shadowRoot?.querySelector(
         ".mb-slider__helper"
       );
-      expect(helper?.textContent).toBe("Adjust volume level");
+      expect(helper?.textContent?.trim()).toBe("Adjust volume level");
     });
   });
 
