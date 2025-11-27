@@ -1,8 +1,8 @@
 import { css } from "lit";
-import { carbonTokens } from "../../shared/carbon-tokens.js";
+import { designTokens } from "../../shared/design-tokens.js";
 
 export const catCreatorStyles = [
-  carbonTokens,
+  designTokens,
   css`
     :host {
       display: block;
@@ -49,8 +49,8 @@ export const catCreatorStyles = [
       margin: 0;
       font-size: 1rem;
       font-weight: 600;
-      color: var(--cds-text-primary);
-      border-bottom: 1px solid var(--cds-border-subtle-01);
+      color: var(--mb-color-text-primary);
+      border-bottom: 1px solid var(--mb-color-border-subtle);
       padding-bottom: 0.5rem;
     }
 
@@ -60,7 +60,7 @@ export const catCreatorStyles = [
       gap: 1rem;
       justify-content: flex-end;
       padding-top: 1rem;
-      border-top: 1px solid var(--cds-border-subtle-01);
+      border-top: 1px solid var(--mb-color-border-subtle);
     }
 
     /* Step Indicator */
@@ -75,17 +75,17 @@ export const catCreatorStyles = [
       width: 0.75rem;
       height: 0.75rem;
       border-radius: 50%;
-      background: var(--cds-border-subtle-01);
+      background: var(--mb-color-border-subtle);
       transition: all 0.2s ease;
     }
 
     .step-dot.active {
-      background: var(--cds-background-brand);
+      background: var(--mb-color-brand-primary);
       transform: scale(1.2);
     }
 
     .step-dot.completed {
-      background: var(--cds-background-brand);
+      background: var(--mb-color-brand-primary);
       opacity: 0.6;
     }
 
@@ -96,7 +96,7 @@ export const catCreatorStyles = [
       justify-content: space-between;
       align-items: center;
       padding-top: 1.5rem;
-      border-top: 1px solid var(--cds-border-subtle-01);
+      border-top: 1px solid var(--mb-color-border-subtle);
       margin-top: 1.5rem;
     }
 

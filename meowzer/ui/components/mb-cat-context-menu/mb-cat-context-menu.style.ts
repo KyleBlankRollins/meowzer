@@ -1,8 +1,8 @@
 import { css } from "lit";
-import { carbonTokens } from "../../shared/carbon-tokens.js";
+import { designTokens } from "../../shared/design-tokens.js";
 
 export const catContextMenuStyles = [
-  carbonTokens,
+  designTokens,
   css`
     :host {
       position: fixed;
@@ -15,8 +15,8 @@ export const catContextMenuStyles = [
     }
 
     .context-menu-content {
-      background: var(--cds-layer);
-      border: 1px solid var(--cds-border-subtle);
+      background: var(--mb-color-surface-default);
+      border: 1px solid var(--mb-color-border-subtle);
       border-radius: 4px;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
       min-width: 160px;
@@ -28,7 +28,7 @@ export const catContextMenuStyles = [
       padding: 8px 16px;
       border: none;
       background: none;
-      color: var(--cds-text-primary);
+      color: var(--mb-color-text-primary);
       font-family: inherit;
       font-size: 14px;
       text-align: left;
@@ -37,26 +37,26 @@ export const catContextMenuStyles = [
     }
 
     .menu-item:hover {
-      background: var(--cds-layer-hover);
+      background: var(--mb-color-surface-subtle);
     }
 
     .menu-item:active {
-      background: var(--cds-layer-active);
+      background: var(--mb-color-surface-hover);
     }
 
     .menu-item.destructive {
-      color: var(--cds-support-error);
+      color: var(--mb-color-status-error);
     }
 
     .menu-item.destructive:hover {
-      background: var(--cds-support-error);
-      color: var(--cds-text-on-color);
+      background: var(--mb-color-status-error);
+      color: var(--mb-color-surface-default);
     }
 
     hr {
       margin: 4px 0;
       border: none;
-      border-top: 1px solid var(--cds-border-subtle);
+      border-top: 1px solid var(--mb-color-border-subtle);
     }
   `,
 ];

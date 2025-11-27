@@ -1,8 +1,8 @@
 import { css } from "lit";
-import { carbonTokens } from "../../shared/carbon-tokens.js";
+import { designTokens } from "../../shared/design-tokens.js";
 
 export const yarnVisualStyles = [
-  carbonTokens,
+  designTokens,
   css`
     :host {
       display: block;

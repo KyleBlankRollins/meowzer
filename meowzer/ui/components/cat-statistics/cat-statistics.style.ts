@@ -1,8 +1,8 @@
 import { css } from "lit";
-import { carbonTokens } from "../../shared/carbon-tokens.js";
+import { designTokens } from "../../shared/design-tokens.js";
 
 export const catStatisticsStyles = [
-  carbonTokens,
+  designTokens,
   css`
     :host {
       display: block;
@@ -20,14 +20,14 @@ export const catStatisticsStyles = [
       flex-direction: column;
       gap: 0.5rem;
       padding: 1rem;
-      background: var(--cds-layer-01);
+      background: var(--mb-color-surface-subtle);
       border-radius: 8px;
-      border: 1px solid var(--cds-border-subtle-01);
+      border: 1px solid var(--mb-color-border-subtle);
     }
 
     .stat-label {
       font-size: 0.875rem;
-      color: var(--cds-text-helper);
+      color: var(--mb-color-text-secondary);
       font-weight: 500;
       text-transform: uppercase;
       letter-spacing: 0.025em;
@@ -36,13 +36,13 @@ export const catStatisticsStyles = [
     .stat-value {
       font-size: 2rem;
       font-weight: 700;
-      color: var(--cds-text-primary);
+      color: var(--mb-color-text-primary);
       line-height: 1;
     }
 
     .stat-unit {
       font-size: 0.875rem;
-      color: var(--cds-text-secondary);
+      color: var(--mb-color-text-secondary);
       font-weight: 400;
       margin-left: 0.25rem;
     }

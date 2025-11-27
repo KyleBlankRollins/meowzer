@@ -1,8 +1,8 @@
 import { css } from "lit";
-import { carbonTokens } from "../../shared/carbon-tokens.js";
+import { designTokens } from "../../shared/design-tokens.js";
 
 export const needVisualStyles = [
-  carbonTokens,
+  designTokens,
   css`
     :host {
       display: block;
@@ -43,9 +43,9 @@ export const needVisualStyles = [
     }
 
     .consuming-indicator {
-      background: var(--cds-layer-accent-01);
-      color: var(--cds-text-on-color);
-      border: 1px solid var(--cds-border-interactive);
+      background: var(--mb-color-brand-primary);
+      color: var(--mb-color-surface-default);
+      border: 1px solid var(--mb-color-brand-primary);
       border-radius: 4px;
       padding: 0.125rem 0.375rem;
       font-size: 0.625rem;

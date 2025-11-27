@@ -1,8 +1,8 @@
 import { css } from "lit";
-import { carbonTokens } from "../../shared/carbon-tokens.js";
+import { designTokens } from "../../shared/design-tokens.js";
 
 export const playgroundToolbarStyles = [
-  carbonTokens,
+  designTokens,
   css`
     :host {
       display: block;
@@ -43,13 +43,13 @@ export const playgroundToolbarStyles = [
     }
 
     cds-button[data-active] {
-      background: var(--cds-layer-accent-01);
-      border-color: var(--cds-border-interactive);
+      background: var(--mb-color-brand-primary);
+      border-color: var(--mb-color-brand-primary);
     }
 
     .divider {
       height: 1px;
-      background: var(--cds-border-subtle-01);
+      background: var(--mb-color-border-subtle);
       margin: 0.5rem 0;
     }
   `,

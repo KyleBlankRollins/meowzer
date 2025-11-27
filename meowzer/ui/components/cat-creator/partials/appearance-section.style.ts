@@ -1,8 +1,8 @@
 import { css } from "lit";
-import { carbonTokens } from "../../../shared/carbon-tokens.js";
+import { designTokens } from "../../../shared/design-tokens.js";
 
 export const appearanceSectionStyles = [
-  carbonTokens,
+  designTokens,
   css`
     :host {
       display: block;
@@ -12,8 +12,8 @@ export const appearanceSectionStyles = [
       margin: 0;
       font-size: 1rem;
       font-weight: 600;
-      color: var(--cds-text-primary);
-      border-bottom: 1px solid var(--cds-border-subtle-01);
+      color: var(--mb-color-text-primary);
+      border-bottom: 1px solid var(--mb-color-border-subtle);
       padding-bottom: 0.5rem;
     }
 
@@ -32,25 +32,25 @@ export const appearanceSectionStyles = [
     .select-field label {
       font-size: 0.875rem;
       font-weight: 500;
-      color: var(--cds-text-secondary);
+      color: var(--mb-color-text-secondary);
     }
 
     .select-field select {
       padding: 0.5rem;
-      background: var(--cds-field-01);
-      border: 1px solid var(--cds-border-subtle-01);
+      background: var(--mb-color-surface-default);
+      border: 1px solid var(--mb-color-border-subtle);
       border-radius: 4px;
-      color: var(--cds-text-primary);
+      color: var(--mb-color-text-primary);
       font-size: 0.875rem;
       cursor: pointer;
     }
 
     .select-field select:hover {
-      background: var(--cds-field-hover-01);
+      background: var(--mb-color-surface-hover);
     }
 
     .select-field select:focus {
-      outline: 2px solid var(--cds-focus);
+      outline: 2px solid var(--mb-color-interactive-focus);
       outline-offset: 2px;
     }
 

@@ -23,3 +23,13 @@
 ## UI
 
 - feat: Create pick up/drop feature that applies to all objects in the playground
+
+## Demo and UI
+
+- Remove Carbon components and maybe the Shoelace color picker
+
+## Demo
+
+- Cat creator. Either add new fur length visuals or remove the option.
+- Cat creator. Remove the "make cat roam" step.
+- Reword anything that references "destroy" cat.

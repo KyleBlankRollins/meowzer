@@ -1,0 +1,177 @@
+/**
+ * Global Design Tokens Stylesheet
+ * 
+ * This file provides CSS custom properties at the :root level for use
+ * outside of shadow DOM (e.g., in regular HTML/CSS).
+ * 
+ * Usage in HTML:
+ * <link rel="stylesheet" href="path/to/global-tokens.css">
+ * 
+ * Usage in JS/TS:
+ * import '@meowzer/ui/global-tokens.css';
+ */
+
+:root {
+  /* Colors - Brand */
+  --mb-color-brand-primary: hsl(210.57, 76.81%, 86.47%);
+  --mb-color-brand-secondary: hsl(180, 100%, 95.88%);
+  --mb-color-brand-accent: hsl(327.39, 69.7%, 87.06%);
+
+  /* Colors - Surface */
+  --mb-color-surface-default: hsl(210, 30%, 99%);
+  --mb-color-surface-subtle: hsl(210, 30%, 98%);
+  --mb-color-surface-elevated: hsl(210, 30%, 99%);
+  --mb-color-surface-hover: hsl(210, 25%, 94%);
+
+  /* Colors - Interactive */
+  --mb-color-interactive-primary: hsl(210.57, 76.81%, 86.47%);
+  --mb-color-interactive-secondary: hsl(180, 100%, 95.88%);
+  --mb-color-interactive-hover: hsl(210, 25%, 94%);
+  --mb-color-interactive-focus: hsl(210.57, 76.81%, 86.47%);
+  --mb-color-interactive-disabled: hsl(210, 20%, 85%);
+
+  /* Colors - Text */
+  --mb-color-text-primary: hsl(210, 8%, 12%);
+  --mb-color-text-secondary: hsl(210, 12%, 45%);
+  --mb-color-text-disabled: hsl(210, 20%, 85%);
+  --mb-color-text-on-brand: hsl(210, 8%, 12%);
+
+  /* Colors - Borders */
+  --mb-color-border-subtle: hsl(210, 25%, 94%);
+  --mb-color-border-default: hsl(210, 20%, 85%);
+  --mb-color-border-strong: hsl(210, 12%, 45%);
+  --mb-color-border-focus: hsl(210.57, 76.81%, 86.47%);
+
+  /* Colors - Status */
+  --mb-color-status-success: hsl(103.5, 68.97%, 88.63%);
+  --mb-color-status-warning: hsl(60, 100%, 96.47%);
+  --mb-color-status-error: hsl(327.39, 69.7%, 87.06%);
+  --mb-color-status-info: hsl(210.57, 76.81%, 86.47%);
+
+  /* Typography */
+  --mb-font-family: "Comic Neue", "Nunito", "Quicksand", system-ui, -apple-system, sans-serif;
+  --mb-font-size: 15px;
+  --mb-font-size-small: 13px;
+  --mb-font-size-medium: 17px;
+  --mb-font-size-large: 22px;
+  --mb-font-size-xlarge: 28px;
+  --mb-font-weight-normal: 400;
+  --mb-font-weight-medium: 600;
+  --mb-font-weight-bold: 700;
+  --mb-line-height: 1.6;
+  --mb-line-height-tight: 1.3;
+  --mb-line-height-normal: 1.6;
+  --mb-line-height-relaxed: 1.8;
+
+  /* Spacing */
+  --mb-space-1: 4px;
+  --mb-space-2: 8px;
+  --mb-space-3: 12px;
+  --mb-space-4: 16px;
+  --mb-space-5: 24px;
+  --mb-space-6: 32px;
+  --mb-space-7: 48px;
+  --mb-space-8: 64px;
+
+  /* Border Radius */
+  --mb-radius-none: 0;
+  --mb-radius-small: 8px;
+  --mb-radius-medium: 12px;
+  --mb-radius-large: 20px;
+  --mb-radius-full: 9999px;
+
+  /* Shadows */
+  --mb-shadow-small: 0 2px 8px rgba(0, 0, 0, 0.08);
+  --mb-shadow-medium: 0 4px 16px rgba(0, 0, 0, 0.12);
+  --mb-shadow-large: 0 8px 32px rgba(0, 0, 0, 0.16);
+}
+
+/* Dark mode - activated via data-theme attribute */
+:root[data-theme="dark"] {
+  /* Colors - Brand */
+  --mb-color-brand-primary: hsl(210.57, 60%, 65%);
+  --mb-color-brand-secondary: hsl(180, 80%, 70%);
+  --mb-color-brand-accent: hsl(327.39, 55%, 70%);
+
+  /* Colors - Surface */
+  --mb-color-surface-default: hsl(210, 15%, 12%);
+  --mb-color-surface-subtle: hsl(210, 15%, 16%);
+  --mb-color-surface-elevated: hsl(210, 15%, 22%);
+  --mb-color-surface-hover: hsl(210, 15%, 22%);
+
+  /* Colors - Interactive */
+  --mb-color-interactive-primary: hsl(210.57, 60%, 65%);
+  --mb-color-interactive-secondary: hsl(180, 80%, 70%);
+  --mb-color-interactive-hover: hsl(210, 15%, 22%);
+  --mb-color-interactive-focus: hsl(210.57, 60%, 65%);
+  --mb-color-interactive-disabled: hsl(210, 12%, 32%);
+
+  /* Colors - Text */
+  --mb-color-text-primary: hsl(210, 20%, 95%);
+  --mb-color-text-secondary: hsl(210, 8%, 65%);
+  --mb-color-text-disabled: hsl(210, 12%, 32%);
+  --mb-color-text-on-brand: hsl(210, 15%, 12%);
+
+  /* Colors - Borders */
+  --mb-color-border-subtle: hsl(210, 15%, 22%);
+  --mb-color-border-default: hsl(210, 12%, 32%);
+  --mb-color-border-strong: hsl(210, 8%, 65%);
+  --mb-color-border-focus: hsl(210.57, 60%, 65%);
+
+  /* Colors - Status */
+  --mb-color-status-success: hsl(103.5, 50%, 65%);
+  --mb-color-status-warning: hsl(60, 80%, 75%);
+  --mb-color-status-error: hsl(327.39, 55%, 70%);
+  --mb-color-status-info: hsl(210.57, 60%, 65%);
+
+  /* Shadows */
+  --mb-shadow-small: 0 2px 8px rgba(0, 0, 0, 0.3);
+  --mb-shadow-medium: 0 4px 16px rgba(0, 0, 0, 0.4);
+  --mb-shadow-large: 0 8px 32px rgba(0, 0, 0, 0.5);
+}
+
+/* Dark mode - auto-detect system preference (unless explicitly overridden) */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    /* Colors - Brand */
+    --mb-color-brand-primary: hsl(210.57, 60%, 65%);
+    --mb-color-brand-secondary: hsl(180, 80%, 70%);
+    --mb-color-brand-accent: hsl(327.39, 55%, 70%);
+
+    /* Colors - Surface */
+    --mb-color-surface-default: hsl(210, 15%, 12%);
+    --mb-color-surface-subtle: hsl(210, 15%, 16%);
+    --mb-color-surface-elevated: hsl(210, 15%, 22%);
+    --mb-color-surface-hover: hsl(210, 15%, 22%);
+
+    /* Colors - Interactive */
+    --mb-color-interactive-primary: hsl(210.57, 60%, 65%);
+    --mb-color-interactive-secondary: hsl(180, 80%, 70%);
+    --mb-color-interactive-hover: hsl(210, 15%, 22%);
+    --mb-color-interactive-focus: hsl(210.57, 60%, 65%);
+    --mb-color-interactive-disabled: hsl(210, 12%, 32%);
+
+    /* Colors - Text */
+    --mb-color-text-primary: hsl(210, 20%, 95%);
+    --mb-color-text-secondary: hsl(210, 8%, 65%);
+    --mb-color-text-disabled: hsl(210, 12%, 32%);
+    --mb-color-text-on-brand: hsl(210, 15%, 12%);
+
+    /* Colors - Borders */
+    --mb-color-border-subtle: hsl(210, 15%, 22%);
+    --mb-color-border-default: hsl(210, 12%, 32%);
+    --mb-color-border-strong: hsl(210, 8%, 65%);
+    --mb-color-border-focus: hsl(210.57, 60%, 65%);
+
+    /* Colors - Status */
+    --mb-color-status-success: hsl(103.5, 50%, 65%);
+    --mb-color-status-warning: hsl(60, 80%, 75%);
+    --mb-color-status-error: hsl(327.39, 55%, 70%);
+    --mb-color-status-info: hsl(210.57, 60%, 65%);
+
+    /* Shadows */
+    --mb-shadow-small: 0 2px 8px rgba(0, 0, 0, 0.3);
+    --mb-shadow-medium: 0 4px 16px rgba(0, 0, 0, 0.4);
+    --mb-shadow-large: 0 8px 32px rgba(0, 0, 0, 0.5);
+  }
+}

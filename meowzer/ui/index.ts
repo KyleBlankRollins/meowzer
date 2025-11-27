@@ -30,6 +30,9 @@ export type {
 
 // UI components
 export {
+  MbButton,
+  MbLoading,
+  MbTag,
   CatCreator,
   CatPersonalityPicker,
   CatPreview,

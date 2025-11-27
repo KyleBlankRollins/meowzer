@@ -1,8 +1,8 @@
 import { css } from "lit";
-import { carbonTokens } from "../../shared/carbon-tokens.js";
+import { designTokens } from "../../shared/design-tokens.js";
 
 export const wardrobeDialogStyles = [
-  carbonTokens,
+  designTokens,
   css`
     .wardrobe-content {
       display: flex;
@@ -16,7 +16,7 @@ export const wardrobeDialogStyles = [
       display: block;
       font-size: 0.875rem;
       font-weight: 600;
-      color: var(--cds-text-primary);
+      color: var(--mb-color-text-primary);
       margin-bottom: 0.5rem;
     }
 
@@ -82,8 +82,8 @@ export const wardrobeDialogStyles = [
     }
 
     .preview-area {
-      background-color: var(--cds-layer-02);
-      border: 1px solid var(--cds-border-subtle-01);
+      background-color: var(--mb-color-surface-default);
+      border: 1px solid var(--mb-color-border-subtle);
       border-radius: 8px;
       padding: 1.5rem;
       min-height: 160px;
@@ -114,7 +114,7 @@ export const wardrobeDialogStyles = [
       width: 32px;
       height: 32px;
       border-radius: 4px;
-      border: 2px solid var(--cds-border-subtle-01);
+      border: 2px solid var(--mb-color-border-subtle);
       box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
     }
   `,

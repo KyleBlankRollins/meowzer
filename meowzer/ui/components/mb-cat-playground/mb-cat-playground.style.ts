@@ -1,8 +1,8 @@
 import { css } from "lit";
-import { carbonTokens } from "../../shared/carbon-tokens.js";
+import { designTokens } from "../../shared/design-tokens.js";
 
 export const catPlaygroundStyles = [
-  carbonTokens,
+  designTokens,
   css`
     :host {
       flex: 1;
@@ -26,8 +26,8 @@ export const catPlaygroundStyles = [
       flex-direction: column;
       gap: 1rem;
       padding: 1rem;
-      background: var(--cds-layer-01);
-      border-left: 1px solid var(--cds-border-subtle-01);
+      background: var(--mb-color-surface-subtle);
+      border-left: 1px solid var(--mb-color-border-subtle);
       min-width: 80px;
       max-width: 80px;
     }
@@ -87,7 +87,7 @@ export const catPlaygroundStyles = [
     /* Error and loading states */
     .error-message {
       padding: 1rem;
-      color: var(--cds-text-error);
+      color: var(--mb-color-status-error);
     }
 
     .loading-container {
@@ -97,7 +97,7 @@ export const catPlaygroundStyles = [
 
     .loading-text {
       margin-top: 1rem;
-      color: var(--cds-text-secondary);
+      color: var(--mb-color-text-secondary);
     }
 
     /* Responsive */

@@ -1,18 +1,18 @@
 import { css } from "lit";
-import { carbonTokens } from "../../shared/carbon-tokens.js";
+import { designTokens } from "../../shared/design-tokens.js";
 
 export const catPreviewStyles = [
-  carbonTokens,
+  designTokens,
   css`
     :host {
       display: block;
     }
 
     .preview-container {
-      border: 2px solid var(--cds-border-subtle-01);
+      border: 2px solid var(--mb-color-border-subtle);
       border-radius: 12px;
       padding: 2rem;
-      background: var(--cds-layer-01);
+      background: var(--mb-color-surface-subtle);
       min-height: 300px;
     }
 
@@ -21,7 +21,7 @@ export const catPreviewStyles = [
       display: flex;
       justify-content: center;
       align-items: center;
-      background: var(--cds-layer-02);
+      background: var(--mb-color-surface-default);
       border-radius: 8px;
       min-height: 200px;
     }
@@ -37,7 +37,7 @@ export const catPreviewStyles = [
 
     .preview-details {
       font-size: 0.875rem;
-      color: var(--cds-text-helper);
+      color: var(--mb-color-text-secondary);
       width: 100%;
     }
 
@@ -52,7 +52,7 @@ export const catPreviewStyles = [
 
     .preview-details code {
       font-family: monospace;
-      background: var(--cds-layer-02);
+      background: var(--mb-color-surface-default);
       padding: 0.125rem 0.375rem;
       border-radius: 4px;
       font-size: 0.8125rem;
@@ -61,7 +61,7 @@ export const catPreviewStyles = [
     .preview-error {
       padding: 2rem;
       text-align: center;
-      color: var(--cds-text-error);
+      color: var(--mb-color-status-error);
     }
 
     .error-text {
@@ -72,7 +72,7 @@ export const catPreviewStyles = [
     .preview-loading {
       padding: 2rem;
       text-align: center;
-      color: var(--cds-text-helper);
+      color: var(--mb-color-text-secondary);
     }
 
     /* Simplified preview styles (fallback) */
@@ -144,7 +144,7 @@ export const catPreviewStyles = [
 
     .preview-label {
       font-size: 0.875rem;
-      color: var(--cds-text-helper);
+      color: var(--mb-color-text-secondary);
       text-align: center;
     }
 
@@ -154,7 +154,7 @@ export const catPreviewStyles = [
       gap: 0.5rem;
       width: 100%;
       padding: 1rem;
-      background: var(--cds-layer-02);
+      background: var(--mb-color-surface-default);
       border-radius: 8px;
       font-size: 0.875rem;
     }
@@ -165,12 +165,12 @@ export const catPreviewStyles = [
     }
 
     .setting-label {
-      color: var(--cds-text-helper);
+      color: var(--mb-color-text-secondary);
     }
 
     .setting-value {
       font-weight: 500;
-      color: var(--cds-text-primary);
+      color: var(--mb-color-text-primary);
     }
   `,
 ];

@@ -1,8 +1,8 @@
 import { css } from "lit";
-import { carbonTokens } from "../../../shared/carbon-tokens.js";
+import { designTokens } from "../../../shared/design-tokens.js";
 
 export const basicInfoSectionStyles = [
-  carbonTokens,
+  designTokens,
   css`
     :host {
       display: block;
@@ -12,8 +12,8 @@ export const basicInfoSectionStyles = [
       margin: 0;
       font-size: 1rem;
       font-weight: 600;
-      color: var(--cds-text-primary);
-      border-bottom: 1px solid var(--cds-border-subtle-01);
+      color: var(--mb-color-text-primary);
+      border-bottom: 1px solid var(--mb-color-border-subtle);
       padding-bottom: 0.5rem;
     }
   `,

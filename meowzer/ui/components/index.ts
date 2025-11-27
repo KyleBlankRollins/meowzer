@@ -2,6 +2,12 @@
  * Component exports
  */
 
+// Phase 1 - Core Components
+export { MbButton } from "./mb-button/mb-button.js";
+export { MbLoading } from "./mb-loading/mb-loading.js";
+export { MbTag } from "./mb-tag/mb-tag.js";
+
+// Phase 2+ - Feature Components
 export { CatCreator } from "./cat-creator/cat-creator.js";
 export { CatPersonalityPicker } from "./cat-personality-picker/cat-personality-picker.js";
 export { CatPreview } from "./cat-preview/cat-preview.js";
