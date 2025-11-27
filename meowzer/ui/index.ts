@@ -33,6 +33,7 @@ export {
   MbButton,
   MbLoading,
   MbTag,
+  MbSlider,
   CatCreator,
   CatPersonalityPicker,
   CatPreview,

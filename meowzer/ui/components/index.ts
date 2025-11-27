@@ -7,6 +7,9 @@ export { MbButton } from "./mb-button/mb-button.js";
 export { MbLoading } from "./mb-loading/mb-loading.js";
 export { MbTag } from "./mb-tag/mb-tag.js";
 
+// Phase 2 - Form Controls
+export { MbSlider } from "./mb-slider/mb-slider.js";
+
 // Phase 2+ - Feature Components
 export { CatCreator } from "./cat-creator/cat-creator.js";
 export { CatPersonalityPicker } from "./cat-personality-picker/cat-personality-picker.js";
