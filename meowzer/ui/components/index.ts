@@ -24,6 +24,7 @@ export { MbColorPicker } from "./mb-color-picker/mb-color-picker.js";
 export { MbTooltip } from "./mb-tooltip/mb-tooltip.js";
 export { MbAccordion } from "./mb-accordion/mb-accordion.js";
 export { MbAccordionItem } from "./mb-accordion/mb-accordion-item.js";
+export { MbPopover } from "./mb-popover/mb-popover.js";
 
 // Phase 2+ - Feature Components
 export { CatCreator } from "./cat-creator/cat-creator.js";

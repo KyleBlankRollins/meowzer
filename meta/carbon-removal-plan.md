@@ -948,7 +948,7 @@ Replace: `<cds-accordion>`
 
 ---
 
-#### 4.4 Popover (Optional)
+#### 4.4 Popover ✅
 
 **Priority**: 🟢 **LOW**
 
@@ -956,7 +956,7 @@ Replace: `<cds-popover>`
 
 **File**: `components/mb-popover/mb-popover.ts`
 
-Can defer to Phase 5 or skip if not actively used.
+**Status**: ✅ **DONE** - 35 tests passing
 
 ---
 

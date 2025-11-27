@@ -45,6 +45,7 @@ export {
   MbTooltip,
   MbAccordion,
   MbAccordionItem,
+  MbPopover,
   CatCreator,
   CatPersonalityPicker,
   CatPreview,
