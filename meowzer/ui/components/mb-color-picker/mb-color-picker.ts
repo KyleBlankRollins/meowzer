@@ -374,9 +374,8 @@ export class MbColorPicker extends LitElement {
 
   render() {
     const currentColor = this.getCurrentColor();
-    const hueColor = this.rgbToHex(
-      ...Object.values(this.hsvToRgb(this.hue, 100, 100))
-    );
+    const hueRgb = this.hsvToRgb(this.hue, 100, 100);
+    const hueColor = this.rgbToHex(hueRgb.r, hueRgb.g, hueRgb.b);
     const gridHandleX = (this.saturation / 100) * 100;
     const gridHandleY = (1 - this.value_hsv / 100) * 100;
     const hueHandleX = (this.hue / 360) * 100;
