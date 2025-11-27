@@ -49,19 +49,19 @@ export class BasicInfoSection extends LitElement {
     return html`
       <div class="form-section">
         <h4>Basic Info</h4>
-        <cds-text-input
+        <mb-text-input
           label="Name"
           .value=${this.name}
           @input=${this.handleNameChange}
           required
-        ></cds-text-input>
+        ></mb-text-input>
 
-        <cds-textarea
+        <mb-textarea
           label="Description"
           .value=${this.description}
           @input=${this.handleDescriptionChange}
           rows="3"
-        ></cds-textarea>
+        ></mb-textarea>
       </div>
     `;
   }

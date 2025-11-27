@@ -11,7 +11,7 @@ import { LitElement, html } from "lit";
 import { appearanceSectionStyles } from "./appearance-section.style.js";
 import { customElement, property } from "lit/decorators.js";
 import type { CatSettings } from "meowzer";
-import "../../cat-color-picker/cat-color-picker.js";
+import "../../mb-color-picker/mb-color-picker.js";
 
 @customElement("appearance-section")
 export class AppearanceSection extends LitElement {
@@ -61,17 +61,17 @@ export class AppearanceSection extends LitElement {
         <h4>Appearance</h4>
 
         <div class="appearance-grid">
-          <cat-color-picker
+          <mb-color-picker
             label="Fur Color"
             .value=${this.settings.color}
-            @color-change=${this.handleColorChange}
-          ></cat-color-picker>
+            @mb-change=${this.handleColorChange}
+          ></mb-color-picker>
 
-          <cat-color-picker
+          <mb-color-picker
             label="Eye Color"
             .value=${this.settings.eyeColor}
-            @color-change=${this.handleEyeColorChange}
-          ></cat-color-picker>
+            @mb-change=${this.handleEyeColorChange}
+          ></mb-color-picker>
 
           <div class="select-field">
             <label>Pattern</label>

@@ -30,7 +30,6 @@ export { MbPopover } from "./mb-popover/mb-popover.js";
 export { CatCreator } from "./cat-creator/cat-creator.js";
 export { CatPersonalityPicker } from "./cat-personality-picker/cat-personality-picker.js";
 export { CatPreview } from "./cat-preview/cat-preview.js";
-export { CatColorPicker } from "./cat-color-picker/cat-color-picker.js";
 export { CatStatistics } from "./cat-statistics/cat-statistics.js";
 export { MbCatPlayground } from "./mb-cat-playground/mb-cat-playground.js";
 export { MbWardrobeDialog } from "./mb-wardrobe-dialog/mb-wardrobe-dialog.js";

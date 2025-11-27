@@ -1,12 +1,10 @@
 #!/usr/bin/env node
 
 /**
- * Copy Carbon Web Components assets to dist folder
+ * Copy interaction assets to dist folder
  *
- * This script copies necessary Carbon theme files to the dist folder
- * so users can optionally bundle them with @meowzer/ui if desired.
- *
- * Note: Users can also load these directly from @carbon/styles in their projects.
+ * This script copies necessary interaction SVG files to the dist folder
+ * so they are available in the published package.
  */
 
 import { copyFileSync, mkdirSync, existsSync } from "fs";

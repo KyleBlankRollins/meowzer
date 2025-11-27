@@ -275,12 +275,12 @@ export class CatCreator extends LitElement {
         <div class="nav-group">
           ${!isFirstStep
             ? html`
-                <cds-button
+                <mb-button
                   @click=${this.previousStep}
-                  kind="secondary"
+                  variant="secondary"
                 >
                   Previous
-                </cds-button>
+                </mb-button>
               `
             : html`<span></span>`}
         </div>
@@ -291,18 +291,18 @@ export class CatCreator extends LitElement {
         <div class="nav-group">
           ${!isLastStep
             ? html`
-                <cds-button @click=${this.nextStep} kind="primary">
+                <mb-button @click=${this.nextStep} variant="primary">
                   Next
-                </cds-button>
+                </mb-button>
               `
             : html`
-                <cds-button
+                <mb-button
                   @click=${this.handleCreate}
-                  kind="primary"
+                  variant="primary"
                   ?disabled=${this.creating}
                 >
                   ${this.creating ? "Creating..." : "Create Cat"}
-                </cds-button>
+                </mb-button>
               `}
         </div>
       </div>
@@ -312,27 +312,24 @@ export class CatCreator extends LitElement {
   render() {
     if (!this.meowzer) {
       return html`
-        <cds-inline-notification
-          kind="error"
-          title="No Meowzer SDK"
-          subtitle="Please wrap this component in a <meowzer-provider>."
-          hideCloseButton
-        >
-        </cds-inline-notification>
+        <mb-notification variant="error" title="No Meowzer SDK">
+          Please wrap this component in a &lt;meowzer-provider&gt;.
+        </mb-notification>
       `;
     }
 
     return html`
       <div class="cat-creator">
-        ${this.message
-          ? html`<cds-inline-notification
-              kind="info"
-              title=${this.message}
-              hideCloseButton
-              class="message"
-            >
-            </cds-inline-notification>`
-          : ""}
+        ${
+          this.message
+            ? html`<mb-notification
+                variant="info"
+                title=${this.message}
+                class="message"
+              >
+              </mb-notification>`
+            : ""
+        }
 
         <div class="creator-layout">
           <!-- Preview Panel -->
@@ -340,85 +337,93 @@ export class CatCreator extends LitElement {
             <cat-preview
               .settings=${this.settings}
               autoBuild
-            ></cat-preview>
+            </cat-preview>
             <div class="preview-actions">
-              <cds-button
+              <mb-button
                 @click=${this.reset}
-                kind="secondary"
+                variant="secondary"
                 size="sm"
               >
                 Reset
-              </cds-button>
+              </mb-button>
             </div>
           </div>
 
           <!-- Wizard Panel -->
           <div class="settings-panel">
             <!-- Step Errors -->
-            ${this.stepErrors.length > 0
-              ? html`
-                  <cds-inline-notification
-                    kind="error"
-                    title="Please fix the following:"
-                    subtitle=${this.stepErrors.join(", ")}
-                    hideCloseButton
-                    class="step-errors"
-                  >
-                  </cds-inline-notification>
-                `
-              : ""}
+            ${
+              this.stepErrors.length > 0
+                ? html`
+                    <mb-notification
+                      variant="error"
+                      title="Please fix the following:"
+                      class="step-errors"
+                    >
+                      ${this.stepErrors.join(", ")}
+                    </mb-notification>
+                  `
+                : ""
+            }
 
             <div class="creator-form">
               <!-- Step 1: Basic Info -->
-              ${this.currentStep === 1
-                ? html`
-                    <basic-info-section
-                      .name=${this.catName}
-                      .description=${this.catDescription}
-                      @basic-info-change=${this.handleBasicInfoChange}
-                    ></basic-info-section>
-                  `
-                : ""}
+              ${
+                this.currentStep === 1
+                  ? html`
+                      <basic-info-section
+                        .name=${this.catName}
+                        .description=${this.catDescription}
+                        @basic-info-change=${this
+                          .handleBasicInfoChange}
+                      ></basic-info-section>
+                    `
+                  : ""
+              }
 
               <!-- Step 2: Appearance & Size -->
-              ${this.currentStep === 2
-                ? html`
-                    <appearance-section
-                      .settings=${this.settings}
-                      @appearance-change=${this
-                        .handleAppearanceChange}
-                    ></appearance-section>
-                  `
-                : ""}
+              ${
+                this.currentStep === 2
+                  ? html`
+                      <appearance-section
+                        .settings=${this.settings}
+                        @appearance-change=${this
+                          .handleAppearanceChange}
+                      ></appearance-section>
+                    `
+                  : ""
+              }
 
               <!-- Step 3: Personality -->
-              ${this.currentStep === 3
-                ? html`
-                    <cat-personality-picker
-                      @personality-change=${this
-                        .handlePersonalityChange}
-                    ></cat-personality-picker>
-                  `
-                : ""}
+              ${
+                this.currentStep === 3
+                  ? html`
+                      <cat-personality-picker
+                        @personality-change=${this
+                          .handlePersonalityChange}
+                      ></cat-personality-picker>
+                    `
+                  : ""
+              }
 
               <!-- Step 4: Behavior Options -->
-              ${this.currentStep === 4
-                ? html`
-                    <div class="form-section">
-                      <h4>Behavior Options</h4>
-                      <cds-checkbox
-                        ?checked=${this.makeRoaming}
-                        @change=${(e: Event) => {
-                          this.makeRoaming = (
-                            e.target as HTMLInputElement
-                          ).checked;
-                        }}
-                      >
-                        Make cat roam the viewport
-                      </cds-checkbox>
-                    </div>
-                  `
-                : ""}
+              ${
+                this.currentStep === 4
+                  ? html`
+                      <div class="form-section">
+                        <h4>Behavior Options</h4>
+                        <mb-checkbox
+                          ?checked=${this.makeRoaming}
+                          @mb-change=${(e: CustomEvent) => {
+                            this.makeRoaming = e.detail.checked;
+                          }}
+                        >
+                          Make cat roam the viewport
+                        </mb-checkbox>
+                      </div>
+                    `
+                  : ""
+              }
             </div>
 
             <!-- Wizard Navigation -->

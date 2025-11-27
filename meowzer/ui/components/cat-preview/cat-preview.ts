@@ -157,7 +157,7 @@ export class CatPreview extends LitElement {
     return html`
       <div class="preview-container">
         <div class="preview-loading">
-          <cds-loading></cds-loading>
+          <mb-loading></mb-loading>
           <p>Waiting for settings...</p>
         </div>
       </div>

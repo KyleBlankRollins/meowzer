@@ -17,15 +17,15 @@ export const playgroundToolbarStyles = [
       padding: 0.5rem;
     }
 
-    cds-button {
+    mb-button {
       min-width: 48px;
       max-width: 48px;
       min-height: 48px;
       max-height: 48px;
     }
 
-    /* Override Carbon's internal button styles to center SVGs */
-    cds-button::part(button) {
+    /* Override button styles to center SVGs */
+    mb-button::part(button) {
       display: flex;
       align-items: center;
       justify-content: center;
@@ -34,7 +34,7 @@ export const playgroundToolbarStyles = [
       width: 100%;
     }
 
-    cds-button svg {
+    mb-button svg {
       display: block;
       width: 24px;
       height: 24px;
@@ -42,7 +42,7 @@ export const playgroundToolbarStyles = [
       margin: 0 auto;
     }
 
-    cds-button[data-active] {
+    mb-button[data-active] {
       background: var(--mb-color-brand-primary);
       border-color: var(--mb-color-brand-primary);
     }

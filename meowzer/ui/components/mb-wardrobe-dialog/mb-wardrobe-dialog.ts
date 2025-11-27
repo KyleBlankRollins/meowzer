@@ -226,9 +226,9 @@ export class MbWardrobeDialog extends LitElement {
         <div class="hat-buttons">
           ${this.hatTypes.map(
             (hat) => html`
-              <cds-button
+              <mb-button
                 class="hat-button"
-                kind=${this.selectedHatType === hat.type
+                variant=${this.selectedHatType === hat.type
                   ? "primary"
                   : "tertiary"}
                 @click=${() => this.handleHatSelect(hat.type)}
@@ -245,7 +245,7 @@ export class MbWardrobeDialog extends LitElement {
                   </span>
                   <span class="hat-label">${hat.label}</span>
                 </div>
-              </cds-button>
+              </mb-button>
             `
           )}
         </div>
@@ -262,17 +262,17 @@ export class MbWardrobeDialog extends LitElement {
         <label class="section-label">Customize Colors:</label>
 
         <div class="color-pickers">
-          <cat-color-picker
+          <mb-color-picker
             label="Base Color"
             .value=${this.baseColor}
-            @color-change=${this.handleBaseColorChange}
-          ></cat-color-picker>
+            @mb-change=${this.handleBaseColorChange}
+          ></mb-color-picker>
 
-          <cat-color-picker
+          <mb-color-picker
             label="Accent Color"
             .value=${this.accentColor}
-            @color-change=${this.handleAccentColorChange}
-          ></cat-color-picker>
+            @mb-change=${this.handleAccentColorChange}
+          ></mb-color-picker>
         </div>
       </div>
     `;
@@ -282,32 +282,25 @@ export class MbWardrobeDialog extends LitElement {
     const catName = this.cat?.name || "Cat";
 
     return html`
-      <cds-modal
+      <mb-modal
         ?open=${this.open}
-        @cds-modal-closed=${this.handleDialogClose}
+        @mb-close=${this.handleDialogClose}
         size="sm"
+        heading="Change Hat for ${catName}"
       >
-        <cds-modal-header>
-          <cds-modal-heading
-            >Change Hat for ${catName}</cds-modal-heading
-          >
-        </cds-modal-header>
+        <div class="wardrobe-content">
+          ${this.renderHatSelection()} ${this.renderColorPickers()}
+        </div>
 
-        <cds-modal-body>
-          <div class="wardrobe-content">
-            ${this.renderHatSelection()} ${this.renderColorPickers()}
-          </div>
-        </cds-modal-body>
-
-        <cds-modal-footer>
-          <cds-button @click=${this.handleCancel} kind="secondary">
+        <div slot="footer">
+          <mb-button @click=${this.handleCancel} variant="secondary">
             Cancel
-          </cds-button>
-          <cds-button @click=${this.handleApply} kind="primary">
+          </mb-button>
+          <mb-button @click=${this.handleApply} variant="primary">
             Apply Hat
-          </cds-button>
-        </cds-modal-footer>
-      </cds-modal>
+          </mb-button>
+        </div>
+      </mb-modal>
     `;
   }
 }

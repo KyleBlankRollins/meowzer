@@ -1,7 +1,7 @@
 {
   "name": "@meowzer/ui",
   "version": "0.1.0",
-  "description": "Lit Element + Carbon Web Components for Meowzer SDK - drop-in cat animations for any website",
+  "description": "Custom Lit Element UI components for Meowzer SDK - drop-in cat animations for any website",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -53,26 +53,19 @@
     "LICENSE"
   ],
   "peerDependencies": {
-    "@carbon/web-components": "^2.43.0",
     "lit": "^3.0.0",
     "meowzer": "^1.0.0"
   },
   "dependencies": {
     "@lit/context": "^1.1.0",
-    "@shoelace-style/shoelace": "^2.20.1",
     "gsap": "^3.13.0"
   },
   "peerDependenciesMeta": {
-    "@carbon/web-components": {
-      "optional": false
-    },
     "lit": {
       "optional": false
     }
   },
   "devDependencies": {
-    "@carbon/icons": "^11.70.0",
-    "@carbon/web-components": "^2.43.0",
     "@storybook/addon-a11y": "^8.6.14",
     "@storybook/addon-essentials": "^8.6.14",
     "@storybook/addon-interactions": "^8.6.14",

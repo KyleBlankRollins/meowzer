@@ -74,81 +74,81 @@ export class CatPersonalityPicker extends LitElement {
         <div class="preset-buttons">
           ${PERSONALITY_PRESETS.map(
             (preset) => html`
-              <cds-button
-                kind=${this.selectedPreset === preset.value
+              <mb-button
+                variant=${this.selectedPreset === preset.value
                   ? "primary"
                   : "tertiary"}
                 @click=${() => this.handlePresetSelect(preset.value)}
               >
                 ${preset.name}
-              </cds-button>
+              </mb-button>
             `
           )}
         </div>
 
         <div class="trait-sliders">
-          <cds-slider
-            label-text="Curiosity"
+          <mb-slider
+            label="Curiosity"
             min="0"
             max="1"
             step="0.1"
             value=${String(
               (this.personality as any).curiosity || 0.5
             )}
-            @cds-slider-changed=${(e: CustomEvent) =>
+            @mb-change=${(e: CustomEvent) =>
               this.handleTraitChange("curiosity", e.detail.value)}
           >
-          </cds-slider>
+          </mb-slider>
 
-          <cds-slider
-            label-text="Playfulness"
+          <mb-slider
+            label="Playfulness"
             min="0"
             max="1"
             step="0.1"
             value=${String(
               (this.personality as any).playfulness || 0.5
             )}
-            @cds-slider-changed=${(e: CustomEvent) =>
+            @mb-change=${(e: CustomEvent) =>
               this.handleTraitChange("playfulness", e.detail.value)}
           >
-          </cds-slider>
+          </mb-slider>
 
-          <cds-slider
-            label-text="Independence"
+          <mb-slider
+            label="Independence"
             min="0"
             max="1"
             step="0.1"
             value=${String(
               (this.personality as any).independence || 0.5
             )}
-            @cds-slider-changed=${(e: CustomEvent) =>
+            @mb-change=${(e: CustomEvent) =>
               this.handleTraitChange("independence", e.detail.value)}
           >
-          </cds-slider>
+          </mb-slider>
 
-          <cds-slider
-            label-text="Sociability"
+          <mb-slider
+            label="Sociability"
             min="0"
             max="1"
             step="0.1"
             value=${String(
               (this.personality as any).sociability || 0.5
             )}
-            @cds-slider-changed=${(e: CustomEvent) =>
+            @mb-change=${(e: CustomEvent) =>
               this.handleTraitChange("sociability", e.detail.value)}
           >
-          </cds-slider>
+          </mb-slider>
 
-          <cds-slider
-            label-text="Energy"
+          <mb-slider
+            label="Energy"
             min="0"
             max="1"
             step="0.1"
             value=${String((this.personality as any).energy || 0.5)}
-            @cds-slider-changed=${(e: CustomEvent) =>
+            @mb-change=${(e: CustomEvent) =>
               this.handleTraitChange("energy", e.detail.value)}
           >
-          </cds-slider>
+          </mb-slider>
         </div>
       </div>
     `;

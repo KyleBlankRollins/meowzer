@@ -487,7 +487,7 @@ export class MbCatPlayground extends LitElement {
       return html`
         <div class="playground-container">
           <div class="loading-container">
-            <cds-loading></cds-loading>
+            <mb-loading></mb-loading>
             <p class="loading-text">
               Waiting for Meowzer provider...
             </p>
@@ -503,47 +503,42 @@ export class MbCatPlayground extends LitElement {
           <!-- Rename Dialog -->
           ${this.showRenameDialog
             ? html`
-                <cds-modal
+                <mb-modal
+                  heading="Rename Cat"
                   ?open=${this.showRenameDialog}
-                  @cds-modal-closed=${this.handleRenameCancel}
+                  @mb-close=${this.handleRenameCancel}
                 >
-                  <cds-modal-header>
-                    <cds-modal-heading>Rename Cat</cds-modal-heading>
-                  </cds-modal-header>
+                  <mb-text-input
+                    label="Cat Name"
+                    .value=${this.newName}
+                    @input=${(e: Event) =>
+                      (this.newName = (
+                        e.target as HTMLInputElement
+                      ).value)}
+                    @keydown=${(e: KeyboardEvent) => {
+                      if (e.key === "Enter")
+                        this.handleRenameSubmit();
+                    }}
+                  ></mb-text-input>
 
-                  <cds-modal-body>
-                    <cds-text-input
-                      label="Cat Name"
-                      .value=${this.newName}
-                      @input=${(e: Event) =>
-                        (this.newName = (
-                          e.target as HTMLInputElement
-                        ).value)}
-                      @keydown=${(e: KeyboardEvent) => {
-                        if (e.key === "Enter")
-                          this.handleRenameSubmit();
-                      }}
-                    ></cds-text-input>
-                  </cds-modal-body>
-
-                  <cds-modal-footer>
-                    <cds-button
-                      kind="secondary"
+                  <div slot="footer">
+                    <mb-button
+                      variant="secondary"
                       @click=${this.handleRenameCancel}
                     >
                       Cancel
-                    </cds-button>
-                    <cds-button
-                      kind="primary"
+                    </mb-button>
+                    <mb-button
+                      variant="primary"
                       @click=${this.handleRenameSubmit}
                       ?disabled=${!this.newName.trim()}
                     >
                       Rename
-                    </cds-button>
-                  </cds-modal-footer>
-                </cds-modal>
+                    </mb-button>
+                  </div>
+                </mb-modal>
               `
-            : ""}
+            : ""}}
 
           <!-- Wardrobe Dialog -->
           <mb-wardrobe-dialog
@@ -553,33 +548,25 @@ export class MbCatPlayground extends LitElement {
           ></mb-wardrobe-dialog>
 
           <!-- Cat Creator Dialog -->
-          <cds-modal
+          <mb-modal
             id="creator-dialog"
-            @cds-modal-closed=${this.closeCreatorDialog}
+            heading="Create Cat"
             size="lg"
+            @mb-close=${this.closeCreatorDialog}
           >
-            <cds-modal-header>
-              <cds-modal-heading>Create Cat</cds-modal-heading>
-            </cds-modal-header>
-            <cds-modal-body>
-              <cat-creator
-                @cat-created=${this.closeCreatorDialog}
-              ></cat-creator>
-            </cds-modal-body>
-          </cds-modal>
+            <cat-creator
+              @cat-created=${this.closeCreatorDialog}
+            ></cat-creator>
+          </mb-modal>
 
           <!-- Statistics Dialog -->
-          <cds-modal
+          <mb-modal
             id="stats-dialog"
-            @cds-modal-closed=${this.closeStatsDialog}
+            heading="Statistics"
+            @mb-close=${this.closeStatsDialog}
           >
-            <cds-modal-header>
-              <cds-modal-heading>Statistics</cds-modal-heading>
-            </cds-modal-header>
-            <cds-modal-body>
-              <cat-statistics></cat-statistics>
-            </cds-modal-body>
-          </cds-modal>
+            <cat-statistics></cat-statistics>
+          </mb-modal>
 
           <!-- Yarn Visuals -->
           ${Array.from(this.activeYarns.values()).map(
