@@ -380,7 +380,7 @@ Replace: `<cds-tag>` → `<mb-tag>`
 
 **Goal**: Replace all form input components
 
-**Status**: 🔄 In Progress (3/5 components complete)
+**Status**: 🔄 In Progress (4/5 components complete - 80%)
 
 #### 2.1 Text Input ✅ **DONE**
 
@@ -457,30 +457,45 @@ Replace: `<cds-textarea>` → `<mb-textarea>`
 
 ---
 
-#### 2.3 Checkbox
+#### 2.3 Checkbox ✅ **DONE**
 
 **Priority**: 🟡 **MODERATE**
 
-Replace: `<cds-checkbox>`
+Replace: `<cds-checkbox>` → `<mb-checkbox>`
+
+**Status**: ✅ Complete - 27 tests passing
 
 **File**: `components/mb-checkbox/mb-checkbox.ts`
 
 **Features**:
 
-- Label support
+- Default slot for label
 - Checked state
 - Disabled state
 - Indeterminate state
+- Helper text and error states
+- Form integration (name, value, required)
+- Custom events (mb-change)
 
 **API**:
 
 ```typescript
 <mb-checkbox
-  label="Random cat"
   ?checked=${isRandom}
   ?disabled=${false}
-  @change=${handleChange}
-></mb-checkbox>
+  ?indeterminate=${partial}
+  helper="Additional information"
+  error-message="Error text"
+  ?error=${hasError}
+  name="field-name"
+  value="field-value"
+  ?required=${true}
+  @mb-change=${(e: CustomEvent) => {
+    console.log(e.detail.checked, e.detail.value);
+  }}
+>
+  Random cat
+</mb-checkbox>
 ```
 
 **Affected Components**:
