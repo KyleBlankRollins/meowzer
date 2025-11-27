@@ -34,6 +34,7 @@ export {
   MbLoading,
   MbTag,
   MbSlider,
+  MbTextInput,
   CatCreator,
   CatPersonalityPicker,
   CatPreview,

@@ -380,13 +380,15 @@ Replace: `<cds-tag>` → `<mb-tag>`
 
 **Goal**: Replace all form input components
 
-**Status**: 🔄 In Progress (1/5 components complete)
+**Status**: 🔄 In Progress (2/5 components complete)
 
-#### 2.1 Text Input
+#### 2.1 Text Input ✅ **DONE**
 
 **Priority**: 🔴 **CRITICAL** (used in forms)
 
-Replace: `<cds-text-input>`
+Replace: `<cds-text-input>` → `<mb-text-input>`
+
+**Status**: ✅ Complete - 28 tests passing
 
 **File**: `components/mb-text-input/mb-text-input.ts`
 
