@@ -16,6 +16,7 @@ export { MbSelect } from "./mb-select/mb-select.js";
 
 // Phase 3 - Complex Components
 export { MbModal } from "./mb-modal/mb-modal.js";
+export { MbNotification } from "./mb-notification/mb-notification.js";
 
 // Phase 2+ - Feature Components
 export { CatCreator } from "./cat-creator/cat-creator.js";

@@ -591,7 +591,7 @@ Replace: `<cds-select>` → `<mb-select>`
 
 ---
 
-### Phase 3: Complex Components (Week 3) - **1/3 COMPLETE** (33%)
+### Phase 3: Complex Components (Week 3) - **2/3 COMPLETE** (67%)
 
 **Goal**: Replace modal system and notifications
 
@@ -679,39 +679,79 @@ Replace: `<cds-modal>`, `<cds-modal-header>`, `<cds-modal-heading>`, `<cds-modal
 
 ---
 
-#### 3.2 Notification/Toast
+#### 3.2 Notification/Toast ✅ **DONE**
 
 **Priority**: 🟡 **MODERATE**
 
-Replace: `<cds-inline-notification>`
+Replace: `<cds-inline-notification>` → `<mb-notification>`
+
+**Status**: ✅ Complete - 33 tests passing
 
 **File**: `components/mb-notification/mb-notification.ts`
 
 **Features**:
 
-- Info, success, warning, error variants
-- Inline or toast positioning
-- Dismissable
-- Auto-dismiss timeout
-- Icon support
+- Four semantic variants (info, success, warning, error) with appropriate icons and colors
+- Title and subtitle support
+- Dismissable with close button (configurable via `hideCloseButton`)
+- Auto-dismiss with configurable timeout
+- Low contrast variant for subtle backgrounds
+- Toast positioning (6 position options: top/bottom × left/center/right)
+- Smooth animations (slide-in from top or bottom)
+- Icon support (built-in SVG icons for each variant)
+- Accessibility (role="alert")
 
 **API**:
 
 ```typescript
 <mb-notification
   variant="info|success|warning|error"
-  ?dismissable=${true}
-  timeout="5000"
-  @dismiss=${handleDismiss}
+  title="Notification Title"
+  subtitle="Notification message"
+  ?hide-close-button=${false}
+  ?low-contrast=${false}
+  ?toast=${false}
+  position="top-right|top-left|bottom-right|bottom-left|top-center|bottom-center"
+  timeout="0"
+  @mb-close=${handleClose}
 >
-  <span slot="title">Success!</span>
-  <span slot="message">Cat created successfully</span>
+  <p>Optional slotted content</p>
 </mb-notification>
 ```
+
+**Properties**:
+
+- `variant: "info" | "success" | "warning" | "error"` - Notification type (default: "info")
+- `title: string` - Notification title
+- `subtitle: string` - Notification message/subtitle
+- `hideCloseButton: boolean` - Hide close button (default: false)
+- `lowContrast: boolean` - Use neutral background (default: false)
+- `toast: boolean` - Display as fixed toast (default: false)
+- `position: string` - Toast position (default: "top-right")
+- `timeout: number` - Auto-dismiss in ms, 0 = no auto-dismiss (default: 0)
+
+**Events**:
+
+- `mb-close` - Fired when notification is closed
+
+**Slots**:
+
+- (default) - Additional content to display
+
+**CSS Parts**:
+
+- `notification`, `icon`, `content`, `title`, `subtitle`, `close`
 
 **Affected Components**:
 
 - `cat-creator` (validation errors, success messages)
+
+**Migration Notes**:
+
+- Carbon `kind` → mb-notification `variant`
+- Carbon `hideCloseButton` → mb-notification `hide-close-button` (kebab-case)
+- Title/subtitle now properties instead of slots
+- Event changed from `cds-close` to `mb-close`
 
 ---
 

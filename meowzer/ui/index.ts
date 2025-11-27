@@ -39,6 +39,7 @@ export {
   MbCheckbox,
   MbSelect,
   MbModal,
+  MbNotification,
   CatCreator,
   CatPersonalityPicker,
   CatPreview,
