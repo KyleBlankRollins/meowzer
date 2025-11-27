@@ -35,6 +35,7 @@ export {
   MbTag,
   MbSlider,
   MbTextInput,
+  MbTextarea,
   CatCreator,
   CatPersonalityPicker,
   CatPreview,
