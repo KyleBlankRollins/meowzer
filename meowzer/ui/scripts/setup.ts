@@ -39,7 +39,6 @@ import "@carbon/web-components/es/components/notification/index.js";
 import "@carbon/web-components/es/components/checkbox/index.js";
 import "@carbon/web-components/es/components/text-input/index.js";
 import "@carbon/web-components/es/components/textarea/index.js";
-import "@carbon/web-components/es/components/accordion/index.js";
 import "@carbon/web-components/es/components/popover/index.js";
 import "@carbon/web-components/es/components/dropdown/index.js";
 import "@carbon/web-components/es/components/slider/index.js";

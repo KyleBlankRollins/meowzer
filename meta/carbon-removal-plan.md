@@ -936,7 +936,7 @@ Replace: `<cds-tooltip>`
 
 ---
 
-#### 4.3 Accordion (Optional)
+#### 4.3 Accordion ✅
 
 **Priority**: 🟢 **LOW**
 
@@ -944,7 +944,7 @@ Replace: `<cds-accordion>`
 
 **File**: `components/mb-accordion/mb-accordion.ts`
 
-Can defer to Phase 5 or skip if not actively used.
+**Status**: ✅ **DONE** - 37 tests passing
 
 ---
 

@@ -43,6 +43,8 @@ export {
   MbIcon,
   MbColorPicker,
   MbTooltip,
+  MbAccordion,
+  MbAccordionItem,
   CatCreator,
   CatPersonalityPicker,
   CatPreview,
