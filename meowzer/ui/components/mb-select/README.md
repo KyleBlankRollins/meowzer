@@ -157,46 +157,6 @@ import "@meowzer/ui/components/mb-select/mb-select.js";
 | `helper`  | The helper text element   |
 | `error`   | The error message element |
 
-## Migration from Carbon
-
-### Before (Carbon Web Components)
-
-```html
-<cds-select
-  label-text="Pattern"
-  .value="${pattern}"
-  @cds-select-changed="${handleChange}"
->
-  <cds-select-item value="solid">Solid</cds-select-item>
-  <cds-select-item value="tabby">Tabby</cds-select-item>
-  <cds-select-item value="spotted">Spotted</cds-select-item>
-</cds-select>
-```
-
-### After (mb-select)
-
-```html
-<mb-select
-  label="Pattern"
-  .value=${pattern}
-  @mb-change=${(e: CustomEvent) => {
-    handleChange(e.detail.value);
-  }}
->
-  <option value="solid">Solid</option>
-  <option value="tabby">Tabby</option>
-  <option value="spotted">Spotted</option>
-</mb-select>
-```
-
-### Key Differences
-
-1. **Event name**: `cds-select-changed` → `mb-change`
-2. **Event detail**: Access via `e.detail.value` instead of `e.target.value`
-3. **Options**: Use native `<option>` elements instead of `<cds-select-item>`
-4. **Label**: `label-text` → `label`
-5. **Helper text**: `helper-text` → `helper`
-
 ## Accessibility
 
 - Uses semantic native `<select>` element

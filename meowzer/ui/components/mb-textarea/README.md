@@ -294,37 +294,6 @@ This component uses the following design tokens:
 - Error announcements linked to textarea
 - Character counter for screen readers
 
-## Comparison to cds-textarea
-
-### Migration from Carbon
-
-```html
-<!-- Before (Carbon) -->
-<cds-textarea
-  label="Description"
-  .value="${description}"
-  @input="${handleInput}"
-  rows="3"
-></cds-textarea>
-
-<!-- After (mb-textarea) -->
-<mb-textarea
-  label="Description"
-  .value="${description}"
-  @mb-input="${handleInput}"
-  rows="3"
-></mb-textarea>
-```
-
-### Key Differences
-
-1. **Event names**: `input` → `mb-input`, added `mb-change`, `mb-focus`, `mb-blur`
-2. **Character counter**: Built-in with `show-counter` and `maxlength`
-3. **Resizable control**: `resizable="true|false"` attribute
-4. **Error handling**: Use `error` boolean + `error-message` string
-5. **Helper text**: Built-in `helper` property
-6. **Focus methods**: `focus()` and `blur()` available
-
 ## Use Cases
 
 ### Cat Creator

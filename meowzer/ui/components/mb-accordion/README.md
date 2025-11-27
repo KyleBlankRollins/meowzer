@@ -180,39 +180,6 @@ mb-accordion-item::part(icon) {
 }
 ```
 
-## Migration from Carbon
-
-Migrating from `cds-accordion` to `mb-accordion`:
-
-### Before (Carbon)
-
-```html
-<cds-accordion>
-  <cds-accordion-item title-text="Section 1">
-    <p>Content</p>
-  </cds-accordion-item>
-</cds-accordion>
-```
-
-### After (Meowbase)
-
-```html
-<mb-accordion>
-  <mb-accordion-item title="Section 1">
-    <p>Content</p>
-  </mb-accordion-item>
-</mb-accordion>
-```
-
-### Key Differences
-
-| Carbon                | Meowbase    | Notes                           |
-| --------------------- | ----------- | ------------------------------- |
-| `title-text`          | `title`     | Property renamed for simplicity |
-| Carbon events         | `mb-toggle` | Use standard custom event       |
-| Limited customization | CSS parts   | Full styling control            |
-| Large bundle          | Lightweight | Smaller footprint               |
-
 ## Examples
 
 ### Listen to Toggle Events

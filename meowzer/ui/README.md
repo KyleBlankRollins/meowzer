@@ -1,18 +1,17 @@
 ````markdown
 # @meowzer/ui
 
-Web Components library for adding Meowzer cats to any website. Built with Lit Element and Carbon Web Components.
+Web Components library for adding Meowzer cats to any website. Built with custom Lit Element components.
 
 ## Installation
 
 ```bash
-npm install meowzer @meowzer/ui @carbon/web-components lit
+npm install meowzer @meowzer/ui lit
 ```
 
 **Peer Dependencies:**
 
 - `meowzer` ^1.0.0 - Core Meowzer SDK
-- `@carbon/web-components` ^2.0.0 - IBM Carbon Design System web components
 - `lit` ^3.0.0 - Web components framework
 
 ## Quick Start
@@ -20,14 +19,14 @@ npm install meowzer @meowzer/ui @carbon/web-components lit
 ### Option 1: NPM (Recommended)
 
 ```bash
-npm install meowzer @meowzer/ui @carbon/web-components lit
+npm install meowzer @meowzer/ui lit
 ```
 
-**Import Carbon styles in your HTML/layout:**
+**Import in your HTML/layout:**
 
 ```html
 <!DOCTYPE html>
-<html class="cds-theme-g10">
+<html>
   <head>
     <style>
       @import "@meowzer/ui/styles";
@@ -46,25 +45,11 @@ npm install meowzer @meowzer/ui @carbon/web-components lit
 </html>
 ```
 
-**Or with direct Carbon import:**
-
-```html
-<!DOCTYPE html>
-<html class="cds-theme-g10">
-  <head>
-    <style>
-      @import "@carbon/styles/css/styles.css";
-    </style>
-  </head>
-  <!-- ... -->
-</html>
-```
-
 **Frameworks (React, Vue, Astro, etc.):**
 
 ```javascript
 // In your main layout/app component
-import "@meowzer/ui/styles"; // Or import "@carbon/styles/css/styles.css"
+import "@meowzer/ui/styles";
 import "@meowzer/ui/setup";
 import "@meowzer/ui";
 ```
@@ -73,12 +58,12 @@ import "@meowzer/ui";
 
 ```html
 <!DOCTYPE html>
-<html class="cds-theme-g10">
+<html>
   <head>
-    <!-- Carbon styles -->
+    <!-- Meowzer UI styles -->
     <link
       rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/@carbon/styles@1.0.0/css/styles.css"
+      href="https://cdn.jsdelivr.net/npm/@meowzer/ui/dist/styles.css"
     />
   </head>
   <body>
@@ -95,8 +80,8 @@ import "@meowzer/ui";
 ```
 
 ```typescript
-// Import Carbon styles
-import "@carbon/styles/css/styles.css";
+// Import Meowzer UI styles
+import "@meowzer/ui/styles";
 
 // Import all components
 import "@meowzer/ui";
@@ -122,7 +107,7 @@ import {
 - **Provider pattern**: Lit Context API for reactive state management
 - **Reactive controllers**: Auto-subscribe to SDK hooks and events
 - **Framework agnostic**: Works with React, Vue, Angular, Svelte, vanilla
-- **Customizable UI**: Built on Carbon Design System for consistent design
+- **Custom design system**: Built with custom Meowbase components for consistent design
 - **Boundary control**: Flexible cat movement areas (fullscreen, fixed, block)
 - **Modular components**: Use creation components independently or as part of playground
 

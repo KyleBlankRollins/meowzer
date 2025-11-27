@@ -223,32 +223,6 @@ Each position has a tailored fade-in animation:
 2. Tooltip appears after delay
 3. **Tab**: Move to next element (tooltip hides)
 
-## Migration from Carbon
-
-### Before (Carbon)
-
-```html
-<cds-tooltip>
-  <cds-button>Hover me</cds-button>
-  <cds-tooltip-content>Helpful hint</cds-tooltip-content>
-</cds-tooltip>
-```
-
-### After (mb-tooltip)
-
-```html
-<mb-tooltip text="Helpful hint">
-  <mb-button>Hover me</mb-button>
-</mb-tooltip>
-```
-
-### Key Differences
-
-1. **Simpler API**: Text is a property, not a separate element
-2. **Single Slot**: Only need to slot the trigger element
-3. **Position Control**: Use `position` property instead of alignment attributes
-4. **Custom Properties**: Use design tokens for consistent styling
-
 ## Browser Support
 
 - Modern browsers with Web Components support
@@ -262,7 +236,3 @@ Each position has a tailored fade-in animation:
 - `mb-button` - Common trigger element for tooltips
 - `mb-icon` - Can be used as tooltip trigger
 - `mb-modal` - Similar overlay pattern but for dialogs
-
-## Credits
-
-Replaces Carbon's `cds-tooltip` component with a simpler, lightweight implementation.

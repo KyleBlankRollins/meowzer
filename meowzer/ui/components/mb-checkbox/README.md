@@ -115,41 +115,6 @@ import "@meowzer/ui/components/mb-checkbox/mb-checkbox.js";
 | `checkmark` | The checkmark SVG         |
 | `dash`      | The indeterminate dash    |
 
-## Migration from Carbon
-
-### Before (Carbon Web Components)
-
-```html
-<cds-checkbox
-  ?checked=${this.makeRoaming}
-  @change=${(e: Event) => {
-    this.makeRoaming = (e.target as HTMLInputElement).checked;
-  }}
->
-  Make cat roam the viewport
-</cds-checkbox>
-```
-
-### After (mb-checkbox)
-
-```html
-<mb-checkbox
-  ?checked=${this.makeRoaming}
-  @mb-change=${(e: CustomEvent) => {
-    this.makeRoaming = e.detail.checked;
-  }}
->
-  Make cat roam the viewport
-</mb-checkbox>
-```
-
-### Key Differences
-
-1. **Event name**: `change` → `mb-change`
-2. **Event detail**: Access via `e.detail.checked` instead of `(e.target as HTMLInputElement).checked`
-3. **Helper text**: Use `helper` property instead of `helper-text`
-4. **Error message**: Use `error-message` property
-
 ## Accessibility
 
 - Uses semantic `<input type="checkbox">` element

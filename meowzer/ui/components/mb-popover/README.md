@@ -251,37 +251,6 @@ mb-popover::part(trigger) {
 - Supports standard keyboard navigation
 - Disabled state prevents interaction
 
-## Migration from Carbon
-
-Migrating from `cds-popover` to `mb-popover`:
-
-### Before (Carbon)
-
-```html
-<cds-popover align="bottom">
-  <button>Trigger</button>
-  <cds-popover-content>Content</cds-popover-content>
-</cds-popover>
-```
-
-### After (Meowbase)
-
-```html
-<mb-popover position="bottom">
-  <button>Trigger</button>
-  <div slot="content">Content</div>
-</mb-popover>
-```
-
-### Key Differences
-
-| Carbon                  | Meowbase             | Notes                  |
-| ----------------------- | -------------------- | ---------------------- |
-| `align`                 | `position`           | Property renamed       |
-| `<cds-popover-content>` | `slot="content"`     | Simpler slot-based API |
-| Carbon events           | `mb-show`, `mb-hide` | Standard custom events |
-| Limited customization   | CSS parts            | Full styling control   |
-
 ## Notes
 
 - Uses fixed positioning for proper layering

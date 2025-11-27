@@ -221,38 +221,12 @@ The component automatically handles accessibility:
 <mb-icon size="32" .svg="${iconSvg}"></mb-icon>
 ```
 
-## Migration from Carbon
-
-If you're migrating from `cds-icon`:
-
-### Before (Carbon)
-
-```html
-<cds-icon>
-  <svg>...</svg>
-</cds-icon>
-```
-
-### After (mb-icon)
-
-```html
-<mb-icon size="24">
-  <svg>...</svg>
-</mb-icon>
-```
-
-Key differences:
-
-- Size is now a property instead of being inferred from SVG
-- More flexible sizing options (predefined + CSS variable)
-- Simpler API with fewer features (intentionally lightweight)
-
 ## Integration with Icon Libraries
 
-### Using with @carbon/icons
+### Using with Icon Packages
 
 ```typescript
-import Add from "@carbon/icons/es/add/16";
+import Add from "some-icon-package/add/16";
 
 const iconSvg = Add.content; // Get raw SVG string
 

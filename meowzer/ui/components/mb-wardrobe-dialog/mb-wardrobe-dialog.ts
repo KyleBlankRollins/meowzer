@@ -203,8 +203,8 @@ export class MbWardrobeDialog extends LitElement {
   }
 
   /**
-   * Handle dialog close event from Carbon
-   * The cds-modal-closed event fires after the modal closes via any method
+   * Handle dialog close event
+   * The mb-close event fires after the modal closes via any method
    */
   private handleDialogClose() {
     this.dispatchEvent(

@@ -33,12 +33,12 @@ export const catPersonalityPickerStyles = [
       }
     }
 
-    /* Carbon slider customization */
-    cds-slider {
+    /* Slider customization */
+    mb-slider {
       width: 100%;
     }
 
-    cds-slider::part(slider-container) {
+    mb-slider::part(slider-container) {
       margin-top: 0.5rem;
     }
   `,

@@ -1,7 +1,7 @@
 /**
  * @meowzer/ui - Web Components for Meowzer SDK
  *
- * Drop-in cat animations for any website using Lit Element and Carbon Web Components.
+ * Drop-in cat animations for any website using Lit Element web components.
  *
  * For automatic setup (stylesheets + component registration), import the setup module:
  * ```typescript

@@ -1,6 +1,6 @@
 # mb-color-picker
 
-A custom color picker component with HSV color selection, replacing Shoelace's `sl-color-picker`.
+A custom color picker component with HSV color selection.
 
 ## Features
 
@@ -187,49 +187,6 @@ mb-color-picker::part(grid-handle) {
 </div>
 ```
 
-## Migration from Shoelace
-
-### Before (Shoelace)
-
-```typescript
-import "@shoelace-style/shoelace/dist/components/color-picker/color-picker.js";
-import type SlColorPicker from "@shoelace-style/shoelace/dist/components/color-picker/color-picker.js";
-
-const picker = document.createElement(
-  "sl-color-picker"
-) as SlColorPicker;
-picker.setAttribute("inline", "");
-picker.format = "hex";
-picker.value = "#3498db";
-
-picker.addEventListener("sl-change", (e) => {
-  console.log(e.target.value);
-});
-```
-
-### After (mb-color-picker)
-
-```typescript
-import { MbColorPicker } from "@meowzer/ui";
-
-const picker = document.createElement("mb-color-picker");
-picker.inline = true;
-picker.format = "hex";
-picker.value = "#3498db";
-
-picker.addEventListener("mb-change", (e) => {
-  console.log(e.detail.value);
-});
-```
-
-### Key Differences
-
-1. **Import Path**: `@meowzer/ui` instead of `@shoelace-style/shoelace`
-2. **Element Name**: `mb-color-picker` instead of `sl-color-picker`
-3. **Event Name**: `mb-change` instead of `sl-change`
-4. **Event Detail**: Access via `e.detail.value` instead of `e.target.value`
-5. **Inline Attribute**: Use property `picker.inline = true` or attribute `inline`
-
 ## Color Conversions
 
 The component internally uses HSV color space for the grid and slider, converting to/from hex format:
@@ -268,7 +225,3 @@ The component internally uses HSV color space for the grid and slider, convertin
 - `mb-button` - Used for color swatch interactions
 - `mb-icon` - Can be used for additional UI elements
 - `mb-modal` - Works well with portal rendering pattern
-
-## Credits
-
-Replaces Shoelace's `sl-color-picker` component with a custom implementation.

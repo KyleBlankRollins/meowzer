@@ -217,44 +217,6 @@ Use `low-contrast` for a more subtle appearance with neutral backgrounds:
 </mb-notification>
 ```
 
-## Migration from Carbon
-
-If you're migrating from `cds-inline-notification`, here are the key differences:
-
-### API Changes
-
-| Carbon            | mb-notification     |
-| ----------------- | ------------------- |
-| `kind="info"`     | `variant="info"`    |
-| `hideCloseButton` | `hide-close-button` |
-| `subtitle`        | `subtitle`          |
-| `title`           | `title`             |
-| `lowContrast`     | `low-contrast`      |
-
-### Before (Carbon)
-
-```html
-<cds-inline-notification
-  kind="error"
-  title="Error Title"
-  subtitle="Error message"
-  hideCloseButton
->
-</cds-inline-notification>
-```
-
-### After (mb-notification)
-
-```html
-<mb-notification
-  variant="error"
-  title="Error Title"
-  subtitle="Error message"
-  hide-close-button
->
-</mb-notification>
-```
-
 ## Examples
 
 ### Validation Errors

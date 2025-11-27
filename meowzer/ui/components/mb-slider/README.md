@@ -234,41 +234,6 @@ This component uses the following design tokens:
 - Visual disabled state
 - Semantic HTML structure
 
-## Comparison to cds-slider
-
-### Migration from Carbon
-
-```html
-<!-- Before (Carbon) -->
-<cds-slider
-  label-text="Curiosity"
-  min="0"
-  max="1"
-  step="0.1"
-  value="0.7"
-  @cds-slider-changed="${handleChange}"
-></cds-slider>
-
-<!-- After (mb-slider) -->
-<mb-slider
-  label="Curiosity"
-  min="0"
-  max="1"
-  step="0.1"
-  value="0.7"
-  decimal-places="1"
-  @mb-change="${handleChange}"
-></mb-slider>
-```
-
-### Key Differences
-
-1. **Property names**: `label-text` → `label`
-2. **Event names**: `cds-slider-changed` → `mb-change` (plus `mb-input` for real-time updates)
-3. **Value display**: Use `decimal-places` to control formatting
-4. **Helper text**: Built-in `helper` property
-5. **Progress visualization**: Built-in colored progress bar
-
 ## Use Cases
 
 ### Cat Personality Picker

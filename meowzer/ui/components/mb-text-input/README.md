@@ -293,36 +293,6 @@ This component uses the following design tokens:
 - Required indicator (\*)
 - Error announcements linked to input
 
-## Comparison to cds-text-input
-
-### Migration from Carbon
-
-```html
-<!-- Before (Carbon) -->
-<cds-text-input
-  label="Cat Name"
-  .value="${catName}"
-  @input="${handleInput}"
-  required
-></cds-text-input>
-
-<!-- After (mb-text-input) -->
-<mb-text-input
-  label="Cat Name"
-  .value="${catName}"
-  @mb-input="${handleInput}"
-  required
-></mb-text-input>
-```
-
-### Key Differences
-
-1. **Event names**: `input` → `mb-input`, added `mb-change`, `mb-focus`, `mb-blur`
-2. **Error handling**: Use `error` boolean + `error-message` string
-3. **Helper text**: Built-in `helper` property
-4. **Focus methods**: `focus()` and `blur()` available
-5. **Required indicator**: Automatic `*` when `required` is true
-
 ## Use Cases
 
 ### Cat Creator Forms
