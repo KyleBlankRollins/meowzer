@@ -10,7 +10,6 @@
   },
   "dependencies": {
     "@astrojs/lit": "^4.3.0",
-    "@carbon/web-components": "^2.43.0",
     "@meowzer/ui": "file:../meowzer/ui",
     "astro": "^5.15.1",
     "gsap": "^3.13.0",

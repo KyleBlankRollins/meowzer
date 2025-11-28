@@ -31,8 +31,6 @@ The Meowzer SDK and its libraries are built with:
 
 ### UI library specific
 
-- **[@carbon/web-components](https://carbondesignsystem.com/)** (v2.43.0) - IBM Carbon design system
-- **[@shoelace-style/shoelace](https://shoelace.style/)** (v2.20.1) - Alternative component library
 - **[@lit/context](https://lit.dev/docs/data/context/)** (v1.1.0) - State management for Lit
 - **[Storybook](https://storybook.js.org/)** (v8.6.14) - Component development environment
 
@@ -45,7 +43,7 @@ The Meowzer monorepo contains multiple specialized packages:
 - **MeowBrain** - AI behaviors
 - **MeowBase** - Storage layer
 - **SDK** - High-level API (GSAP)
-- **UI** - Web components (Lit, Carbon/Shoelace, GSAP)
+- **UI** - Web components (Lit, GSAP)
 
 ## Built with AI
 

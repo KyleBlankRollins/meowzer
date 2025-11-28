@@ -49,7 +49,6 @@ describe("CatCreator", () => {
         },
       } as unknown as Meowzer;
 
-      // @ts-expect-error - accessing private property for testing
       el.meowzer = mockMeowzer;
       await el.updateComplete;
 
@@ -63,7 +62,6 @@ describe("CatCreator", () => {
         storage: { isInitialized: () => false },
       } as unknown as Meowzer;
 
-      // @ts-expect-error - accessing private property for testing
       el.meowzer = mockMeowzer;
       await el.updateComplete;
 
@@ -81,7 +79,6 @@ describe("CatCreator", () => {
         storage: { isInitialized: () => false },
       } as unknown as Meowzer;
 
-      // @ts-expect-error - accessing private property for testing
       el.meowzer = mockMeowzer;
       await el.updateComplete;
 
@@ -103,7 +100,6 @@ describe("CatCreator", () => {
         storage: { isInitialized: () => false },
       } as unknown as Meowzer;
 
-      // @ts-expect-error - accessing private property for testing
       el.meowzer = mockMeowzer;
       await el.updateComplete;
     });
@@ -194,7 +190,6 @@ describe("CatCreator", () => {
         storage: { isInitialized: () => false },
       } as unknown as Meowzer;
 
-      // @ts-expect-error - accessing private property for testing
       el.meowzer = mockMeowzer;
       await el.updateComplete;
     });
@@ -232,7 +227,6 @@ describe("CatCreator", () => {
         storage: { isInitialized: () => false },
       } as unknown as Meowzer;
 
-      // @ts-expect-error - accessing private property for testing
       el.meowzer = mockMeowzer;
       await el.updateComplete;
     });
@@ -273,7 +267,6 @@ describe("CatCreator", () => {
         storage: { isInitialized: () => false },
       } as unknown as Meowzer;
 
-      // @ts-expect-error - accessing private property for testing
       el.meowzer = mockMeowzer;
       await el.updateComplete;
     });
@@ -321,7 +314,6 @@ describe("CatCreator", () => {
         storage: { isInitialized: () => false },
       } as unknown as Meowzer;
 
-      // @ts-expect-error - accessing private property for testing
       el.meowzer = mockMeowzer;
       await el.updateComplete;
     });
@@ -360,7 +352,6 @@ describe("CatCreator", () => {
         storage: { isInitialized: () => false },
       } as unknown as Meowzer;
 
-      // @ts-expect-error - accessing private property for testing
       el.meowzer = mockMeowzer;
       await el.updateComplete;
     });
@@ -444,7 +435,6 @@ describe("CatCreator", () => {
         storage: { isInitialized: () => false },
       } as unknown as Meowzer;
 
-      // @ts-expect-error - accessing private property for testing
       el.meowzer = mockMeowzer;
       await el.updateComplete;
     });

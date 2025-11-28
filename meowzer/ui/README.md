@@ -312,6 +312,60 @@ Or use components independently:
 </meowzer-provider>
 ```
 
+## Component Standards
+
+All components in this library follow the scaffold reference pattern defined in `mb-button/SCAFFOLD-REFERENCE.md`.
+
+### Required Files
+
+- [ ] `component-name.ts` - Component logic
+- [ ] `component-name.style.ts` - Component styles
+- [ ] `component-name.test.ts` - Unit tests (Vitest)
+- [ ] `component-name.stories.ts` - Storybook documentation
+- [ ] `README.md` - API documentation
+
+### Code Patterns
+
+- [ ] Uses `@customElement()` decorator
+- [ ] Extends `LitElement`
+- [ ] Properties use `@property()` decorator
+- [ ] Styles imported from separate `.style.ts` file
+- [ ] Exports in `components/index.ts`
+- [ ] TypeScript declaration for `HTMLElementTagNameMap`
+
+### Style Organization
+
+- [ ] Base styles first
+- [ ] Variants second
+- [ ] Sizes third
+- [ ] States last (hover, active, disabled, etc.)
+- [ ] Uses semantic design tokens (not primitives)
+
+### Testing
+
+- [ ] Minimum 10+ tests per component
+- [ ] Tests custom element registration
+- [ ] Tests property values and reactivity
+- [ ] Tests events and interactions
+- [ ] Tests accessibility (ARIA, keyboard nav)
+- [ ] Tests CSS parts exposure
+
+### Documentation (README)
+
+- [ ] Features list
+- [ ] Usage examples
+- [ ] API documentation (properties, slots, events, CSS parts)
+- [ ] Design tokens used
+- [ ] Accessibility notes
+
+### Accessibility
+
+- [ ] Proper ARIA attributes
+- [ ] Focus indicators
+- [ ] Keyboard support
+- [ ] Semantic HTML
+- [ ] Screen reader friendly
+
 ## License
 
 MIT

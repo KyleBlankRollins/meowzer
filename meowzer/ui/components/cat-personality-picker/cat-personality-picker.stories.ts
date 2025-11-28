@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/web-components";
 import { html } from "lit";
-import "../components/cat-personality-picker/cat-personality-picker.js";
+import "./cat-personality-picker.js";
 
 const meta = {
   title: "Creation Components/Cat Personality Picker",

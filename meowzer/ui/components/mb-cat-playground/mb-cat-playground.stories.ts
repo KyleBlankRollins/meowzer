@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/web-components";
 import { html } from "lit";
-import "../components/mb-cat-playground/mb-cat-playground.js";
+import "./mb-cat-playground.js";
 
 const meta = {
   title: "Drop-in Solutions/Cat Playground",

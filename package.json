@@ -17,6 +17,8 @@
     "build:ui": "npm run build --workspace=meowzer/ui",
     "build": "npm run build:sdk && npm run build:ui"
   },
-  "devDependencies": {},
-  "description": "Monorepo containing Meowzer SDK, UI components, documentation, and demo site"
+  "description": "Monorepo containing Meowzer SDK, UI components, documentation, and demo site",
+  "dependencies": {
+    "gsap": "^3.13.0"
+  }
 }
