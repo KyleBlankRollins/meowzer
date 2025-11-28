@@ -49,21 +49,33 @@ export const mbSliderStyles = css`
     appearance: none;
     background: transparent;
     outline: none;
+    z-index: 2;
   }
 
   /* Track */
   .mb-slider__input::-webkit-slider-runnable-track {
     width: 100%;
     height: 4px;
-    background: var(--mb-color-border-subtle);
+    background: transparent;
     border-radius: var(--mb-radius-full);
   }
 
   .mb-slider__input::-moz-range-track {
     width: 100%;
     height: 4px;
+    background: transparent;
+    border-radius: var(--mb-radius-full);
+  }
+
+  /* Background track */
+  .mb-slider__track-container::before {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 4px;
     background: var(--mb-color-border-subtle);
     border-radius: var(--mb-radius-full);
+    z-index: 0;
   }
 
   /* Progress fill */
@@ -74,6 +86,7 @@ export const mbSliderStyles = css`
     border-radius: var(--mb-radius-full);
     pointer-events: none;
     transition: width 0.1s ease;
+    z-index: 2;
   }
 
   /* Thumb */

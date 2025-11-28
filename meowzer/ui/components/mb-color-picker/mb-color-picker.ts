@@ -47,6 +47,12 @@ export class MbColorPicker extends LitElement {
   @property({ type: Boolean })
   declare disabled: boolean;
 
+  /**
+   * Label to display above the swatch (e.g., "Fur", "Eyes")
+   */
+  @property({ type: String })
+  declare label: string;
+
   @state()
   private hue = 0;
 
@@ -61,6 +67,9 @@ export class MbColorPicker extends LitElement {
 
   @state()
   private isDraggingHue = false;
+
+  @state()
+  private isOpen = false;
 
   @query(".mb-color-picker__grid")
   private gridElement?: HTMLElement;
@@ -77,11 +86,18 @@ export class MbColorPicker extends LitElement {
     this.format = "hex";
     this.inline = false;
     this.disabled = false;
+    this.label = "";
   }
 
   connectedCallback(): void {
     super.connectedCallback();
     this.parseColor(this.value);
+    document.addEventListener("click", this.handleDocumentClick);
+  }
+
+  disconnectedCallback(): void {
+    super.disconnectedCallback();
+    document.removeEventListener("click", this.handleDocumentClick);
   }
 
   updated(changedProperties: Map<string, any>): void {
@@ -278,6 +294,7 @@ export class MbColorPicker extends LitElement {
     this.isDraggingGrid = false;
     (e.target as HTMLElement).releasePointerCapture(e.pointerId);
     this.updateColor(true);
+    this.isOpen = false;
   };
 
   private updateGridPosition(e: PointerEvent): void {
@@ -319,6 +336,7 @@ export class MbColorPicker extends LitElement {
     this.isDraggingHue = false;
     (e.target as HTMLElement).releasePointerCapture(e.pointerId);
     this.updateColor(true);
+    this.isOpen = false;
   };
 
   private updateHuePosition(e: PointerEvent): void {
@@ -335,26 +353,6 @@ export class MbColorPicker extends LitElement {
   }
 
   /**
-   * Handle text input changes
-   */
-  private handleTextInput = (e: Event): void => {
-    const input = e.target as HTMLInputElement;
-    let value = input.value.trim();
-
-    // Add # if missing
-    if (!value.startsWith("#")) {
-      value = "#" + value;
-    }
-
-    // Validate hex format
-    if (/^#[0-9A-F]{6}$/i.test(value)) {
-      this.value = value;
-      this.parseColor(value);
-      this.updateColor(true);
-    }
-  };
-
-  /**
    * Handle native color input (fallback)
    */
   private handleNativeInput = (e: Event): void => {
@@ -365,11 +363,24 @@ export class MbColorPicker extends LitElement {
   };
 
   /**
-   * Handle swatch click (opens native picker)
+   * Handle swatch click (toggles picker)
    */
-  private handleSwatchClick = (): void => {
+  private handleSwatchClick = (e: Event): void => {
     if (this.disabled) return;
-    this.nativeInput?.click();
+    e.stopPropagation();
+    this.isOpen = !this.isOpen;
+  };
+
+  /**
+   * Handle clicks outside the color picker to close it
+   */
+  private handleDocumentClick = (e: Event): void => {
+    if (!this.isOpen) return;
+
+    const path = e.composedPath();
+    if (!path.includes(this)) {
+      this.isOpen = false;
+    }
   };
 
   render() {
@@ -382,76 +393,70 @@ export class MbColorPicker extends LitElement {
 
     return html`
       <div class="mb-color-picker" part="base">
-        <!-- Preview and input -->
-        <div class="mb-color-picker__preview" part="preview">
-          <div
-            class="mb-color-picker__swatch"
-            part="swatch"
-            @click=${this.handleSwatchClick}
-            role="button"
-            tabindex=${this.disabled ? nothing : "0"}
-            aria-label="Color swatch"
-          >
-            <div
-              class="mb-color-picker__swatch-color"
-              style="background: ${currentColor};"
-            ></div>
-          </div>
-
-          <div class="mb-color-picker__input-group">
-            <label class="mb-color-picker__label" part="label"
-              >HEX</label
-            >
-            <input
-              type="text"
-              class="mb-color-picker__text-input"
-              part="input"
-              .value=${currentColor.toUpperCase()}
-              @change=${this.handleTextInput}
-              ?disabled=${this.disabled}
-              maxlength="7"
-              spellcheck="false"
-            />
-          </div>
-        </div>
-
-        <!-- Saturation/Value grid -->
+        ${this.label
+          ? html`<label class="mb-color-picker__label" part="label"
+              >${this.label}</label
+            >`
+          : nothing}
+        <!-- Preview swatch -->
         <div
-          class="mb-color-picker__grid"
-          part="grid"
-          style="background-color: ${hueColor};"
-          @pointerdown=${this.handleGridPointerDown}
-          @pointermove=${this.handleGridPointerMove}
-          @pointerup=${this.handleGridPointerUp}
-          role="slider"
-          aria-label="Color saturation and brightness"
-          tabindex=${this.disabled ? nothing : "0"}
+          class="mb-color-picker__swatch"
+          part="swatch"
+          @click=${this.handleSwatchClick}
+          role="button"
+          .tabIndex=${this.disabled ? -1 : 0}
+          aria-label="${this.label || "Color swatch"}"
         >
-          <div class="mb-color-picker__grid-gradient"></div>
           <div
-            class="mb-color-picker__grid-handle"
-            part="grid-handle"
-            style="left: ${gridHandleX}%; top: ${gridHandleY}%;"
+            class="mb-color-picker__swatch-color"
+            style="background: ${currentColor};"
           ></div>
         </div>
 
-        <!-- Hue slider -->
-        <div
-          class="mb-color-picker__hue-slider"
-          part="hue-slider"
-          @pointerdown=${this.handleHuePointerDown}
-          @pointermove=${this.handleHuePointerMove}
-          @pointerup=${this.handleHuePointerUp}
-          role="slider"
-          aria-label="Color hue"
-          tabindex=${this.disabled ? nothing : "0"}
-        >
-          <div
-            class="mb-color-picker__hue-handle"
-            part="hue-handle"
-            style="left: ${hueHandleX}%;"
-          ></div>
-        </div>
+        <!-- Picker controls (absolutely positioned) -->
+        ${this.isOpen
+          ? html`
+              <div class="mb-color-picker__controls" part="controls">
+                <!-- Saturation/Value grid -->
+                <div
+                  class="mb-color-picker__grid"
+                  part="grid"
+                  style="background-color: ${hueColor};"
+                  @pointerdown=${this.handleGridPointerDown}
+                  @pointermove=${this.handleGridPointerMove}
+                  @pointerup=${this.handleGridPointerUp}
+                  role="slider"
+                  aria-label="Color saturation and brightness"
+                  .tabIndex=${this.disabled ? -1 : 0}
+                >
+                  <div class="mb-color-picker__grid-gradient"></div>
+                  <div
+                    class="mb-color-picker__grid-handle"
+                    part="grid-handle"
+                    style="left: ${gridHandleX}%; top: ${gridHandleY}%;"
+                  ></div>
+                </div>
+
+                <!-- Hue slider -->
+                <div
+                  class="mb-color-picker__hue-slider"
+                  part="hue-slider"
+                  @pointerdown=${this.handleHuePointerDown}
+                  @pointermove=${this.handleHuePointerMove}
+                  @pointerup=${this.handleHuePointerUp}
+                  role="slider"
+                  aria-label="Color hue"
+                  .tabIndex=${this.disabled ? -1 : 0}
+                >
+                  <div
+                    class="mb-color-picker__hue-handle"
+                    part="hue-handle"
+                    style="left: ${hueHandleX}%;"
+                  ></div>
+                </div>
+              </div>
+            `
+          : nothing}
 
         <!-- Native color input (hidden fallback) -->
         <input

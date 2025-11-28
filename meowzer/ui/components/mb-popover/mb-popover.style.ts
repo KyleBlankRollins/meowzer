@@ -17,7 +17,7 @@ export const popoverStyles = css`
     border: 1px solid var(--mb-color-border, #e0e0e0);
     border-radius: var(--mb-radius-md, 0.5rem);
     box-shadow: var(--mb-shadow-lg, 0 10px 20px rgba(0, 0, 0, 0.2));
-    padding: var(--mb-space-3, 0.75rem);
+    padding: var(--mb-space-sm);
     min-width: 200px;
     max-width: 400px;
     opacity: 0;

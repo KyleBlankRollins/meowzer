@@ -115,15 +115,13 @@ export const tokens = {
   lineHeightNormal: "1.6",
   lineHeightRelaxed: "1.8",
 
-  // Spacing
-  space1: "4px",
-  space2: "8px",
-  space3: "12px",
-  space4: "16px",
-  space5: "24px",
-  space6: "32px",
-  space7: "48px",
-  space8: "64px",
+  // Semantic spacing (maps to numbered scale)
+  spaceXs: "4px", // space1
+  spaceSm: "8px", // space2
+  spaceMd: "16px", // space4
+  spaceLg: "24px", // space5
+  spaceXl: "32px", // space6
+  spaceXxl: "48px", // space7
 
   // Border Radius - rounded/playful
   radiusNone: "0",
@@ -274,14 +272,12 @@ export const designTokens = css`
     --mb-line-height-relaxed: ${unsafeCSS(tokens.lineHeightRelaxed)};
 
     /* Spacing */
-    --mb-space-1: ${unsafeCSS(tokens.space1)};
-    --mb-space-2: ${unsafeCSS(tokens.space2)};
-    --mb-space-3: ${unsafeCSS(tokens.space3)};
-    --mb-space-4: ${unsafeCSS(tokens.space4)};
-    --mb-space-5: ${unsafeCSS(tokens.space5)};
-    --mb-space-6: ${unsafeCSS(tokens.space6)};
-    --mb-space-7: ${unsafeCSS(tokens.space7)};
-    --mb-space-8: ${unsafeCSS(tokens.space8)};
+    --mb-space-xs: ${unsafeCSS(tokens.spaceXs)};
+    --mb-space-sm: ${unsafeCSS(tokens.spaceSm)};
+    --mb-space-md: ${unsafeCSS(tokens.spaceMd)};
+    --mb-space-lg: ${unsafeCSS(tokens.spaceLg)};
+    --mb-space-xl: ${unsafeCSS(tokens.spaceXl)};
+    --mb-space-xxl: ${unsafeCSS(tokens.spaceXxl)};
 
     /* Border Radius */
     --mb-radius-none: ${unsafeCSS(tokens.radiusNone)};

@@ -40,6 +40,12 @@ export const catCreatorStyles = [
     }
 
     /* Settings Panel */
+    .settings-panel {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
     .creator-form {
       display: grid;
       gap: 1.5rem;
@@ -47,6 +53,7 @@ export const catCreatorStyles = [
 
     .form-section h4 {
       margin: 0;
+      margin-bottom: 1rem;
       font-size: 1rem;
       font-weight: 600;
       color: var(--mb-color-text-primary);

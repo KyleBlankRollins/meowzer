@@ -9,8 +9,8 @@ export const mbButtonStyles = css`
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: var(--mb-space-2);
-    padding: var(--mb-space-2) var(--mb-space-4);
+    gap: var(--mb-space-sm);
+    padding: var(--mb-space-sm) var(--mb-space-md);
     font-family: var(--mb-font-family);
     font-size: var(--mb-font-size);
     font-weight: var(--mb-font-weight-medium);
@@ -77,17 +77,17 @@ export const mbButtonStyles = css`
 
   /* Sizes */
   .mb-button--sm {
-    padding: var(--mb-space-1) var(--mb-space-3);
+    padding: var(--mb-space-xs) var(--mb-space-sm);
     font-size: var(--mb-font-size-small);
   }
 
   .mb-button--md {
-    padding: var(--mb-space-2) var(--mb-space-4);
+    padding: var(--mb-space-sm) var(--mb-space-md);
     font-size: var(--mb-font-size);
   }
 
   .mb-button--lg {
-    padding: var(--mb-space-3) var(--mb-space-5);
+    padding: var(--mb-space-sm) var(--mb-space-lg);
     font-size: var(--mb-font-size-medium);
   }
 

@@ -10,6 +10,7 @@ export const appearanceSectionStyles = [
 
     .form-section h4 {
       margin: 0;
+      margin-bottom: 1rem;
       font-size: 1rem;
       font-weight: 600;
       color: var(--mb-color-text-primary);

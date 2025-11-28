@@ -3,6 +3,7 @@ import { css } from "lit";
 export const colorPickerStyles = css`
   :host {
     display: inline-block;
+    position: relative;
     font-family: var(
       --mb-font-family,
       "IBM Plex Sans",
@@ -23,7 +24,6 @@ export const colorPickerStyles = css`
       --mb-shadow-medium,
       0 4px 6px rgba(0, 0, 0, 0.15)
     );
-    min-width: 260px;
   }
 
   /* Inline variant (no border/shadow) */
@@ -41,7 +41,6 @@ export const colorPickerStyles = css`
   }
 
   .mb-color-picker__swatch {
-    width: 48px;
     height: 48px;
     border-radius: var(--mb-radius-small, 4px);
     border: 2px solid var(--mb-color-border, #e0e0e0);
@@ -79,6 +78,26 @@ export const colorPickerStyles = css`
     z-index: 1;
   }
 
+  /* Picker controls container - absolutely positioned */
+  .mb-color-picker__controls {
+    position: absolute;
+    top: calc(100% + 0.5rem);
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    background: var(--mb-color-background, #ffffff);
+    border: 1px solid var(--mb-color-border, #e0e0e0);
+    border-radius: var(--mb-radius-medium, 8px);
+    padding: 1rem;
+    box-shadow: var(
+      --mb-shadow-medium,
+      0 4px 6px rgba(0, 0, 0, 0.15)
+    );
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
   .mb-color-picker__input-group {
     display: flex;
     flex-direction: column;
@@ -100,7 +119,6 @@ export const colorPickerStyles = css`
     border-radius: var(--mb-radius-small, 4px);
     font-family: monospace;
     font-size: 0.875rem;
-    width: 100%;
   }
 
   .mb-color-picker__text-input:focus {

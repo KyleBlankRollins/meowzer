@@ -218,7 +218,7 @@ mb-popover::part(content) {
   --mb-color-border: #e0e0e0;
   --mb-radius-md: 0.5rem;
   --mb-shadow-lg: 0 10px 20px rgba(0, 0, 0, 0.2);
-  --mb-space-3: 0.75rem;
+  --mb-space-sm: 0.5rem;
 }
 ```
 

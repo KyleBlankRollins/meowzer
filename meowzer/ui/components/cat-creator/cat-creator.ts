@@ -92,10 +92,6 @@ export class CatCreator extends LitElement {
           this.stepErrors.push("Please select a personality");
         }
         break;
-
-      case 4: // Behavior
-        // Behavior options are optional
-        break;
     }
 
     return this.stepErrors.length === 0;
@@ -105,7 +101,7 @@ export class CatCreator extends LitElement {
    * Navigate to next step
    */
   private nextStep() {
-    if (this.validateCurrentStep() && this.currentStep < 4) {
+    if (this.validateCurrentStep() && this.currentStep < 3) {
       this.currentStep++;
       this.stepErrors = [];
     }
@@ -244,7 +240,7 @@ export class CatCreator extends LitElement {
    * Render step indicator dots
    */
   private renderStepIndicator() {
-    const steps = [1, 2, 3, 4];
+    const steps = [1, 2, 3];
 
     return html`
       <div class="step-indicator">
@@ -267,7 +263,7 @@ export class CatCreator extends LitElement {
    * Render wizard navigation buttons
    */
   private renderWizardNavigation() {
-    const isLastStep = this.currentStep === 4;
+    const isLastStep = this.currentStep === 3;
     const isFirstStep = this.currentStep === 1;
 
     return html`
@@ -402,25 +398,6 @@ export class CatCreator extends LitElement {
                         @personality-change=${this
                           .handlePersonalityChange}
                       ></cat-personality-picker>
-                    `
-                  : ""
-              }
-
-              <!-- Step 4: Behavior Options -->
-              ${
-                this.currentStep === 4
-                  ? html`
-                      <div class="form-section">
-                        <h4>Behavior Options</h4>
-                        <mb-checkbox
-                          ?checked=${this.makeRoaming}
-                          @mb-change=${(e: CustomEvent) => {
-                            this.makeRoaming = e.detail.checked;
-                          }}
-                        >
-                          Make cat roam the viewport
-                        </mb-checkbox>
-                      </div>
                     `
                   : ""
               }

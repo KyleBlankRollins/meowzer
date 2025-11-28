@@ -18,7 +18,7 @@ export const mbSelectStyles = css`
     color: var(--mb-color-text-primary);
     display: flex;
     align-items: center;
-    gap: var(--mb-space-2xs);
+    gap: var(--mb-space-xs);
   }
 
   .mb-select__required {
@@ -33,7 +33,7 @@ export const mbSelectStyles = css`
   .mb-select__native {
     width: 100%;
     padding: var(--mb-space-sm) var(--mb-space-md);
-    padding-right: var(--mb-space-2xl);
+    padding-right: var(--mb-space-xxl);
     font-family: var(--mb-font-family-base);
     font-size: var(--mb-font-size-base);
     color: var(--mb-color-text-primary);
@@ -123,7 +123,7 @@ export const mbSelectStyles = css`
 
   :host([size="lg"]) .mb-select__native {
     padding: var(--mb-space-md) var(--mb-space-lg);
-    padding-right: calc(var(--mb-space-2xl) + var(--mb-space-sm));
+    padding-right: calc(var(--mb-space-xxl) + var(--mb-space-sm));
     font-size: var(--mb-font-size-large);
   }
 

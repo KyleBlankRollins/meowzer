@@ -14,10 +14,24 @@ export const catPersonalityPickerStyles = [
       gap: 1rem;
     }
 
+    .personality-section h4 {
+      margin: 0;
+      margin-bottom: 1rem;
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--mb-color-text-primary);
+      border-bottom: 1px solid var(--mb-color-border-subtle);
+      padding-bottom: 0.5rem;
+    }
+
     .preset-buttons {
       display: flex;
       gap: 0.5rem;
       flex-wrap: wrap;
+      background: var(--mb-color-brand-secondary);
+      border: 1px solid var(--mb-color-border-subtle);
+      border-radius: var(--mb-radius-md);
+      padding: var(--mb-space-md);
     }
 
     .trait-sliders {

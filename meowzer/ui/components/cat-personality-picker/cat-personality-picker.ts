@@ -71,13 +71,15 @@ export class CatPersonalityPicker extends LitElement {
   render() {
     return html`
       <div class="personality-section">
+        <h4>Appearance</h4>
+
         <div class="preset-buttons">
           ${PERSONALITY_PRESETS.map(
             (preset) => html`
               <mb-button
                 variant=${this.selectedPreset === preset.value
                   ? "primary"
-                  : "tertiary"}
+                  : "secondary"}
                 @click=${() => this.handlePresetSelect(preset.value)}
               >
                 ${preset.name}
@@ -92,9 +94,8 @@ export class CatPersonalityPicker extends LitElement {
             min="0"
             max="1"
             step="0.1"
-            value=${String(
-              (this.personality as any).curiosity || 0.5
-            )}
+            .showValue=${false}
+            .value=${(this.personality as any).curiosity || 0.5}
             @mb-change=${(e: CustomEvent) =>
               this.handleTraitChange("curiosity", e.detail.value)}
           >
@@ -105,9 +106,8 @@ export class CatPersonalityPicker extends LitElement {
             min="0"
             max="1"
             step="0.1"
-            value=${String(
-              (this.personality as any).playfulness || 0.5
-            )}
+            .showValue=${false}
+            .value=${(this.personality as any).playfulness || 0.5}
             @mb-change=${(e: CustomEvent) =>
               this.handleTraitChange("playfulness", e.detail.value)}
           >
@@ -118,9 +118,8 @@ export class CatPersonalityPicker extends LitElement {
             min="0"
             max="1"
             step="0.1"
-            value=${String(
-              (this.personality as any).independence || 0.5
-            )}
+            .showValue=${false}
+            .value=${(this.personality as any).independence || 0.5}
             @mb-change=${(e: CustomEvent) =>
               this.handleTraitChange("independence", e.detail.value)}
           >
@@ -131,9 +130,8 @@ export class CatPersonalityPicker extends LitElement {
             min="0"
             max="1"
             step="0.1"
-            value=${String(
-              (this.personality as any).sociability || 0.5
-            )}
+            .showValue=${false}
+            .value=${(this.personality as any).sociability || 0.5}
             @mb-change=${(e: CustomEvent) =>
               this.handleTraitChange("sociability", e.detail.value)}
           >
@@ -144,7 +142,8 @@ export class CatPersonalityPicker extends LitElement {
             min="0"
             max="1"
             step="0.1"
-            value=${String((this.personality as any).energy || 0.5)}
+            .showValue=${false}
+            .value=${(this.personality as any).energy || 0.5}
             @mb-change=${(e: CustomEvent) =>
               this.handleTraitChange("energy", e.detail.value)}
           >
