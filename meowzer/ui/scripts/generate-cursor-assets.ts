@@ -20,22 +20,22 @@ interface CursorAsset {
 const CURSOR_ASSETS: CursorAsset[] = [
   {
     mode: "food:basic",
-    path: "food/basic-default.svg",
+    path: "food/basic-active.svg",
     outputKey: "FOOD_BASIC",
   },
   {
     mode: "food:fancy",
-    path: "food/fancy-default.svg",
+    path: "food/fancy-active.svg",
     outputKey: "FOOD_FANCY",
   },
   {
     mode: "water",
-    path: "water/default.svg",
+    path: "water/active.svg",
     outputKey: "WATER",
   },
   {
     mode: "yarn",
-    path: "toys/yarn-default.svg",
+    path: "toys/yarn-active.svg",
     outputKey: "YARN",
   },
 ];

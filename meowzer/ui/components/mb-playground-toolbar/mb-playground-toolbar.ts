@@ -10,12 +10,14 @@
  * - Place yarn
  */
 
-import { LitElement, html, svg } from "lit";
+import { LitElement, html } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
+import { unsafeSVG } from "lit/directives/unsafe-svg.js";
 import { consume } from "@lit/context";
 import { meowzerContext } from "../../contexts/meowzer-context.js";
 import { playgroundToolbarStyles } from "./mb-playground-toolbar.style.js";
 import { CursorController } from "../../controllers/cursor-controller.js";
+import { INTERACTION_SVGS } from "../../shared/interaction-svgs.js";
 import type { Meowzer } from "meowzer";
 import { LaserPointer } from "meowzer";
 
@@ -223,76 +225,6 @@ export class MbPlaygroundToolbar extends LitElement {
     );
   }
 
-  // SVG icon helpers matching mb-need-visual and other visual components
-  private renderBasicFoodIcon() {
-    return svg`
-      <ellipse cx="50" cy="80" rx="35" ry="12" fill="#654321" opacity="0.3"/>
-      <rect x="20" y="30" width="60" height="50" rx="5" fill="#8B4513" stroke="#654321" stroke-width="2"/>
-      <ellipse cx="50" cy="30" rx="30" ry="8" fill="#8B4513" stroke="#654321" stroke-width="2"/>
-      <ellipse cx="50" cy="30" rx="25" ry="6" fill="#A0522D" opacity="0.8"/>
-      <rect x="25" y="45" width="50" height="20" rx="3" fill="white" opacity="0.6"/>
-      <text x="50" y="58" text-anchor="middle" font-size="12" fill="#654321" font-weight="bold">FOOD</text>
-      <ellipse cx="35" cy="40" rx="8" ry="15" fill="white" opacity="0.3"/>
-    `;
-  }
-
-  private renderFancyFoodIcon() {
-    return svg`
-      <ellipse cx="52" cy="85" rx="30" ry="8" fill="black" opacity="0.2"/>
-      <ellipse cx="50" cy="75" rx="40" ry="15" fill="#8B4513" stroke="#654321" stroke-width="2"/>
-      <ellipse cx="50" cy="73" rx="35" ry="12" fill="#A0522D" opacity="0.6"/>
-      <ellipse cx="45" cy="55" rx="20" ry="15" fill="#A0522D" stroke="#8B0000" stroke-width="2"/>
-      <ellipse cx="48" cy="52" rx="8" ry="6" fill="white" opacity="0.3"/>
-      <g transform="rotate(-15 60 55)">
-        <rect x="55" y="50" width="15" height="4" rx="2" fill="#F5DEB3" stroke="#D2B48C" stroke-width="1"/>
-        <circle cx="55" cy="52" r="3" fill="#F5DEB3" stroke="#D2B48C" stroke-width="1"/>
-        <circle cx="70" cy="52" r="3" fill="#F5DEB3" stroke="#D2B48C" stroke-width="1"/>
-      </g>
-    `;
-  }
-
-  private renderWaterIcon() {
-    return svg`
-      <ellipse cx="52" cy="85" rx="32" ry="8" fill="black" opacity="0.2"/>
-      <path d="M 15 65 Q 15 80, 25 85 L 75 85 Q 85 80, 85 65 Z" fill="#4682B4" stroke="#4169E1" stroke-width="2"/>
-      <ellipse cx="50" cy="65" rx="35" ry="10" fill="#4682B4" stroke="#4169E1" stroke-width="2"/>
-      <ellipse cx="50" cy="65" rx="32" ry="8" fill="#6495ED" opacity="0.8"/>
-      <path d="M 20 65 Q 30 62, 40 65 Q 50 68, 60 65 Q 70 62, 80 65" stroke="white" stroke-width="1.5" fill="none" opacity="0.6"/>
-      <ellipse cx="38" cy="63" rx="10" ry="4" fill="white" opacity="0.5"/>
-      <ellipse cx="62" cy="67" rx="6" ry="3" fill="white" opacity="0.4"/>
-    `;
-  }
-
-  private renderLaserIcon() {
-    return svg`
-      <defs>
-        <radialGradient id="laserGlow">
-          <stop offset="0%" style="stop-color:#FF0000;stop-opacity:1"/>
-          <stop offset="30%" style="stop-color:#FF0000;stop-opacity:0.9"/>
-          <stop offset="60%" style="stop-color:#FF4444;stop-opacity:0.4"/>
-          <stop offset="100%" style="stop-color:#FF0000;stop-opacity:0"/>
-        </radialGradient>
-      </defs>
-      <circle cx="32" cy="32" r="12" fill="url(#laserGlow)"/>
-      <circle cx="32" cy="32" r="6" fill="#FF0000" opacity="0.6"/>
-      <circle cx="32" cy="32" r="3" fill="#FF0000"/>
-      <circle cx="32" cy="32" r="2" fill="#FF4444"/>
-      <circle cx="31" cy="31" r="1" fill="#FFFFFF" opacity="0.8"/>
-    `;
-  }
-
-  private renderYarnIcon() {
-    return svg`
-      <circle cx="50" cy="50" r="45" fill="#FF6B6B"/>
-      <path d="M 30 20 Q 50 30, 70 25" stroke="#FF6B6B" stroke-width="3" fill="none" opacity="0.6"/>
-      <path d="M 25 35 Q 50 45, 75 40" stroke="#FF6B6B" stroke-width="3" fill="none" opacity="0.6"/>
-      <path d="M 20 50 Q 50 60, 80 55" stroke="#FF6B6B" stroke-width="3" fill="none" opacity="0.6"/>
-      <path d="M 25 65 Q 50 75, 75 70" stroke="#FF6B6B" stroke-width="3" fill="none" opacity="0.6"/>
-      <ellipse cx="40" cy="35" rx="15" ry="12" fill="white" opacity="0.3"/>
-      <ellipse cx="55" cy="65" rx="20" ry="15" fill="black" opacity="0.1"/>
-    `;
-  }
-
   render() {
     const laserActive =
       this.laserPointer && this.laserPointer.isActive;
@@ -351,14 +283,9 @@ export class MbPlaygroundToolbar extends LitElement {
           @click=${() => this.handlePlacement("food:basic")}
           title="Place Basic Food"
         >
-          ${html`<svg
-            width="24"
-            height="24"
-            viewBox="0 0 100 100"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            ${this.renderBasicFoodIcon()}
-          </svg>`}
+          <div class="icon">
+            ${unsafeSVG(INTERACTION_SVGS.foodBasic)}
+          </div>
         </mb-button>
 
         <!-- Fancy Food -->
@@ -369,14 +296,9 @@ export class MbPlaygroundToolbar extends LitElement {
           @click=${() => this.handlePlacement("food:fancy")}
           title="Place Fancy Food"
         >
-          ${html`<svg
-            width="24"
-            height="24"
-            viewBox="0 0 100 100"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            ${this.renderFancyFoodIcon()}
-          </svg>`}
+          <div class="icon">
+            ${unsafeSVG(INTERACTION_SVGS.foodFancy)}
+          </div>
         </mb-button>
 
         <!-- Water -->
@@ -387,14 +309,7 @@ export class MbPlaygroundToolbar extends LitElement {
           @click=${() => this.handlePlacement("water")}
           title="Place Water"
         >
-          ${html`<svg
-            width="24"
-            height="24"
-            viewBox="0 0 100 100"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            ${this.renderWaterIcon()}
-          </svg>`}
+          <div class="icon">${unsafeSVG(INTERACTION_SVGS.water)}</div>
         </mb-button>
 
         <div class="divider"></div>
@@ -412,14 +327,7 @@ export class MbPlaygroundToolbar extends LitElement {
             ? "Stop Laser"
             : "Activate Laser Pointer"}"
         >
-          ${html`<svg
-            width="24"
-            height="24"
-            viewBox="0 0 64 64"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            ${this.renderLaserIcon()}
-          </svg>`}
+          <div class="icon">${unsafeSVG(INTERACTION_SVGS.laser)}</div>
         </mb-button>
 
         <!-- Yarn -->
@@ -430,14 +338,7 @@ export class MbPlaygroundToolbar extends LitElement {
           @click=${() => this.handlePlacement("yarn")}
           title="Place Yarn Ball"
         >
-          ${html`<svg
-            width="24"
-            height="24"
-            viewBox="0 0 100 100"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            ${this.renderYarnIcon()}
-          </svg>`}
+          <div class="icon">${unsafeSVG(INTERACTION_SVGS.yarn)}</div>
         </mb-button>
       </div>
     `;

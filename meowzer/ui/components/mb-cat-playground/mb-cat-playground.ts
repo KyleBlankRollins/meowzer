@@ -538,7 +538,7 @@ export class MbCatPlayground extends LitElement {
                   </div>
                 </mb-modal>
               `
-            : ""}}
+            : ""}
 
           <!-- Wardrobe Dialog -->
           <mb-wardrobe-dialog

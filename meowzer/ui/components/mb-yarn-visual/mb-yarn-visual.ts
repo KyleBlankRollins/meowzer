@@ -1,8 +1,10 @@
 import { LitElement, html } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
+import { unsafeSVG } from "lit/directives/unsafe-svg.js";
 import { consume } from "@lit/context";
 import { meowzerContext } from "../../contexts/meowzer-context.js";
 import { yarnVisualStyles } from "./mb-yarn-visual.style.js";
+import { INTERACTION_SVGS } from "../../shared/interaction-svgs.js";
 import type { Meowzer, Yarn } from "meowzer";
 
 /**
@@ -135,67 +137,16 @@ export class MbYarnVisual extends LitElement {
   };
 
   render() {
+    // Placed yarn always uses the active (unraveled) version
+    // The default (ball) version is for toolbar/cursor only
     return html`
       <div class="yarn-container" @mousedown=${this._handleMouseDown}>
-        <svg
-          width="${this.size}"
-          height="${this.size}"
-          viewBox="0 0 100 100"
-          xmlns="http://www.w3.org/2000/svg"
+        <div
+          class="yarn-icon"
+          style="width: ${this.size}px; height: ${this.size}px;"
         >
-          <!-- Yarn ball base -->
-          <circle cx="50" cy="50" r="45" fill="${this.color}" />
-
-          <!-- Yarn strands for texture -->
-          <path
-            d="M 30 20 Q 50 30, 70 25"
-            stroke="${this.color}"
-            stroke-width="3"
-            fill="none"
-            opacity="0.6"
-          />
-          <path
-            d="M 25 35 Q 50 45, 75 40"
-            stroke="${this.color}"
-            stroke-width="3"
-            fill="none"
-            opacity="0.6"
-          />
-          <path
-            d="M 20 50 Q 50 60, 80 55"
-            stroke="${this.color}"
-            stroke-width="3"
-            fill="none"
-            opacity="0.6"
-          />
-          <path
-            d="M 25 65 Q 50 75, 75 70"
-            stroke="${this.color}"
-            stroke-width="3"
-            fill="none"
-            opacity="0.6"
-          />
-
-          <!-- Highlight for depth -->
-          <ellipse
-            cx="40"
-            cy="35"
-            rx="15"
-            ry="12"
-            fill="white"
-            opacity="0.3"
-          />
-
-          <!-- Shadow for depth -->
-          <ellipse
-            cx="55"
-            cy="65"
-            rx="20"
-            ry="15"
-            fill="black"
-            opacity="0.1"
-          />
-        </svg>
+          ${unsafeSVG(INTERACTION_SVGS.yarnActive)}
+        </div>
       </div>
     `;
   }

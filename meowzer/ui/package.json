@@ -26,7 +26,7 @@
   "scripts": {
     "dev": "tsc --watch",
     "clean": "rm -rf dist",
-    "prebuild": "node scripts/generate-cursor-assets.ts",
+    "prebuild": "node scripts/generate-cursor-assets.ts && node scripts/generate-interaction-svgs.ts",
     "build": "npm run clean && tsc && npm run copy-assets",
     "copy-assets": "node dist/scripts/copy-assets.js",
     "test": "vitest",
