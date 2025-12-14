@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" shape-rendering="crispEdges">
+  <g fill="${color}">
+    <path d="M30 50h5v20h-5z"/>
+    <path d="M29 69h7v3h-7zM40 50h5v20h-5z"/>
+    <path d="M39 69h7v3h-7z"/>
+  </g>
+  <path fill="none" stroke="${color}" stroke-linecap="square" stroke-width="5" d="m25 45-7-3-4-4-2-6-2-6 2-4"/>
+  <path fill="${color}" d="M26 33h42v24H26z"/>
+  <path fill="${shadingColor}" d="M28 50h38v6H28z" opacity=".3"/>
+  <g fill="${color}">
+    <path d="M52 50h5v20h-5z"/>
+    <path d="M51 69h7v3h-7zM62 50h5v20h-5z"/>
+    <path d="M61 69h7v3h-7z"/>
+  </g>
+  <path fill="${color}" d="M58 28h18v18H58z"/>
+  <path fill="${color}" d="M74 34h8v10h-8z"/>
+  <path fill="${shadingColor}" d="M60 40h14v5H60z" opacity=".3"/>
+  <path fill="${color}" d="m60 28-2-8 6 6z"/>
+  <path fill="${shadingColor}" d="m61 27-1-5 3 3z" opacity=".3"/>
+  <path fill="${color}" d="m72 28-2-8 6 6z"/>
+  <path fill="${shadingColor}" d="m73 27-1-5 3 3z" opacity=".3"/>
+  <path fill="${eyeColor}" d="M68 34h4v4h-4z"/>
+  <path fill="#FFF" d="M69 34h2v2h-2z" opacity=".8"/>
+  <path fill="${eyeColor}" d="M64 35h2v3h-2z" opacity=".4"/>
+  <path fill="#F99" d="M79 39h2v2h-2z"/>
+  <path stroke="${shadingColor}" stroke-linecap="square" d="m79 42-3 2"/>
+  <path stroke="${shadingColor}" d="m76 36 12-2M77 39h13M76 42l12 2" opacity=".8"/>
+</svg>

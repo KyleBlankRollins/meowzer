@@ -19,6 +19,8 @@
 
 - feat: add different SVG templates for different fur lengths
 - feat: add different SVG templates for hats
+- feat: persist hats
+- feat: fix basebal cap to be side view instead of head-on view
 
 ## UI
 
@@ -27,6 +29,3 @@
 ## Demo
 
 - Cat creator. Either add new fur length visuals or remove the option.
-- Cat creator. Remove the "make cat roam" step.
-- Reword anything that references "destroy" cat.
-- Clean up new component styles

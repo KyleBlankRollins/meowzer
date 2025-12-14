@@ -70,9 +70,10 @@ function generateCowboyHat(
 }
 
 /**
- * Generates a baseball cap SVG
- * Base color: Cap crown and bill
- * Accent color: Button on top and optional details
+ * Generates a baseball cap SVG (side profile view)
+ * Base color: Cap crown
+ * Accent color: Bill/visor
+ * Cap faces right to match cat's profile orientation
  */
 function generateBaseballCapHat(
   baseColor: string,
@@ -80,27 +81,29 @@ function generateBaseballCapHat(
   hatId: string
 ): string {
   return `
-  <!-- Baseball Cap -->
+  <!-- Baseball Cap (Side Profile) -->
   <g id="${hatId}">
-    <!-- Cap crown (base color) -->
-    <path d="M 56 20 Q 56 14 63 14 Q 70 14 70 20 L 68 22 L 58 22 Z" fill="${baseColor}"/>
+    <!-- Cap crown (base color) - side profile -->
+    <path d="M 56 18 Q 56 14 60 14 Q 64 14 66 16 Q 68 18 68 20 L 68 22 L 56 22 Z" fill="${baseColor}"/>
     
-    <!-- Bill/Visor (base color) -->
-    <path d="M 58 22 L 56 24 L 72 24 L 70 22 Z" fill="${baseColor}"/>
+    <!-- Bill/Visor extending forward (accent color) -->
+    <path d="M 56 20 L 48 22 L 48 24 L 56 23 Z" fill="${accentColor}"/>
     
-    <!-- Crown segments (darker lines) -->
+    <!-- Crown seam/panel line -->
     <line x1="60" y1="14" x2="60" y2="22" stroke="black" stroke-width="0.5" opacity="0.3"/>
-    <line x1="63" y1="14" x2="63" y2="22" stroke="black" stroke-width="0.5" opacity="0.3"/>
-    <line x1="66" y1="14" x2="66" y2="22" stroke="black" stroke-width="0.5" opacity="0.3"/>
+    <line x1="64" y1="15" x2="64" y2="22" stroke="black" stroke-width="0.5" opacity="0.3"/>
     
-    <!-- Top button (accent color) -->
-    <circle cx="63" cy="14" r="1.5" fill="${accentColor}"/>
+    <!-- Bill curve and depth (accent color) -->
+    <path d="M 56 21.5 L 49 23 L 49 24 L 56 22.5 Z" fill="${accentColor}" opacity="0.7"/>
     
-    <!-- Bill shading -->
-    <path d="M 58 23 L 56 24 L 72 24 L 70 23 Z" fill="black" opacity="0.2"/>
+    <!-- Bill shading/underside -->
+    <path d="M 56 23 L 48 24 L 56 24 Z" fill="black" opacity="0.3"/>
     
     <!-- Crown shading -->
-    <path d="M 58 18 Q 58 22 63 22 Q 68 22 68 18" fill="black" opacity="0.1"/>
+    <path d="M 57 16 Q 58 20 62 21 Q 66 20 67 18" fill="black" opacity="0.1"/>
+    
+    <!-- Top edge highlight -->
+    <path d="M 58 14 Q 60 14 64 15" stroke="${baseColor}" stroke-width="0.5" opacity="0.5" fill="none"/>
   </g>
   `.trim();
 }
