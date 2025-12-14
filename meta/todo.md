@@ -18,14 +18,8 @@
 ## Meowkit
 
 - feat: add different SVG templates for different fur lengths
-- feat: add different SVG templates for hats
-- feat: persist hats
-- feat: fix basebal cap to be side view instead of head-on view
 
 ## UI
 
 - feat: Create pick up/drop feature that applies to all objects in the playground
-
-## Demo
-
-- Cat creator. Either add new fur length visuals or remove the option.
+- Cat creator. Either add new fur length visuals or remove the option

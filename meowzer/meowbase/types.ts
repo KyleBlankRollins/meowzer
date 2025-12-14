@@ -13,6 +13,25 @@ export interface Cat {
   description: string;
   currentEmotion: Emotion;
   importantHumans: Human[];
+  /**
+   * Appearance data including colors, patterns, and accessories (hats, etc.)
+   * Optional for backward compatibility with existing stored cats
+   */
+  appearance?: {
+    color: string;
+    eyeColor: string;
+    pattern: string;
+    furLength: string;
+    shadingColor: string;
+    highlightColor: string;
+    accessories?: {
+      hat?: {
+        type: string;
+        baseColor: string;
+        accentColor: string;
+      };
+    };
+  };
 }
 
 export interface Toy {

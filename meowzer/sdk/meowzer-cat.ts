@@ -238,6 +238,45 @@ export class MeowzerCat {
     this._updateTimestamp();
   }
 
+  /**
+   * Get complete appearance data (colors, patterns, accessories)
+   */
+  getAppearance() {
+    return {
+      color: this._cat.protoCat.appearance.color,
+      eyeColor: this._cat.protoCat.appearance.eyeColor,
+      pattern: this._cat.protoCat.appearance.pattern,
+      furLength: this._cat.protoCat.appearance.furLength,
+      shadingColor: this._cat.protoCat.appearance.shadingColor,
+      highlightColor: this._cat.protoCat.appearance.highlightColor,
+      accessories: this._cat.protoCat.appearance.accessories,
+    };
+  }
+
+  /**
+   * Restore complete appearance from stored data
+   */
+  setAppearance(appearance: any): void {
+    // Restore basic appearance properties
+    this._cat.protoCat.appearance.color = appearance.color;
+    this._cat.protoCat.appearance.eyeColor = appearance.eyeColor;
+    this._cat.protoCat.appearance.pattern = appearance.pattern;
+    this._cat.protoCat.appearance.furLength = appearance.furLength;
+    this._cat.protoCat.appearance.shadingColor =
+      appearance.shadingColor;
+    this._cat.protoCat.appearance.highlightColor =
+      appearance.highlightColor;
+
+    // Restore accessories (hats, etc.)
+    if (appearance.accessories) {
+      this._cat.protoCat.appearance.accessories =
+        appearance.accessories;
+    }
+
+    // Use accessories component to regenerate sprite
+    (this.accessories as any).updateSprite();
+  }
+
   // ============================================================================
   // ============================================================================
   // UTILITIES

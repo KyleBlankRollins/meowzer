@@ -149,7 +149,7 @@ export class MbWardrobeDialog extends LitElement {
   /**
    * Handle apply action
    */
-  private handleApply() {
+  private async handleApply() {
     if (!this.cat) return;
 
     const hasHat = this.cat.accessories.hasHat();
@@ -180,6 +180,9 @@ export class MbWardrobeDialog extends LitElement {
         this.accentColor
       );
     }
+
+    // Save the cat with the new hat
+    await this.cat.save();
 
     this.dispatchEvent(
       new CustomEvent("hat-applied", {

@@ -175,6 +175,8 @@ export class StorageManager {
           name: "Content",
         },
         importantHumans: [],
+        // Persist appearance data (colors, patterns, accessories like hats)
+        appearance: cat.getAppearance(),
         ...options?.metadata,
       };
 
@@ -309,6 +311,11 @@ export class StorageManager {
             description: meowbaseCat.description,
           });
 
+          // Restore appearance data if it was saved (includes accessories like hats)
+          if (meowbaseCat.appearance) {
+            cat.setAppearance(meowbaseCat.appearance);
+          }
+
           // Set collection reference
           cat._setCollectionName(collection.id);
 
@@ -390,6 +397,11 @@ export class StorageManager {
           name: meowbaseCat.name,
           description: meowbaseCat.description,
         });
+
+        // Restore appearance data if it was saved (includes accessories like hats)
+        if (meowbaseCat.appearance) {
+          cat.setAppearance(meowbaseCat.appearance);
+        }
 
         cat._setCollectionName(collectionName);
         // Mark as clean since it's just loaded from storage
