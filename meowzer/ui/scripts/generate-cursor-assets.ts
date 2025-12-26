@@ -35,7 +35,7 @@ const CURSOR_ASSETS: CursorAsset[] = [
   },
   {
     mode: "yarn",
-    path: "toys/yarn-active.svg",
+    path: "toys/yarn-default.svg",
     outputKey: "YARN",
   },
 ];

@@ -137,15 +137,13 @@ export class MbYarnVisual extends LitElement {
   };
 
   render() {
-    // Placed yarn always uses the active (unraveled) version
-    // The default (ball) version is for toolbar/cursor only
     return html`
       <div class="yarn-container" @mousedown=${this._handleMouseDown}>
         <div
           class="yarn-icon"
           style="width: ${this.size}px; height: ${this.size}px;"
         >
-          ${unsafeSVG(INTERACTION_SVGS.yarnActive)}
+          ${unsafeSVG(INTERACTION_SVGS.yarn)}
         </div>
       </div>
     `;
