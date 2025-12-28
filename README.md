@@ -27,7 +27,7 @@ graph TB
         BRAIN[Brain Instance<br/>Decision Engine]
     end
 
-    USER -->|meowzer.cats.create()| SDK
+    USER -->|meowzer.cats.create| SDK
 
     SDK -->|buildCat| MEOWKIT
     SDK -->|animateCat| MEOWTION

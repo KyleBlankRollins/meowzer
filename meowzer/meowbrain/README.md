@@ -47,11 +47,11 @@ flowchart TD
 
     UPDATE --> CALC[Calculate Behavior Weights<br/>decision-engine.ts]
 
-    CALC --> W_WANDER[Wandering Weight<br/>= energy × curiosity × exploration]
-    CALC --> W_REST[Resting Weight<br/>= rest × (1 - energy)]
-    CALC --> W_PLAY[Playing Weight<br/>= playfulness × stimulation × energy]
-    CALC --> W_OBSERVE[Observing Weight<br/>= curiosity × (1 - playfulness)]
-    CALC --> W_EXPLORE[Exploring Weight<br/>= exploration × curiosity]
+    CALC --> W_WANDER[Wandering Weight<br/>= energy * curiosity * exploration]
+    CALC --> W_REST[Resting Weight<br/>= rest * low energy]
+    CALC --> W_PLAY[Playing Weight<br/>= playfulness * stimulation * energy]
+    CALC --> W_OBSERVE[Observing Weight<br/>= curiosity * low playfulness]
+    CALC --> W_EXPLORE[Exploring Weight<br/>= exploration * curiosity]
 
     W_WANDER --> CHOOSE{Choose Behavior<br/>Weighted Random}
     W_REST --> CHOOSE
