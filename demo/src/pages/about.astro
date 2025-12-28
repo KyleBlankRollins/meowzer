@@ -10,32 +10,57 @@ import Header from "../components/Header.astro";
     <article class="about-content">
       <h1>What is this?</h1>
       <p>
-        A fun playground for creating and playing with animated cats!
+        A fun playground for creating and playing with simulated cats!
         🐱
       </p>
 
       <h2>How to use it</h2>
-      <ul>
+      <ol>
         <li>Click "Create Cat" to make a new friend</li>
         <li>Customize colors, patterns, and personality</li>
         <li>Watch them roam around the screen</li>
         <li>Save your favorites and share them!</li>
-      </ul>
-
-      <h2>Want cats on your site?</h2>
-      <p>
-        Check out the <a
-          href="https://github.com/yourusername/meowzer"
-          target="_blank">GitHub repo</a
-        >
-        to add Meowzer to your own website!
-      </p>
+      </ol>
 
       <h2>Credits</h2>
       <p>
-        Built with <a href="https://lit.dev" target="_blank">Lit</a> and
-        <a href="https://astro.build" target="_blank">Astro</a>.
+        This demo site was built with <a
+          href="https://astro.build"
+          target="_blank">Astro</a
+        >
+        and <a href="https://lit.dev" target="_blank">Lit</a> web components.
+        Development was assisted by GitHub Copilot using Claude Sonnet 4.5.
       </p>
+
+      <h3>Technical Details</h3>
+      <ul>
+        <li>
+          <strong>Framework:</strong>
+          <a href="https://astro.build" target="_blank">Astro</a>, a
+          modern static site generator that enables fast,
+          content-focused websites
+        </li>
+        <li>
+          <strong>Components:</strong>
+          <a href="https://lit.dev" target="_blank">Lit</a> web components
+          from the <code>@meowzer/ui</code> package for all interactive
+          cat functionality
+        </li>
+        <li>
+          <strong>State Management:</strong> The <code
+            >&lt;meowzer-provider&gt;</code
+          > component manages cat state and orchestrates all cat behaviors
+          throughout the application
+        </li>
+        <li>
+          <strong>Styling:</strong> Custom CSS using CSS custom properties
+          for theming, ensuring a consistent look across all pages
+        </li>
+        <li>
+          <strong>Deployment:</strong> Deployed on Netlify with automatic
+          builds from the main branch
+        </li>
+      </ul>
 
       <div class="demo-cats">
         <p class="demo-label">
@@ -79,19 +104,44 @@ import Header from "../components/Header.astro";
     margin-bottom: 1rem;
   }
 
+  h3 {
+    color: #444;
+    font-size: 1.35rem;
+    margin-top: 1.5rem;
+    margin-bottom: 0.75rem;
+  }
+
   p {
     color: #555;
     font-size: 1.125rem;
   }
 
-  ul {
+  ul,
+  ol {
     color: #555;
     font-size: 1.125rem;
     padding-left: 1.5rem;
   }
 
+  ul {
+    list-style: initial;
+  }
+
+  ol {
+    list-style: initial;
+  }
+
   li {
     margin-bottom: 0.5rem;
+  }
+
+  code {
+    background: #f0f0f0;
+    padding: 0.2em 0.4em;
+    border-radius: 3px;
+    font-size: 0.9em;
+    font-family: "Courier New", monospace;
+    color: #333;
   }
 
   a {

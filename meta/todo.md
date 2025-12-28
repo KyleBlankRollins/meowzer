@@ -23,3 +23,5 @@
 
 - feat: Create pick up/drop feature that applies to all objects in the playground
 - Cat creator. Either add new fur length visuals or remove the option
+- feat: Add share option to cat context menu. It should show the cat's seed value and have a copy button.
+- feat: Add "import cat" option to cat creator. It should parse a cat seed value to create a new cat.
