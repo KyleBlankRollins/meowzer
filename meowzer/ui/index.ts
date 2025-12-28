@@ -41,6 +41,7 @@ export {
   MbModal,
   MbNotification,
   MbIcon,
+  MbTabs,
   MbColorPicker,
   MbTooltip,
   MbAccordion,
@@ -52,6 +53,7 @@ export {
   CatStatistics,
   MbCatPlayground,
   MbWardrobeDialog,
+  MbShareCatModal,
 } from "./components/index.js";
 
 // Re-export Meowzer SDK types for convenience

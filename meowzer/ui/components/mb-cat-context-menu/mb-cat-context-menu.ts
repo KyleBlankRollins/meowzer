@@ -23,6 +23,7 @@ import type { MeowzerCat } from "meowzer";
  * @fires cat-remove - Dispatched when user clicks "Remove"
  * @fires cat-rename - Dispatched when user clicks "Rename"
  * @fires cat-change-hat - Dispatched when user clicks "Change Hat"
+ * @fires cat-share - Dispatched when user clicks "Share Cat"
  * @fires menu-close - Dispatched when menu should close
  */
 @customElement("mb-cat-context-menu")
@@ -159,7 +160,9 @@ export class MbCatContextMenu extends LitElement {
   /**
    * Handle menu item click
    */
-  private handleAction(action: "remove" | "rename" | "change-hat") {
+  private handleAction(
+    action: "remove" | "rename" | "change-hat" | "share"
+  ) {
     this.dispatchEvent(
       new CustomEvent(`cat-${action}`, {
         detail: { cat: this.cat },
@@ -204,6 +207,12 @@ export class MbCatContextMenu extends LitElement {
           @click=${() => this.handleAction("change-hat")}
         >
           Change Hat
+        </button>
+        <button
+          class="menu-item normal"
+          @click=${() => this.handleAction("share")}
+        >
+          Share Cat
         </button>
         <hr />
         <button

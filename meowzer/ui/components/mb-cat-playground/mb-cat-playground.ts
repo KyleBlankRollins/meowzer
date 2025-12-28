@@ -84,6 +84,12 @@ export class MbCatPlayground extends LitElement {
   private showRenameDialog = false;
 
   /**
+   * Share modal state
+   */
+  @state()
+  private showShareModal = false;
+
+  /**
    * Flag to prevent clearing selectedCat when transitioning to another dialog
    */
   private keepSelectedCat = false;
@@ -295,6 +301,9 @@ export class MbCatPlayground extends LitElement {
       case "change-hat":
         this.handleChangeHat();
         break;
+      case "share":
+        this.handleShare();
+        break;
     }
   }
 
@@ -464,6 +473,33 @@ export class MbCatPlayground extends LitElement {
   }
 
   /**
+   * Handle "Share Cat" menu option
+   */
+  private handleShare() {
+    if (!this.selectedCat) return;
+
+    // Close context menu and open share modal
+    this.contextMenuOpen = false;
+    this.showShareModal = true;
+  }
+
+  /**
+   * Handle share modal close
+   */
+  private closeShareModal() {
+    this.showShareModal = false;
+
+    // Clear selectedCat and resume cat after share modal closes
+    if (this.selectedCat) {
+      if (!this.selectedCat.isActive) {
+        this.selectedCat.lifecycle.resume();
+      }
+      this.selectedCat.element.classList.remove("menu-open");
+      this.selectedCat = null;
+    }
+  }
+
+  /**
    * Handle wardrobe dialog close
    */
   private handleWardrobeDialogClose() {
@@ -547,6 +583,13 @@ export class MbCatPlayground extends LitElement {
             @dialog-close=${this.handleWardrobeDialogClose}
           ></mb-wardrobe-dialog>
 
+          <!-- Share Cat Modal -->
+          <mb-share-cat-modal
+            .cat=${this.selectedCat}
+            ?open=${this.showShareModal}
+            @close=${this.closeShareModal}
+          ></mb-share-cat-modal>
+
           <!-- Cat Creator Dialog -->
           <mb-modal
             id="creator-dialog"
@@ -611,6 +654,7 @@ export class MbCatPlayground extends LitElement {
                       this.handleMenuAction("rename")}
                     @cat-change-hat=${() =>
                       this.handleMenuAction("change-hat")}
+                    @cat-share=${() => this.handleMenuAction("share")}
                     @menu-close=${this.closeContextMenu}
                   ></mb-cat-context-menu>
                 `;

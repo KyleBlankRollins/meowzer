@@ -32,8 +32,10 @@ import type {
 // Import child components
 import "../cat-preview/cat-preview.js";
 import "../cat-personality-picker/cat-personality-picker.js";
+import "../mb-tabs/mb-tabs.js";
 import "./partials/appearance-section.js";
 import "./partials/basic-info-section.js";
+import "./partials/adopt-section.js";
 
 // Import shared utilities
 import { validateCatForm } from "../../shared/validation/cat-validation.js";
@@ -59,9 +61,9 @@ export class CatCreator extends LitElement {
     "balanced";
   @state() private makeRoaming = true;
   @state() private creating = false;
-  @state() private message = "";
   @state() private currentStep = 1;
   @state() private stepErrors: string[] = [];
+  @state() private activeTab = 0; // 0 = Create, 1 = Adopt
 
   /**
    * Validate the current step
@@ -146,7 +148,7 @@ export class CatCreator extends LitElement {
    */
   private async handleCreate() {
     if (!this.meowzer) {
-      this.message = "Meowzer SDK not available";
+      this.stepErrors = ["Meowzer SDK not available"];
       return;
     }
 
@@ -157,12 +159,12 @@ export class CatCreator extends LitElement {
     });
 
     if (!validation.valid) {
-      this.message = validation.errors.join(", ");
+      this.stepErrors = validation.errors;
       return;
     }
 
     this.creating = true;
-    this.message = "";
+    this.stepErrors = [];
 
     try {
       const cat = await this.meowzer.cats.create({
@@ -203,7 +205,7 @@ export class CatCreator extends LitElement {
       this.reset();
     } catch (error) {
       console.error("Failed to create cat:", error);
-      this.message = `Error creating cat: ${error}`;
+      this.stepErrors = [`Error creating cat: ${error}`];
       this.dispatchEvent(
         new CustomEvent("cat-creation-error", {
           detail: { error },
@@ -231,8 +233,34 @@ export class CatCreator extends LitElement {
     };
     this.selectedPersonality = "balanced";
     this.makeRoaming = true;
-    this.message = "";
     this.currentStep = 1;
+    this.activeTab = 0;
+  }
+
+  /**
+   * Handle tab change
+   */
+  private handleTabChange(e: CustomEvent) {
+    this.activeTab = e.detail.index;
+    // Reset errors when switching tabs
+    this.stepErrors = [];
+  }
+
+  /**
+   * Handle cat adoption
+   */
+  private handleAdopt(e: CustomEvent) {
+    // Cat is already created and saved by adopt-section
+    // Just dispatch success event and reset
+    this.dispatchEvent(
+      new CustomEvent("cat-created", {
+        detail: { cat: e.detail.cat },
+        bubbles: true,
+        composed: true,
+      })
+    );
+
+    this.reset();
     this.stepErrors = [];
   }
 
@@ -305,108 +333,114 @@ export class CatCreator extends LitElement {
     `;
   }
 
-  render() {
-    if (!this.meowzer) {
-      return html`
-        <mb-notification variant="error" title="No Meowzer SDK">
-          Please wrap this component in a &lt;meowzer-provider&gt;.
-        </mb-notification>
-      `;
-    }
-
+  /**
+   * Render create cat tab
+   */
+  private renderCreateTab() {
     return html`
-      <div class="cat-creator">
-        ${
-          this.message
-            ? html`<mb-notification
-                variant="info"
-                title=${this.message}
-                class="message"
-              >
-              </mb-notification>`
-            : ""
-        }
-
-        <div class="creator-layout">
-          <!-- Preview Panel -->
-          <div class="preview-panel">
-            <cat-preview
-              .settings=${this.settings}
-              autoBuild
-            </cat-preview>
-            <div class="preview-actions">
-              <mb-button
-                @click=${this.reset}
-                variant="secondary"
-                size="sm"
-              >
-                Reset
-              </mb-button>
-            </div>
-          </div>
-
-          <!-- Wizard Panel -->
-          <div class="settings-panel">
-            <!-- Step Errors -->
-            ${
-              this.stepErrors.length > 0
-                ? html`
-                    <mb-notification
-                      variant="error"
-                      title="Please fix the following:"
-                      class="step-errors"
-                    >
-                      ${this.stepErrors.join(", ")}
-                    </mb-notification>
-                  `
-                : ""
-            }
-
-            <div class="creator-form">
-              <!-- Step 1: Basic Info -->
-              ${
-                this.currentStep === 1
-                  ? html`
-                      <basic-info-section
-                        .name=${this.catName}
-                        .description=${this.catDescription}
-                        @basic-info-change=${this
-                          .handleBasicInfoChange}
-                      ></basic-info-section>
-                    `
-                  : ""
-              }
-
-              <!-- Step 2: Appearance & Size -->
-              ${
-                this.currentStep === 2
-                  ? html`
-                      <appearance-section
-                        .settings=${this.settings}
-                        @appearance-change=${this
-                          .handleAppearanceChange}
-                      ></appearance-section>
-                    `
-                  : ""
-              }
-
-              <!-- Step 3: Personality -->
-              ${
-                this.currentStep === 3
-                  ? html`
-                      <cat-personality-picker
-                        @personality-change=${this
-                          .handlePersonalityChange}
-                      ></cat-personality-picker>
-                    `
-                  : ""
-              }
-            </div>
-
-            <!-- Wizard Navigation -->
-            ${this.renderWizardNavigation()}
+      <div class="creator-layout">
+        <!-- Preview Panel -->
+        <div class="preview-panel">
+          <cat-preview
+            .settings=${this.settings}
+            autoBuild
+          ></cat-preview>
+          <div class="preview-actions">
+            <mb-button
+              @click=${this.reset}
+              variant="secondary"
+              size="sm"
+            >
+              Reset
+            </mb-button>
           </div>
         </div>
+
+        <!-- Wizard Panel -->
+        <div class="settings-panel">
+          <!-- Step Errors -->
+          ${this.stepErrors.length > 0
+            ? html`
+                <mb-notification
+                  variant="error"
+                  title="Please fix the following:"
+                  class="step-errors"
+                >
+                  ${this.stepErrors.join(", ")}
+                </mb-notification>
+              `
+            : ""}
+
+          <div class="creator-form">
+            <!-- Step 1: Basic Info -->
+            ${this.currentStep === 1
+              ? html`
+                  <basic-info-section
+                    .name=${this.catName}
+                    .description=${this.catDescription}
+                    @basic-info-change=${this.handleBasicInfoChange}
+                  ></basic-info-section>
+                `
+              : ""}
+
+            <!-- Step 2: Appearance & Size -->
+            ${this.currentStep === 2
+              ? html`
+                  <appearance-section
+                    .settings=${this.settings}
+                    @appearance-change=${this.handleAppearanceChange}
+                  ></appearance-section>
+                `
+              : ""}
+
+            <!-- Step 3: Personality -->
+            ${this.currentStep === 3
+              ? html`
+                  <cat-personality-picker
+                    @personality-change=${this
+                      .handlePersonalityChange}
+                  ></cat-personality-picker>
+                `
+              : ""}
+          </div>
+
+          <!-- Wizard Navigation -->
+          ${this.renderWizardNavigation()}
+        </div>
+      </div>
+    `;
+  }
+
+  /**
+   * Render adopt cat tab
+   */
+  private renderAdoptTab() {
+    return html`
+      <div class="adopt-layout">
+        <adopt-section @adopt=${this.handleAdopt}></adopt-section>
+      </div>
+    `;
+  }
+
+  /**
+   * Main render method
+   */
+  render() {
+    return html`
+      <div class="cat-creator-container">
+        <!-- Tabs -->
+        <div class="tabs-container">
+          <mb-tabs
+            .tabs=${["New cat", "Adopt cat"]}
+            activeIndex=${this.activeTab}
+            @tab-change=${this.handleTabChange}
+          ></mb-tabs>
+        </div>
+
+        <!-- Tab content -->
+        ${this.activeTab === 0
+          ? this.renderCreateTab()
+          : this.renderAdoptTab()}
       </div>
     `;
   }

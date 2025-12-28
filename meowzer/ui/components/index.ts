@@ -18,6 +18,7 @@ export { MbSelect } from "./mb-select/mb-select.js";
 export { MbModal } from "./mb-modal/mb-modal.js";
 export { MbNotification } from "./mb-notification/mb-notification.js";
 export { MbIcon } from "./mb-icon/mb-icon.js";
+export { MbTabs } from "./mb-tabs/mb-tabs.js";
 
 // Phase 4 - Specialized Components
 export { MbColorPicker } from "./mb-color-picker/mb-color-picker.js";
@@ -38,3 +39,4 @@ export { MbPlaygroundToolbar } from "./mb-playground-toolbar/mb-playground-toolb
 export { MbYarnVisual } from "./mb-yarn-visual/mb-yarn-visual.js";
 export { MbNeedVisual } from "./mb-need-visual/mb-need-visual.js";
 export { MbLaserVisual } from "./mb-laser-visual/mb-laser-visual.js";
+export { MbShareCatModal } from "./mb-share-cat-modal/mb-share-cat-modal.js";

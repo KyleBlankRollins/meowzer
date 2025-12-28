@@ -17,6 +17,12 @@ export const catCreatorStyles = [
       margin-bottom: 1rem;
     }
 
+    /* Tabs Container */
+    .tabs-container {
+      margin-bottom: 1rem;
+    }
+
+    /* Create Tab Layout */
     .creator-layout {
       display: grid;
       gap: 2rem;
@@ -32,6 +38,18 @@ export const catCreatorStyles = [
       .preview-panel {
         order: -1; /* Ensure preview appears first on mobile */
       }
+    }
+
+    /* Adopt Tab Layout */
+    .adopt-layout {
+      display: flex;
+      justify-content: center;
+      padding: 1rem;
+    }
+
+    .adopt-layout adopt-section {
+      max-width: 600px;
+      width: 100%;
     }
 
     /* Preview Panel */
