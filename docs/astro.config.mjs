@@ -17,6 +17,13 @@ export default defineConfig({
       ],
       sidebar: [
         {
+          label: "Meta information",
+          items: [
+            { label: "About These Docs", slug: "about" },
+            { label: "Credits", slug: "credits" },
+          ],
+        },
+        {
           label: "Getting Started",
           items: [
             {
@@ -38,7 +45,34 @@ export default defineConfig({
           ],
         },
         {
+          label: "Play",
+          items: [
+            {
+              label: "Understanding Cats",
+              slug: "play/understanding-cats",
+            },
+            {
+              label: "Interacting",
+              items: [
+                {
+                  label: "Feeding Cats",
+                  slug: "play/interacting/feeding-cats",
+                },
+                {
+                  label: "Playing with Toys",
+                  slug: "play/interacting/playing-with-toys",
+                },
+                {
+                  label: "Sharing & Adopting Cats",
+                  slug: "play/interacting/sharing-and-adopting",
+                },
+              ],
+            },
+          ],
+        },
+        {
           label: "Tutorials",
+          collapsed: true,
           items: [
             {
               label: "Basic Integration",
@@ -56,6 +90,7 @@ export default defineConfig({
         },
         {
           label: "Concepts",
+          collapsed: true,
           items: [
             {
               label: "Architecture",
@@ -73,6 +108,7 @@ export default defineConfig({
         },
         {
           label: "Guides",
+          collapsed: true,
           items: [
             {
               label: "Customization",
@@ -90,6 +126,7 @@ export default defineConfig({
         },
         {
           label: "API Reference",
+          collapsed: true,
           items: [
             {
               label: "Meowzer SDK",
@@ -119,24 +156,8 @@ export default defineConfig({
           ],
         },
         {
-          label: "Examples",
-          items: [
-            {
-              label: "Code Snippets",
-              slug: "examples/code-snippets",
-            },
-            {
-              label: "Live Demos",
-              slug: "examples/live-demos",
-              badge: {
-                text: "Coming Soon",
-                variant: "note",
-              },
-            },
-          ],
-        },
-        {
           label: "Advanced",
+          collapsed: true,
           items: [
             {
               label: "Plugin Development",
@@ -146,35 +167,10 @@ export default defineConfig({
               label: "Framework Integration",
               slug: "advanced/framework-integration",
             },
-          ],
-        },
-        {
-          label: "Play",
-          items: [
             {
-              label: "Understanding Cats",
-              slug: "play/understanding-cats",
+              label: "Code Snippets",
+              slug: "examples/code-snippets",
             },
-            {
-              label: "Interacting",
-              items: [
-                {
-                  label: "Feeding Cats",
-                  slug: "play/interacting/feeding-cats",
-                },
-                {
-                  label: "Playing with Toys",
-                  slug: "play/interacting/playing-with-toys",
-                },
-              ],
-            },
-          ],
-        },
-        {
-          label: "Resources",
-          items: [
-            { label: "About These Docs", slug: "about" },
-            { label: "Credits", slug: "credits" },
           ],
         },
       ],

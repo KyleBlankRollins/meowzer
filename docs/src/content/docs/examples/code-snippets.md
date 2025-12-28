@@ -815,6 +815,5 @@ setInterval(() => cleanupOldCats(24), 24 * 60 * 60 * 1000);
 
 ## See Also
 
-- [Live Demos](/examples/live-demos) - Interactive examples
 - [Basic Integration Tutorial](/tutorials/basic-integration) - Step-by-step guide
 - [API Reference](/api/meowzer-sdk) - Complete API documentation
