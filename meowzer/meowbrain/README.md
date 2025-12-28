@@ -134,7 +134,11 @@ type BehaviorType =
   | "resting" // Sitting or sleeping
   | "playing" // Erratic, playful movements
   | "observing" // Sitting and watching
-  | "exploring"; // Moving to unvisited areas
+  | "exploring" // Moving to unvisited areas
+  | "approaching" // Moving toward an attractor
+  | "consuming" // Interacting with an attractor
+  | "chasing" // Following a moving target
+  | "batting"; // Playing with an interactive element
 
 type BrainEvent =
   | "behaviorChange" // Emitted when behavior changes
@@ -189,8 +193,8 @@ interface Environment {
 Creates a brain for a cat, enabling autonomous behavior.
 
 ```typescript
-import { animateCat } from "@meowzer/meowtion";
-import { createBrain } from "@meowzer/meowbrain";
+import { animateCat } from "../meowtion/index.js";
+import { createBrain } from "../meowbrain/index.js";
 
 const cat = animateCat(protoCat);
 const brain = createBrain(cat, {
@@ -205,16 +209,6 @@ brain.start();
 ```
 
 **Options:** See `BrainOptions` interface above.
-
-#### `BrainBuilder` (Builder Pattern)
-
-```typescript
-const brain = new BrainBuilder(cat)
-  .withPersonality("curious")
-  .withEnvironment({ boundaries: {...} })
-  .withDecisionInterval(1000, 3000)
-  .build();
-```
 
 ### Brain Class Methods
 
@@ -309,6 +303,10 @@ interface BehaviorWeights {
   playing: number;
   observing: number;
   exploring: number;
+  approaching: number;
+  consuming: number;
+  chasing: number;
+  batting: number;
 }
 ```
 
@@ -357,9 +355,9 @@ Like other Meowzer libraries:
 ### Basic Autonomous Cat
 
 ```typescript
-import { buildCatFromSeed } from "meowkit";
-import { animateCat } from "meowtion";
-import { createBrain } from "meowbrain";
+import { buildCatFromSeed } from "../meowkit/index.js";
+import { animateCat } from "../meowtion/index.js";
+import { createBrain } from "../meowbrain/index.js";
 
 // Create the cat
 const protoCat = buildCatFromSeed("tabby-FF9500-00FF00-m-short-v1");

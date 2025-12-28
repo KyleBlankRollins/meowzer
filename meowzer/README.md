@@ -108,17 +108,14 @@ The SDK is **instance-based**, not global functions. Always start by creating an
 ```typescript
 const meowzer = new Meowzer({
   storage: {
-    adapter: "indexeddb", // Use IndexedDB for persistence
     enabled: true, // Enable storage features
   },
-  behavior: {
-    boundaries: {
-      // Default boundaries for cats
-      minX: 0,
-      maxX: window.innerWidth,
-      minY: 0,
-      maxY: window.innerHeight,
-    },
+  boundaries: {
+    // Default boundaries for cats
+    minX: 0,
+    maxX: window.innerWidth,
+    minY: 0,
+    maxY: window.innerHeight,
   },
 });
 
@@ -157,13 +154,10 @@ cat.state; // "idle" | "walking" | "sitting" | "sleeping"
 cat.personality; // { energy, curiosity, playfulness, independence, sociability }
 cat.element; // HTMLElement for the cat
 
-// Cat methods
-cat.pause(); // Stop AI behaviors
-cat.resume(); // Resume AI behaviors
-cat.destroy(); // Remove and cleanup
-cat.respondToNeed(id); // Interact with food/water
-cat.playWithYarn(id); // Play with yarn
-cat.chaseLaser(position); // Chase laser pointer
+// Cat lifecycle methods
+cat.lifecycle.pause(); // Stop AI behaviors
+cat.lifecycle.resume(); // Resume AI behaviors
+cat.lifecycle.destroy(); // Remove and cleanup
 ```
 
 ---
@@ -261,10 +255,10 @@ const cat = await meowzer.cats.create();
 // Cat automatically appears on document.body
 
 // Pause AI (cat stops moving)
-cat.pause();
+cat.lifecycle.pause();
 
 // Resume AI
-cat.resume();
+cat.lifecycle.resume();
 
 // Update properties
 cat.setName("New Name");
@@ -313,23 +307,23 @@ Save cats to IndexedDB to persist across sessions:
 ```typescript
 // Create SDK with storage enabled
 const meowzer = new Meowzer({
-  storage: { adapter: "indexeddb", enabled: true },
+  storage: { enabled: true },
 });
 await meowzer.init();
 
 // Create and save a cat
 const cat = await meowzer.cats.create({ name: "Whiskers" });
-await meowzer.storage.save(cat.id);
+await meowzer.storage.saveCat(cat);
 
 // Later, load the cat
-const loadedCat = await meowzer.storage.load("cat-abc123");
+const loadedCat = await meowzer.storage.loadCat("cat-abc123");
 // Cat automatically appears on the page!
 
-// Load all saved cats
-const allSavedCats = await meowzer.storage.loadAll();
+// Load all saved cats from default collection
+const allSavedCats = await meowzer.storage.loadCollection("my-cats");
 
 // Delete from storage (doesn't destroy active instance)
-await meowzer.storage.delete("cat-abc123");
+await meowzer.storage.deleteCat("cat-abc123");
 ```
 
 ### Collections
@@ -338,28 +332,20 @@ Organize cats into collections (like folders):
 
 ```typescript
 // Create collection
-const collectionId = await meowzer.storage.createCollection(
-  "My Favorites",
-  {
-    description: "My favorite cats",
-  }
-);
+await meowzer.storage.createCollection("My Favorites");
 
-// Add cats to collection
-await meowzer.storage.addToCollection(collectionId, cat.id);
+// Add cats to collection (save to specific collection)
+await meowzer.storage.saveCat(cat, { collection: "My Favorites" });
 
 // Get collection info
-const info = await meowzer.storage.getCollection(collectionId);
-console.log(info.name, info.catIds);
+const info = await meowzer.storage.getCollectionInfo("My Favorites");
+console.log(info.name, info.catCount);
 
 // Load all cats from collection
-const cats = await meowzer.storage.loadCollection(collectionId);
+const cats = await meowzer.storage.loadCollection("My Favorites");
 
-// Remove cat from collection
-await meowzer.storage.removeFromCollection(collectionId, cat.id);
-
-// Delete collection (keeps cats, just removes collection)
-await meowzer.storage.deleteCollection(collectionId);
+// Delete collection (keeps cats in default collection)
+await meowzer.storage.deleteCollection("My Favorites");
 
 // List all collections
 const collections = await meowzer.storage.listCollections();
@@ -396,7 +382,7 @@ const water = await meowzer.interactions.placeNeed("water", {
 // Depends on personality and current state
 
 // Manually trigger cat response
-await cat.respondToNeed(food.id);
+await cat.interactions.respondToNeed(food.id);
 
 // Remove need
 await meowzer.interactions.removeNeed(food.id);
@@ -422,10 +408,7 @@ const randomYarn = await meowzer.interactions.placeYarn();
 
 // Cats detect yarn and may play with it
 // Manually trigger
-await cat.playWithYarn(yarn.id);
-
-// Move yarn (cat will chase)
-yarn.move({ x: 400, y: 250 });
+await cat.interactions.playWithYarn(yarn.id);
 
 // Listen to yarn events
 yarn.on("moved", (event) => {
@@ -457,15 +440,19 @@ laser.on("moved", (event) => {
   console.log("Laser at:", event.position);
 });
 
-laser.on("turnedOn", (event) => {
+laser.on("activated", (event) => {
   console.log("Laser activated");
+});
+
+laser.on("deactivated", (event) => {
+  console.log("Laser deactivated");
 });
 
 // Turn off
 laser.turnOff();
 
 // Manually make cat chase laser
-await cat.chaseLaser(laser.position);
+await cat.interactions.chaseLaser(laser.position);
 ```
 
 ### Interaction Events
@@ -520,11 +507,7 @@ meowzer.hooks.on("afterSave", (context) => {
   console.log("Saved successfully!");
 });
 
-// Before/after load
-meowzer.hooks.on("beforeLoad", (context) => {
-  console.log("Loading cat:", context.catId);
-});
-
+// After load (no beforeLoad hook exists)
 meowzer.hooks.on("afterLoad", (context) => {
   console.log("Loaded cat:", context.catId);
 });
@@ -564,7 +547,7 @@ meowzer.hooks.off("afterCreate", handler);
 
 - `beforeCreate` / `afterCreate`
 - `beforeSave` / `afterSave`
-- `beforeLoad` / `afterLoad`
+- `afterLoad` (no beforeLoad)
 - `beforeDestroy` / `afterDestroy`
 - `beforeDelete` / `afterDelete`
 
@@ -573,7 +556,9 @@ meowzer.hooks.off("afterCreate", handler);
 - `beforeNeedPlace` / `afterNeedPlace`
 - `beforeNeedRemove` / `afterNeedRemove`
 - `beforeYarnPlace` / `afterYarnPlace`
-- `beforeInteractionStart` / `afterInteractionEnd`
+- `beforeYarnRemove` / `afterYarnRemove`
+- `beforeInteractionStart` / `afterInteractionStart`
+- `beforeInteractionEnd` / `afterInteractionEnd`
 
 ---
 
@@ -584,8 +569,7 @@ Extend Meowzer with plugins:
 ```typescript
 // Define a plugin
 const analyticsPlugin = {
-  id: "analytics",
-  name: "Analytics Plugin",
+  name: "analytics",
   version: "1.0.0",
 
   install(context) {
@@ -594,16 +578,14 @@ const analyticsPlugin = {
 
     // Track cat creation
     hooks.on("afterCreate", (ctx) => {
-      console.log("Analytics: Cat created", ctx.catId);
+      console.log("Analytics: Cat created", ctx.cat.id);
       // Send to analytics service...
     });
+  },
 
-    return {
-      // Cleanup function (optional)
-      uninstall() {
-        console.log("Analytics plugin uninstalled");
-      },
-    };
+  // Optional cleanup function
+  uninstall(context) {
+    console.log("Analytics plugin uninstalled");
   },
 };
 
@@ -616,7 +598,7 @@ await meowzer.plugins.install(analyticsPlugin, {
 await meowzer.use(analyticsPlugin);
 
 // Check installed plugins
-const plugins = meowzer.plugins.getInstalled();
+const plugins = meowzer.plugins.getAll();
 
 // Uninstall
 await meowzer.plugins.uninstall("analytics");
@@ -626,12 +608,14 @@ await meowzer.plugins.uninstall("analytics");
 
 ```typescript
 interface MeowzerPlugin {
-  id: string;
   name: string;
   version: string;
+  description?: string;
   install(
-    context: PluginContext
-  ): PluginInstallResult | Promise<PluginInstallResult>;
+    context: PluginContext,
+    options?: PluginInstallOptions
+  ): void | Promise<void>;
+  uninstall?(context: PluginContext): void | Promise<void>;
 }
 
 interface PluginContext {
@@ -666,7 +650,7 @@ const cat = await meowzer.cats.create();
 import { Meowzer } from "meowzer";
 
 const meowzer = new Meowzer({
-  storage: { adapter: "indexeddb", enabled: true },
+  storage: { enabled: true },
 });
 await meowzer.init();
 
@@ -686,10 +670,10 @@ const cat = await meowzer.cats.create({
 // Cat automatically appears on the page!
 
 // Save for later
-await meowzer.storage.save(cat.id);
+await meowzer.storage.saveCat(cat);
 
 // Later session...
-const loadedCat = await meowzer.storage.load(cat.id);
+const loadedCat = await meowzer.storage.loadCat(cat.id);
 // Cat automatically appears on the page!
 ```
 
@@ -739,13 +723,11 @@ meowzer.interactions.on("needResponse", (event) => {
 import { Meowzer } from "meowzer";
 
 const meowzer = new Meowzer({
-  behavior: {
-    boundaries: {
-      minX: 0,
-      maxX: window.innerWidth,
-      minY: 0,
-      maxY: window.innerHeight,
-    },
+  boundaries: {
+    minX: 0,
+    maxX: window.innerWidth,
+    minY: 0,
+    maxY: window.innerHeight,
   },
 });
 await meowzer.init();
@@ -764,7 +746,7 @@ window.addEventListener("resize", () => {
 
   // Update config (affects new cats)
   meowzer.configure({
-    behavior: { boundaries: newBoundaries },
+    boundaries: newBoundaries,
   });
 
   // Update existing cat
@@ -778,27 +760,22 @@ window.addEventListener("resize", () => {
 import { Meowzer } from "meowzer";
 
 const meowzer = new Meowzer({
-  storage: { adapter: "indexeddb", enabled: true },
+  storage: { enabled: true },
 });
 await meowzer.init();
 
 // Create collection
-const collectionId = await meowzer.storage.createCollection(
-  "My Cats"
-);
+await meowzer.storage.createCollection("My Cats");
 
 // Create and save cats
 const cat1 = await meowzer.cats.create({ name: "Whiskers" });
 const cat2 = await meowzer.cats.create({ name: "Mittens" });
 
-await meowzer.storage.save(cat1.id);
-await meowzer.storage.save(cat2.id);
-
-await meowzer.storage.addToCollection(collectionId, cat1.id);
-await meowzer.storage.addToCollection(collectionId, cat2.id);
+await meowzer.storage.saveCat(cat1, { collection: "My Cats" });
+await meowzer.storage.saveCat(cat2, { collection: "My Cats" });
 
 // Later, load entire collection
-const cats = await meowzer.storage.loadCollection(collectionId);
+const cats = await meowzer.storage.loadCollection("My Cats");
 // All cats automatically appear on the page!
 ```
 
@@ -853,28 +830,25 @@ class CatManager {
 
 ```typescript
 class StorageManager {
-  save(catId: string, options?: SaveCatOptions): Promise<void>;
-  load(catId: string): Promise<MeowzerCat>;
-  loadAll(): Promise<MeowzerCat[]>;
-  delete(catId: string): Promise<void>;
-  exists(catId: string): Promise<boolean>;
-  count(): Promise<number>;
-  list(): Promise<string[]>;
+  saveCat(cat: MeowzerCat, options?: SaveCatOptions): Promise<void>;
+  saveMany(
+    cats: MeowzerCat[],
+    options?: SaveCatOptions
+  ): Promise<void>;
+  saveAll(options?: SaveCatOptions): Promise<void>;
+  loadCat(catId: string): Promise<MeowzerCat>;
+  deleteCat(catId: string): Promise<void>;
+  isInitialized(): boolean;
 
   // Collections
-  createCollection(
-    name: string,
-    metadata?: Record<string, unknown>
-  ): Promise<string>;
-  getCollection(collectionId: string): Promise<CollectionInfo>;
+  createCollection(name: string): Promise<void>;
+  getCollectionInfo(name: string): Promise<CollectionInfo>;
   listCollections(): Promise<CollectionInfo[]>;
-  loadCollection(collectionId: string): Promise<MeowzerCat[]>;
-  addToCollection(collectionId: string, catId: string): Promise<void>;
-  removeFromCollection(
-    collectionId: string,
-    catId: string
-  ): Promise<void>;
-  deleteCollection(collectionId: string): Promise<void>;
+  loadCollection(
+    name: string,
+    options?: LoadCollectionOptions
+  ): Promise<MeowzerCat[]>;
+  deleteCollection(name: string): Promise<void>;
 }
 ```
 
@@ -922,14 +896,12 @@ class MeowzerCat {
   description: string | undefined;
   metadata: CatMetadata;
 
-  // Placement
-  place(container: HTMLElement): void;
-  remove(): void;
-
-  // Control
-  pause(): void;
-  resume(): void;
-  destroy(): void;
+  // Components
+  readonly lifecycle: CatLifecycle; // pause(), resume(), destroy()
+  readonly persistence: CatPersistence; // save(), delete(), isDirty
+  readonly accessories: CatAccessories; // applyHat(), removeHat(), updateHat()
+  readonly interactions: CatInteractions; // respondToNeed(), playWithYarn(), chaseLaser()
+  readonly events: CatEvents; // Event aggregation
 
   // Configuration
   setName(name: string): void;
@@ -937,12 +909,7 @@ class MeowzerCat {
   setEnvironment(environment: Environment): void;
   updateMetadata(metadata: Record<string, unknown>): void;
 
-  // Interactions
-  respondToNeed(needId: string): Promise<void>;
-  playWithYarn(yarnId: string): Promise<void>;
-  chaseLaser(position: Position): Promise<void>;
-
-  // Events
+  // Convenience methods
   on(event: MeowzerEvent, handler: EventHandler): void;
   off(event: MeowzerEvent, handler: EventHandler): void;
 
@@ -999,11 +966,18 @@ type CatStateType =
   | "playing";
 
 // Events
-type MeowzerEvent =
-  | "behaviorChange"
+type MeowzerEventType =
   | "stateChange"
-  | "positionChange"
-  | "destroy";
+  | "move"
+  | "behaviorChange"
+  | "update"
+  | "pause"
+  | "resume"
+  | "destroy"
+  | "menuClick"
+  | "hat-applied"
+  | "hat-removed"
+  | "hat-updated";
 ```
 
 ---
@@ -1100,7 +1074,7 @@ import type {
 } from "meowzer";
 
 const config: MeowzerConfig = {
-  storage: { adapter: "indexeddb", enabled: true },
+  storage: { enabled: true },
 };
 
 const meowzer: Meowzer = new Meowzer(config);
@@ -1130,7 +1104,7 @@ await meowzer.init(); // ✅ First call
 
 - Check `cat.isActive` - should be `true`
 - Increase interaction interest by placing items nearby
-- Manually trigger: `await cat.respondToNeed(needId)`
+- Manually trigger: `await cat.interactions.respondToNeed(needId)`
 - Check personality: high `independence` = ignores stuff
 
 ### Storage not working
@@ -1141,13 +1115,13 @@ await meowzer.init(); // ✅ First call
 
 ```typescript
 // Check if initialized with storage
-if (meowzer.storage._isEnabled()) {
-  await meowzer.storage.save(cat.id);
+if (meowzer.storage.isInitialized()) {
+  await meowzer.storage.saveCat(cat);
 }
 
 // Make sure storage enabled in config
 const meowzer = new Meowzer({
-  storage: { enabled: true, adapter: "indexeddb" },
+  storage: { enabled: true },
 });
 ```
 
@@ -1160,9 +1134,7 @@ const meowzer = new Meowzer({
 ```typescript
 // Set during SDK initialization
 const meowzer = new Meowzer({
-  behavior: {
-    boundaries: { minX: 0, maxX: 800, minY: 0, maxY: 600 },
-  },
+  boundaries: { minX: 0, maxX: 800, minY: 0, maxY: 600 },
 });
 
 // Or per-cat
@@ -1170,30 +1142,6 @@ cat.setEnvironment({
   boundaries: { minX: 0, maxX: 800, minY: 0, maxY: 600 },
 });
 ```
-
----
-
-## 🚧 Roadmap
-
-**Current Version:** 1.0.0 (Phase 1 Complete)
-
-**Completed:**
-
-- ✅ Cat creation and management
-- ✅ Autonomous AI behaviors
-- ✅ IndexedDB persistence
-- ✅ Food/water/yarn interactions
-- ✅ Laser pointer
-- ✅ Lifecycle hooks
-- ✅ Plugin system
-
-**Planned:**
-
-- 🔜 Social dynamics (cats interact with each other)
-- 🔜 Sound effects (purring, meowing)
-- 🔜 Performance mode (handle 50+ cats)
-- 🔜 Accessibility features (ARIA labels, reduced motion)
-- 🔜 Export/import collections as JSON
 
 ---
 
@@ -1208,5 +1156,7 @@ MIT License - See LICENSE file for details
 Built with:
 
 - [GSAP](https://greensock.com/gsap/) - Animation library
+- [Lit](https://lit.dev/) - Web components framework
 - TypeScript
+- IndexedDB
 - Love for cats 🐈

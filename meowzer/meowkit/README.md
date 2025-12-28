@@ -176,7 +176,7 @@ All public functions are exported through `index.ts`.
 Creates a complete ProtoCat from user settings. Validates settings and throws an error if invalid.
 
 ```typescript
-import { buildCat } from "@meowzer/meowkit";
+import { buildCat } from "../meowkit/index.js";
 
 const protoCat = buildCat({
   color: "#FF9500",
@@ -192,35 +192,10 @@ const protoCat = buildCat({
 Generates a ProtoCat from a seed string. This is the primary way to recreate cats from storage.
 
 ```typescript
-import { buildCatFromSeed } from "@meowzer/meowkit";
+import { buildCatFromSeed } from "../meowkit/index.js";
 
 const protoCat = buildCatFromSeed("tabby-FF9500-00FF00-m-short-v1");
 ```
-
-#### `CatBuilder` (Builder Pattern)
-
-For more controlled cat construction:
-
-```typescript
-import { CatBuilder } from "@meowzer/meowkit";
-
-const cat = new CatBuilder()
-  .withColor("#FF9500")
-  .withEyeColor("green")
-  .withPattern("tabby")
-  .withSize("medium")
-  .withFurLength("short")
-  .build();
-```
-
-**Methods:**
-
-- `withColor(color: string): CatBuilder`
-- `withEyeColor(eyeColor: string): CatBuilder`
-- `withPattern(pattern: CatPattern): CatBuilder`
-- `withSize(size: CatSize): CatBuilder`
-- `withFurLength(furLength: FurLength): CatBuilder`
-- `build(): ProtoCat` - Throws error if required fields missing
 
 ### Validation
 
@@ -253,7 +228,7 @@ Generates a compact seed string from CatSettings.
 **Example:** `"tabby-FF9500-00FF00-m-short-v1"`
 
 ```typescript
-import { generateSeed } from "@meowzer/meowkit";
+import { generateSeed } from "../meowkit/index.js";
 
 const seed = generateSeed(settings);
 // "tabby-FF9500-00FF00-m-short-v1"
@@ -264,7 +239,7 @@ const seed = generateSeed(settings);
 Parses a seed string back into CatSettings. Throws an error if seed is invalid or version unsupported.
 
 ```typescript
-import { parseSeed } from "@meowzer/meowkit";
+import { parseSeed } from "../meowkit/index.js";
 
 const settings = parseSeed("tabby-FF9500-00FF00-m-short-v1");
 ```
@@ -276,7 +251,7 @@ const settings = parseSeed("tabby-FF9500-00FF00-m-short-v1");
 Converts ProtoCat to minimal JSON for storage (seed + metadata only). SVG is regenerated on deserialization.
 
 ```typescript
-import { serializeCat } from "@meowzer/meowkit";
+import { serializeCat } from "../meowkit/index.js";
 
 const json = serializeCat(protoCat);
 // {"id":"cat-123","seed":"tabby-...","metadata":{...}}
@@ -287,7 +262,7 @@ const json = serializeCat(protoCat);
 Reconstructs ProtoCat from stored JSON by regenerating from seed.
 
 ```typescript
-import { deserializeCat } from "@meowzer/meowkit";
+import { deserializeCat } from "../meowkit/index.js";
 
 const protoCat = deserializeCat(json);
 ```
@@ -299,7 +274,7 @@ const protoCat = deserializeCat(json);
 Checks if a color string is valid (hex format or named color).
 
 ```typescript
-import { isValidColor } from "@meowzer/meowkit";
+import { isValidColor } from "../meowkit/index.js";
 
 isValidColor("#FF9500"); // true
 isValidColor("orange"); // true
@@ -313,7 +288,7 @@ isValidColor("invalid"); // false
 Normalizes color to uppercase hex format without `#` prefix. Converts named colors to hex.
 
 ```typescript
-import { normalizeColor } from "@meowzer/meowkit";
+import { normalizeColor } from "../meowkit/index.js";
 
 normalizeColor("#ff9500"); // "FF9500"
 normalizeColor("orange"); // "FFA500"
@@ -326,39 +301,9 @@ normalizeColor("orange"); // "FFA500"
 Generates a unique ID for cats.
 
 ```typescript
-import { generateId } from "@meowzer/meowkit";
+import { generateId } from "../meowkit/index.js";
 
 const id = generateId(); // "cat-1234567890-abc123"
-```
-
-#### `darkenColor(hex: string, amount: number): string`
-
-Darkens a hex color by a given amount (0-1).
-
-```typescript
-import { darkenColor } from "@meowzer/meowkit";
-
-darkenColor("#FF9500", 0.3); // Returns darker shade
-```
-
-#### `lightenColor(hex: string, amount: number): string`
-
-Lightens a hex color by a given amount (0-1).
-
-```typescript
-import { lightenColor } from "@meowzer/meowkit";
-
-lightenColor("#FF9500", 0.2); // Returns lighter shade
-```
-
-#### `randomColor(): string`
-
-Generates a random hex color.
-
-```typescript
-import { randomColor } from "@meowzer/meowkit";
-
-const color = randomColor(); // "#a3f5b2"
 ```
 
 ### SVG Generation
@@ -368,7 +313,7 @@ const color = randomColor(); // "#a3f5b2"
 Generates complete SVG sprite data for a cat. Typically used internally by `buildCat`, but can be used directly for custom workflows.
 
 ```typescript
-import { generateCatSVG } from "@meowzer/meowkit";
+import { generateCatSVG } from "../meowkit/index.js";
 
 const spriteData = generateCatSVG(appearance, dimensions);
 // Returns: { svg: "...", elements: {...}, viewBox: {...} }
@@ -411,7 +356,9 @@ Base viewBox is consistent (`0 0 100 100`) with scaling applied via the `scale` 
 
 Seeds use a **delimited format** for readability and URL-safety:
 
-**Format:** `pattern-color-eyeColor-sizeChar-furLength-v1`
+**Format (without hat):** `pattern-color-eyeColor-sizeChar-furLength-v1`
+
+**Format (with hat):** `pattern-color-eyeColor-sizeChar-furLength-hatType-hatBase-hatAccent-v1`
 
 **Size encoding:**
 
@@ -419,12 +366,14 @@ Seeds use a **delimited format** for readability and URL-safety:
 - `m` = medium
 - `l` = large
 
-**Example:** `"tabby-FF9500-00FF00-m-short-v1"`
+**Example (basic):** `"tabby-FF9500-00FF00-m-short-v1"`
+
+**Example (with hat):** `"tabby-FF9500-00FF00-m-short-tophat-000000-FFFFFF-v1"`
 
 **Properties:**
 
 - **Deterministic**: Same settings always produce same seed
-- **Compact**: Typically 30-40 characters
+- **Compact**: Typically 30-40 characters (without hat) or 50-60 characters (with hat)
 - **Versioned**: Includes `v1` marker for future compatibility
 - **Readable**: Human-parseable for debugging and sharing
 
@@ -449,7 +398,7 @@ Zero external dependencies for sprite generation:
 ### Creating a New Cat
 
 ```typescript
-import { buildCat } from "@meowzer/meowkit";
+import { buildCat } from "../meowkit/index.js";
 
 const settings = {
   color: "#FF9500",
@@ -474,7 +423,7 @@ document.body.innerHTML = protoCat.spriteData.svg;
 ### Recreating a Cat from Seed
 
 ```typescript
-import { buildCatFromSeed } from "@meowzer/meowkit";
+import { buildCatFromSeed } from "../meowkit/index.js";
 
 // Retrieve stored seed (e.g., from database)
 const seed = "tabby-FF9500-00FF00-m-short-v1";
@@ -484,30 +433,10 @@ const protoCat = buildCatFromSeed(seed);
 console.log(protoCat.appearance.color); // "#FF9500"
 ```
 
-### Using the Builder Pattern
-
-```typescript
-import { CatBuilder } from "@meowzer/meowkit";
-
-try {
-  const cat = new CatBuilder()
-    .withColor("orange")
-    .withEyeColor("#00FF00")
-    .withPattern("spotted")
-    .withSize("large")
-    .withFurLength("medium")
-    .build();
-
-  console.log(cat.seed);
-} catch (error) {
-  console.error("Builder error:", error.message);
-}
-```
-
 ### Validating Settings
 
 ```typescript
-import { validateCatSettings } from "@meowzer/meowkit";
+import { validateCatSettings } from "../meowkit/index.js";
 
 const settings = {
   color: "invalid-color",
@@ -527,7 +456,7 @@ if (!result.valid) {
 ### Sharing Cats
 
 ```typescript
-import { buildCat, buildCatFromSeed } from "@meowzer/meowkit";
+import { buildCat, buildCatFromSeed } from "../meowkit/index.js";
 
 // User creates a cat
 const myCat = buildCat({
@@ -549,7 +478,7 @@ const friendsCat = buildCatFromSeed(shareableCode);
 ### Full Serialization (with Metadata)
 
 ```typescript
-import { serializeCat, deserializeCat } from "@meowzer/meowkit";
+import { serializeCat, deserializeCat } from "../meowkit/index.js";
 
 // Serialize for storage (includes ID and creation date)
 const json = serializeCat(protoCat);
@@ -564,13 +493,7 @@ console.log(restoredCat.metadata.createdAt); // Original creation date
 ### Working with Colors
 
 ```typescript
-import {
-  isValidColor,
-  normalizeColor,
-  randomColor,
-  darkenColor,
-  lightenColor,
-} from "@meowzer/meowkit";
+import { isValidColor, normalizeColor } from "../meowkit/index.js";
 
 // Validation
 isValidColor("#FF9500"); // true
@@ -580,19 +503,12 @@ isValidColor("nope"); // false
 // Normalization
 normalizeColor("#ff9500"); // "FF9500"
 normalizeColor("orange"); // "FFA500"
-
-// Generation
-const color = randomColor(); // "#a3c5f2"
-
-// Manipulation
-darkenColor("#FF9500", 0.3); // Darker shade for shading
-lightenColor("#FF9500", 0.2); // Lighter shade for highlights
 ```
 
 ## Future Enhancements
 
 - Additional patterns (bicolor, tortoiseshell, etc.)
-- Accessory system (collars, hats, etc.)
+- More accessory types (collars, bows, glasses, etc.)
 - Breed-specific variations (ear shapes, tail lengths)
 - Animation hint data (personality traits affecting movement)
 - Export to various formats (standalone SVG file, data URL, etc.)

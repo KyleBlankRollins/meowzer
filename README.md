@@ -11,7 +11,7 @@ graph TB
     end
 
     subgraph "High-Level API"
-        MEOWZER[Meowzer<br/>Integration Layer]
+        SDK[Meowzer SDK<br/>Integration Layer]
     end
 
     subgraph "Core Libraries"
@@ -27,14 +27,12 @@ graph TB
         BRAIN[Brain Instance<br/>Decision Engine]
     end
 
-    USER -->|createCat| MEOWZER
-    USER -->|createCatFromSeed| MEOWZER
-    USER -->|createRandomCat| MEOWZER
+    USER -->|meowzer.cats.create()| SDK
 
-    MEOWZER -->|buildCat| MEOWKIT
-    MEOWZER -->|animateCat| MEOWTION
-    MEOWZER -->|createBrain| MEOWBRAIN
-    MEOWZER -->|save/load| MEOWBASE
+    SDK -->|buildCat| MEOWKIT
+    SDK -->|animateCat| MEOWTION
+    SDK -->|createBrain| MEOWBRAIN
+    SDK -->|save/load| MEOWBASE
 
     MEOWKIT -->|generates| PROTOCAT
     MEOWTION -->|creates| CAT
@@ -45,7 +43,7 @@ graph TB
 
     MEOWBASE -->|stores| PROTOCAT
 
-    style MEOWZER fill:#ff9500
+    style SDK fill:#ff9500
     style MEOWKIT fill:#4a9eff
     style MEOWTION fill:#50c878
     style MEOWBRAIN fill:#da70d6
@@ -54,16 +52,17 @@ graph TB
 
 ## 📦 Packages
 
-### Meowzer (Integration Layer)
+### SDK (Meowzer)
 
-High-level API that orchestrates all libraries. Simplifies cat creation and management.
+High-level API that orchestrates all libraries. Provides a class-based interface for cat creation and management.
 
 **Key Features:**
 
-- One-line cat creation with `createCat()`, `createCatFromSeed()`, `createRandomCat()`
-- Automatic lifecycle management and cleanup
-- Global cat registry and management functions
-- Database persistence integration
+- Unified `Meowzer` class with manager pattern
+- Cat lifecycle management via `meowzer.cats` manager
+- Storage operations via `meowzer.storage` manager
+- Interaction system via `meowzer.interactions` manager
+- Plugin system for extensibility
 
 ### Meowkit (Cat Creation)
 
@@ -113,35 +112,35 @@ Document database for persisting cat collections.
 ## 🚀 Quick Start
 
 ```typescript
-// Simple: Create one autonomous cat
-import { createRandomCat } from "@meowzer/meowzer";
+// Initialize Meowzer
+import { Meowzer } from "meowzer";
 
-const cat = createRandomCat(); // That's it!
+const meowzer = new Meowzer();
+await meowzer.init();
+
+// Simple: Create a random cat
+const cat = await meowzer.cats.create();
+// Cat automatically appears on the page!
 
 // Advanced: Full control
-import { createCat } from "@meowzer/meowzer";
-
-const cat = createCat(
-  {
+const customCat = await meowzer.cats.create({
+  name: "Whiskers",
+  description: "A playful orange tabby",
+  settings: {
     color: "#FF9500",
     eyeColor: "#00FF00",
     pattern: "tabby",
     size: "medium",
     furLength: "short",
   },
-  {
-    name: "Whiskers",
-    personality: "playful",
-    position: { x: 100, y: 100 },
-    boundaries: { minX: 0, maxX: 800, minY: 0, maxY: 600 },
-  }
-);
+});
+
+// Set personality
+customCat.setPersonality("playful");
 
 // Management
-import { getAllCats, destroyAllCats } from "@meowzer/meowzer";
-
-const allCats = getAllCats();
-destroyAllCats(); // Clean up when done
+const allCats = meowzer.cats.getAll();
+await meowzer.cats.destroyAll(); // Clean up when done
 ```
 
 ## 📊 Data Flow
@@ -154,19 +153,19 @@ sequenceDiagram
     participant Meowtion
     participant Meowbrain
 
-    User->>Meowzer: createCat(settings, options)
+    User->>Meowzer: meowzer.cats.create(options)
     Meowzer->>Meowkit: buildCat(settings)
     Meowkit-->>Meowzer: ProtoCat (id, seed, SVG, appearance)
 
-    Meowzer->>Meowtion: new Cat(protoCat, options)
+    Meowzer->>Meowtion: new Cat(protoCat)
     Meowtion-->>Meowzer: Cat instance (animated sprite)
 
-    Meowzer->>Meowbrain: createBrain(cat, personality)
+    Meowzer->>Meowbrain: new Brain(cat)
     Meowbrain-->>Meowzer: Brain instance
 
     Meowzer-->>User: MeowzerCat (unified interface)
 
-    User->>Meowzer: cat.resume()
+    User->>Meowzer: cat.lifecycle.resume()
     Meowzer->>Meowbrain: brain.start()
 
     loop Decision Loop
@@ -189,7 +188,6 @@ meowzer/
 │   │   └── color-utils.ts
 │   ├── meowtion/            # Animation library
 │   │   ├── cat.ts
-│   │   ├── animator.ts
 │   │   ├── state-machine.ts
 │   │   ├── animations/
 │   │   └── cat/
@@ -201,26 +199,35 @@ meowzer/
 │   │   ├── decision-engine.ts
 │   │   ├── behaviors.ts
 │   │   ├── personality.ts
-│   │   └── builder.ts
+│   │   └── behavior-orchestrator.ts
 │   ├── meowbase/            # IndexedDB storage
 │   │   ├── meowbase.ts
 │   │   ├── collections/
 │   │   ├── cats/
 │   │   └── storage/
-│   ├── meowzer/             # Integration layer
-│   │   ├── meowzer.ts
-│   │   ├── creation.ts
-│   │   ├── management.ts
-│   │   ├── database.ts
-│   │   └── meowzer-cat.ts
+│   ├── sdk/                 # Integration layer (package: "meowzer")
+│   │   ├── meowzer-sdk.ts
+│   │   ├── meowzer-cat.ts
+│   │   ├── managers/
+│   │   │   ├── cat-manager.ts
+│   │   │   ├── storage-manager.ts
+│   │   │   ├── interaction-manager.ts
+│   │   │   └── hook-manager.ts
+│   │   ├── interactions/
+│   │   └── cat-modules/
+│   ├── ui/                  # Web components library
+│   │   ├── components/
+│   │   ├── providers/
+│   │   └── controllers/
+│   ├── types/               # Shared TypeScript types
 │   └── utilities/
 │       └── event-emitter.ts # Shared event system
-├── docs/                    # Documentation website
-│   └── source/
-│       ├── components/
+├── docs/                    # Documentation website (Astro + Starlight)
+│   └── src/
 │       └── content/
+├── demo/                    # Demo website (Astro)
 └── meta/                    # Project documentation
-    └── project-docs-revamp.md
+    └── *.md
 
 ## 🛠️ Development
 
@@ -260,7 +267,9 @@ Each package has comprehensive documentation:
 - **[Meowkit README](./meowzer/meowkit/README.md)** - Cat creation API, seed format, builder pattern
 - **[Meowtion README](./meowzer/meowtion/README.md)** - Animation system, movement, state machine
 - **[Meowbrain README](./meowzer/meowbrain/README.md)** - AI behaviors, personalities, decision engine
-- **[Meowbase README](./meowzer/meowbase/README.md)** - Storage API, collections, result pattern
+- **[Meowbase README](./meowzer/meowbase/README.md)** - Storage API, collections, result pattern- **[SDK README](./meowzer/sdk/README.md)** - High-level API, managers, configuration
+- **[UI README](./meowzer/ui/README.md)** - Web components, providers, playground
+- **[Documentation Site](./docs/)** - Astro + Starlight docs site
 
 ## 🎯 Use Cases
 
@@ -279,40 +288,40 @@ Each package has comprehensive documentation:
 5. **Event-Driven**: Shared EventEmitter for reactive programming
 6. **Testable**: Pure functions, dependency injection, comprehensive tests
 
-## 📝 License
+## � Workspace Commands
 
-MIT License - See LICENSE file for details
+The root `package.json` provides convenient scripts:
 
-## 🔧 Workspace Commands
-
-The root `package.json` provides convenient scripts for working with both projects:
-
-- `npm test` - Run Meowbase tests
-- `npm run test:watch` - Run Meowbase tests in watch mode
-- `npm run test:ui` - Open Vitest UI for Meowbase
-- `npm run test:coverage` - Generate test coverage report
 - `npm run dev:docs` - Start docs development server
 - `npm run build:docs` - Build docs for production
+- `npm run dev:demo` - Start demo development server
+- `npm run build:demo` - Build demo for production
+- `npm run build:sdk` - Build SDK package
+- `npm run build:ui` - Build UI components package
+- `npm run build` - Build both SDK and UI packages
 
 ## 📖 Documentation
 
-- **Meowbase Library:** See [meowbase/README.md](./meowbase/README.md)
-- **API Reference:** See [meowbase/README.md#api-reference](./meowbase/README.md#api-reference)
-- **Architecture:** See [meowbase/README.md#architecture](./meowbase/README.md#architecture)
+- **Meowkit:** See [meowzer/meowkit/README.md](./meowzer/meowkit/README.md)
+- **Meowtion:** See [meowzer/meowtion/README.md](./meowzer/meowtion/README.md)
+- **Meowbrain:** See [meowzer/meowbrain/README.md](./meowzer/meowbrain/README.md)
+- **Meowbase:** See [meowzer/meowbase/README.md](./meowzer/meowbase/README.md)
+- **SDK:** See [meowzer/sdk/README.md](./meowzer/sdk/README.md)
+- **UI:** See [meowzer/ui/README.md](./meowzer/ui/README.md)
+- **Documentation Site:** [docs/](./docs/) - Astro + Starlight
 
 ## 🧪 Testing
 
-All tests are located in the `/meowbase/__tests__/` directory. The test suite uses:
+Each package has its own test suite using Vitest:
 
-- **Vitest** for the test runner
-- **happy-dom** for simulating browser APIs in Node.js
-
-Current test coverage:
-
-- ✅ Cache tests (20 tests)
-- 🚧 IndexedDB storage tests (pending - requires fake-indexeddb)
-- 🚧 Collection operations tests (pending)
-- 🚧 Cat operations tests (pending)
+```bash
+cd meowzer/meowkit && npm test
+cd meowzer/meowtion && npm test
+cd meowzer/meowbrain && npm test
+cd meowzer/meowbase && npm test
+cd meowzer/sdk && npm test
+cd meowzer/ui && npm test
+```
 
 ## 📝 License
 

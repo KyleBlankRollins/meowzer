@@ -182,7 +182,7 @@ interface PhysicsOptions {
 Creates an animated Cat instance from a ProtoCat.
 
 ```typescript
-import { animateCat } from "@meowzer/meowtion";
+import { animateCat } from "../meowtion/index.js";
 
 const cat = animateCat(protoCat, {
   container: document.getElementById("playground"),
@@ -213,31 +213,6 @@ interface AnimationOptions {
   boundaries?: Boundaries; // Movement constraints
 }
 ```
-
-#### `CatAnimator` (Builder Pattern)
-
-For more controlled configuration:
-
-```typescript
-import { CatAnimator } from "@meowzer/meowtion";
-
-const cat = new CatAnimator(protoCat)
-  .in(document.getElementById("playground"))
-  .at(100, 100)
-  .withState("idle")
-  .withPhysics({ friction: 0.2, maxSpeed: 200 })
-  .withinBounds({ minX: 0, maxX: 800, minY: 0, maxY: 600 })
-  .animate();
-```
-
-**Methods:**
-
-- `in(container: HTMLElement): CatAnimator`
-- `at(x: number, y: number): CatAnimator`
-- `withState(state: CatStateType): CatAnimator`
-- `withPhysics(options: PhysicsOptions): CatAnimator`
-- `withinBounds(boundaries: Boundaries): CatAnimator`
-- `animate(): Cat` - Creates the Cat instance
 
 ### Cat Class Methods
 
@@ -550,8 +525,8 @@ GSAP provides:
 ### Basic Setup
 
 ```typescript
-import { buildCatFromSeed } from "@meowzer/meowkit";
-import { animateCat } from "@meowzer/meowtion";
+import { buildCatFromSeed } from "../meowkit/index.js";
+import { animateCat } from "../meowtion/index.js";
 
 const protoCat = buildCatFromSeed("tabby-FF9500-00FF00-m-short-v1");
 const cat = animateCat(protoCat, {
@@ -617,8 +592,8 @@ cat.on("boundaryHit", ({ direction }) => {
 ### Multiple Cats
 
 ```typescript
-import { buildCatFromSeed } from "@meowzer/meowkit";
-import { animateCat } from "@meowzer/meowtion";
+import { buildCatFromSeed } from "../meowkit/index.js";
+import { animateCat } from "../meowtion/index.js";
 
 const seeds = [
   "tabby-FF9500-00FF00-m-short-v1",
@@ -645,37 +620,6 @@ cats[1].setState("playing");
 cats[2].setVelocity(100, 50);
 ```
 
-### Builder Pattern
-
-```typescript
-import { buildCat } from "@meowzer/meowkit";
-import { CatAnimator } from "@meowzer/meowtion";
-
-const protoCat = buildCat({
-  color: "#FF9500",
-  eyeColor: "#00FF00",
-  pattern: "spotted",
-  size: "large",
-  furLength: "medium",
-});
-
-const cat = new CatAnimator(protoCat)
-  .in(document.getElementById("playground"))
-  .at(200, 300)
-  .withState("idle")
-  .withPhysics({
-    friction: 0.15,
-    maxSpeed: 250,
-  })
-  .withinBounds({
-    minX: 0,
-    maxX: 800,
-    minY: 0,
-    maxY: 600,
-  })
-  .animate();
-```
-
 ### Lifecycle Management
 
 ```typescript
@@ -699,9 +643,9 @@ function cleanup() {
 Meowtion is designed to be controlled by Meowbrain, the AI library. While you can use Meowtion directly for scripted animations, the recommended approach is:
 
 ```typescript
-import { buildCatFromSeed } from "meowkit";
-import { animateCat } from "meowtion";
-import { createBrain } from "meowbrain";
+import { buildCatFromSeed } from "../meowkit/index.js";
+import { animateCat } from "../meowtion/index.js";
+import { createBrain } from "../meowbrain/index.js";
 
 const protoCat = buildCatFromSeed("tabby-FF9500-00FF00-m-short-v1");
 const cat = animateCat(protoCat);

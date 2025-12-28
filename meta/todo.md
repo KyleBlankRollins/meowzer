@@ -18,6 +18,7 @@
 ## Meowkit
 
 - feat: add different SVG templates for different fur lengths
+- feat: make seed value account for behavior settings
 
 ## UI
 

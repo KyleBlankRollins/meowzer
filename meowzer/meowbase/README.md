@@ -182,43 +182,43 @@ const db = new Meowbase({
 
 ### Collection Management
 
-#### `createCollection(name: string, cats?: Cat[]): MeowbaseResult<Collection>`
+#### `createCollection(name: string, cats?: Cat[]): Promise<MeowbaseResult<Collection>>`
 
 Create a new collection and persist it to storage.
 
 ```ts
-const result = db.createCollection("My Cats", []);
+const result = await db.createCollection("My Cats", []);
 if (result.success) {
   console.log(result.data); // The created collection
 }
 ```
 
-#### `loadCollection(identifier: string): MeowbaseResult<Collection>`
+#### `loadCollection(identifier: string): Promise<MeowbaseResult<Collection>>`
 
 Load a collection into memory by ID or name. If already loaded, updates the access timestamp.
 
 ```ts
-const result = db.loadCollection("My Cats");
+const result = await db.loadCollection("My Cats");
 ```
 
-#### `loadCollections(identifiers: string[]): MeowbaseResult<Collection[]>`
+#### `loadCollections(identifiers: string[]): Promise<MeowbaseResult<Collection[]>>`
 
 Load multiple collections at once.
 
-#### `saveCollection(identifier: string): MeowbaseResult`
+#### `saveCollection(identifier: string): Promise<MeowbaseResult>`
 
 Save a loaded collection's changes back to storage. Required before unloading.
 
 ```ts
-db.saveCollection("My Cats");
+await db.saveCollection("My Cats");
 ```
 
-#### `flushChanges(): MeowbaseResult`
+#### `flushChanges(): Promise<MeowbaseResult>`
 
 Save all dirty (modified) collections to storage.
 
 ```ts
-db.flushChanges();
+await db.flushChanges();
 ```
 
 #### `unloadCollection(identifier: string): MeowbaseResult`
@@ -233,15 +233,15 @@ db.unloadCollection("My Cats");
 
 Remove all collections from memory. Fails if any collection has unsaved changes.
 
-#### `deleteCollection(identifier: string): MeowbaseResult`
+#### `deleteCollection(identifier: string): Promise<MeowbaseResult>`
 
 Permanently delete a collection from storage.
 
-#### `getCollection(identifier: string): MeowbaseResult<Collection>`
+#### `getCollection(identifier: string): Promise<MeowbaseResult<Collection>>`
 
 Read a collection from storage without loading it into memory.
 
-#### `listCollections(): MeowbaseResult<Array<{id, name, catCount}>>`
+#### `listCollections(): Promise<MeowbaseResult<Array<{id, name, catCount}>>>`
 
 List all collections in storage with metadata.
 
@@ -253,7 +253,7 @@ Get information about currently loaded collections.
 
 Check if a collection is in memory.
 
-#### `getCollectionSize(identifier: string): MeowbaseResult<number>`
+#### `getCollectionSize(identifier: string): Promise<MeowbaseResult<number>>`
 
 Get the number of cats in a collection without loading it.
 
@@ -266,7 +266,7 @@ All cat operations require the collection to be loaded into memory first.
 Find a cat by ID or name within a loaded collection.
 
 ```ts
-db.loadCollection("My Cats");
+await db.loadCollection("My Cats");
 const result = db.findCatInCollection("My Cats", "Fluffy");
 ```
 
@@ -281,7 +281,7 @@ const cat = {
   // ... other required fields
 };
 db.addCatToCollection("My Cats", cat);
-db.saveCollection("My Cats"); // Don't forget to save!
+await db.saveCollection("My Cats"); // Don't forget to save!
 ```
 
 #### `removeCatFromCollection(collectionId: string, catId: string): MeowbaseResult`
@@ -294,7 +294,7 @@ Update a cat within a loaded collection. Finds the cat by `id` and replaces it.
 
 ### Data Management
 
-#### `loadSampleData(): MeowbaseResult<{collectionsCreated: number, totalCats: number}>`
+#### `loadSampleData(): Promise<MeowbaseResult<{collectionsCreated: number, totalCats: number}>>`
 
 Load a pre-built sample dataset into storage. This is useful for testing, demos, or learning.
 
@@ -345,15 +345,16 @@ Each cat includes complete data:
 import { Meowbase } from "./meowbase/meowbase.js";
 
 const db = new Meowbase();
+await db.initialize();
 
 // Load the sample dataset
-const result = db.loadSampleData();
+const result = await db.loadSampleData();
 
 if (result.success) {
   console.log(`Loaded ${result.data.totalCats} cats!`);
 
   // Now you can work with the data
-  db.loadCollection("home");
+  await db.loadCollection("home");
   const catResult = db.findCatInCollection("home", "Bella");
 }
 ```
@@ -363,7 +364,7 @@ if (result.success) {
 **Note**: This method clears ALL existing Meowbase data before loading.
 
 ```ts
-const result = db.loadSampleData();
+const result = await db.loadSampleData();
 if (result.success) {
   console.log(
     `Loaded ${result.data.collectionsCreated} collections with ${result.data.totalCats} cats`
@@ -372,12 +373,12 @@ if (result.success) {
 }
 ```
 
-#### `clearAllData(): MeowbaseResult`
+#### `clearAllData(): Promise<MeowbaseResult>`
 
 Clear all Meowbase data from storage and unload all collections from memory.
 
 ```ts
-db.clearAllData();
+await db.clearAllData();
 ```
 
 ## Result Pattern
@@ -407,13 +408,14 @@ Always check `result.success` before accessing `result.data`.
 import { Meowbase } from "./meowbase/meowbase.js";
 
 const db = new Meowbase();
+await db.initialize();
 
 // Create a collection
-const createResult = db.createCollection("Cat Shelter");
+const createResult = await db.createCollection("Cat Shelter");
 
 if (createResult.success) {
   // Load it into memory
-  db.loadCollection("Cat Shelter");
+  await db.loadCollection("Cat Shelter");
 
   // Add a cat
   const cat = {
@@ -424,7 +426,7 @@ if (createResult.success) {
   db.addCatToCollection("Cat Shelter", cat);
 
   // Save changes
-  db.saveCollection("Cat Shelter");
+  await db.saveCollection("Cat Shelter");
 
   // Find the cat
   const findResult = db.findCatInCollection(
