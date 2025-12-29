@@ -8,31 +8,14 @@ Prioritize readable code over concision. Especially in the case of variable name
 
 ## CSS
 
-Generally, this project relies on Carbon Web Components' built-in CSS and theming system. There are a couple of high level things to always consider:
+This project uses custom UI tokens and components. There are a couple of high level things to always consider:
 
-- NEVER use inline CSS styles. All CSS styles should live in dedicated style files or be Carbon component classes.
+- NEVER use inline CSS styles. All CSS styles should live in dedicated style files.
 - NEVER use fallback values in `var()`. We need to make sure what we pass to `var()` works. Fallback values make debugging significantly harder.
 
 ## Web components
 
-This project uses a mix of Carbon Web Components and Lit Element. Carbon Web Components are preferred whenever possible. However, we sometimes need to use Lit Element when Carbon doesn't provide what we need. For example, when we need to use providers and context.
-
-### Carbon Web Components
-
-This project uses IBM's Carbon Design System web components (`@carbon/web-components`). Carbon components use the `cds-` prefix (e.g., `<cds-button>`, `<cds-input>`).
-
-**Documentation:**
-
-- Main repository: https://github.com/carbon-design-system/carbon/tree/main/packages/web-components
-- Component documentation: https://web-components.carbondesignsystem.com/
-- Carbon Design System: https://carbondesignsystem.com/
-
-**Key Points:**
-
-- All Carbon components are built with Lit
-- Use Carbon's theming system for consistent styling
-- Components are framework-agnostic (work with React, Vue, Angular, vanilla JS)
-- Strong accessibility and TypeScript support
+This project uses Lit Element for all web components.
 
 ### LitElement Component Conventions
 

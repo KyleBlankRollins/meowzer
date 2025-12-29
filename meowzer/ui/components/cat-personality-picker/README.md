@@ -189,8 +189,9 @@ const playfulTraits = getPersonality("playful");
 
 ### Layout
 
-- `--cds-spacing-05` - Spacing between preset buttons
-- `--cds-spacing-07` - Spacing between trait sliders
+- `--mb-space-md` - Padding for preset buttons container
+- `gap: 0.5rem` - Spacing between preset buttons
+- `gap: 1.5rem` - Spacing between trait sliders
 
 ### Typography
 

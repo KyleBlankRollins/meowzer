@@ -288,20 +288,21 @@ The playground listens to several Meowzer events:
 
 ### Layout
 
-- `--cds-spacing-05` - Component spacing
-- `--cds-spacing-07` - Dialog padding
+- `gap: 1rem` - Component spacing
+- `padding: 1rem` - Sidebar and section padding
 
 ### Typography
 
-- `--cds-body-01` - Body text
-- `--cds-heading-03` - Dialog headings
+- `font-size: 1rem` - Section headings
+- `font-weight: 600` - Section headings
 
 ### Colors
 
-- `--cds-background` - Playground background
-- `--cds-layer-01` - Dialog backgrounds
-- `--cds-text-primary` - Primary text
-- `--cds-text-secondary` - Secondary text
+- `--mb-color-surface-subtle` - Sidebar background
+- `--mb-color-border-subtle` - Sidebar border
+- `--mb-color-text-primary` - Primary text
+- `--mb-color-text-secondary` - Secondary text and empty states
+- `--mb-color-status-error` - Error messages
 
 ## Examples
 

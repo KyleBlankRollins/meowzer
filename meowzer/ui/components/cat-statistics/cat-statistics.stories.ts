@@ -60,25 +60,15 @@ export const InModal: Story = {
   `,
 };
 
-export const WithBackground: Story = {
+export const WithHeading: Story = {
   render: () => html`
-    <div
-      style="padding: 2rem; background: var(--cds-layer-01); border-radius: 8px;"
-    >
-      <h3
-        style="margin-top: 0; margin-bottom: 1rem; color: var(--cds-text-primary);"
-      >
-        Playground Statistics
-      </h3>
+    <div>
+      <h3>Playground Statistics</h3>
       <cat-statistics></cat-statistics>
     </div>
   `,
 };
 
 export const Compact: Story = {
-  render: () => html`
-    <div style="max-width: 400px;">
-      <cat-statistics></cat-statistics>
-    </div>
-  `,
+  render: () => html` <cat-statistics></cat-statistics> `,
 };
