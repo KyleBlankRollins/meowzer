@@ -43,7 +43,7 @@ Real-time statistics display component showing cat counts and performance metric
 ```css
 .stats-container {
   padding: 1rem;
-  background: var(--cds-layer-01);
+  background: var(--mb-color-surface-subtle);
   border-radius: 8px;
 }
 ```
@@ -181,20 +181,22 @@ None - this is a standalone display component
 
 ### Layout
 
-- `--cds-spacing-05` - Grid gap between stat items
-- `--cds-spacing-06` - Internal padding
+- `gap: 1.5rem` - Grid gap between stat items
+- `padding: 1rem` - Grid and stat item padding
 
 ### Typography
 
-- `--cds-label-01` - Stat labels
-- `--cds-heading-03` - Stat values
-- `--cds-caption-01` - Unit labels (fps)
+- `font-size: 0.875rem` - Stat labels and units
+- `font-size: 2rem` - Stat values
+- `font-weight: 700` - Stat values
+- `font-weight: 500` - Stat labels
 
 ### Colors
 
-- `--cds-text-secondary` - Stat labels
-- `--cds-text-primary` - Stat values
-- `--cds-border-subtle` - Dividers (if used in styling)
+- `--mb-color-surface-subtle` - Stat item background
+- `--mb-color-border-subtle` - Stat item borders
+- `--mb-color-text-secondary` - Stat labels and units
+- `--mb-color-text-primary` - Stat values
 
 ## Examples
 

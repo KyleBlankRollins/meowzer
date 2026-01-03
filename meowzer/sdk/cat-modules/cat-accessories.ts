@@ -167,10 +167,16 @@ export class CatAccessories extends EventEmitter<AccessoryEvent> {
    * Update the cat's sprite after appearance changes
    */
   private updateSprite(): void {
-    // Regenerate SVG sprite with current appearance
+    // Extract the SVG element ID prefix from existing sprite data
+    // e.g., "cat-1767396823522-body" -> "cat-1767396823522"
+    const existingBodyId = this.cat.protoCat.spriteData.elements.body;
+    const svgIdPrefix = existingBodyId.replace(/-body$/, "");
+
+    // Regenerate SVG sprite with current appearance, using the same ID prefix
     const newSpriteData = generateCatSVG(
       this.cat.protoCat.appearance,
-      this.cat.protoCat.dimensions
+      this.cat.protoCat.dimensions,
+      svgIdPrefix
     );
 
     // Update the ProtoCat's sprite data

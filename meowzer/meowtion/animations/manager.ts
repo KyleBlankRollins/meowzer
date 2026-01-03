@@ -150,6 +150,7 @@ export class CatAnimationManager {
       anim.restart();
       anim.resume();
     });
+
     this.currentTimelines.forEach((tl) => {
       tl.restart();
       tl.resume();
@@ -180,6 +181,36 @@ export class CatAnimationManager {
   resume(): void {
     this.currentAnimations.forEach((anim) => anim.resume());
     this.currentTimelines.forEach((tl) => tl.resume());
+  }
+
+  /**
+   * Reinitialize animation pool after SVG element changes
+   * Call this when the SVG is regenerated (e.g., after loading from storage)
+   */
+  reinitialize(): void {
+    // Kill all existing animations
+    this.animationPool.forEach((animations) => {
+      animations.forEach((anim) => anim.kill());
+    });
+    this.timelinePool.forEach((timelines) => {
+      timelines.forEach((tl) => tl.kill());
+    });
+
+    this.animationPool.clear();
+    this.timelinePool.clear();
+
+    // Re-cache elements (they've changed in the DOM)
+    this.elements = this._cacheElements();
+
+    // Re-create animation pool with new elements
+    this._initializeAnimationPool();
+
+    // If there was an active state, restart it
+    if (this.activeState !== null) {
+      const state = this.activeState;
+      this.activeState = null; // Reset so startStateAnimations works correctly
+      this.startStateAnimations(state);
+    }
   }
 
   /**

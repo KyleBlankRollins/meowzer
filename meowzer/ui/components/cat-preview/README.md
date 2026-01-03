@@ -202,21 +202,23 @@ As the user adjusts settings in the creator, the preview updates in real-time.
 
 ### Layout
 
-- `--cds-spacing-05` - Internal spacing
-- `--cds-spacing-07` - Component padding
+- `padding: 2rem` - Container padding
+- `gap: 0.5rem` - Settings summary row spacing
+- `padding: 1rem` - Settings summary panel padding
 
 ### Typography
 
-- `--cds-body-01` - Settings summary text
-- `--cds-code-01` - Seed display
+- `font-size: 0.875rem` - Settings summary and labels
+- `font-family: monospace` - Seed display code blocks
 
 ### Colors
 
-- `--cds-background` - Container background
-- `--cds-layer-01` - Preview background
-- `--cds-text-primary` - Main text
-- `--cds-text-secondary` - Labels
-- `--cds-danger` - Error text
+- `--mb-color-surface-subtle` - Container background
+- `--mb-color-surface-default` - Preview background and settings panel
+- `--mb-color-border-subtle` - Container border
+- `--mb-color-text-primary` - Main text
+- `--mb-color-text-secondary` - Labels and secondary text
+- `--mb-color-status-error` - Error text
 - CSS variables:
   - `--preview-fur-color` - Dynamically set fur color
   - `--preview-eye-color` - Dynamically set eye color

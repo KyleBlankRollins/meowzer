@@ -111,6 +111,7 @@ class Cat {
   // Lifecycle
   pause(): void;
   resume(): void;
+  reinitializeAnimations(): void;
   destroy(): void;
 
   // Events
@@ -294,6 +295,18 @@ Resumes paused animations and movement.
 
 ```typescript
 cat.resume();
+```
+
+**`reinitializeAnimations(): void`**
+
+Reinitializes the animation system after the cat's SVG has been replaced.
+
+**⚠️ Important:** This method must be called whenever the cat's SVG element is replaced in the DOM (e.g., when restoring appearance from storage, changing accessories, or any operation that regenerates the SVG). GSAP animations hold references to specific DOM elements, so when the SVG is replaced, those references become stale and animations will stop working.
+
+```typescript
+// After replacing the SVG (e.g., loading from storage)
+cat.setAppearance(savedAppearance);
+cat.reinitializeAnimations(); // Required!
 ```
 
 **`destroy(): void`**
@@ -496,6 +509,34 @@ The container element is managed by `CatDOM` class which handles:
 - State-based GSAP animations
 - Manages timelines for each state
 - Animates specific SVG elements (tail, legs, body, etc.)
+
+### SVG Replacement and Animation Reinitialization
+
+**Critical consideration:** When a cat's SVG element is replaced in the DOM, GSAP animations break because they hold references to the old, detached SVG elements.
+
+**When SVG replacement happens:**
+
+- Loading cat from storage with saved appearance
+- Changing accessories (hats, collars, etc.)
+- Any operation that calls `setAppearance()` or regenerates the SVG
+
+**The solution:** Call `cat.reinitializeAnimations()` immediately after any SVG replacement. This method:
+
+1. Kills all existing GSAP animations
+2. Re-caches references to the new SVG elements (legs, tail, body, etc.)
+3. Recreates the animation pool with the new element references
+4. Restarts animations for the current state
+
+```typescript
+// Example: Loading from storage
+const cat = await storage.loadCat(catId);
+// Storage manager automatically calls reinitializeAnimations()
+// if appearance data is restored
+
+// Example: Manual SVG replacement
+cat.setAppearance(newAppearance);
+cat.reinitializeAnimations(); // Required!
+```
 
 ### Performance Optimization
 
