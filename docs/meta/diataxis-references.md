@@ -1,0 +1,16 @@
+- Overview: https://diataxis.fr/
+- Practice
+  - How to use diataxis: https://diataxis.fr/how-to-use-diataxis/
+  - Tutorials: https://diataxis.fr/tutorials/
+  - How-to guides: https://diataxis.fr/how-to-guides/
+  - Reference: https://diataxis.fr/reference/
+  - Explanation: https://diataxis.fr/explanation/
+  - Determining type: https://diataxis.fr/compass/
+- Theory
+  - Diataxis theory overvie: https://diataxis.fr/theory/
+  - Foundations: https://diataxis.fr/foundations/
+  - Map: https://diataxis.fr/map/
+  - Quality: https://diataxis.fr/quality/
+  - Difference between tutorial and how-to guide: https://diataxis.fr/tutorials-how-to/
+  - Difference between reference and explanation: https://diataxis.fr/reference-explanation/
+  - Complex hiearchies: https://diataxis.fr/complex-hierarchies/
