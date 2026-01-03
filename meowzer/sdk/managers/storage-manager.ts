@@ -314,6 +314,8 @@ export class StorageManager {
           // Restore appearance data if it was saved (includes accessories like hats)
           if (meowbaseCat.appearance) {
             cat.setAppearance(meowbaseCat.appearance);
+            // Reinitialize animations after SVG is regenerated
+            (cat as any)._cat.reinitializeAnimations();
           }
 
           // Set collection reference
@@ -402,6 +404,8 @@ export class StorageManager {
           // Restore appearance data if it was saved (includes accessories like hats)
           if (meowbaseCat.appearance) {
             cat.setAppearance(meowbaseCat.appearance);
+            // Reinitialize animations after SVG is regenerated
+            (cat as any)._cat.reinitializeAnimations();
           }
 
           cat._setCollectionName(collectionName);

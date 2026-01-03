@@ -21,6 +21,8 @@ export function animateWalking(elements: AnimationElements): {
     const [backLeft, backRight, frontLeft, frontRight] =
       elements.legElements;
 
+    console.log(">> 4 leg elements found");
+
     const legTimeline = gsap.timeline({ repeat: -1 });
 
     // Walking uses a 4-beat gait: back-left, front-right, back-right, front-left
@@ -104,6 +106,8 @@ export function animateWalking(elements: AnimationElements): {
         },
         walkCycle * 0.875
       );
+
+    console.log("leg timeline: ", legTimeline);
 
     timelines.push(legTimeline);
   }

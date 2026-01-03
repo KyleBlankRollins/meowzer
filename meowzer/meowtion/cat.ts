@@ -321,6 +321,15 @@ export class Cat {
     this._animationManager?.resume();
   }
 
+  /**
+   * Reinitialize animations after SVG changes
+   * Call this when the cat's SVG is regenerated (e.g., after loading from storage)
+   */
+  reinitializeAnimations(): void {
+    if (this._destroyed) return;
+    this._animationManager?.reinitialize();
+  }
+
   destroy(): void {
     if (this._destroyed) return;
 

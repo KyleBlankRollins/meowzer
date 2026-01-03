@@ -62,6 +62,8 @@ export class CatAnimationManager {
       findByIdSuffix("-leg-front-right"),
     ].filter((el) => el !== null) as SVGElement[];
 
+    console.log("leg elements found by GSAP manager:", legElements);
+
     return {
       tailElement: findByIdSuffix("-tail"),
       bodyElement: findByIdSuffix("-body"),
@@ -86,6 +88,7 @@ export class CatAnimationManager {
       "playing",
     ];
 
+    console.log("setting animations for every state ... ");
     states.forEach((state) => {
       let animations: gsap.core.Tween[] = [];
       let timelines: gsap.core.Timeline[] = [];
@@ -131,6 +134,7 @@ export class CatAnimationManager {
    * Uses pooled animations instead of creating new ones
    */
   startStateAnimations(state: CatStateType): void {
+    console.log("in startStateAnimations()");
     // Pause previous state animations
     if (this.activeState !== null) {
       const prevAnimations = this.animationPool.get(this.activeState);
@@ -147,9 +151,12 @@ export class CatAnimationManager {
 
     // Restart and resume pooled animations
     this.currentAnimations.forEach((anim) => {
+      console.log("restart and resume pooled animations");
       anim.restart();
       anim.resume();
     });
+
+    console.log("restart and resume timelines");
     this.currentTimelines.forEach((tl) => {
       tl.restart();
       tl.resume();
@@ -180,6 +187,36 @@ export class CatAnimationManager {
   resume(): void {
     this.currentAnimations.forEach((anim) => anim.resume());
     this.currentTimelines.forEach((tl) => tl.resume());
+  }
+
+  /**
+   * Reinitialize animation pool after SVG element changes
+   * Call this when the SVG is regenerated (e.g., after loading from storage)
+   */
+  reinitialize(): void {
+    // Kill all existing animations
+    this.animationPool.forEach((animations) => {
+      animations.forEach((anim) => anim.kill());
+    });
+    this.timelinePool.forEach((timelines) => {
+      timelines.forEach((tl) => tl.kill());
+    });
+
+    this.animationPool.clear();
+    this.timelinePool.clear();
+
+    // Re-cache elements (they've changed in the DOM)
+    this.elements = this._cacheElements();
+
+    // Re-create animation pool with new elements
+    this._initializeAnimationPool();
+
+    // If there was an active state, restart it
+    if (this.activeState !== null) {
+      const state = this.activeState;
+      this.activeState = null; // Reset so startStateAnimations works correctly
+      this.startStateAnimations(state);
+    }
   }
 
   /**
