@@ -4,12 +4,9 @@
   "private": true,
   "workspaces": [
     "meowzer/*",
-    "docs",
     "demo"
   ],
   "scripts": {
-    "dev:docs": "npm run dev --workspace=docs",
-    "build:docs": "npm run build --workspace=docs",
     "dev:demo": "npm run dev --workspace=demo",
     "build:demo": "npm run build:sdk && npm run build:ui && npm run build --workspace=demo",
     "build:sdk": "npm run build --workspace=meowzer/sdk",
