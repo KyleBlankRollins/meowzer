@@ -26,8 +26,11 @@ All components use **Lit Element** with **Shadow DOM**:
 ```
 src/components/
 ├── component-name/
-│   ├── component-name.ts       # Component logic
-│   └── component-name.style.ts # Dedicated styles
+│   ├── component-name.ts            # Component logic
+│   ├── component-name.test.ts       # Unit tests (Vitest)
+│   ├── component-name.stories.ts    # Storybook documentation
+│   ├── component-name.style.ts      # Dedicated styles
+│   └── README.md                    # API documentation
 ```
 
 #### Naming Conventions

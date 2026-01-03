@@ -8,7 +8,11 @@ import type {
   SpriteData,
   SVGElements,
 } from "../types/index.js";
-import { generateElementId } from "./utils.js";
+import {
+  generateElementId,
+  darkenColor,
+  lightenColor,
+} from "./utils.js";
 import { generateHatSVG, getHatElementId } from "./accessories.js";
 
 /**
@@ -16,36 +20,37 @@ import { generateHatSVG, getHatElementId } from "./accessories.js";
  */
 export function generateCatSVG(
   appearance: AppearanceData,
-  dimensions: DimensionData
+  dimensions: DimensionData,
+  catId?: string
 ): SpriteData {
-  const catId = `cat-${Date.now()}`;
+  const elementIdPrefix = catId || `cat-${Date.now()}`;
 
   const elements: SVGElements = {
-    body: generateElementId(catId, "body"),
-    head: generateElementId(catId, "head"),
+    body: generateElementId(elementIdPrefix, "body"),
+    head: generateElementId(elementIdPrefix, "head"),
     ears: [
-      generateElementId(catId, "ear-left"),
-      generateElementId(catId, "ear-right"),
+      generateElementId(elementIdPrefix, "ear-left"),
+      generateElementId(elementIdPrefix, "ear-right"),
     ],
     eyes: [
-      generateElementId(catId, "eye-left"),
-      generateElementId(catId, "eye-right"),
+      generateElementId(elementIdPrefix, "eye-left"),
+      generateElementId(elementIdPrefix, "eye-right"),
     ],
-    tail: generateElementId(catId, "tail"),
+    tail: generateElementId(elementIdPrefix, "tail"),
     legs: [
-      generateElementId(catId, "leg-back-left"),
-      generateElementId(catId, "leg-back-right"),
-      generateElementId(catId, "leg-front-left"),
-      generateElementId(catId, "leg-front-right"),
+      generateElementId(elementIdPrefix, "leg-back-left"),
+      generateElementId(elementIdPrefix, "leg-back-right"),
+      generateElementId(elementIdPrefix, "leg-front-left"),
+      generateElementId(elementIdPrefix, "leg-front-right"),
     ],
   };
 
   // Add pattern elements if not solid
   if (appearance.pattern !== "solid") {
     elements.pattern = [
-      generateElementId(catId, "pattern-1"),
-      generateElementId(catId, "pattern-2"),
-      generateElementId(catId, "pattern-3"),
+      generateElementId(elementIdPrefix, "pattern-1"),
+      generateElementId(elementIdPrefix, "pattern-2"),
+      generateElementId(elementIdPrefix, "pattern-3"),
     ];
   }
 
@@ -53,11 +58,16 @@ export function generateCatSVG(
   if (appearance.accessories?.hat) {
     elements.hat = getHatElementId(
       appearance.accessories.hat.type,
-      catId
+      elementIdPrefix
     );
   }
 
-  const svg = buildSVGMarkup(appearance, dimensions, elements, catId);
+  const svg = buildSVGMarkup(
+    appearance,
+    dimensions,
+    elements,
+    elementIdPrefix
+  );
 
   return {
     svg,
@@ -82,7 +92,8 @@ function buildSVGMarkup(
   elements: SVGElements,
   catId: string
 ): string {
-  const { color, eyeColor, shadingColor, pattern } = appearance;
+  const { color, eyeColor, shadingColor, pattern, furLength } =
+    appearance;
   const { width, height } = dimensions;
 
   const svgContent = `
@@ -187,6 +198,8 @@ function buildSVGMarkup(
   ${generateHatMarkup(appearance, catId)}
   
   ${generatePatternOverlay(pattern, elements, color, shadingColor)}
+  
+  ${generateFurLengthOverlay(furLength, color)}
 </svg>
   `.trim();
 
@@ -290,4 +303,121 @@ function generatePatternOverlay(
     default:
       return "";
   }
+}
+
+/**
+ * Generates fur length overlay to add texture for medium and long fur
+ * Short fur uses base SVG with no overlay
+ * Medium and long fur extend beyond body bounds for fluffy silhouette
+ * Uses contrasting colors for visibility
+ */
+function generateFurLengthOverlay(
+  furLength: string,
+  color: string
+): string {
+  if (furLength === "short") {
+    return "";
+  }
+
+  // Create contrasting colors for fur visibility
+  const furLight = lightenColor(color, 0.3);
+  const furDark = darkenColor(color, 0.4);
+
+  if (furLength === "medium") {
+    return `
+      <g id="fur-texture-medium">
+        <!-- Medium fur extending from top of body -->
+        <line x1="28" y1="33" x2="26" y2="31" stroke="${furDark}" stroke-width="2" opacity="0.5"/>
+        <line x1="28" y1="33" x2="26" y2="31" stroke="${furLight}" stroke-width="1"/>
+        <line x1="35" y1="33" x2="33" y2="30" stroke="${furDark}" stroke-width="2" opacity="0.5"/>
+        <line x1="35" y1="33" x2="33" y2="30" stroke="${furLight}" stroke-width="1"/>
+        <line x1="42" y1="33" x2="40" y2="30" stroke="${furDark}" stroke-width="2" opacity="0.5"/>
+        <line x1="42" y1="33" x2="40" y2="30" stroke="${furLight}" stroke-width="1"/>
+        <line x1="50" y1="33" x2="48" y2="30" stroke="${furDark}" stroke-width="2" opacity="0.5"/>
+        <line x1="50" y1="33" x2="48" y2="30" stroke="${furLight}" stroke-width="1"/>
+        <line x1="58" y1="33" x2="56" y2="30" stroke="${furDark}" stroke-width="2" opacity="0.5"/>
+        <line x1="58" y1="33" x2="56" y2="30" stroke="${furLight}" stroke-width="1"/>
+        <line x1="64" y1="33" x2="62" y2="30" stroke="${furDark}" stroke-width="2" opacity="0.5"/>
+        <line x1="64" y1="33" x2="62" y2="30" stroke="${furLight}" stroke-width="1"/>
+        
+        <!-- Medium fur extending from bottom of body -->
+        <line x1="28" y1="57" x2="26" y2="59" stroke="${furDark}" stroke-width="2" opacity="0.5"/>
+        <line x1="28" y1="57" x2="26" y2="59" stroke="${furLight}" stroke-width="1"/>
+        <line x1="36" y1="57" x2="34" y2="59" stroke="${furDark}" stroke-width="2" opacity="0.5"/>
+        <line x1="36" y1="57" x2="34" y2="59" stroke="${furLight}" stroke-width="1"/>
+        <line x1="44" y1="57" x2="42" y2="59" stroke="${furDark}" stroke-width="2" opacity="0.5"/>
+        <line x1="44" y1="57" x2="42" y2="59" stroke="${furLight}" stroke-width="1"/>
+        <line x1="54" y1="57" x2="52" y2="59" stroke="${furDark}" stroke-width="2" opacity="0.5"/>
+        <line x1="54" y1="57" x2="52" y2="59" stroke="${furLight}" stroke-width="1"/>
+        <line x1="64" y1="57" x2="62" y2="59" stroke="${furDark}" stroke-width="2" opacity="0.5"/>
+        <line x1="64" y1="57" x2="62" y2="59" stroke="${furLight}" stroke-width="1"/>
+        
+        <!-- Internal fur texture on body -->
+        <line x1="32" y1="38" x2="34" y2="40" stroke="${furLight}" stroke-width="1" opacity="0.6"/>
+        <line x1="40" y1="40" x2="42" y2="42" stroke="${furLight}" stroke-width="1" opacity="0.6"/>
+        <line x1="48" y1="38" x2="50" y2="40" stroke="${furLight}" stroke-width="1" opacity="0.6"/>
+        <line x1="56" y1="40" x2="58" y2="42" stroke="${furLight}" stroke-width="1" opacity="0.6"/>
+      </g>
+    `;
+  }
+
+  if (furLength === "long") {
+    return `
+      <g id="fur-texture-long">
+        <!-- Long fur extending significantly from top of body -->
+        <line x1="28" y1="33" x2="24" y2="28" stroke="${furDark}" stroke-width="2.5" opacity="0.6"/>
+        <line x1="28" y1="33" x2="24" y2="28" stroke="${furLight}" stroke-width="1.5"/>
+        <line x1="32" y1="33" x2="28" y2="27" stroke="${furDark}" stroke-width="2.5" opacity="0.6"/>
+        <line x1="32" y1="33" x2="28" y2="27" stroke="${furLight}" stroke-width="1.5"/>
+        <line x1="38" y1="33" x2="34" y2="27" stroke="${furDark}" stroke-width="2.5" opacity="0.6"/>
+        <line x1="38" y1="33" x2="34" y2="27" stroke="${furLight}" stroke-width="1.5"/>
+        <line x1="44" y1="33" x2="40" y2="26" stroke="${furDark}" stroke-width="2.5" opacity="0.6"/>
+        <line x1="44" y1="33" x2="40" y2="26" stroke="${furLight}" stroke-width="1.5"/>
+        <line x1="50" y1="33" x2="46" y2="26" stroke="${furDark}" stroke-width="2.5" opacity="0.6"/>
+        <line x1="50" y1="33" x2="46" y2="26" stroke="${furLight}" stroke-width="1.5"/>
+        <line x1="56" y1="33" x2="52" y2="27" stroke="${furDark}" stroke-width="2.5" opacity="0.6"/>
+        <line x1="56" y1="33" x2="52" y2="27" stroke="${furLight}" stroke-width="1.5"/>
+        <line x1="62" y1="33" x2="58" y2="27" stroke="${furDark}" stroke-width="2.5" opacity="0.6"/>
+        <line x1="62" y1="33" x2="58" y2="27" stroke="${furLight}" stroke-width="1.5"/>
+        <line x1="66" y1="33" x2="62" y2="28" stroke="${furDark}" stroke-width="2.5" opacity="0.6"/>
+        <line x1="66" y1="33" x2="62" y2="28" stroke="${furLight}" stroke-width="1.5"/>
+        
+        <!-- Long fur extending from bottom of body -->
+        <line x1="28" y1="57" x2="24" y2="62" stroke="${furDark}" stroke-width="2.5" opacity="0.6"/>
+        <line x1="28" y1="57" x2="24" y2="62" stroke="${furLight}" stroke-width="1.5"/>
+        <line x1="34" y1="57" x2="30" y2="62" stroke="${furDark}" stroke-width="2.5" opacity="0.6"/>
+        <line x1="34" y1="57" x2="30" y2="62" stroke="${furLight}" stroke-width="1.5"/>
+        <line x1="40" y1="57" x2="36" y2="62" stroke="${furDark}" stroke-width="2.5" opacity="0.6"/>
+        <line x1="40" y1="57" x2="36" y2="62" stroke="${furLight}" stroke-width="1.5"/>
+        <line x1="46" y1="57" x2="42" y2="62" stroke="${furDark}" stroke-width="2.5" opacity="0.6"/>
+        <line x1="46" y1="57" x2="42" y2="62" stroke="${furLight}" stroke-width="1.5"/>
+        <line x1="52" y1="57" x2="48" y2="62" stroke="${furDark}" stroke-width="2.5" opacity="0.6"/>
+        <line x1="52" y1="57" x2="48" y2="62" stroke="${furLight}" stroke-width="1.5"/>
+        <line x1="58" y1="57" x2="54" y2="62" stroke="${furDark}" stroke-width="2.5" opacity="0.6"/>
+        <line x1="58" y1="57" x2="54" y2="62" stroke="${furLight}" stroke-width="1.5"/>
+        <line x1="64" y1="57" x2="60" y2="62" stroke="${furDark}" stroke-width="2.5" opacity="0.6"/>
+        <line x1="64" y1="57" x2="60" y2="62" stroke="${furLight}" stroke-width="1.5"/>
+        
+        <!-- Long fluffy tail fur -->
+        <line x1="14" y1="38" x2="10" y2="36" stroke="${furDark}" stroke-width="2.5" opacity="0.6"/>
+        <line x1="14" y1="38" x2="10" y2="36" stroke="${furLight}" stroke-width="1.5"/>
+        <line x1="12" y1="32" x2="8" y2="30" stroke="${furDark}" stroke-width="2.5" opacity="0.6"/>
+        <line x1="12" y1="32" x2="8" y2="30" stroke="${furLight}" stroke-width="1.5"/>
+        <line x1="12" y1="22" x2="8" y2="20" stroke="${furDark}" stroke-width="2.5" opacity="0.6"/>
+        <line x1="12" y1="22" x2="8" y2="20" stroke="${furLight}" stroke-width="1.5"/>
+        
+        <!-- Internal fur texture on body (longer strokes) -->
+        <line x1="30" y1="36" x2="33" y2="40" stroke="${furLight}" stroke-width="1.5" opacity="0.7"/>
+        <line x1="34" y1="38" x2="37" y2="42" stroke="${furLight}" stroke-width="1.5" opacity="0.7"/>
+        <line x1="38" y1="40" x2="41" y2="44" stroke="${furLight}" stroke-width="1.5" opacity="0.7"/>
+        <line x1="44" y1="37" x2="47" y2="41" stroke="${furLight}" stroke-width="1.5" opacity="0.7"/>
+        <line x1="48" y1="39" x2="51" y2="43" stroke="${furLight}" stroke-width="1.5" opacity="0.7"/>
+        <line x1="52" y1="38" x2="55" y2="42" stroke="${furLight}" stroke-width="1.5" opacity="0.7"/>
+        <line x1="56" y1="40" x2="59" y2="44" stroke="${furLight}" stroke-width="1.5" opacity="0.7"/>
+        <line x1="60" y1="36" x2="63" y2="40" stroke="${furLight}" stroke-width="1.5" opacity="0.7"/>
+      </g>
+    `;
+  }
+
+  return "";
 }

@@ -119,10 +119,6 @@ export class CatPreview extends LitElement {
           .innerHTML=${protoCat.spriteData.svg}
         ></div>
         <div class="preview-details">
-          <p>
-            <strong>Seed:</strong>
-            <code>${protoCat.seed}</code>
-          </p>
           <p><strong>Size:</strong> ${protoCat.dimensions.size}</p>
           <p>
             <strong>Pattern:</strong>

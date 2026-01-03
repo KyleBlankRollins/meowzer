@@ -391,22 +391,31 @@ export class StorageManager {
       const cats: MeowzerCat[] = [];
 
       for (const meowbaseCat of meowbaseCats) {
-        const cat = await this.catManager.create({
-          id: meowbaseCat.id,
-          seed: meowbaseCat.image,
-          name: meowbaseCat.name,
-          description: meowbaseCat.description,
-        });
+        try {
+          const cat = await this.catManager.create({
+            id: meowbaseCat.id,
+            seed: meowbaseCat.image,
+            name: meowbaseCat.name,
+            description: meowbaseCat.description,
+          });
 
-        // Restore appearance data if it was saved (includes accessories like hats)
-        if (meowbaseCat.appearance) {
-          cat.setAppearance(meowbaseCat.appearance);
+          // Restore appearance data if it was saved (includes accessories like hats)
+          if (meowbaseCat.appearance) {
+            cat.setAppearance(meowbaseCat.appearance);
+          }
+
+          cat._setCollectionName(collectionName);
+          // Mark as clean since it's just loaded from storage
+          cat._markClean();
+          cats.push(cat);
+        } catch (error) {
+          console.error(
+            `Failed to load cat ${meowbaseCat.id} from collection. Seed:`,
+            meowbaseCat.image,
+            error
+          );
+          throw error;
         }
-
-        cat._setCollectionName(collectionName);
-        // Mark as clean since it's just loaded from storage
-        cat._markClean();
-        cats.push(cat);
       }
 
       return cats;

@@ -10,7 +10,6 @@ export { validateCatSettings } from "./validation.js";
 export {
   generateSeed,
   parseSeed,
-  parseHatFromSeed,
   serializeCat,
 } from "./serialization.js";
 
