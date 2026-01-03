@@ -62,8 +62,6 @@ export class CatAnimationManager {
       findByIdSuffix("-leg-front-right"),
     ].filter((el) => el !== null) as SVGElement[];
 
-    console.log("leg elements found by GSAP manager:", legElements);
-
     return {
       tailElement: findByIdSuffix("-tail"),
       bodyElement: findByIdSuffix("-body"),
@@ -88,7 +86,6 @@ export class CatAnimationManager {
       "playing",
     ];
 
-    console.log("setting animations for every state ... ");
     states.forEach((state) => {
       let animations: gsap.core.Tween[] = [];
       let timelines: gsap.core.Timeline[] = [];
@@ -134,7 +131,6 @@ export class CatAnimationManager {
    * Uses pooled animations instead of creating new ones
    */
   startStateAnimations(state: CatStateType): void {
-    console.log("in startStateAnimations()");
     // Pause previous state animations
     if (this.activeState !== null) {
       const prevAnimations = this.animationPool.get(this.activeState);
@@ -151,12 +147,10 @@ export class CatAnimationManager {
 
     // Restart and resume pooled animations
     this.currentAnimations.forEach((anim) => {
-      console.log("restart and resume pooled animations");
       anim.restart();
       anim.resume();
     });
 
-    console.log("restart and resume timelines");
     this.currentTimelines.forEach((tl) => {
       tl.restart();
       tl.resume();

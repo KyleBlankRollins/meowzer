@@ -96,6 +96,26 @@ export class AdoptSection extends LitElement {
         description: this.description || undefined,
       });
 
+      // Save cat to storage
+      if (this.meowzer.storage.isInitialized()) {
+        await this.meowzer.storage.saveCat(cat);
+      } else {
+        console.warn(
+          "Storage not initialized, cat will not be persisted"
+        );
+      }
+
+      // Spawn the adopted cat on the page
+      cat.element.style.position = "fixed";
+
+      // Random starting position within viewport
+      const randomX = Math.random() * (window.innerWidth - 150);
+      const randomY = Math.random() * (window.innerHeight - 200);
+      (cat as any)._cat.setPosition(randomX, randomY);
+
+      document.body.appendChild(cat.element);
+      cat.lifecycle.resume();
+
       // Emit success event
       this.dispatchEvent(
         new CustomEvent("adopt", {
